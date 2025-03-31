@@ -16,7 +16,8 @@
   /* Basic theme colors */
   --color-bg-primary: #fcf7f6;
   --color-bg-secondary: #00ad1d;
-  --color-text-primary: #ffffff;
+  --color-primary-text: #15ff00;
+  --color-secondary-text: #f9faf8;
 
   /* Accent colors */
 
