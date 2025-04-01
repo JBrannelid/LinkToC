@@ -16,7 +16,7 @@ const CardImage = ({
                 src={src}
                 alt={alt}
                 loading={loading}
-                className={`w-full h-full object-cover ${className}`}
+                className={`w-full h-full object-contain ${className}`}
             />
         </div>
     );
