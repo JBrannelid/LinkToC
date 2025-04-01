@@ -1,84 +1,43 @@
-import React, { useState } from "react";
+import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import {
-  add,
-  eachDayOfInterval,
-  endOfMonth,
-  format,
-  getDay,
-  isEqual,
-  isSameDay,
-  isSameMonth,
-  isToday,
-  parse,
-  startOfToday,
-} from "date-fns";
 import { sv } from "date-fns/locale";
-import EventItem from "../calendar/calendarEventForm";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { calendarHook } from "../../hooks/calendarHook";
+import EventItem from "./CalendarEventItem";
 
 // Reusable Calendar with props for data and configuration
 const Calendar = ({
   events = [],
   locale = sv,
-  accentColor = "bg-green-500",
-  textColor = "text-primary-text",
-  eventItemRenderer = EventItem,
   noEventsMessage = "Inga schemalagda händelser",
+  eventItemRenderer = EventItem,
 }) => {
-  const today = startOfToday();
-  const [selectedDay, setSelectedDay] = useState(today);
-  const [currentMonth, setCurrentMonth] = useState(
-    format(today, "MMM-yyyy", { locale })
-  );
+  const {
+    // Date const values
+    selectedDay,
+    firstDayCurrentMonth,
+    days,
 
-  // Create date obj from a string base on format and locale
-  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date(), {
-    locale,
-  });
+    // Date functions
+    format,
+    isSameDay,
+    isToday,
+    isSameMonth,
+    getDay,
+    parseISO,
+    classNames,
 
-  const days = eachDayOfInterval({
-    start: firstDayCurrentMonth,
-    end: endOfMonth(firstDayCurrentMonth),
-  });
+    // Calendar data
+    selectedDayEvents,
+    weekdayTitle,
+    colStartClasses,
 
-  function previousMonth() {
-    const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
-    setCurrentMonth(format(firstDayPreviousMonth, "MMM-yyyy", { locale }));
-  }
+    // States
+    setSelectedDay,
 
-  function nextMonth() {
-    const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
-    setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy", { locale }));
-  }
-
-  // Convert ISO 8601-format (2025-03-26T14:00:00Z) to a JS Date-obj.
-  function parseISO(dateString) {
-    return new Date(dateString);
-  }
-
-  const selectedDayEvents = events.filter((event) =>
-    isSameDay(parseISO(event.startDatetime), selectedDay)
-  );
-
-  const colStartClasses = [
-    "col-start-7", // Sunday moves to the end (7th column)
-    "", // Monday
-    "col-start-2", // Tuesday
-    "col-start-3", // Wednesday
-    "col-start-4", // Thursday
-    "col-start-5", // Friday
-    "col-start-6", // Saturday
-  ];
-
-  // Weekday abbreviations based on locale
-  const weekdayAbbr =
-    locale === sv
-      ? ["Må", "Ti", "On", "To", "Fr", "Lö", "Sö"]
-      : ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+    // Navigation functions
+    previousMonth,
+    nextMonth,
+  } = calendarHook(events, locale);
 
   return (
     <div className="pt-16">
@@ -108,7 +67,7 @@ const Calendar = ({
 
             {/* Weekday Headings */}
             <div className="grid grid-cols-7 mt-10 text-xs text-center text-gray-500">
-              {weekdayAbbr.map((day, index) => (
+              {weekdayTitle.map((day, index) => (
                 <div key={index}>{day}</div>
               ))}
             </div>
@@ -127,19 +86,44 @@ const Calendar = ({
                     type="button"
                     onClick={() => setSelectedDay(day)}
                     className={classNames(
-                      isEqual(day, selectedDay) && "text-gray-800", // change foreground color on selectedDay
-                      !isEqual(day, selectedDay) && isToday(day) && textColor, // Today foreground color
-                      !isEqual(day, selectedDay) &&
+                      // Selected day text color
+                      isSameDay(day, selectedDay) && "text-secondary-text",
+
+                      // Highlight Today's date (when not selected) with accent color
+                      !isSameDay(day, selectedDay) &&
+                        isToday(day) &&
+                        "text-primary-text",
+
+                      // Current month days text color (not selected, not today)
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
                         isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-gray-800", // default foreground color
-                      isEqual(day, selectedDay) && isToday(day) && accentColor, // Today background color
-                      isEqual(day, selectedDay) &&
+                        "text-gray-800",
+
+                      // Days not included in current
+                      !isSameDay(day, selectedDay) &&
                         !isToday(day) &&
-                        "bg-gray-300", // Default background color
-                      !isEqual(day, selectedDay) && "hover:bg-gray-200", // change foreground color on hover
-                      (isEqual(day, selectedDay) || isToday(day)) &&
+                        !isSameMonth(day, firstDayCurrentMonth) &&
+                        "text-gray-500",
+
+                      // Background for selected day that is also today
+                      isSameDay(day, selectedDay) &&
+                        isToday(day) &&
+                        "bg-bg-secondary",
+
+                      // Background for selected day that is not today
+                      isSameDay(day, selectedDay) &&
+                        !isToday(day) &&
+                        "bg-gray-500",
+
+                      // Hover effect for non-selected days
+                      !isSameDay(day, selectedDay) && "hover:bg-gray-200",
+
+                      // Bold text for selected day or today
+                      (isSameDay(day, selectedDay) || isToday(day)) &&
                         "font-semibold",
+
+                      // Base styling for all day buttons
                       "mx-auto flex h-8 w-8 items-center justify-center rounded-full"
                     )}
                   >
@@ -151,10 +135,10 @@ const Calendar = ({
                   {/* Marker for days with events */}
                   <div className="w-1 h-1 mx-auto mt-1">
                     {events.some((event) =>
-                      isSameDay(parseISO(event.startDatetime), day)
+                      isSameDay(parseISO(event.StartDatetime), day)
                     ) && (
                       <div
-                        className={`w-1 h-1 rounded-full ${accentColor}`}
+                        className={`w-1 h-1 rounded-full bg-bg-secondary`}
                       ></div>
                     )}
                   </div>
