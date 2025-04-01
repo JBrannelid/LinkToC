@@ -16,6 +16,13 @@ const HorseProfile = ({ horseId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [profileImage, setProfileImage] = useState(horse?.imageUrl || "src/components/ui/Images/profilePlaceholder.jpg");
+    const [fileInputRef, setFileInputRef] = useState(null);
+    
+    const triggerFileUpload = () => {
+        if (fileInputRef) {
+            fileInputRef.click();
+        }
+    };
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -115,11 +122,27 @@ const HorseProfile = ({ horseId }) => {
                 )}
             </Card.Body>
             <Card.Footer>
-                <button tabIndex={0} onClick={getHorseData}
-                    className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    aria-label={`View full details for ${horse.name}`}>
-                    View Full Details
-                </button>
+                <div className="flex space-x-2">
+                    <button tabIndex={0} onClick={getHorseData}
+                            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            aria-label={`View full details for ${horse.name}`}>
+                        View Full Details
+                    </button>  
+                    <input
+                    type="file"
+                    ref={ref => setFileInputRef(ref)}
+                    id="profile-image-upload"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    style={{ display: "none" }}
+                    />
+                    <button 
+                        onClick={triggerFileUpload}
+                        className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+                        aria-label="Upload profile picture for horse">
+                        Update Photo
+                    </button>
+                </div>
             </Card.Footer>
         </Card.Container>
     );
