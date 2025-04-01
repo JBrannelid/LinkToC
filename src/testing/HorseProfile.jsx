@@ -5,8 +5,7 @@ import HorseData from "./HorseData.json";
 const fetchHorseData = async (horseId) => {
     return new Promise((resolve) => {
         setTimeout(() => {
-            const horse = HorseData.find(h => h.id === Number(horseId)); // Ensure you are passing the correct ID type
-            console.log("Getting data3");
+            const horse = HorseData.find(h => h.id === Number(horseId));
             resolve(horse || null); // Return null if no matching horse is found
         }, 1000);
     });
@@ -16,11 +15,19 @@ const HorseProfile = ({ horseId }) => {
     const [horse, setHorse] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [profileImage, setProfileImage] = useState(horse?.imageUrl || "src/components/ui/Images/profilePlaceholder.jpg");
 
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setProfileImage(imageUrl);
+        }
+    }
     const getHorseData = async () => {
         try {
             setLoading(true);
-            const data = await fetchHorseData(2);
+            const data = await fetchHorseData(1);
             setHorse(data);
             setError(null);
         } catch (error) {
@@ -32,7 +39,7 @@ const HorseProfile = ({ horseId }) => {
     };
 
     useEffect(() => {
-        getHorseData();
+        void getHorseData();
     }, [horseId]);
 
     if (loading) {
@@ -67,12 +74,12 @@ const HorseProfile = ({ horseId }) => {
     const descId = `horse-${horse.id}-desc`;
 
     return (
-        <Card.Container
+        <Card.Container 
             id={`horse-${horse.id}-profile`}
             aria-label={titleId}
             aria-describedby={descId}>
             <Card.Image
-                src={horse.imageUrl}
+                src={profileImage}
                 alt={`${horse.color} ${horse.breed} horse named ${horse.name}`}
             />
             <Card.Header>
@@ -81,7 +88,6 @@ const HorseProfile = ({ horseId }) => {
             </Card.Header>
             <Card.Body id={descId}>
                 <p>{horse.description}</p>
-
                 {horse.stats && (
                     <div className="mt-4 pt-3 border-t border-gray-100">
                         <h4 className="font-semibold mb-2">Statistics</h4>
@@ -109,7 +115,7 @@ const HorseProfile = ({ horseId }) => {
                 )}
             </Card.Body>
             <Card.Footer>
-                <button
+                <button tabIndex={0} onClick={getHorseData}
                     className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     aria-label={`View full details for ${horse.name}`}>
                     View Full Details

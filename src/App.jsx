@@ -4,7 +4,7 @@ import HorseProfile from "./testing/HorseProfile.jsx";
 function App() {
   return (
     <>
-     <HorseProfile/>
+     <HorseProfile />
     </>
   );
 }
