@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "Midnight Comet",
+    "breed": "Thoroughbred",
+    "age": 7,
+    "color": "Black",
+    "imageUrl": "/images/horse.jpg",
+    "description": "A champion racehorse with remarkable speed and agility. Has won 12 major races in the past 3 years.",
+    "stats": {
+      "weight": 480,
+      "height": 163,
+      "victories": 12
+    }
+  },
+  {
+    "id": 2,
+    "name": "Silver Wind",
+    "breed": "Arabian",
+    "age": 5,
+    "color": "Grey",
+    "imageUrl": "/images/silver-wind.jpg",
+    "description": "Known for endurance and elegance. Has completed three 100-mile races with outstanding times.",
+    "stats": {
+      "weight": 450,
+      "height": 152,
+      "victories": 8
+    }
+  },
+  {
+    "id": 3,
+    "name": "Desert Storm",
+    "breed": "Quarter Horse",
+    "age": 6,
+    "color": "Chestnut",
+    "imageUrl": "/images/desert-storm.jpg",
+    "description": "Powerful sprinter with exceptional acceleration. Undefeated in quarter-mile races.",
+    "stats": {
+      "weight": 500,
+      "height": 158,
+      "victories": 15
+    }
+  },
+  {
+    "id": 4,
+    "name": "Whisper's Legacy",
+    "breed": "Andalusian",
+    "age": 8,
+    "color": "White",
+    "imageUrl": "/images/whispers-legacy.jpg",
+    "description": "Graceful dressage performer with incredible discipline and poise. Winner of multiple international competitions.",
+    "stats": {
+      "weight": 510,
+      "height": 168,
+      "victories": 9
+    }
+  },
+  {
+    "id": 5,
+    "name": "Thunder's Echo",
+    "breed": "Friesian",
+    "age": 9,
+    "color": "Black",
+    "imageUrl": "/images/thunders-echo.jpg",
+    "description": "Majestic and powerful with distinctive high-stepping gait. Star of several film productions.",
+    "stats": {
+      "weight": 540,
+      "height": 170,
+      "victories": 6
+    }
+  },
+  {
+    "id": 6,
+    "name": "Golden Sunrise",
+    "breed": "Palomino",
+    "age": 4,
+    "color": "Gold",
+    "imageUrl": "/images/golden-sunrise.jpg",
+    "description": "Young rising star with exceptional jumping ability. Recently began competitive circuit with promising results.",
+    "stats": {
+      "weight": 470,
+      "height": 160,
+      "victories": 3
+    }
+  },
+  {
+    "id": 7,
+    "name": "Misty Mountain",
+    "breed": "Appaloosa",
+    "age": 6,
+    "color": "Spotted Grey",
+    "imageUrl": "/images/misty-mountain.jpg",
+    "description": "Versatile performer excelling in both trail riding and show competitions. Known for calm temperament.",
+    "stats": {
+      "weight": 490,
+      "height": 155,
+      "victories": 7
+    }
+  },
+  {
+    "id": 8,
+    "name": "Crimson Tide",
+    "breed": "Morgan",
+    "age": 10,
+    "color": "Bay",
+    "imageUrl": "/images/crimson-tide.jpg",
+    "description": "Veteran competitor with exceptional stamina. Has mentored younger horses and participates in therapeutic riding programs.",
+    "stats": {
+      "weight": 510,
+      "height": 157,
+      "victories": 18
+    }
+  },
+  {
+    "id": 9,
+    "name": "Winter Frost",
+    "breed": "Lipizzaner",
+    "age": 7,
+    "color": "Grey",
+    "imageUrl": "/images/winter-frost.jpg",
+    "description": "Classical dressage specialist trained in the highest levels of performance. Known for precise movements.",
+    "stats": {
+      "weight": 495,
+      "height": 165,
+      "victories": 11
+    }
+  },
+  {
+    "id": 10,
+    "name": "Wildfire",
+    "breed": "Mustang",
+    "age": 5,
+    "color": "Dun",
+    "imageUrl": "/images/wildfire.jpg",
+    "description": "Rescued from the wild three years ago, now competing successfully in endurance races. Symbol of adaptability and spirit.",
+    "stats": {
+      "weight": 460,
+      "height": 150,
+      "victories": 5
+    }
+  }
+]
