@@ -1,4 +1,4 @@
-import React from 'react';
+
 import CardContainer from './Card';
 import CardImage from './CardImage';
 import CardHeader from './CardHeader';

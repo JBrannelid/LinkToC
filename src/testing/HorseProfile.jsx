@@ -1,32 +1,38 @@
-import React, {useState, useEffect} from "react";
-import fetchHorseData from "../api/fetchHorseData.jsx";
-import Card from "../components/ui/Card"
+import React, { useEffect, useState } from "react";
+import Card from "../components/ui/Card";
+import HorseData from "./HorseData.json";
 
+const fetchHorseData = async (horseId) => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            const horse = HorseData.find(h => h.id === Number(horseId)); // Ensure you are passing the correct ID type
+            console.log("Getting data3");
+            resolve(horse || null); // Return null if no matching horse is found
+        }, 1000);
+    });
+};
 
-const HorseProfilePage = ({ horseId }) => {
+const HorseProfile = ({ horseId }) => {
     const [horse, setHorse] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const getHorseData = async () => {
+        try {
+            setLoading(true);
+            const data = await fetchHorseData(2);
+            setHorse(data);
+            setError(null);
+        } catch (error) {
+            setError('Failed to fetch horse');
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const getHorseData = async () => {
-            if (!horse){
-                try {
-                    setLoading(true);
-                    const data = await fetchHorseData(horseId);
-                    setHorse(data);
-                    setError(null);
-                } catch (err) {
-                    setError('Failed to fetch horse data');
-                    console.error(err);
-                } finally {
-                    setLoading(false);
-                }
-            };
-
-            await getHorseData();
-            }
-
+        getHorseData();
     }, [horseId]);
 
     if (loading) {
@@ -36,15 +42,13 @@ const HorseProfilePage = ({ horseId }) => {
             </div>
         );
     }
-
     if (error) {
         return (
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg max-w-md mx-auto">
                 <p className="text-red-700 text-center">{error}</p>
                 <button
-                    onClick={() => fetchHorseData()}
-                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg mx-auto block"
-                >
+                    onClick={getHorseData}
+                    className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg mx-auto block">
                     Retry
                 </button>
             </div>
@@ -65,9 +69,8 @@ const HorseProfilePage = ({ horseId }) => {
     return (
         <Card.Container
             id={`horse-${horse.id}-profile`}
-            ariaLabelledby={titleId}
-            ariaDescribedby={descId}
-        >
+            aria-label={titleId}
+            aria-describedby={descId}>
             <Card.Image
                 src={horse.imageUrl}
                 alt={`${horse.color} ${horse.breed} horse named ${horse.name}`}
@@ -108,8 +111,7 @@ const HorseProfilePage = ({ horseId }) => {
             <Card.Footer>
                 <button
                     className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                    aria-label={`View full details for ${horse.name}`}
-                >
+                    aria-label={`View full details for ${horse.name}`}>
                     View Full Details
                 </button>
             </Card.Footer>
@@ -117,4 +119,4 @@ const HorseProfilePage = ({ horseId }) => {
     );
 };
 
-export default HorseProfilePage;
+export default HorseProfile;
