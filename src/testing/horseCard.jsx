@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "../components/ui/Card";
+import Card from "../utils/cardUtils.js";
 import HorseData from "./HorseData.json";
 
 const fetchHorseData = async (horseId) => {
@@ -11,7 +11,7 @@ const fetchHorseData = async (horseId) => {
     });
 };
 
-const HorseProfile = ({ horseId }) => {
+const horseProfile = ({ horseId }) => {
     const [horse, setHorse] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -83,7 +83,7 @@ const HorseProfile = ({ horseId }) => {
     return (
         <Card.Container 
             id={`horse-${horse.id}-profile`}
-            aria-label={titleId}
+            aria-labelledby={titleId}
             aria-describedby={descId}>
             <Card.Image
                 src={profileImage}
@@ -148,4 +148,4 @@ const HorseProfile = ({ horseId }) => {
     );
 };
 
-export default HorseProfile;
+export default horseProfile;
