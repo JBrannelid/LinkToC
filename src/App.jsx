@@ -1,10 +1,11 @@
-import HorseProfile from "./testing/HorseProfile.jsx";
+
+import HorseProfile2 from "./testing/horseCard2.0.jsx";
 
 
 function App() {
   return (
     <>
-     <HorseProfile />
+     <HorseProfile2/>
     </>
   );
 }

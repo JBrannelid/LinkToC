@@ -7,7 +7,7 @@ import CardSubtitle from '../components/ui/Card/CardSubtitle.jsx';
 import CardBody from '../components/ui/Card/CardBody.jsx';
 import CardFooter from '../components/ui/Card/CardFooter.jsx';
 
-export const Card = {
+const Card = {
     Container: CardContainer,
     Image: CardImage,
     Header: CardHeader,
@@ -31,3 +31,5 @@ export {
     CardBody,
     CardFooter
 };
+
+export default Card;

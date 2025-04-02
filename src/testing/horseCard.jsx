@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Card from "../utils/cardUtils.js";
+import profileCard from "../components/ui/Card/profileCard.jsx"
 import HorseData from "./HorseData.json";
 
 const fetchHorseData = async (horseId) => {

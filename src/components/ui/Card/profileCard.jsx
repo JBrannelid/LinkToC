@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef} from "react";
-import {Card, classNames} from "src/utils/cardUtils.js";
+import React, {useState, useRef} from "react";
+import Card, {classNames} from "../../../utils/cardUtils.js";
 
 
 const ProfileCard = ({
@@ -87,7 +87,7 @@ const ProfileCard = ({
             <Card.Image
                 src={imageToDisplay}
                 alt={altText}
-                className={calssNames(!profileImage && "opacity-80",
+                className={classNames(!profileImage && "opacity-80",
                     imageClassName,)}/>
             <Card.Header>
                 <Card.Title id={titleId} >{name}</Card.Title>
@@ -95,7 +95,7 @@ const ProfileCard = ({
             </Card.Header>
             <Card.Body id={descId}>
                 <p>{description}</p>
-                {stats.lenght > 0 && (
+                {stats.length > 0 && (
                     <div className="mt-4 pt-3 border-t border-gray-100">
                         <h4 className="font-semibold mb-2">Statistics</h4>
                         <ul className="grid grid-cols-3 gap-2">
@@ -136,7 +136,7 @@ const ProfileCard = ({
                         <>
                             <input type="file"
                             ref={fileInputRef}
-                            id={`profile-${id}-image-ipload`}
+                            id={`profile-${id}-image-upload`}
                             accept="image/*"
                             onChange={handleImageUpload}
                             style={{display: 'none'}}/>
