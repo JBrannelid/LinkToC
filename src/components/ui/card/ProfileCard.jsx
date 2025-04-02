@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import Card, {classNames} from "../../../utils/cardUtils.js";
-
+import {triggerFileUpload, handleImageUpload} from "../../../utils/imagesUtils.js"; 
 
 const ProfileCard = ({
     id,
@@ -23,9 +23,8 @@ const ProfileCard = ({
     containerClassName = "",
     imageClassName = "",
     
-    placeholderImageUrl = "src/components/ui/Images/profilePlaceholder.jpg",
-    loadingText = "Loading profile...",
-    notFoundText = "Profile Not Found",
+    placeholderImageUrl = "",
+    notFoundText = "",
     
 }) => {
     const [profileImage, setProfileImage] = useState(imageUrl || null);
@@ -46,19 +45,7 @@ const ProfileCard = ({
         }
     }
     
-    const triggerFileUpload = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    };
-    
-    const handleImageUpload = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setProfileImage(imageUrl);
-        }
-    };
+
     
     if (!id || !name) {
         return (
@@ -88,7 +75,7 @@ const ProfileCard = ({
                 src={imageToDisplay}
                 alt={altText}
                 className={classNames(!profileImage && "opacity-80",
-                    imageClassName,)}/>
+                    imageClassName)}/>
             <Card.Header>
                 <Card.Title id={titleId} >{name}</Card.Title>
                 {metadataText && <Card.Subtitle>{metadataText}</Card.Subtitle>}
@@ -100,8 +87,8 @@ const ProfileCard = ({
                         <h4 className="font-semibold mb-2">Statistics</h4>
                         <ul className="grid grid-cols-3 gap-2">
                             {stats.map((stat, index) =>(
-                                <li key={index} className={stat.clasName}>
-                                    <span className="block text-sm text-gray-500">{stat.lable}</span>
+                                <li key={index} className={stat.className}>
+                                    <span className="block text-sm text-gray-500">{stat.label}</span>
                                     <span>{stat.value}</span>
                                 </li>
                             ))}
@@ -127,7 +114,7 @@ const ProfileCard = ({
                                 "focus:ring-blue-500",
                                 "focus:ring-offset-2"  
                             )}
-                            aria-label={`View full detals for ${name}`}>
+                            aria-label={`View full details for ${id.name}`}>
                             View Full Details
                         </button>
                     )}
@@ -155,7 +142,7 @@ const ProfileCard = ({
                                 "focus:ring-offset-2",
                                 !profileImage && "bg-green-500 hover:bg-green-600"
                             )}
-                            aria-label={`Upload profile picture for ${name}`}>
+                            aria-label={`Upload profile picture for ${id.name}`}>
                                 {profileImage ? "Update Photo" : "Add Photo"}
                             </button>
                         </>

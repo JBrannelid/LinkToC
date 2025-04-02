@@ -16,7 +16,7 @@ const Card = {
     Body: CardBody,
     Footer: CardFooter
 };
-
+export default Card;
 export function classNames(...classes) {
     return classes.filter(Boolean).join(' ');
 }
@@ -32,4 +32,3 @@ export {
     CardFooter
 };
 
-export default Card;

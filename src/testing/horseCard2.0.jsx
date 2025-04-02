@@ -16,14 +16,14 @@ const HorseProfile2 = ({ horseId }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const getHorseData = async () => {
+    const getData = async () => {
         try {
             setLoading(true);
-            const data = await fetchHorseData(1); // For testing purposes
+            const data = await fetchHorseData(3); // For testing purposes
             setHorse(data);
             setError(null);
         } catch (error) {
-            setError('Failed to fetch horse');
+            setError(`Failed to fetch data`);
             console.log(error);
         } finally {
             setLoading(false);
@@ -31,7 +31,7 @@ const HorseProfile2 = ({ horseId }) => {
     };
 
     useEffect(() => {
-        void getHorseData();
+        void getData();
     }, [horseId]);
 
     if (loading) {
@@ -47,7 +47,7 @@ const HorseProfile2 = ({ horseId }) => {
             <div className="p-4 bg-red-50 border border-red-200 rounded-lg max-w-md mx-auto">
                 <p className="text-red-700 text-center">{error}</p>
                 <button
-                    onClick={getHorseData}
+                    onClick={getData}
                     className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg mx-auto block">
                     Retry
                 </button>
@@ -104,13 +104,10 @@ const HorseProfile2 = ({ horseId }) => {
             description={horse.description}
             metadata={metadata}
             stats={stats}
-            onDetailsClick={getHorseData}
-            containerClassName={
-                horse.breed === "Arabian" ? "border border-red-200" : ""
-            }
+            onDetailsClick={getData}
             loadingText="Loading horse profile..."
             notFoundText="No horse data found"
-            placeholderImageUrl="/path/to/horse-silhouette.jpg"
+            placeholderImageUrl="src/assets/images/profilePlaceholder.jpg"
         />
     );
 };

@@ -33,7 +33,7 @@
     "breed": "Quarter Horse",
     "age": 6,
     "color": "Chestnut",
-    "imageUrl": "/images/desert-storm.jpg",
+    "imageUrl": "",
     "description": "Powerful sprinter with exceptional acceleration. Undefeated in quarter-mile races.",
     "stats": {
       "weight": 500,
