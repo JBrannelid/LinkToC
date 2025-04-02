@@ -1,11 +1,11 @@
-import CalendarTest from "./testing/CalendarTest";
+
+import HorseProfile2 from "./testing/horseCard2.0.jsx";
+
 
 function App() {
   return (
     <>
-      <div>
-        <CalendarTest />
-      </div>
+     
     </>
   );
 }
