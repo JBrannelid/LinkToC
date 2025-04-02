@@ -8,22 +8,162 @@ const ProfileCard = ({
     imageUrl,
     description,
     
+    entityType = "profile",
+    altTextDetails = {},
+    getAltText = null,
+    
     metadata = [],
     
     stats = [],
     
-    allowImageUppload = true,
+    allowImageUpload = true,
     showDetailsButton = true,
     onDetailsClick = null,
     
-    containerClassNames = "",
-    imageClassNames = "",
+    containerClassName = "",
+    imageClassName = "",
     
     placeholderImageUrl = "src/components/ui/Images/profilePlaceholder.jpg",
     loadingText = "Loading profile...",
     notFoundText = "Profile Not Found",
     
 }) => {
-    const [profileImage, set]
+    const [profileImage, setProfileImage] = useState(imageUrl || null);
+    const fileInputRef = useRef(null);
     
-}
+    let altText = `Profile of ${name}`;
+    if (getAltText){
+        altText = getAltText(name, altTextDetails);
+    } else if (entityType === "horse") {
+        const {color, breed} = altTextDetails;
+        altText = `${color || ""} ${breed || ""} horse named ${name}`.trim();
+    } else if (entityType === "user") {
+        const { role, department } = altTextDetails;
+        if (role && department) {
+            altText = `${role} ${name} from ${department} department`;
+        } else if (role) {
+            altText = `${role} ${name}`;
+        }
+    }
+    
+    const triggerFileUpload = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+    
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setProfileImage(imageUrl);
+        }
+    };
+    
+    if (!id || !name) {
+        return (
+            <div className={classNames(        
+                "p-4",
+                "bg-gray-100",
+                "rounded-lg",
+                "max-w-md",
+                "mx-auto")}>
+                <p className="text-center">{notFoundText}</p>
+            </div>
+        );
+    }
+    
+    const titleId = `profile${id}-title`;
+    const descId = `profile${id}-desc`;
+    const imageToDisplay = profileImage || placeholderImageUrl;
+    const metadataText = metadata.length > 0 ? metadata.join(' • ') : '';
+    
+    return (
+        <Card.Container
+            id={`profile-${id}`}
+            ariaLabelledby={titleId}
+            ariaDescribedby={descId}
+            className={containerClassName}>
+            <Card.Image
+                src={imageToDisplay}
+                alt={altText}
+                className={calssNames(!profileImage && "opacity-80",
+                    imageClassName,)}/>
+            <Card.Header>
+                <Card.Title id={titleId} >{name}</Card.Title>
+                {metadataText && <Card.Subtitle>{metadataText}</Card.Subtitle>}
+            </Card.Header>
+            <Card.Body id={descId}>
+                <p>{description}</p>
+                {stats.lenght > 0 && (
+                    <div className="mt-4 pt-3 border-t border-gray-100">
+                        <h4 className="font-semibold mb-2">Statistics</h4>
+                        <ul className="grid grid-cols-3 gap-2">
+                            {stats.map((stat, index) =>(
+                                <li key={index} className={stat.clasName}>
+                                    <span className="block text-sm text-gray-500">{stat.lable}</span>
+                                    <span>{stat.value}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </Card.Body>
+            <Card.Footer>
+                <div className="flex space-x-2">
+                    {showDetailsButton && (
+                        <button
+                            tabIndex={0}
+                            onClick={onDetailsClick}
+                            className={classNames(
+                                "px-4",
+                                "py-2",
+                                "bg-blue-500",
+                                "hover:bg-blue-600",
+                                "text-white",
+                                "rounded",
+                                "focus:outline-none",
+                                "focus:ring-2",
+                                "focus:ring-blue-500",
+                                "focus:ring-offset-2"  
+                            )}
+                            aria-label={`View full detals for ${name}`}>
+                            View Full Details
+                        </button>
+                    )}
+
+                    {allowImageUpload &&(
+                        <>
+                            <input type="file"
+                            ref={fileInputRef}
+                            id={`profile-${id}-image-ipload`}
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{display: 'none'}}/>
+                            <button
+                            onClick={triggerFileUpload}
+                            className={classNames(
+                                "px-4",
+                                "py-2",
+                                "bg-gray-500",
+                                "hover:bg-gray-600",
+                                "text-white",
+                                "rounded",
+                                "focus:outline-none",
+                                "focus:ring-2",
+                                "focus:ring-gray-500",
+                                "focus:ring-offset-2",
+                                !profileImage && "bg-green-500 hover:bg-green-600"
+                            )}
+                            aria-label={`Upload profile picture for ${name}`}>
+                                {profileImage ? "Update Photo" : "Add Photo"}
+                            </button>
+                        </>
+                    )}
+                </div>
+            </Card.Footer>
+        </Card.Container>
+    );
+};
+
+export default ProfileCard;
