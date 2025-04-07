@@ -19,7 +19,7 @@ const HorseProfile2 = ({ horseId }) => {
     const getData = async () => {
         try {
             setLoading(true);
-            const data = await fetchHorseData(3); // For testing purposes
+            const data = await fetchHorseData(1); // For testing purposes
             setHorse(data);
             setError(null);
         } catch (error) {
