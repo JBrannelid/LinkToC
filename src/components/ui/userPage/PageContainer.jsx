@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PageContainer = ({
+export const PageContainer = ({
     id,
     className ="",
     children,
@@ -15,10 +15,9 @@ const PageContainer = ({
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}
-        className={`max-w-md ${className}`}>
+        className={`bg-white rounded-lg shadow-md overflow-hidden ${className}`}>
             {children}
         </div>
     )
 };
 
-export default PageContainer;
