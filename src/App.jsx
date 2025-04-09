@@ -1,13 +1,13 @@
-
-import HorseProfile2 from "./testing/horseCard2.0.jsx";
-
-
 function App() {
+<<<<<<< HEAD
   return (
     <>
      <HorseProfile2/>
     </>
   );
+=======
+  return <></>;
+>>>>>>> origin
 }
 
 export default App;
