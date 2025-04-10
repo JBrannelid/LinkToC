@@ -1,4 +1,5 @@
 // Central file for all API endpoint definitions
 export const ENDPOINTS = {
-  EVENTS: "/events",
+  EVENTS: "/api/calendar-events",
+  HORSES: "/api/horse",
 };
