@@ -1,5 +1,11 @@
+import ApiTester from "./testing/ApiTester";
+
 function App() {
-  return <></>;
+  return (
+    <>
+      <ApiTester />
+    </>
+  );
 }
 
 export default App;
