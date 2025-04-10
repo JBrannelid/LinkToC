@@ -1,25 +1,53 @@
 import React, { useEffect, useState } from "react";
 import ProfileCard from "../components/ui/Card/profileCard.jsx";
-import HorseData from "./HorseData.json";
+import createBaseService from "../api/services/baseService.js";
+import {createError, ErrorTypes} from "../api/index.js";
+
+const horseService = createBaseService(endpoint);
 
 const fetchHorseData = async (horseId) => {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            const horse = HorseData.find(h => h.id === Number(horseId));
-            resolve(horse || null); // Return null if no matching horse is found
-        }, 1000);
-    });
+    try {
+        if (!horseId) {
+            console.error("Horse ID is missing:", horseId); // Log the horseId to debug
+            throw createError("Horse ID is required", ErrorTypes.VALIDATION, 400);
+        }
+
+        // Fetch the data using getById
+        const response = await getById(horseId); // Assuming getById is your function for API call
+        const horses = response.data.value; // Access the 'value' array in the response
+
+        // Find the horse with the matching ID
+        const horse = horses.find(h => h.id === horseId);
+
+        if (!horse) {
+            console.error(`Horse with ID ${horseId} not found.`);
+            return null; // Return null if horse is not found
+        }
+
+        return horse; // Return the found horse
+    } catch (error) {
+        console.error(`Error fetching horse data with ID ${horseId}:`, error);
+        return null; // Handle the error and return null if necessary
+    }
 };
 
-const HorseProfile2 = ({ horseId }) => {
+const HorseProfile2 = (horseId) => {
     const [horse, setHorse] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+
     const getData = async () => {
         try {
+            console.log("Fetching data for horseId:", horseId); // Debug log
+            if (!horseId) {
+                console.error("horseId is undefined or null");
+                setError("Horse ID is required");
+                return;
+            }
+
             setLoading(true);
-            const data = await fetchHorseData(1); // For testing purposes
+            const data = await fetchHorseData(horseId); // For testing purposes
             setHorse(data);
             setError(null);
         } catch (error) {
