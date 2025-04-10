@@ -1,8 +1,7 @@
-import React from 'react';
-
-export const PageImage = ({ src, alt, fallbackSrc, className = '',}) => {
-    const [imgSrc, setImgSrc] = React.useState(src);
-    const [isError, setIsError] = React.useState(false);
+import React, {useState} from 'react';
+const PageImage = ({ src, alt, fallbackSrc, className = '',}) => {
+    const [imgSrc, setImgSrc] = useState(src);
+    const [isError, setIsError] = useState(false);
 
     const handleError = () => {
         if (!isError && fallbackSrc) {
@@ -14,7 +13,7 @@ export const PageImage = ({ src, alt, fallbackSrc, className = '',}) => {
     return (
         <div className={`relative ${className}`}>
             <img
-                src={imgSrc}
+                src={src}
                 alt={alt}
                 onError={handleError}
                 className="w-full h-full object-cover"
@@ -27,3 +26,4 @@ export const PageImage = ({ src, alt, fallbackSrc, className = '',}) => {
         </div>
     );
 };
+export default PageImage;
