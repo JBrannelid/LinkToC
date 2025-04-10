@@ -1,5 +1,6 @@
 // Export services
 import eventService from "./services/eventService";
+import horseService from "./services/horseService";
 
 // Export endpoint configurations
 import { ENDPOINTS } from "./services/endPoints";
@@ -11,6 +12,7 @@ import { ErrorTypes, createError, handleAxiosError } from "./utils/errors";
 export {
   // Services
   eventService,
+  horseService,
 
   // Endpoint configurations
   ENDPOINTS,
