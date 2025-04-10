@@ -3,7 +3,17 @@ import { createError, ErrorTypes } from "../utils/errors";
 
 export default function createBaseService(endpoint) {
   return {
-    // GET all resources
+    // GET all resourcesgetById: async (id) => {
+    //       try {
+    //         if (!id) {
+    //           throw createError("ID is required", ErrorTypes.VALIDATION, 400);
+    //         }
+    //         return await axiosConfig.get(`${endpoint}/${id}`);
+    //       } catch (error) {
+    //         console.error(`Error fetching item with ID ${id}:`, error);
+    //         throw error;
+    //       }
+    //     },
     getAll: async () => {
       try {
         return await axiosConfig.get(endpoint);
@@ -14,18 +24,7 @@ export default function createBaseService(endpoint) {
     },
 
     // GET by ID
-    getById: async (id) => {
-      try {
-        if (!id) {
-          throw createError("ID is required", ErrorTypes.VALIDATION, 400);
-        }
-        return await axiosConfig.get(`${endpoint}/${id}`);
-      } catch (error) {
-        console.error(`Error fetching item with ID ${id}:`, error);
-        throw error;
-      }
-    },
-
+    
     // CREATE
     create: async (data) => {
       try {
