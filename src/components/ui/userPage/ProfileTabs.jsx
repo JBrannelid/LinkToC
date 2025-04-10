@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-export const Tabs = ({ tabs, defaultTab, className ='' }) => {
+const Tabs = ({ tabs, defaultTab, className ='' }) => {
     const [activeTab, setActiveTab] = useState(defaultTab || (tabs[0] && tabs[0].id));
     
     return( 
@@ -42,3 +42,5 @@ export const Tabs = ({ tabs, defaultTab, className ='' }) => {
         </div>
     );
 };
+
+export default Tabs;
