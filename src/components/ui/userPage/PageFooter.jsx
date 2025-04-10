@@ -1,7 +1,7 @@
 // PageFooter.jsx
 import React from 'react';
 
-export const PageFooter = ({ className = "", children, id, bordered = true }) => {
+const PageFooter = ({ className = "", children, id, bordered = true }) => {
     const borderClass = bordered ? 'border-t border-gray-200' : '';
 
     return (
@@ -10,4 +10,6 @@ export const PageFooter = ({ className = "", children, id, bordered = true }) =>
         </footer>
     );
 };
+
+export default PageFooter;
 
