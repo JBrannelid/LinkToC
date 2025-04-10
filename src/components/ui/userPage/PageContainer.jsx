@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const PageContainer = ({
+const PageContainer = ({
     id,
     className ="",
     children,
@@ -20,4 +20,6 @@ export const PageContainer = ({
         </div>
     )
 };
+
+export default PageContainer;
 
