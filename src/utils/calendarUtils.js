@@ -1,4 +1,4 @@
-// Import specific functions from date-fns to use throughout the application
+// Import specific functions from date-fns
 import {
   add,
   eachDayOfInterval,
@@ -12,9 +12,10 @@ import {
   isSameMonth,
   startOfWeek,
   endOfWeek,
+  parseISO as dateFnsParseISO,
 } from "date-fns";
 
-// Export the imported date-fns functions so they can be imported from this file by other modules
+// Re-export date-fns functions directly
 export {
   add,
   eachDayOfInterval,
@@ -40,17 +41,41 @@ export function parseISO(dateString) {
   return new Date(dateString);
 }
 
-// CSS class names for positioning days in the calendar grid
+// Format date for HTML local datetime with parseIso
+export const formatDateForInput = (dateString) => {
+  return format(parseISO(dateString), "yyyy-MM-dd'T'HH:mm");
+};
+
+// Format time to 24/h
+export function formatTimeOnly(dateString) {
+  return format(parseISO(dateString), "HH:mm");
+}
+
+// Format month and year
+export function formatMonthYear(date, locale) {
+  return format(date, "MMMM yyyy", { locale });
+}
+
+// Format day number
+export function formatDayNumber(date) {
+  return format(date, "d");
+}
+
+// Format full day date
+export function formatFullDayDate(date, locale) {
+  return format(date, "EEEE d MMMM", { locale });
+}
+
+// Tailwind-CSS class names for positioning days in the calendar grid
 export const colStartClasses = [
   "col-start-7", // Sunday (moved to end for European calendar format)
   "", // Monday (first column, no special class needed)
-  "col-start-2", // Tuesday
-  "col-start-3", // Wednesday
-  "col-start-4", // Thursday
-  "col-start-5", // Friday
-  "col-start-6", // Saturday
+  "col-start-2",
+  "col-start-3",
+  "col-start-4",
+  "col-start-5",
+  "col-start-6",
 ];
 
-//  weekday titles for Swedish locale
-//  Ordered Monday to Sunday following European convention
+// Ordered Monday to Sunday following European convention (swe-conventions)
 export const weekdayTitles = ["Må", "Ti", "On", "To", "Fr", "Lö", "Sö"];

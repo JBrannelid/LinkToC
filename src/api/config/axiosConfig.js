@@ -18,6 +18,9 @@ axiosInstance.interceptors.response.use(
   // Error (status >= 400): Format the error into a standardized JSON object
   (error) => {
     const formattedError = handleAxiosError(error);
+    console.error(
+      `[API Error] ${formattedError.type}: ${formattedError.message}`
+    );
     return Promise.reject(formattedError);
   }
 );
@@ -25,11 +28,14 @@ axiosInstance.interceptors.response.use(
 axiosInstance.interceptors.request.use(
   (config) => {
     // Do something before request is sent
-    // Ex. modify or add headers, tokens, or other configurations to requests before they are sent
+
+    // Authentication logic will go here when implemented
+    // JWT with HmacSha512 encryption for request authentication
+
     return config;
   },
   (error) => {
-    // Do something with request error
+    // Handle request configuration errors
     return Promise.reject(error);
   }
 );
