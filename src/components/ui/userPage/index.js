@@ -10,6 +10,5 @@ export { default as PageDocumentBadge } from './PageDocumentBadge';
 export { default as PageInfoItem } from './PageInfoItem';
 export { default as PageRecordList } from './PageRecordList';
 export { default as PageTitle } from './PageTitle';
-export { default as PageProfileCard } from './PageProfileCard';
 export { default as LoadingState } from './LoadingState';
 export { default as NotFoundState } from './NotFoundState';

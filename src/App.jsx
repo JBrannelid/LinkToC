@@ -1,8 +1,9 @@
 
-import HorseProfile2 from "./testing/horseCard2.0.jsx";
+import HorseProfile from "./testing/horseCard2.0.jsx";
+import ProfileTester from "./testing/ProfileTester.jsx";
 function App() {
     return (
-        <HorseProfile2 horseId={1}/>
+        <ProfileTester horseId={1}/>
     );
 }
 

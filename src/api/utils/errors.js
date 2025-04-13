@@ -37,7 +37,7 @@ export function handleAxiosError(error) {
     return createError(
       "Could not connect to the server",
       ErrorTypes.NETWORK,
-      0
+      0 // No connection code
     );
   }
 

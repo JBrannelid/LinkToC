@@ -1,29 +1,38 @@
-import React, {useState} from 'react';
-const PageImage = ({ src, alt, fallbackSrc, className = '',}) => {
-    const [imgSrc, setImgSrc] = useState(src);
-    const [isError, setIsError] = useState(false);
+import React, { useState, useEffect } from 'react';
 
+const PageImage = ({ src, alt, fallbackSrc, ...props }) => {
+    // Initialize with null instead of empty string if src is empty
+    const [imgSrc, setImgSrc] = useState(src || fallbackSrc);
+
+    // Update imgSrc when src prop changes
+    useEffect(() => {
+        setImgSrc(src || null);
+    }, [src]);
+
+    // Handle image load errors
     const handleError = () => {
-        if (!isError && fallbackSrc) {
+        if (fallbackSrc && imgSrc !== fallbackSrc) {
             setImgSrc(fallbackSrc);
-            setIsError(true);
+        } else {
+            // If no fallback or already showing fallback, set to null
+            setImgSrc(fallbackSrc);
         }
     };
 
+    // Don't render the img element if imgSrc is null
+    if (imgSrc === null) {
+        return null;
+    }
+
     return (
-        <div className={`relative ${className}`}>
-            <img
-                src={src}
-                alt={alt}
-                onError={handleError}
-                className="w-full h-full object-cover"
-            />
-            {isError && (
-                <div className="absolute bottom-0 left-0 right-0 bg-yellow-100 text-yellow-800 text-xs px-2 py-1">
-                    Using placeholder image
-                </div>
-            )}
-        </div>
+        <img
+            src={imgSrc}
+            alt={alt || "Image"}
+            onError={handleError}
+            {...props}
+        />
     );
 };
+
 export default PageImage;
+

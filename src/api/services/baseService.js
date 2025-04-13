@@ -1,19 +1,10 @@
 import axiosConfig from "../config/axiosConfig";
 import { createError, ErrorTypes } from "../utils/errors";
 
+
 export default function createBaseService(endpoint) {
   return {
-    // GET all resourcesgetById: async (id) => {
-    //       try {
-    //         if (!id) {
-    //           throw createError("ID is required", ErrorTypes.VALIDATION, 400);
-    //         }
-    //         return await axiosConfig.get(`${endpoint}/${id}`);
-    //       } catch (error) {
-    //         console.error(`Error fetching item with ID ${id}:`, error);
-    //         throw error;
-    //       }
-    //     },
+    
     getAll: async () => {
       try {
         return await axiosConfig.get(endpoint);
@@ -24,14 +15,24 @@ export default function createBaseService(endpoint) {
     },
 
     // GET by ID
-    
+    getById: async (id) => {
+      try {
+        if (!id) {
+          throw createError("ID is required", ErrorTypes.VALIDATION, 400);
+        }
+        return await axiosConfig.get(`${endpoint}/${id}`);
+      } catch (error) {
+        console.error(`Error fetching item with ID ${id}:`, error);
+        throw error;
+      }
+    },
     // CREATE
     create: async (data) => {
       try {
         if (!data) {
           throw createError("Data is required", ErrorTypes.VALIDATION, 400);
         }
-        return await axiosConfig.post(endpoint, data);
+        return await axiosConfig.post(`${endpoint}/create`, data);
       } catch (error) {
         console.error(`Error creating item at ${endpoint}:`, error);
         throw error;
@@ -47,7 +48,11 @@ export default function createBaseService(endpoint) {
         if (!data) {
           throw createError("Data is required", ErrorTypes.VALIDATION, 400);
         }
-        return await axiosConfig.put(`${endpoint}/${id}`, data);
+        const updateData = {
+          ...data,
+          id: id,
+        };
+        return await axiosConfig.put(`${endpoint}/update`, updateData);
       } catch (error) {
         console.error(`Error updating item with ID ${id}:`, error);
         throw error;
@@ -60,7 +65,7 @@ export default function createBaseService(endpoint) {
         if (!id) {
           throw createError("ID is required", ErrorTypes.VALIDATION, 400);
         }
-        return await axiosConfig.delete(`${endpoint}/${id}`);
+        return await axiosConfig.delete(`${endpoint}/delete/${id}`);
       } catch (error) {
         console.error(`Error deleting item with ID ${id}:`, error);
         throw error;

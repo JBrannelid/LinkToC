@@ -6,11 +6,11 @@ const RecordList = ({ records, dateField, nameField, labelField }) => {
             {records.map((record, index) => (
                 <li key={index} className="py-2">
                     <div className="flex justify-between">
-                        <div className="text-sm font-medium text-gray-900">{record[nameField]}</div>
-                        <div className="text-sm text-gray-500">{record[dateField]}</div>
+                        <div className="text-sm font-medium text-gray-900">{record[nameField] || 'Not available'}</div>
+                        <div className="text-sm text-gray-500">{record[dateField] || 'Not available' }</div>
                     </div>
                     {labelField && record[labelField] && (
-                        <div className="text-sm text-gray-500">{record[labelField]}</div>
+                        <div className="text-sm text-gray-500">{record[labelField] || 'Not available'}</div>
                     )}
                 </li>
             ))}

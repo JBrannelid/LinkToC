@@ -1,123 +1,140 @@
-import React from 'react';
-import {ProfilePage} from "../components/ui/userPage/HorseProfilePage.jsx";
+import React, { useState, useEffect } from 'react';
+import { ProfilePage } from "../components/ui/userPage/HorseProfilePage.jsx";
+import createBaseService from "../api/services/baseService.js";
+import { createError, ErrorTypes } from "../api/index.js";
+import {createHorseProfile} from "../utils/horseProfileUtils.js";
 
-// Function to add ID to the horse data
-const addIdToHorse = (horse) => {
-    return {
-        id: `H${Math.floor(Math.random() * 10000)}`,
-        ...horse
-    };
+
+// Define the endpoint and create the service
+const endpoint = '/api/horse';
+const horseService = createBaseService(endpoint);
+
+// Updated to use horseProfileUtils for consistency
+
+const processHorseData = (horse) => {
+    // Convert age from ISO string to age in years
+    if (horse.age && typeof horse.age === 'string') {
+        try {
+            const birthDate = new Date(horse.age);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+
+            // Adjust age if birthday hasn't occurred yet this year
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            horse.ageYears = age;
+        } catch (e) {
+            console.error("Error calculating age:", e);
+            horse.ageYears = "Unknown";
+        }
+    }
+    // Use createHorseProfile to ensure complete data structure
+    return createHorseProfile(horse);
+};
+const fetchHorseData = async (horseId) => {
+    try {
+        if (!horseId) {
+            console.error("Horse ID is missing:", horseId);
+            throw createError("Horse ID is required", ErrorTypes.VALIDATION, 400);
+        }
+
+        console.log(`Calling horseService.getById(${horseId})...`);
+        const response = await horseService.getById(horseId);
+        console.log("Raw API Response:", response);
+
+        if (!response) {
+            console.error(`No response received from API for horse ID ${horseId}`);
+            return null;
+        }
+
+        if (!response.data) {
+            if (response.isSuccess && response.value) {
+                console.log("Attempting to use response directly as it has expected structure");
+                const horse = response.value;
+                return processHorseData(horse);
+            }
+            return null;
+        }
+
+        if (!response.data.isSuccess) {
+            console.error(`Error from API: ${response.data.message}`);
+            return null;
+        }
+
+        const horse = response.data.value;
+
+        if (!horse) {
+            console.error(`Horse with ID ${horseId} not found.`);
+            return null;
+        }
+
+        return processHorseData(horse);
+    } catch (error) {
+        console.error(`Error fetching horse data with ID ${horseId}:`, error);
+        return null;
+    }
 };
 
-const ProfileTester = () => {
-    const horse = addIdToHorse({
-        "name": "Midnight Star",
-        "breed": "Arabian",
-        "age": 7,
-        "color": "Black",
-        "height": "15.2 hands",
-        "weight": "950 lbs",
-        "gender": "Gelding",
-        "birthDate": "April 15, 2018",
-        "owner": "Jane Smith",
-        "discipline": "Dressage",
-        "registration": "AHA #123456",
-        "microchipId": "985121054367289",
-        "registryOrganization": "Arabian Horse Association",
-        "registrationNumber": "AHA123456",
-        "purchaseDate": "June 10, 2020",
-        "bio": "Midnight Star is a talented and spirited Arabian with exceptional movement. He loves trail rides and has competed successfully in several local dressage events.",
-        "healthStatus": "Excellent",
-        "veterinarian": {
-            "name": "Dr. Emily Johnson",
-            "practice": "Equine Health Center",
-            "contact": "(555) 123-4567"
-        },
-        "lastVetExam": "March 15, 2023",
-        "feedType": "Premium Grain Mix & Timothy Hay",
-        "feedAmount": "5 lbs grain daily, free choice hay",
-        "supplements": [
-            "Joint supplement",
-            "Vitamin E",
-            "Omega-3 oil"
-        ],
-        "specialDiet": "No molasses",
-        "feedingNotes": "Feed twice daily, morning and evening. Add supplements to morning feed only.",
-        "insurance": {
-            "provider": "Equine Insurance Co.",
-            "policyNumber": "EQ-98765432",
-            "coverageType": "Major Medical & Mortality",
-            "expirationDate": "December 31, 2023"
-        },
-        "vaccinations": [
-            {
-                "name": "Flu/Rhino",
-                "date": "January 15, 2023"
-            },
-            {
-                "name": "West Nile",
-                "date": "March 1, 2023"
-            },
-            {
-                "name": "Rabies",
-                "date": "March 1, 2023"
-            },
-            {
-                "name": "Tetanus",
-                "date": "March 1, 2023"
+const ProfileTester = ({ horseId }) => {
+    const [horse, setHorse] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const placeholderImage = "/src/assets/images/profilePlaceholder.jpg";
+
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const data = await fetchHorseData(horseId);
+                setHorse(data);
+            } catch (error) {
+                setError(error.message || "Failed to load horse data");
+                console.error("Error loading horse data:", error);
+            } finally {
+                setLoading(false);
             }
-        ],
-        "dentalRecords": [
-            {
-                "procedure": "Routine Float",
-                "date": "February 12, 2023"
-            },
-            {
-                "procedure": "Wolf Tooth Extraction",
-                "date": "August 5, 2022"
-            }
-        ],
-        "documents": {
-            "Registration Papers": true,
-            "Purchase Contract": true,
-            "Health Certificate": true,
-            "Coggins Test": true,
-            "Insurance Policy": false
-        }
-    });
+        };
 
-    // Mock data fetching function
-    const getData = async (id) => {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 800));
+        loadInitialData();
+    }, [horseId]);
 
-        if (id === horse.id) {
-            return horse;
-        }
-
-        throw new Error('Horse not found');
+    // This function handles the onDetailsClick event and matches the signature expected by ProfilePage
+    const handleDetailsClick = async (id) => {
+        // Since we already have the horse data, we can return it immediately
+        // If needed, you could re-fetch the data here
+        return horse;
     };
 
+    // Check if we're still loading or have an error
+    if (loading) {
+        return <div>Loading horse profile...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    // If we have no horse data, show an error
+    if (!horse) {
+        return <div>No horse data found</div>;
+    }
+    
+    
+    // Render the ProfilePage component with the horse data
     return (
-        <ProfilePage
-            id={horse.id}
-            name={horse.name}
-            imageUrl="" // Empty to test the fallback
-            description={horse.bio}
-            metadata={{
-                breed: horse.breed,
-                age: horse.age,
-                discipline: horse.discipline
-            }}
-            stats={{
-                health: horse.healthStatus,
-                lastExam: horse.lastVetExam
-            }}
-            onDetailsClick={getData}
-            loadingText="Loading horse profile..."
-            notFoundText="No horse data found"
-            placeholderImageUrl="/src/assets/images/profilePlaceholder.jpg"
-        />
+        <div className="container mx-auto px-4 py-8">
+            <ProfilePage
+                horseId={horseId}
+                imageUrl={horse.imageUrl}
+                onDetailsClick={handleDetailsClick}
+                loadingText="Loading horse profile..."
+                notFoundText="Horse profile not found"
+                placeholderImageUrl={placeholderImage}
+               />
+        </div>
     );
 };
 
