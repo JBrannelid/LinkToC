@@ -1,5 +1,11 @@
+import CalendarDisplay from "../src/components/calendar/CalendarDisplay";
+
 function App() {
-  return <></>;
+  return (
+    <>
+      <CalendarDisplay />
+    </>
+  );
 }
 
 export default App;
