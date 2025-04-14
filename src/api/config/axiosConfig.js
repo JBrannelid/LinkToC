@@ -13,7 +13,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   // Sucess (status 2xx): Return response data
-  (response) => response.data,
+  (response) => {
+    console.log(response.data);
+    return response.data;
+  },
 
   // Error (status >= 400): Format the error into a standardized JSON object
   (error) => {
