@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { sv } from "date-fns/locale";
-import { calendarHook } from "../../hooks/calendarHook";
+import { calendarHook } from "../../hooks/useDateFns";
 import EventItem from "./CalendarEventItem";
 
 // Reusable Calendar with props for data and configuration
@@ -12,7 +12,7 @@ const Calendar = ({
   eventItemRenderer = EventItem,
 }) => {
   const {
-    // Date const values
+    // Date values
     selectedDay,
     firstDayCurrentMonth,
     days,
@@ -24,12 +24,17 @@ const Calendar = ({
     isSameMonth,
     getDay,
     parseISO,
-    classNames,
 
     // Calendar data
     selectedDayEvents,
     weekdayTitle,
     colStartClasses,
+    classNames,
+
+    // Format functions
+    formatMonthYear,
+    formatDayNumber,
+    formatFullDayDate,
 
     // States
     setSelectedDay,
@@ -47,7 +52,7 @@ const Calendar = ({
           <div className="md:pr-14">
             <div className="flex items-center">
               <h2 className="flex-auto font-semibold text-gray-900">
-                {format(firstDayCurrentMonth, "MMMM yyyy", { locale })}
+                {formatMonthYear(firstDayCurrentMonth, locale)}
               </h2>
               <button
                 type="button"
@@ -128,14 +133,14 @@ const Calendar = ({
                     )}
                   >
                     <time dateTime={format(day, "yyyy-MM-dd")}>
-                      {format(day, "d")}
+                      {formatDayNumber(day)}
                     </time>
                   </button>
 
                   {/* Marker for days with events */}
                   <div className="w-1 h-1 mx-auto mt-1">
                     {events.some((event) =>
-                      isSameDay(parseISO(event.StartDatetime), day)
+                      isSameDay(parseISO(event.startDateTime), day)
                     ) && (
                       <div
                         className={`w-1 h-1 rounded-full bg-bg-secondary`}
@@ -152,7 +157,7 @@ const Calendar = ({
             <h2 className="font-semibold text-gray-900">
               Schema för&nbsp;
               <time dateTime={format(selectedDay, "yyyy-MM-dd")}>
-                {format(selectedDay, "EEEE d MMMM", { locale })}
+                {formatFullDayDate(selectedDay, locale)}
               </time>
             </h2>
             {/* Map list of events */}
