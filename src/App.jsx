@@ -1,10 +1,11 @@
+import CalendarDisplay from "./components/calendar/CalendarDisplay";
 
-import HorseProfile from "./testing/horseCard2.0.jsx";
-import ProfileTester from "./testing/ProfileTester.jsx";
 function App() {
-    return (
-        <ProfileTester horseId={1}/>
-    );
+  return (
+    <>
+      <CalendarDisplay />
+    </>
+  );
 }
 
 export default App;

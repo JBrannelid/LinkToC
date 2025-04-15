@@ -1,5 +1,8 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { sv } from "date-fns/locale";
 import { calendarHook } from "../../hooks/useDateFns";
 import EventItem from "./CalendarEventItem";
@@ -33,6 +36,8 @@ const Calendar = ({
 
     // Format functions
     formatMonthYear,
+    formatMonth,
+    formatYear,
     formatDayNumber,
     formatFullDayDate,
 
@@ -42,7 +47,11 @@ const Calendar = ({
     // Navigation functions
     previousMonth,
     nextMonth,
+    changeYear,
   } = calendarHook(events, locale);
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   return (
     <div className="pt-16">
@@ -50,24 +59,40 @@ const Calendar = ({
         <div className="md:grid md:grid-cols-2 md:divide-x md:divide-accent-secondary/50">
           {/* Calendar */}
           <div className="md:pr-14">
-            <div className="flex items-center">
-              <h2 className="flex-auto font-semibold text-gray-900">
-                {formatMonthYear(firstDayCurrentMonth, locale)}
-              </h2>
-              <button
-                type="button"
-                onClick={previousMonth}
-                className="p-2 text-gray-400 hover:text-gray-500"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={nextMonth}
-                type="button"
-                className="p-2 text-gray-400 hover:text-gray-500"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
+            <div className="flex ">
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={previousMonth}
+                  className="p-2 text-gray-400 hover:text-gray-500"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+
+                <h2 className="text-lg font-bold text-gray-900">
+                  {formatMonth(firstDayCurrentMonth, locale)}
+                </h2>
+
+                <button
+                  onClick={nextMonth}
+                  type="button"
+                  className="p-2 text-gray-400 hover:text-gray-500"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+                <select
+                  id="year"
+                  value={firstDayCurrentMonth.getFullYear()}
+                  onChange={(e) => changeYear(Number(e.target.value))}
+                  className="font-bold text-gray-9000"
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Weekday Headings */}

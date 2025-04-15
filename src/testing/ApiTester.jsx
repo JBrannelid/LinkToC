@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { eventService, horseService } from "../api";
-import { ENDPOINTS } from "../api/index.js";
+import { eventService, stableService } from "../api";
+import { ENDPOINTS } from "../api/services/endPoints";
 
 // Constants to make it easy to change endpoints and methods
-const DEFAULT_SERVICE = horseService.getAll;
-const DEFAULT_ENDPOINT = ENDPOINTS.HORSES;
+const DEFAULT_SERVICE = stableService.getAll;
+const DEFAULT_ENDPOINT = ENDPOINTS.EVENTS;
 
 function ApiTester() {
   // State for managing API responses and status
