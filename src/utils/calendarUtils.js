@@ -56,6 +56,11 @@ export function formatMonthYear(date, locale) {
   return format(date, "MMMM yyyy", { locale });
 }
 
+// Format month and year
+export function formatYear(date, locale) {
+  return format(date, "yyyy", { locale });
+}
+
 // Format month
 export function formatMonth(date, locale) {
   return format(date, "MMMM", { locale });
