@@ -78,6 +78,14 @@ export const calendarHook = (events = [], locale) => {
     setCurrentMonth(format(firstDayNextYear, "MMM-yyyy", { locale }));
   }
 
+  // Navigate to the previous year
+  function previousYear() {
+    const firstDayPreviousYear = add(firstDayCurrentMonth, {
+      years: -1,
+    });
+    setCurrentMonth(format(firstDayPreviousYear, "MMM-yyyy", { locale }));
+  }
+
   // Change year
   function changeYear(targetYear) {
     const newDate = new Date(firstDayCurrentMonth);
@@ -118,8 +126,9 @@ export const calendarHook = (events = [], locale) => {
 
     // Navigation functions
     previousMonth,
+    previousYear,
+    changeYear,
     nextMonth,
     nextYear,
-    changeYear,
   };
 };
