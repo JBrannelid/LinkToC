@@ -20,6 +20,7 @@ import {
   formatMonth,
   formatDayNumber,
   formatFullDayDate,
+  formatYear,
 } from "../utils/calendarUtils";
 
 // Custom hook for calendar functionality
@@ -69,6 +70,14 @@ export const calendarHook = (events = [], locale) => {
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy", { locale }));
   }
 
+  // Navigate to the next year
+  function nextYear() {
+    const firstDayNextYear = add(firstDayCurrentMonth, {
+      years: 1,
+    });
+    setCurrentMonth(format(firstDayNextYear, "MMM-yyyy", { locale }));
+  }
+
   // Change year
   function changeYear(targetYear) {
     const newDate = new Date(firstDayCurrentMonth);
@@ -102,6 +111,7 @@ export const calendarHook = (events = [], locale) => {
     formatMonth,
     formatDayNumber,
     formatFullDayDate,
+    formatYear,
 
     // States
     setSelectedDay,
@@ -109,6 +119,7 @@ export const calendarHook = (events = [], locale) => {
     // Navigation functions
     previousMonth,
     nextMonth,
+    nextYear,
     changeYear,
   };
 };
