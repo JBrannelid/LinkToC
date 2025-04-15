@@ -1,5 +1,10 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import { sv } from "date-fns/locale";
 import { calendarHook } from "../../hooks/useDateFns";
 import EventItem from "./CalendarEventItem";
@@ -34,6 +39,7 @@ const Calendar = ({
     // Format functions
     formatMonthYear,
     formatMonth,
+    formatYear,
     formatDayNumber,
     formatFullDayDate,
 
@@ -76,7 +82,6 @@ const Calendar = ({
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
-
                 <select
                   id="year"
                   value={firstDayCurrentMonth.getFullYear()}
