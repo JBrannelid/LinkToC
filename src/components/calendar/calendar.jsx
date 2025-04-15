@@ -2,8 +2,6 @@ import React from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
 } from "lucide-react";
 import { sv } from "date-fns/locale";
 import { calendarHook } from "../../hooks/useDateFns";
