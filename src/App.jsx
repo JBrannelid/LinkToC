@@ -1,3 +1,5 @@
+import PostFeed from "./pages/PostFeed";
+
 function App() {
   return <></>;
 }
