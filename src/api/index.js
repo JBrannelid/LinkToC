@@ -1,6 +1,7 @@
 // Export services
 import eventService from "./services/eventService";
 import stableService from "./services/stableService";
+import stablePostService from "./services/stablePostService";
 
 // Export endpoint configurations
 import { ENDPOINTS } from "./services/endPoints";
@@ -13,6 +14,7 @@ export {
   // Services
   eventService,
   stableService,
+  stablePostService,
 
   // Endpoint configurations
   ENDPOINTS,
