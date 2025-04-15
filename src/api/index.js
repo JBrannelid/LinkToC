@@ -13,6 +13,8 @@ import { ErrorTypes, createError, handleAxiosError } from "./utils/errors";
 export {
   // Services
   eventService,
+  stableService,
+  stablePostService,
 
   // Endpoint configurations
   ENDPOINTS,
