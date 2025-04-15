@@ -28,14 +28,23 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+const getAuthToken = () => {
+  return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwianRpIjoiMjZkNDJlYTItNWFkMi00NjYzLTlhMDQtZWVjMTYyMTc2Njg1IiwibmJmIjoxNzQ0NzIzMTExLCJleHAiOjE3NDUwNjA2MTEsImlhdCI6MTc0NDcyMzExMSwiaXNzIjoiRXF1aWxvZ0FQSSIsImF1ZCI6IkVxdWlsb2dDbGllbnQifQ.Qbggs1FHzC-OmNi9IlwdKavKd5_Dy-qF9NLVrnR1p0Zhc-pYttt5sDjDsHjK-hmKRBf4Rcqx0cL9nbBdgmAvWQ";
+};
+
 axiosInstance.interceptors.request.use(
   (config) => {
+    const token = getAuthToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+
     // Do something before request is sent
 
     // Authentication logic will go here when implemented
     // JWT with HmacSha512 encryption for request authentication
-
-    return config;
   },
   (error) => {
     // Handle request configuration errors
