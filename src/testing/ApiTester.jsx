@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { eventService } from "../api";
+import { eventService, stableService } from "../api";
 import { ENDPOINTS } from "../api/services/endPoints";
 
 // Constants to make it easy to change endpoints and methods
-const DEFAULT_SERVICE = eventService.getAll;
+const DEFAULT_SERVICE = stableService.getAll;
 const DEFAULT_ENDPOINT = ENDPOINTS.EVENTS;
 
 function ApiTester() {

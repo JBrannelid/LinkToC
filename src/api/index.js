@@ -1,5 +1,6 @@
 // Export services
 import eventService from "./services/eventService";
+import stableService from "./services/stableService";
 
 // Export endpoint configurations
 import { ENDPOINTS } from "./services/endPoints";
@@ -11,6 +12,7 @@ import { ErrorTypes, createError, handleAxiosError } from "./utils/errors";
 export {
   // Services
   eventService,
+  stableService,
 
   // Endpoint configurations
   ENDPOINTS,
