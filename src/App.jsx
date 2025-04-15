@@ -1,7 +1,10 @@
 import PostFeed from "./pages/PostFeed";
 
 function App() {
-  return <></>;
+  return (
+    <>
+    </>
+  );
 }
 
 export default App;
