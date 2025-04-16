@@ -89,3 +89,35 @@ export const colStartClasses = [
 
 // Ordered Monday to Sunday following European convention (swe-conventions)
 export const weekdayTitles = ["Må", "Ti", "On", "To", "Fr", "Lö", "Sö"];
+
+// Returns Tailwind CSS classes for calendar day buttons based on their state
+export function getDayButtonClasses(day, selectedDay, firstDayCurrentMonth) {
+  return classNames(
+    // Base styling for all day buttons
+    "mx-auto flex h-8 w-8 items-center justify-center rounded-full",
+
+    // Grey out days from other months. Not used at the moment sense we add overlay for dates !isSameMonth
+    !isSameMonth(day, firstDayCurrentMonth) && "text-gray-500",
+
+    // Standard text color for current month days
+    isSameMonth(day, firstDayCurrentMonth) &&
+      !isToday(day) &&
+      !isSameDay(day, selectedDay) &&
+      "text-gray-800",
+
+    // Highlight today (if not selected)
+    isToday(day) && !isSameDay(day, selectedDay) && "text-primary-text",
+
+    // Selected day (not today)
+    isSameDay(day, selectedDay) && !isToday(day) && "text-gray-500",
+
+    // Selected day is today
+    isSameDay(day, selectedDay) && isToday(day) && "text-emerald-400",
+
+    // Hover effect for unselected days
+    !isSameDay(day, selectedDay) && "hover:bg-gray-200",
+
+    // Bold for selected day or today
+    (isSameDay(day, selectedDay) || isToday(day)) && "font-semibold"
+  );
+}
