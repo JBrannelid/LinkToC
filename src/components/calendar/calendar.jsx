@@ -1,11 +1,9 @@
 import React from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { sv } from "date-fns/locale";
 import { calendarHook } from "../../hooks/useDateFns";
 import EventItem from "./CalendarEventItem";
+import CalendarEventsList from "./CalendarEventsList";
 
 // Reusable Calendar with props for data and configuration
 const Calendar = ({
@@ -96,13 +94,13 @@ const Calendar = ({
             </div>
 
             {/* Weekday Headings */}
-            <div className="grid grid-cols-7 mt-10 text-xs text-center text-gray-500">
+            <div className="grid grid-cols-7 mt-6 text-xs leading-6 text-center text-gray-500">
               {weekdayTitle.map((day, index) => (
                 <div key={index}>{day}</div>
               ))}
             </div>
 
-            {/* Calendar Days */}
+            {/* Calendar Days grid */}
             <div className="grid grid-cols-7 mt-2 text-sm">
               {days.map((day, dayIdx) => (
                 <div
@@ -178,26 +176,15 @@ const Calendar = ({
           </div>
 
           {/* Today's events */}
-          <section className="mt-12 md:mt-0 md:pl-14">
-            <h2 className="font-semibold text-gray-900">
-              Schema för&nbsp;
-              <time dateTime={format(selectedDay, "yyyy-MM-dd")}>
-                {formatFullDayDate(selectedDay, locale)}
-              </time>
-            </h2>
-            {/* Map list of events */}
-            <ol className="mt-4 text-sm leading-6 text-gray-500">
-              {selectedDayEvents.length > 0 ? (
-                selectedDayEvents.map((event) => (
-                  <React.Fragment key={event.id}>
-                    {React.createElement(eventItemRenderer, { event })}
-                  </React.Fragment>
-                ))
-              ) : (
-                <p>{noEventsMessage}</p>
-              )}
-            </ol>
-          </section>
+          <CalendarEventsList
+            selectedDay={selectedDay}
+            selectedDayEvents={selectedDayEvents}
+            format={format}
+            formatFullDayDate={formatFullDayDate}
+            locale={locale}
+            noEventsMessage={noEventsMessage}
+            eventItemRenderer={eventItemRenderer}
+          />
         </div>
       </div>
     </div>
