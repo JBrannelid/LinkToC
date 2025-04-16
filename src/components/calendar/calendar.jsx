@@ -11,6 +11,7 @@ const Calendar = ({
   locale = sv,
   noEventsMessage = "Inga schemalagda händelser",
   eventItemRenderer = EventItem,
+  onAddEvent = () => {},
 }) => {
   const {
     // Date values
@@ -33,9 +34,7 @@ const Calendar = ({
     classNames,
 
     // Format functions
-    formatMonthYear,
     formatMonth,
-    formatYear,
     formatDayNumber,
     formatFullDayDate,
 
@@ -52,22 +51,53 @@ const Calendar = ({
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   return (
-    <div className="pt-16">
-      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-3xl md:px-6">
+    <div className="pt-4">
+      <div className=" mx-auto sm:px-7 md:max-w-5xl md:px-6">
         <div className="md:grid md:grid-cols-2 md:divide-x md:divide-accent-secondary/50">
           {/* Calendar */}
           <div className="md:pr-14">
-            <div className="flex ">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center space-x-2">
+                {/* Dropdownlist Years */}
+                <select
+                  id="year"
+                  value={firstDayCurrentMonth.getFullYear()}
+                  onChange={(e) => changeYear(Number(e.target.value))}
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-full text-sm"
+                >
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+                {/* Return to today */}
+                <button
+                  type="button"
+                  className="px-3 py-2 bg-white border border-gray-300 rounded-full text-sm"
+                >
+                  Today
+                </button>
+                {/* Add a new event */}
+                <button
+                  type="button"
+                  onClick={onAddEvent}
+                  className="px-3 py-2 bg-blue-500 text-white rounded-full text-sm flex items-center"
+                >
+                  <span>+</span>
+                </button>
+              </div>
+
               <div className="flex items-center space-x-2">
                 <button
                   type="button"
                   onClick={previousMonth}
-                  className="p-2 text-gray-400 hover:text-gray-500"
+                  className="pl-2 text-gray-400 hover:text-gray-500"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
 
-                <h2 className="text-lg font-bold text-gray-900">
+                <h2 className=" text-sm">
                   {formatMonth(firstDayCurrentMonth, locale)}
                 </h2>
 
@@ -78,96 +108,90 @@ const Calendar = ({
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
-                <select
-                  id="year"
-                  value={firstDayCurrentMonth.getFullYear()}
-                  onChange={(e) => changeYear(Number(e.target.value))}
-                  className="font-bold text-gray-9000"
-                >
-                  {years.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
 
             {/* Weekday Headings */}
-            <div className="grid grid-cols-7 mt-6 text-xs leading-6 text-center text-gray-500">
+            <div className="grid grid-cols-7 text-sm text-center text-gray-500">
               {weekdayTitle.map((day, index) => (
-                <div key={index}>{day}</div>
+                <div key={index} className="font-medium py-2">
+                  {day}
+                </div>
               ))}
             </div>
 
-            {/* Calendar Days grid */}
+            {/* Divider between weekday headers and calendar */}
+            <div className="border-t border-gray-200 my-2"></div>
+
+            {/* Calendar Days Box-Grid */}
             <div className="grid grid-cols-7 mt-2 text-sm">
               {days.map((day, dayIdx) => (
                 <div
                   key={day.toString()}
                   className={classNames(
                     dayIdx === 0 && colStartClasses[getDay(day)],
-                    "p-1.5"
+                    "p-0.5 h-20 border border-gray-200 rounded-md relative"
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDay(day)}
-                    className={classNames(
-                      // Selected day text color
-                      isSameDay(day, selectedDay) && "text-secondary-text",
+                  <div className="p-1 h-full">
+                    {/* Day number in top-left corner - Only this is clickable now */}
+                    <button
+                      type="button"
+                      onClick={() => setSelectedDay(day)}
+                      className={classNames(
+                        // Base styling for all day buttons
+                        "mx-auto flex h-8 w-8 items-center justify-center rounded-full",
 
-                      // Highlight Today's date (when not selected) with accent color
-                      !isSameDay(day, selectedDay) &&
-                        isToday(day) &&
-                        "text-primary-text",
-
-                      // Current month days text color (not selected, not today)
-                      !isSameDay(day, selectedDay) &&
-                        !isToday(day) &&
+                        // Standard text colors first
+                        !isSameMonth(day, firstDayCurrentMonth)
+                          ? "text-gray-500"
+                          : "",
                         isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-gray-800",
+                          !isToday(day) &&
+                          !isSameDay(day, selectedDay)
+                          ? "text-gray-800"
+                          : "",
+                        isToday(day) && !isSameDay(day, selectedDay)
+                          ? "text-primary-text"
+                          : "",
+                        isSameDay(day, selectedDay) && !isToday(day)
+                          ? "text-gray-500"
+                          : "",
 
-                      // Days not included in current
-                      !isSameDay(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-gray-500",
+                        // The emerald color as highest priority
+                        isSameDay(day, selectedDay) && isToday(day)
+                          ? "text-emerald-400"
+                          : "",
 
-                      // Background for selected day that is also today
-                      isSameDay(day, selectedDay) &&
-                        isToday(day) &&
-                        "bg-bg-secondary",
+                        // Other styles
+                        !isSameDay(day, selectedDay) ? "hover:bg-gray-200" : "",
+                        isSameDay(day, selectedDay) || isToday(day)
+                          ? "font-semibold"
+                          : ""
+                      )}
+                    >
+                      <time dateTime={format(day, "yyyy-MM-dd")}>
+                        {formatDayNumber(day)}
+                      </time>
+                    </button>
 
-                      // Background for selected day that is not today
-                      isSameDay(day, selectedDay) &&
-                        !isToday(day) &&
-                        "bg-gray-500",
-
-                      // Hover effect for non-selected days
-                      !isSameDay(day, selectedDay) && "hover:bg-gray-200",
-
-                      // Bold text for selected day or today
-                      (isSameDay(day, selectedDay) || isToday(day)) &&
-                        "font-semibold",
-
-                      // Base styling for all day buttons
-                      "mx-auto flex h-8 w-8 items-center justify-center rounded-full"
+                    {/* Special styling for selected day */}
+                    {isSameDay(day, selectedDay) && (
+                      <div className="absolute inset-0 border-2 border-gray-300 pointer-events-none z-10"></div>
                     )}
-                  >
-                    <time dateTime={format(day, "yyyy-MM-dd")}>
-                      {formatDayNumber(day)}
-                    </time>
-                  </button>
 
-                  {/* Marker for days with events */}
-                  <div className="w-1 h-1 mx-auto mt-1">
+                    {/* Event indicators */}
                     {events.some((event) =>
                       isSameDay(parseISO(event.startDateTime), day)
                     ) && (
-                      <div
-                        className={`w-1 h-1 rounded-full bg-bg-secondary`}
-                      ></div>
+                      <div className="absolute bottom-2 w-full px-3">
+                        <div className="h-1.5 w-1.5 rounded-full bg-green-500 mt-1"></div>
+                      </div>
+                    )}
+
+                    {/* Day not in current month - add overlay */}
+                    {!isSameMonth(day, firstDayCurrentMonth) && (
+                      <div className="absolute inset-0 bg-gray-100 bg-opacity-20 pointer-events-none"></div>
                     )}
                   </div>
                 </div>
