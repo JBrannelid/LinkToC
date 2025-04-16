@@ -60,15 +60,6 @@ function CalendarDisplay() {
       <div className="flex justify-between items-center mt-4">
         <h1 className="text-2xl font-bold">Kalender</h1>
       </div>
-      <div>
-        <button
-          onClick={showEventEditorForm}
-          className="px-4 py-2 mt-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          <p>Lägg till händelse</p>
-        </button>
-      </div>
-
       {status.loading && events.length > 0 && (
         <div className="text-center py-2 text-gray-500">Uppdaterar...</div>
       )}
@@ -88,6 +79,7 @@ function CalendarDisplay() {
         events={events}
         locale={sv}
         noEventsMessage="Inga schemalagda händelser"
+        onAddEvent={showEventEditorForm}
         eventItemRenderer={({ event }) => (
           <CalendarEventItem
             event={event}
