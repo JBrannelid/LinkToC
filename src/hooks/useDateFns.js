@@ -93,6 +93,12 @@ export const calendarHook = (events = [], locale) => {
     setCurrentMonth(format(newDate, "MMM-yyyy", { locale }));
   }
 
+  // Go to today (resets both month and year)
+  function goToToday() {
+    setSelectedDay(today);
+    setCurrentMonth(format(today, "MMM-yyyy", { locale }));
+  }
+
   return {
     // Date values
     today,
@@ -130,5 +136,6 @@ export const calendarHook = (events = [], locale) => {
     changeYear,
     nextMonth,
     nextYear,
+    goToToday,
   };
 };
