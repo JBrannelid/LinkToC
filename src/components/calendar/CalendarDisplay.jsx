@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { sv } from "date-fns/locale";
-import Calendar from "./Calendar";
+import Calendar from "./calendar";
 import CalendarEventItem from "./CalendarEventItem";
 import EventForm from "../forms/DataForm";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
