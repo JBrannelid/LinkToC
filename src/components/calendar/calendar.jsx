@@ -45,6 +45,7 @@ const Calendar = ({
     previousMonth,
     nextMonth,
     changeYear,
+    goToToday,
   } = calendarHook(events, locale);
 
   const currentYear = new Date().getFullYear();
@@ -74,6 +75,7 @@ const Calendar = ({
                 {/* Return to today */}
                 <button
                   type="button"
+                  onClick={goToToday}
                   className="px-3 py-2 bg-white border border-gray-300 rounded-full text-sm"
                 >
                   Today
