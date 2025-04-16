@@ -4,6 +4,7 @@ import { sv } from "date-fns/locale";
 import { calendarHook } from "../../hooks/useDateFns";
 import EventItem from "./CalendarEventItem";
 import CalendarEventsList from "./CalendarEventsList";
+import { getDayButtonClasses } from "../../utils/calendarUtils";
 
 // Reusable Calendar with props for data and configuration
 const Calendar = ({
@@ -22,7 +23,6 @@ const Calendar = ({
     // Date functions
     format,
     isSameDay,
-    isToday,
     isSameMonth,
     getDay,
     parseISO,
@@ -135,65 +135,41 @@ const Calendar = ({
                     "p-0.5 h-20 border border-gray-200 rounded-md relative"
                   )}
                 >
-                  <div className="p-1 h-full">
-                    {/* Day number in top-left corner - Only this is clickable now */}
-                    <button
-                      type="button"
-                      onClick={() => setSelectedDay(day)}
-                      className={classNames(
-                        // Base styling for all day buttons
-                        "mx-auto flex h-8 w-8 items-center justify-center rounded-full",
+                  {/* Day number in top-left corner wrap in a button*/}
+                  <div className="h-full flex flex-col text-[0.7rem] font-semibold">
+                    <div className="self-start">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDay(day)}
+                        className={getDayButtonClasses(
+                          day,
+                          selectedDay,
+                          firstDayCurrentMonth
+                        )}
+                      >
+                        <time dateTime={format(day, "yyyy-MM-dd")}>
+                          {formatDayNumber(day)}
+                        </time>
+                      </button>
+                    </div>
 
-                        // Standard text colors first
-                        !isSameMonth(day, firstDayCurrentMonth)
-                          ? "text-gray-500"
-                          : "",
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                          !isToday(day) &&
-                          !isSameDay(day, selectedDay)
-                          ? "text-gray-800"
-                          : "",
-                        isToday(day) && !isSameDay(day, selectedDay)
-                          ? "text-primary-text"
-                          : "",
-                        isSameDay(day, selectedDay) && !isToday(day)
-                          ? "text-gray-500"
-                          : "",
-
-                        // The emerald color as highest priority
-                        isSameDay(day, selectedDay) && isToday(day)
-                          ? "text-emerald-400"
-                          : "",
-
-                        // Other styles
-                        !isSameDay(day, selectedDay) ? "hover:bg-gray-200" : "",
-                        isSameDay(day, selectedDay) || isToday(day)
-                          ? "font-semibold"
-                          : ""
-                      )}
-                    >
-                      <time dateTime={format(day, "yyyy-MM-dd")}>
-                        {formatDayNumber(day)}
-                      </time>
-                    </button>
-
-                    {/* Special styling for selected day */}
+                    {/* Border highlight for selected day */}
                     {isSameDay(day, selectedDay) && (
-                      <div className="absolute inset-0 border-2 border-gray-300 pointer-events-none z-10"></div>
+                      <div className="absolute inset-0 border-2 border-gray-400/60 z-10"></div>
                     )}
 
-                    {/* Event indicators */}
+                    {/* Overlay for out-of-month days */}
+                    {!isSameMonth(day, firstDayCurrentMonth) && (
+                      <div className="absolute inset-0 bg-gray-100 bg-opacity-20 "></div>
+                    )}
+
+                    {/* Event indicator dot */}
                     {events.some((event) =>
                       isSameDay(parseISO(event.startDateTime), day)
                     ) && (
                       <div className="absolute bottom-2 w-full px-3">
-                        <div className="h-1.5 w-1.5 rounded-full bg-green-500 mt-1"></div>
+                        <div className="h-1.5 w-1.5 rounded-full bg-green-500"></div>
                       </div>
-                    )}
-
-                    {/* Day not in current month - add overlay */}
-                    {!isSameMonth(day, firstDayCurrentMonth) && (
-                      <div className="absolute inset-0 bg-gray-100 bg-opacity-20 pointer-events-none"></div>
                     )}
                   </div>
                 </div>
