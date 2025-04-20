@@ -3,17 +3,26 @@ import { ENDPOINTS } from "./endPoints";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
 
+// We need backend to filter events by stable ID
+// getStableEvents have a temporary solution and return all events for now
 const eventService = {
   ...baseService,
 
-  create: async (data) => {
-    // baseService will handle validation of data
+  getStableEvents: async (stableId) => {
+    const allEvents = await eventService.getAll();
+    console.log(
+      `Retrieved ${allEvents.length} events - displaying all since stableIdFk is not provided by backend`
+    );
 
+    return allEvents;
+  },
+
+  create: async (data) => {
     const createData = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: 1, // Default value since we're not handling stable foreign key atm.
+      stableIdFk: data.stableIdFk || 2, // Default to stable 2 to match my local db
     };
 
     return await baseService.create(createData);
@@ -25,14 +34,11 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk || 1,
+      stableIdFk: data.stableIdFk || 2, // Default to stable 2 to match my local db
     };
 
-    console.log("Sending update data:", JSON.stringify(updateData));
     return await baseService.update(updateData);
   },
-
-  // Implement event-specific method to ensure DTO formatting
 };
 
 export default eventService;
