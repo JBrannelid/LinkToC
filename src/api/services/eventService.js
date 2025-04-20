@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endpoints";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
 
