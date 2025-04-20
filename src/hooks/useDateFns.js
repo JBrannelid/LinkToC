@@ -24,7 +24,7 @@ import {
 } from "../utils/calendarUtils";
 
 // Custom hook for calendar functionality
-export const calendarHook = (events = [], locale) => {
+export const useDateFns = (locale, events = []) => {
   const today = startOfToday();
 
   // State for the currently selected day and current month view
@@ -93,7 +93,7 @@ export const calendarHook = (events = [], locale) => {
     setCurrentMonth(format(newDate, "MMM-yyyy", { locale }));
   }
 
-  // Go to today (resets both month and year)
+  // To to today
   function goToToday() {
     setSelectedDay(today);
     setCurrentMonth(format(today, "MMM-yyyy", { locale }));
