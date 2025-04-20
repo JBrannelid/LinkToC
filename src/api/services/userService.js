@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endpoints";
 
 // baseService will handle validation of data
 const baseService = createBaseService(ENDPOINTS.USERS);
