@@ -54,6 +54,16 @@ export const useDateFns = (locale, events = []) => {
     isSameDay(parseISO(event.startDateTime), selectedDay)
   );
 
+  // Custom setter for selectedDay that also updates the currentMonth if needed
+  const setSelectedDayWithMonthUpdate = (day) => {
+    setSelectedDay(day);
+
+    // If the selected day is in a different month, update the month view
+    if (!isSameMonth(day, firstDayCurrentMonth)) {
+      setCurrentMonth(format(day, "MMM-yyyy", { locale }));
+    }
+  };
+
   // Navigate to the previous month
   function previousMonth() {
     const firstDayPreviousMonth = add(firstDayCurrentMonth, {
@@ -128,7 +138,7 @@ export const useDateFns = (locale, events = []) => {
     formatYear,
 
     // States
-    setSelectedDay,
+    setSelectedDay: setSelectedDayWithMonthUpdate,
 
     // Navigation functions
     previousMonth,
