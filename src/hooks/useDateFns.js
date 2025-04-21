@@ -54,56 +54,50 @@ export const useDateFns = (locale, events = []) => {
     isSameDay(parseISO(event.startDateTime), selectedDay)
   );
 
-  // Custom setter for selectedDay that also updates the currentMonth if needed
-  const setSelectedDayWithMonthUpdate = (day) => {
+  // Enhanced setter for selectedDay that can optionally update the month
+  const setSelectedDayWithMonthUpdate = (day, shouldUpdateMonth = true) => {
+    if (!day) return;
+
     setSelectedDay(day);
 
-    // If the selected day is in a different month, update the month view
-    if (!isSameMonth(day, firstDayCurrentMonth)) {
+    // Only update the month if explicitly requested and the day is in a different month
+    if (shouldUpdateMonth && !isSameMonth(day, firstDayCurrentMonth)) {
       setCurrentMonth(format(day, "MMM-yyyy", { locale }));
     }
   };
 
-  // Navigate to the previous month
+  // Navigate to the previous month without changing selected day
   function previousMonth() {
-    const firstDayPreviousMonth = add(firstDayCurrentMonth, {
-      months: -1,
-    });
+    const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayPreviousMonth, "MMM-yyyy", { locale }));
   }
 
-  // Navigate to the next month
+  // Navigate to the next month without changing selected day
   function nextMonth() {
-    const firstDayNextMonth = add(firstDayCurrentMonth, {
-      months: 1,
-    });
+    const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     setCurrentMonth(format(firstDayNextMonth, "MMM-yyyy", { locale }));
   }
 
-  // Navigate to the next year
+  // Navigate to the next year without changing selected day
   function nextYear() {
-    const firstDayNextYear = add(firstDayCurrentMonth, {
-      years: 1,
-    });
+    const firstDayNextYear = add(firstDayCurrentMonth, { years: 1 });
     setCurrentMonth(format(firstDayNextYear, "MMM-yyyy", { locale }));
   }
 
-  // Navigate to the previous year
+  // Navigate to the previous year without changing selected day
   function previousYear() {
-    const firstDayPreviousYear = add(firstDayCurrentMonth, {
-      years: -1,
-    });
+    const firstDayPreviousYear = add(firstDayCurrentMonth, { years: -1 });
     setCurrentMonth(format(firstDayPreviousYear, "MMM-yyyy", { locale }));
   }
 
-  // Change year
+  // Change year without changing selected day
   function changeYear(targetYear) {
     const newDate = new Date(firstDayCurrentMonth);
     newDate.setFullYear(targetYear);
     setCurrentMonth(format(newDate, "MMM-yyyy", { locale }));
   }
 
-  // To to today
+  // Go to today - update month and selected day
   function goToToday() {
     setSelectedDay(today);
     setCurrentMonth(format(today, "MMM-yyyy", { locale }));
