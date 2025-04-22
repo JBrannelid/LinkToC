@@ -4,8 +4,6 @@ import { ProfilePage } from "../components/ui/userPage/HorseProfilePage.jsx";
 const ProfileTester = ({ horseId }) => {
     const placeholderImage = "/src/assets/images/profilePlaceholder.jpg";
     
-
-    // Simply render the ProfilePage component with the required props
     return (
         <div className="container mx-auto px-4 py-8">
             <ProfilePage
