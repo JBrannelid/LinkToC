@@ -85,7 +85,6 @@ ProfilePage.propTypes = {
         PropTypes.number
     ]).isRequired,
     imageUrl: PropTypes.string,
-    onDetailsClick: PropTypes.func.isRequired,
     loadingText: PropTypes.string,
     notFoundText: PropTypes.string,
     placeholderImageUrl: PropTypes.string,
