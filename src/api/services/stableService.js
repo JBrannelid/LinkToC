@@ -1,13 +1,12 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endpoints";
 
-// Create base service with standard CRUD operations
 const baseService = createBaseService(ENDPOINTS.STABLE);
 
 const stableService = {
   ...baseService,
 
-  // Implement event-specific method
+  // Implement stable-specific method
 };
 
 export default stableService;
