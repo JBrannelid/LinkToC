@@ -1,20 +1,27 @@
+import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
-
-// We need backend to filter events by stable ID
-// getStableEvents have a temporary solution and return all events for now
 const eventService = {
   ...baseService,
 
+  // Retrive events belong to a stableId
   getStableEvents: async (stableId) => {
-    const allEvents = await eventService.getAll();
-    console.log(
-      `Retrieved ${allEvents.length} events - displaying all since stableIdFk is not provided by backend`
-    );
+    try {
+      const response = await axiosInstance.get(
+        `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
+      );
 
-    return allEvents;
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching events by stable ID:", error);
+      return [];
+    }
   },
 
   create: async (data) => {
@@ -22,9 +29,11 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk || 2, // Default to stable 2 to match my local db
+      stableIdFk: data.stableIdFk,
+      userIdFk: data.userIdFk || 1, // Default to user 1
     };
 
+    console.log("Creating event with data:", createData);
     return await baseService.create(createData);
   },
 
@@ -34,9 +43,11 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk || 2, // Default to stable 2 to match my local db
+      stableIdFk: data.stableIdFk,
+      userIdFk: data.userIdFk || 1, // Default to user 1
     };
 
+    console.log("Updating event with data:", updateData);
     return await baseService.update(updateData);
   },
 };
