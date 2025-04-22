@@ -1,4 +1,4 @@
-// Custom hook for horse profile data
+
 import {useCallback, useEffect, useState} from "react";
 import {createHorseProfile} from "../utils/horseProfileUtils.js";
 import {horseService} from "../api/index.js";
@@ -28,10 +28,10 @@ export const useHorseProfile = (horseId) =>
             const response = await horseService.getById(horseId);
             console.log("API Response:", response);
 
-            // Extract horse data from response, regardless of structure
+            // Extract horse data from response
             let rawHorseData = null;
 
-            // Handle API response structure - try all possible paths
+            // Handle API response structure
             if (response?.data) {
                 rawHorseData = response.data;
             } else if (response?.value) {
@@ -39,7 +39,7 @@ export const useHorseProfile = (horseId) =>
             } else if (response?.isSuccess && response?.value) {
                 rawHorseData = response.value;
             } else if (typeof response === 'object' && response !== null) {
-                // The response itself might be the horse object
+                
                 rawHorseData = response;
             }
 
@@ -153,8 +153,7 @@ export const useHorseManagement = () => {
             } else {
                 horsesData = response;
             }
-
-            // Ensure it's an array and process each horse
+            
             const processedHorses = Array.isArray(horsesData)
                 ? horsesData.map(horse => createHorseProfile(horse))
                 : [];
