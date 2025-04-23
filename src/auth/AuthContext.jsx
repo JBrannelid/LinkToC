@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
     
-    
+        
         const verifyToken = useCallback(async () => {
             try {
                 const token = sessionStorage.getItem("authToken");
@@ -176,13 +176,28 @@ export const AuthProvider = ({ children }) => {
         }
     };
     
-    const logout = useCallback(() => {
-        sessionStorage.removeItem("authToken");
-        setUser(null);
-        setShowSessionWarning(false);
-        if(sessionTimeout){
-            clearTimeout(sessionTimeout);
-            setSessionTimeout(null);
+    const logout = useCallback(async() => {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            sessionStorage.removeItem("authToken");
+            setUser(null);
+            setShowSessionWarning(false);
+            
+            if(sessionTimeout){
+                clearTimeout(sessionTimeout);
+                setSessionTimeout(null);
+            }
+            if (token){
+                try {
+                    await authService.logout(token);
+                }catch(error){
+                    console.error('Error during server logout', error);
+                }
+            }
+            return true;
+        }catch(error){
+            console.error('Logout error:', error);
+            return false;
         }
     }, [sessionTimeout]);
     

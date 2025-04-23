@@ -22,6 +22,7 @@ const authService  = {
         return await axiosConfig.post(`${ENDPOINTS.AUTH}/register`, registerData);
     },
 
+    // RefreshToken: POST /api/auth/refreshToken
     refreshToken: async () => {
         try {
             const token = sessionStorage.getItem("authToken");
@@ -40,6 +41,7 @@ const authService  = {
         }
     },
     
+    // Logout: POST /api/auth/logout
     logout: async (token) => {
         try {
             if(!token) return true;
@@ -50,7 +52,7 @@ const authService  = {
                 }
             });
         }catch(error) {
-            console.error("Logout reguest failed:", error);
+            console.error("Logout request failed:", error);
             return true;
         }
     }
