@@ -1,5 +1,6 @@
 import {createContext, useContext, useState, useEffect, useMemo, useCallback} from "react";
 import SessionTimeoutWarning from "./SessionTimeoutWarning.jsx";
+import authService from "../api/services/authService.js";
 
 const AuthContext = createContext();
 
@@ -38,9 +39,12 @@ export const AuthProvider = ({ children }) => {
                     return false;
                 } else{
                     setUser({
-                        id: userData.sub || userData.id,
+                        firstName: userData.firstName,
+                        lastName: userData.lastName,
                         email: userData.email,
-                        name: userData.name,
+                        password: userData.password,
+                        phoneNumber: userData.phoneNumber,
+                        userName: userData.userName,
                     });
                     setIsLoading(false);
                     return true;
@@ -102,39 +106,38 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         try {
             setIsLoading(true);
-            const response = await fetch('/api/fetch/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({email, password}),
-            });
-            const data = await response.json();
-            console.log('Login response', data);
 
-            if(!response.ok){
-                const errorData = await response.json();
-                throw new Error(errorData.message || response.statusText || 'Inloggning misslyckades');
+            // Use authService to login
+            const response = await authService.login({ email, password });
+
+            // Handle the API response
+            if (!response) {
+                throw new Error('Login failed: No response from server');
             }
-            
+
+            // Extract token based on API response structure (try different known structures)
             let token = null;
-            if (data.token) {
-                token = data.token;
-            } else if (data.data?.token) {
-                token = data.data.token;
-            } else if (data.result?.token) {
-                token = data.result.token;
+            if (response.data && response.data.token) {
+                token = response.data.token;
+            } else if (response.token) {
+                token = response.token;
+            } else if (response.value && response.value.token) {
+                token = response.value.token;
             }
-            
-            if(!token){
-                console.error('Unexpected response structure', data);
+
+            if (!token) {
+                console.error('Unexpected response structure', response);
                 throw new Error('Authentication failed: Invalid token response');
             }
-            sessionStorage.setItem("authToken", data.token);
+
+            // Store token and verify it
+            sessionStorage.setItem("authToken", token);
             await verifyToken();
             return true;
-        } catch(error){
-            console.error('Login error:' ,error);
+        } catch (error) {
+            console.error('Login error:', error);
             throw error;
-        }finally {
+        } finally {
             setIsLoading(false);
         }
     };
