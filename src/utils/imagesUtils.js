@@ -1,13 +1,14 @@
-export const triggerFileUpload = () => {
+export function triggerFileUpload  (fileInputRef)  {
     if (fileInputRef.current) {
-        fileInputRef.current.click();
+        return fileInputRef.current.click();
     }
-};
+}
 
-export const handleImageUpload = (event) => {
+
+export function handleImageUpload (event, setProfileImage) {
     const file = event.target.files[0];
     if (file) {
         const imageUrl = URL.createObjectURL(file);
-        setProfileImage(imageUrl);
+        return setProfileImage(imageUrl);
     }
-};
+}
