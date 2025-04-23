@@ -1,53 +1,54 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
-
   return context;
 };
 
 export const AppProvider = ({ children }) => {
-  // Default values. Need to load thorugh a localStorage, useMemo(), localSession??
-  const [currentUser, setCurrentUser] = useState({
-    id: 1, // Default user ID
-    token:
-      "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwianRpIjoiMjZkNDJlYTItNWFkMi00NjYzLTlhMDQtZWVjMTYyMTc2Njg1IiwibmJmIjoxNzQ0NzIzMTExLCJleHAiOjE3NDUwNjA2MTEsImlhdCI6MTc0NDcyMzExMSwiaXNzIjoiRXF1aWxvZ0FQSSIsImF1ZCI6IkVxdWlsb2dDbGllbnQifQ.Qbggs1FHzC-OmNi9IlwdKavKd5_Dy-qF9NLVrnR1p0Zhc-pYttt5sDjDsHjK-hmKRBf4Rcqx0cL9nbBdgmAvWQ",
+  // Get authentication state from AuthContext
+  const { user } = useAuth();
+
+  // Current stable state (for the selected stable)
+  const [currentStable, setCurrentStable] = useState(() => {
+    // Try to load from localStorage on initial render
+    const savedStable = localStorage.getItem("currentStable");
+    return savedStable ? JSON.parse(savedStable) : null;
   });
 
-  const [currentStable, setCurrentStable] = useState({
-    id: 2, // Default stable ID
-  });
-
-  const [selectedHorse, setSelectedHorse] = useState({
-    id: 2,
-  });
+  // Selected horse state - initialize as null
+  const [selectedHorse, setSelectedHorse] = useState(null);
 
   // Update the current stable
-  const changeStable = (id) => {
-    setCurrentStable({ id });
+  const changeStable = (id, name = "") => {
+    const stableData = { id, name };
+    setCurrentStable(stableData);
 
-    // Save to localStorage ??
-    localStorage.setItem(currentStable, id);
+    localStorage.setItem("currentStable", JSON.stringify(stableData));
   };
 
-  // Function to update the current user
-  const changeUser = (id, token = null) => {
-    setCurrentUser({ id, token });
-
-    // Save to localStorage ??
-  };
-
-  // Load values on initial load (StableId, UserId, TokenId) from local storage??
-  // Implement useeffect to load data form storage
+  // Load saved stable on initial mount
+  useEffect(() => {
+    const savedStable = localStorage.getItem("currentStable");
+    if (savedStable) {
+      try {
+        setCurrentStable(JSON.parse(savedStable));
+      } catch (error) {
+        console.error("Error parsing saved stable:", error);
+        // Reset to null
+        setCurrentStable(null);
+      }
+    }
+  }, []);
 
   const contextValue = {
-    currentUser,
+    currentUser: user,
     currentStable,
-    selectedHorse,
     changeStable,
-    changeUser,
+    selectedHorse,
     setSelectedHorse,
   };
 
