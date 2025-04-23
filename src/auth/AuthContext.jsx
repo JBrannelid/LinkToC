@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
                     setIsLoading(false);
                     return false;
                 } else{
-
+                    
                     const userId = userData.sub;
                     
                     setUser({
@@ -60,6 +60,30 @@ export const AuthProvider = ({ children }) => {
                 return false;
             }
             },[]);
+    const logout = useCallback(async() => {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            sessionStorage.removeItem("authToken");
+            setUser(null);
+            setShowSessionWarning(false);
+
+            if(sessionTimeout){
+                clearTimeout(sessionTimeout);
+                setSessionTimeout(null);
+            }
+            if (token){
+                try {
+                    await authService.logout(token);
+                }catch(error){
+                    console.error('Error during server logout', error);
+                }
+            }
+            return true;
+        }catch(error){
+            console.error('Logout error:', error);
+            return false;
+        }
+    }, [sessionTimeout]);
         
         const checkAndRefreshToken = useCallback(async () => {
             try {
@@ -132,14 +156,14 @@ export const AuthProvider = ({ children }) => {
             };
         }, [checkAndRefreshToken(), sessionTimeout, user, logout]);
 
+        
     const login = async (email, password) => {
         try {
             setIsLoading(true);
 
             // Use authService to login
             const response = await authService.login({ email, password });
-            console.log('Full axios response:', response);
-            console.log('Response data:', response.data);
+            
             if (response.data && typeof response.data === 'object') {
                 console.log('Data keys:', Object.keys(response.data));
             }
@@ -148,15 +172,12 @@ export const AuthProvider = ({ children }) => {
             if (!response) {
                 throw new Error('Login failed: No response from server');
             }
-
-            // Extract token based on API response structure (try different known structures)
-            let token = null;
-            if (response.data && response.data.token) {
-                token = response.data.token;
-            } else if (response.token) {
-                token = response.token;
-            } else if (response.value && response.value.token) {
-                token = response.value.token;
+ 
+            // Extract token 
+            const token = response?.value?.token;
+            if (!token) {
+                console.error('Unexpected response structure', response);
+                throw new Error('Authentication failed: Invalid token response');
             }
 
             if (!token) {
@@ -176,30 +197,7 @@ export const AuthProvider = ({ children }) => {
         }
     };
     
-    const logout = useCallback(async() => {
-        try {
-            const token = sessionStorage.getItem("authToken");
-            sessionStorage.removeItem("authToken");
-            setUser(null);
-            setShowSessionWarning(false);
-            
-            if(sessionTimeout){
-                clearTimeout(sessionTimeout);
-                setSessionTimeout(null);
-            }
-            if (token){
-                try {
-                    await authService.logout(token);
-                }catch(error){
-                    console.error('Error during server logout', error);
-                }
-            }
-            return true;
-        }catch(error){
-            console.error('Logout error:', error);
-            return false;
-        }
-    }, [sessionTimeout]);
+    
     
     const authFetch = useCallback(async (url, options = {}) => {
         const isValid = await verifyToken();
@@ -220,7 +218,7 @@ export const AuthProvider = ({ children }) => {
         const response = await fetch(url, authOptions);
         
         if (response.status === 401) {
-            logout();
+            await logout();
             throw new Error('Session expired. Please log in again.');
         }
         return response;
