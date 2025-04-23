@@ -1,19 +1,20 @@
-import {useState, useEffect } from "react";
+import {useState } from "react";
 import {useForm} from "react-hook-form";
 import {useAuth} from "./AuthContext.jsx";
+import authService from "../api/services/authService.js";
+import CalendarDisplay from "../components/calendar/CalendarDisplay.jsx";
 
 const RegistrationPage = () => {
    
     const [serverError, setServerError] = useState ('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const {login} = useAuth();
+   
     
     const {
         register,
         handleSubmit,
-        setValue,
         formState: {errors},
-        watch,
     } = useForm({
         mode: 'onSubmit',
         defaultValues:{
@@ -25,51 +26,41 @@ const RegistrationPage = () => {
             phoneNumber: '',
         },
     });
-    
-    const fullNameValue = watch('fullName');
-    useEffect(() => {
-        if (fullNameValue) {
-            const nameParts = fullNameValue.split(' ');
-            if (nameParts.length >= 2) {
-                const firstName = nameParts[0];
-                const lastName = nameParts.slice(1).join(' ');
-                setValue('firstName', firstName);
-                setValue('lastName', lastName);
-            }else {
-                setValue('firstName', fullNameValue);
-                setValue('lastName', '');
-            }
-        }
-    }, [fullNameValue, setValue]);
-    
-    const onSubmit = async (data) => {
 
+    const onSubmit = async (data) => {
         try {
             setIsSubmitting(true);
             setServerError('');
 
-            if (!data.lastName) {
-                data.lastName = data.firstName;
-            }
-            
             console.log('Submitting registration data:', data);
-            
-            const response = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
-            
-            const responseData = await response.json();
-            
-            if(!response.ok){
-                const errorMessage = responseData.error || responseData.Message || response.statusText;
-                throw new Error(errorMessage || 'Registration misslyckades');
+
+            // Submit registration data and get response
+            const response = await authService.register(data);
+
+            // Check if the registration was successful
+            if (response && response.isSuccess) {
+                console.log('Registration successful:', response);
+
+                // Attempt to log in with the newly registered credentials
+                try {
+                    await login(data.email, data.password);
+                    // Redirect to dashboard or home page after successful login
+                    console.log('Login successful:', response);
+                    
+                } catch (loginError) {
+                    console.error('Auto-login failed after registration:', loginError);
+                    // Even if auto-login fails, registration was successful
+                    // Redirect to login page with a success message
+                    console.log('Registration successful. Please log in with your credentials.', response);
+
+                }
+            } else {
+                // Handle API response indicating failure
+                throw new Error(response?.message || 'Registration failed');
             }
-            await login(data.email, data.password);
-        } catch(error){
+        } catch (error) {
             console.error('Registration failed', error);
-            setServerError(error.message || 'Registration misslyckades. Försök igen');
+            setServerError(error.message || 'Registration failed. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -78,7 +69,7 @@ const RegistrationPage = () => {
         <div className="flex flex-col h-screen">
             {/* Logo Section - Green background */}
             <div className="bg-[#556B2F] py-16 flex justify-center items-center">
-                <div className="h-20 w-20">
+                <div className="h-20 w-20" role="img" aria-label="Horse Rider Logo">
                     {/* Horse rider icon */}
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path
@@ -99,26 +90,51 @@ const RegistrationPage = () => {
                     )}
 
                     <div className="mb-2">
-                        <label htmlFor="fullName" className="sr-only">
-                            För- och efternamn
+                        <label htmlFor="firstName" className="sr-only">
+                            Förnamn
                         </label>
                         <input
-                            id="fullName"
+                            id="firstName"
                             type="text"
-                            placeholder="För- och efternamn"
+                            placeholder="Förnamn"
                             className={`w-full px-3 py-4 border ${
-                                errors.fullName ? 'border-red-300' : 'border-gray-300'
+                                errors.firstName ? 'border-red-300' : 'border-gray-300'
                             } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
-                            aria-invalid={errors.fullName ? 'true' : 'false'}
-                            aria-describedby={errors.fullName ? 'fullName-error' : undefined}
+                            aria-invalid={errors.firstName ? 'true' : 'false'}
+                            aria-describedby={errors.firstName ? 'firstName-error' : undefined}
                             disabled={isSubmitting}
-                            {...register('fullName', {
-                                required: 'Namn krävs',
+                            {...register('firstName', {
+                                required: 'Förnamn krävs',
                             })}
                         />
-                        {errors.fullName && (
-                            <p id="fullName-error" className="mt-1 text-sm text-red-600" role="alert">
-                                {errors.fullName.message}
+                        {errors.firstName && (
+                            <p id="firstName-error" className="mt-1 text-sm text-red-600" role="alert">
+                                {errors.firstName.message}
+                            </p>
+                        )}
+                    </div>
+                    
+                    <div className="mb-2">
+                        <label htmlFor="lastName" className="sr-only">
+                            Efternamn
+                        </label>
+                        <input
+                            id="lastName"
+                            type="text"
+                            placeholder="Efternamn"
+                            className={`w-full px-3 py-4 border ${
+                                errors.lastName ? 'border-red-300' : 'border-gray-300'
+                            } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                            aria-invalid={errors.lastName ? 'true' : 'false'}
+                            aria-describedby={errors.lastName ? 'lastName-error' : undefined}
+                            disabled={isSubmitting}
+                            {...register('lastName', {
+                                required: 'Efternamn krävs',
+                            })}
+                        />
+                        {errors.lastName && (
+                            <p id="firstName-error" className="mt-1 text-sm text-red-600" role="alert">
+                                {errors.lastName.message}
                             </p>
                         )}
                     </div>
@@ -153,6 +169,21 @@ const RegistrationPage = () => {
                         )}
                     </div>
 
+                    <div className="mb-2">
+                        <label htmlFor="phoneNumber" className="sr-only">
+                            Telefonnummer
+                        </label>
+                        <input
+                            id="phoneNumber"
+                            type="tel"
+                            autoComplete="tel"
+                            placeholder="Telefonnummer (valfritt)"
+                            className="w-full px-3 py-4 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900"
+                            disabled={isSubmitting}
+                            {...register('phoneNumber')}
+                        />
+                    </div>
+                    
                     <div className="mb-2">
                         <label htmlFor="email" className="sr-only">
                             Email
@@ -191,7 +222,7 @@ const RegistrationPage = () => {
                             id="password"
                             type="password"
                             autoComplete="new-password"
-                            placeholder="Password"
+                            placeholder="Lösenord"
                             className={`w-full px-3 py-4 border ${
                                 errors.password ? 'border-red-300' : 'border-gray-300'
                             } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
@@ -212,11 +243,6 @@ const RegistrationPage = () => {
                             </p>
                         )}
                     </div>
-
-                    {/* Hidden fields for backend compatibility */}
-                    <input type="hidden" {...register('firstName')} />
-                    <input type="hidden" {...register('lastName')} />
-                    <input type="hidden" {...register('phoneNumber')} value="" />
 
                     <button
                         type="submit"
