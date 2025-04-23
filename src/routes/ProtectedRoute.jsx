@@ -4,9 +4,18 @@ import { useAppContext } from "../context/AppContext";
 import { ROUTES } from "./routeConstants";
 
 const ProtectedRoute = ({ children, requiresStable = false }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const { currentStable } = useAppContext();
   const location = useLocation();
+
+  if (isLoading) {
+    // Loading . We need to inplement a loading component here
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p>Verifierar autentisering...</p>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     // Redirect to login if not authenticated
