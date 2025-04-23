@@ -20,6 +20,39 @@ const authService  = {
             throw new Error("Registration data is required");
         }
         return await axiosConfig.post(`${ENDPOINTS.AUTH}/register`, registerData);
+    },
+
+    refreshToken: async () => {
+        try {
+            const token = sessionStorage.getItem("authToken");
+            if (!token) {
+                throw new Error("No token available");
+            }
+
+            return await axiosConfig.post(`${ENDPOINTS.AUTH}/refresh-token`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        } catch (error) {
+            console.error("Token refresh failed:", error);
+            throw error;
+        }
+    },
+    
+    logout: async (token) => {
+        try {
+            if(!token) return true;
+            
+            return await axiosConfig.post(`${ENDPOINTS.AUTH}/logout`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }catch(error) {
+            console.error("Logout reguest failed:", error);
+            return true;
+        }
     }
 }; 
 
