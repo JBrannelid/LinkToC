@@ -38,12 +38,14 @@ export const AuthProvider = ({ children }) => {
                     setIsLoading(false);
                     return false;
                 } else{
+
+                    const userId = userData.sub;
+                    
                     setUser({
-                        id: userData.id,
+                        id: userId,
                         firstName: userData.firstName,
                         lastName: userData.lastName,
                         email: userData.email,
-                        password: userData.password,
                         phoneNumber: userData.phoneNumber,
                         userName: userData.userName,
                     });
@@ -110,7 +112,12 @@ export const AuthProvider = ({ children }) => {
 
             // Use authService to login
             const response = await authService.login({ email, password });
-
+            console.log('Full axios response:', response);
+            console.log('Response data:', response.data);
+            if (response.data && typeof response.data === 'object') {
+                console.log('Data keys:', Object.keys(response.data));
+            }
+            
             // Handle the API response
             if (!response) {
                 throw new Error('Login failed: No response from server');

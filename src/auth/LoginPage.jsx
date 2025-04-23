@@ -34,8 +34,7 @@ const LoginForm = () => {
     return (
         <div className="flex flex-col h-screen">
             {/* Logo Section - Green background */}
-            <div className="py-16 flex justify-center items-center bg-gradient-to-t"
-                 style={{ backgroundImage: 'linear-gradient(to top, var(--color-bg-olive), white)' }}>
+            <div className="py-16 flex justify-center items-center bg-[#556B2F]">
                 <RabbitIcon className="h-20 w-20">
                     {/* Horse rider icon */}
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
