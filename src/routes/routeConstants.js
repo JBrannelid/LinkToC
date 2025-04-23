@@ -6,6 +6,7 @@ export const ROUTES = {
   HORSE_PROFILE: "/horsepage/:horseId",
   USER_PROFILE: "/userpage/:userId",
   STABLE: "/stable/:stableId",
+  SETTINGS: "/settings",
 };
 
 // Dynamic routes with params
