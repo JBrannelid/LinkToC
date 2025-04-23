@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import StableName from "../components/home/StableName";
 import Calendar from "../components/calendar/calendar";
+import WallPost from "../components/home/WallPost";
 
 export default function Home() {
   //stable id
@@ -9,9 +10,11 @@ export default function Home() {
   return (
     <>
       <StableName id={id} />
-      <div>Important Notice!!</div>
       <div>
         <Calendar />
+      </div>
+      <div>
+        <WallPost />
       </div>
       <nav>navigation bar</nav>
     </>
