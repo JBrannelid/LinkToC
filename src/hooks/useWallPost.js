@@ -15,7 +15,7 @@ export const useWallPost = (event, onSubmit, onCancel) => {
 
   //When editing set form with WallPostData
   useEffect(() => {
-    if (event) {
+    if (wallPost) {
       setWallPostData({
         title: wallPost.title,
         body: wallPost.body,
@@ -42,7 +42,7 @@ export const useWallPost = (event, onSubmit, onCancel) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (onSubmit) {
-      onSubmit(WallPostData);
+      onSubmit(wallPostData);
     }
   };
 

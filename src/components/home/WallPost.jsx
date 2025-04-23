@@ -1,34 +1,38 @@
 import React, { useCallback, useEffect, useState } from "react";
 import WallPostForm from "../forms/WallPostForm";
+import { wallPostService } from "../../api";
 
-export default function WallPost() {
+export default function WallPost({ id }) {
   const [wallPost, setWallPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //   const currentWallPost = useCallback(async () => {
-  //     try {
-  //       setLoading(true);
-  //       const fetchWallPost = await WALLPOSTSERVICE.getbyid!!!
-  //       setWallPost(fetchWallPost);
-  //       return true;
-  //     } catch (error) {
-  //       setLoading(false);
-  //       return false;
-  //     } finally {
-  //       setLoading(false);
-  //       return false;
-  //     }
-  //   }, [id]);
+  const currentWallPost = useCallback(async () => {
+    try {
+      setLoading(true);
+      const fetchWallPost = await wallPostService.getById(id);
+      setWallPost(fetchWallPost.value);
+      return true;
+    } catch (error) {
+      setLoading(false);
+      return false;
+    } finally {
+      setLoading(false);
+      return false;
+    }
+  }, [id]);
 
-  //   useEffect(() => {
-  //     currentWallPost();
-  //   }, [currentWallPost]);
+  useEffect(() => {
+    currentWallPost();
+  }, [currentWallPost]);
 
   const [isFormOpen, setIsForOpen] = useState(false);
   const toggleButton = () => {
     setIsFormOpen((prev) => !prev);
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <>
@@ -43,11 +47,15 @@ export default function WallPost() {
         {isFormOpen && <WallPostForm />}
       </div>
 
-      {/* <div class=wallpostservice>
-    {wallPost.title}
-    {wallPost.body}
-    {wallPost.editedDateTime}
-  </div> */}
+      {wallPost ? (
+        <div>
+          <h2 className="underline">{wallPost.title}</h2>
+          <p>{wallPost.body}</p>
+          <p>{wallPost.postDate}</p>
+        </div>
+      ) : (
+        <p>No post available</p>
+      )}
     </>
   );
 }
