@@ -43,8 +43,9 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk,
+      // stableIdFk: data.stableIdFk,
       userIdFk: data.userIdFk || 1, // Default to user 1
+      // är anv superadmin eller är användare samma anv som skapade eventet?
     };
 
     console.log("Updating event with data:", updateData);
