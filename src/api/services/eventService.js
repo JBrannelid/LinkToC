@@ -6,22 +6,17 @@ const baseService = createBaseService(ENDPOINTS.EVENTS);
 const eventService = {
   ...baseService,
 
-  // Retrive events belong to a stableId
+  // Retrieve events belonging to a stableId
   getStableEvents: async (stableId) => {
-    try {
-      const response = await axiosInstance.get(
-        `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
-      );
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
+    );
 
-      if (response && response.isSuccess && Array.isArray(response.value)) {
-        return response.value;
-      }
-
-      return [];
-    } catch (error) {
-      console.error("Error fetching events by stable ID:", error);
-      return [];
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
     }
+
+    return [];
   },
 
   create: async (data) => {
@@ -30,7 +25,7 @@ const eventService = {
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
       stableIdFk: data.stableIdFk,
-      userIdFk: data.userIdFk || 1, // Default to user 1
+      userIdFk: data.userIdFk,
     };
 
     console.log("Creating event with data:", createData);
@@ -43,9 +38,7 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      // stableIdFk: data.stableIdFk,
-      userIdFk: data.userIdFk || 1, // Default to user 1
-      // är anv superadmin eller är användare samma anv som skapade eventet?
+      userIdFk: data.userIdFk,
     };
 
     console.log("Updating event with data:", updateData);
