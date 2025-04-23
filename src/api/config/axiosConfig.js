@@ -28,26 +28,28 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// Get the auth token from AppContext. We need to implement proper local storage coockies with react useMemo()
-const getAuthToken = axiosInstance.interceptors.request.use(
+// Request interceptor to add auth token from sessionStorage
+axiosInstance.interceptors.request.use(
   (config) => {
-    // Always include the token in requests
-    const token =
-      "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMSIsImp0aSI6IjcyMzU2ZmM4LWYwYzEtNDY0Mi04NzA3LWRmNTY2NjRmYThjNiIsIm5iZiI6MTc0NTQzMDIzMiwiZXhwIjoxNzQ1NzY3NzMyLCJpYXQiOjE3NDU0MzAyMzIsImlzcyI6IkVxdWlsb2dBUEkiLCJhdWQiOiJFcXVpbG9nQ2xpZW50In0.IOQNQu1ZzEkgUNAVru3nnsM6zMHm6qTM72Q6eaw2hS08wb-0DOqcvL12uGoyBDIOvzcVQ9r8iNbQcVrQOHbSYQ";
+    // Skip adding token for endpoints that don't require authentication
+    const noAuthRequired = [
+      "/api/auth/login",
+      "/api/auth/register",
+      // More page that dont need a authentication,
+    ];
+
+    if (noAuthRequired.some((endpoint) => config.url.includes(endpoint))) {
+      return config;
+    }
+
+    // Get token from sessionStorage (managed by AuthContext)
+    const token = sessionStorage.getItem("authToken");
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log("Adding authorization token to request");
-    } else {
-      console.warn("No authorization token available");
     }
 
     return config;
-
-    // Do something before request is sent
-
-    // Authentication logic will go here when implemented
-    // JWT with HmacSha512 encryption for request authentication
   },
   (error) => {
     console.error("Request configuration error:", error);
