@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
-import { useAuth } from "./auth/AuthContext";
+import { useAuth } from "./context/AuthContext";
 import { useAppContext } from "./context/AppContext";
 
 function App() {

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { handleAxiosError } from "../utils/errors";
-import { useAppContext } from "../../context/AppContext";
 
 // Axios instance with default configuration
 const axiosInstance = axios.create({
@@ -30,12 +29,12 @@ axiosInstance.interceptors.response.use(
 );
 
 // Get the auth token from AppContext. We need to implement proper local storage coockies with react useMemo()
-const getAuthToken = () => {};
-
-axiosInstance.interceptors.request.use(
+const getAuthToken = axiosInstance.interceptors.request.use(
   (config) => {
     // Always include the token in requests
-    const token = getAuthToken();
+    const token =
+      "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMSIsImp0aSI6IjcyMzU2ZmM4LWYwYzEtNDY0Mi04NzA3LWRmNTY2NjRmYThjNiIsIm5iZiI6MTc0NTQzMDIzMiwiZXhwIjoxNzQ1NzY3NzMyLCJpYXQiOjE3NDU0MzAyMzIsImlzcyI6IkVxdWlsb2dBUEkiLCJhdWQiOiJFcXVpbG9nQ2xpZW50In0.IOQNQu1ZzEkgUNAVru3nnsM6zMHm6qTM72Q6eaw2hS08wb-0DOqcvL12uGoyBDIOvzcVQ9r8iNbQcVrQOHbSYQ";
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log("Adding authorization token to request");

@@ -9,7 +9,7 @@ import HomePage from "./pages/HomePage.jsx";
 import ProfileTester from "./testing/ProfileTester.jsx";
 import { AppProvider } from "./context/AppContext";
 
-import { AuthProvider } from "./auth/AuthContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import LoginForm from "./auth/LoginPage.jsx";
 import RegistrationPage from "./auth/RegistrationPage.jsx";

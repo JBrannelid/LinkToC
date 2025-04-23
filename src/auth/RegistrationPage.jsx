@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAuth } from "./AuthContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../api/services/authService.js";
 import { RabbitIcon } from "lucide-react";
 import { useNavigate } from "react-router";

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { Feather, FacebookIcon, LinkedinIcon, RabbitIcon } from "lucide-react";
 
 const LoginForm = () => {
