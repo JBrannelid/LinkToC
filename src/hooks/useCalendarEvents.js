@@ -1,35 +1,69 @@
 import { useState, useEffect, useCallback } from "react";
 import eventService from "../api/services/eventService";
+import userService from "../api/services/userService";
+import { parseISO, isSameDay } from "../utils/calendarUtils";
 
-export function useCalendarEvents() {
+export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Hard-coded userID until we have logic to handle userId dynamic
+  const DEFAULT_USER_ID = 1;
+
   const fetchAndUpdateEvents = useCallback(async () => {
     try {
-      // Set loading to true and clear any previous errors
       setLoading(true);
       setError(null);
 
-      const fetchedEventsData = await eventService.getAll();
+      // Get Users
+      const userResponse = await userService.getAll();
+      const userList = Array.isArray(userResponse) ? userResponse : [];
+      setUsers(userList);
 
-      // Update events list with new data
-      setEvents(fetchedEventsData);
+      // Get events from stableId
+      const eventsResponse = await eventService.getStableEvents(stableId);
+      const eventList = Array.isArray(eventsResponse) ? eventsResponse : [];
+
+      // Find current user from the user list
+      const currentUser = userList.find((user) => user.id === DEFAULT_USER_ID);
+
+      // Process events to ensure they have user references
+      const processedEvents = eventList.map((event) => {
+        let eventUser = null;
+
+        // If the event has a userIdFk, look up the user
+        if (event.userIdFk) {
+          eventUser = userList.find((user) => user.id === event.userIdFk);
+        }
+
+        // If no user found, assign one for testing
+        if (!eventUser && userList.length > 0) {
+          const userIndex = event.id % userList.length;
+          eventUser = userList[userIndex] || currentUser;
+        }
+
+        // Return the event with user information
+        return {
+          ...event,
+          user: eventUser || currentUser,
+          userIdFk:
+            event.userIdFk || (eventUser ? eventUser.id : DEFAULT_USER_ID),
+        };
+      });
+
+      setEvents(processedEvents);
 
       return true;
     } catch (error) {
-      // Error already formatted by axiosConfig interceptor
-      console.error("Error fetching events:", error);
-      setError(error.message || "Något gick fel vid hämtning av kalenderdata");
+      setError(error.message || "Failed to retrieve calendar data");
       return false;
     } finally {
-      // Always reset loading state when done to prevent endless loading spinner
       setLoading(false);
     }
-  }, []);
+  }, [stableId]);
 
-  // Load events when component mounts (runs once)
   useEffect(() => {
     fetchAndUpdateEvents();
   }, [fetchAndUpdateEvents]);
@@ -39,15 +73,19 @@ export function useCalendarEvents() {
       setLoading(true);
       setError(null);
 
-      await eventService.create(eventData);
+      const eventWithDetails = {
+        ...eventData,
+        stableIdFk: stableId,
+        userIdFk: DEFAULT_USER_ID,
+      };
+
+      await eventService.create(eventWithDetails);
       await fetchAndUpdateEvents();
       return true;
     } catch (error) {
-      // Use the error message already formatted by the axios interceptor
-      setError(error.message || "Kunde inte skapa händelse");
-      return false;
-    } finally {
+      setError(error.message || "Failed to create event");
       setLoading(false);
+      return false;
     }
   };
 
@@ -56,14 +94,19 @@ export function useCalendarEvents() {
       setLoading(true);
       setError(null);
 
-      await eventService.update(eventData);
+      const eventWithDetails = {
+        ...eventData,
+        stableIdFk: stableId,
+        userIdFk: DEFAULT_USER_ID,
+      };
+
+      await eventService.update(eventWithDetails);
       await fetchAndUpdateEvents();
       return true;
     } catch (error) {
-      setError(error.message || "Kunde inte uppdatera händelse");
-      return false;
-    } finally {
+      setError(error.message || "Failed to update event");
       setLoading(false);
+      return false;
     }
   };
 
@@ -76,18 +119,34 @@ export function useCalendarEvents() {
       await fetchAndUpdateEvents();
       return true;
     } catch (error) {
-      setError(error.message || "Ett fel inträffade. Event kunde inte raderas");
-      return false;
-    } finally {
+      setError(error.message || "Failed to delete event");
       setLoading(false);
+      return false;
     }
   };
 
+  const getEventsForDay = useCallback(
+    (day) => {
+      if (!events.length) return [];
+
+      return events
+        .filter((event) => {
+          if (!event.startDateTime) return false;
+          return isSameDay(parseISO(event.startDateTime), day);
+        })
+        .sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime));
+    },
+    [events]
+  );
+
   return {
     events,
-    status: { loading, error },
+    users,
+    calendarStatus: { loading, error },
     createEvent,
     updateEvent,
     deleteEvent,
+    getEventsForDay,
+    fetchAndUpdateEvents,
   };
 }

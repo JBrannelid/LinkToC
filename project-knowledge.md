@@ -9,6 +9,7 @@ This document serves as a central knowledge repository for Equilog-Frontend proj
 | Library | Purpose | Why We Use It |
 |---------|---------|---------------|
 | **Axios** | HTTP client | Provides better error handling and automatic JSON transformation |
+| **React Hook Form** | Forms | Form state management instead of custom solutions |
 | **Lucide React** | Icons | Lightweight icon library with a consistent design system that integrates well with React. Better performance and one external source for icon library |
 | **date-fns** | Date manipulation | Modular approach with build in functions. Locale support for Swedish implementation |
 | **Tailwind CSS** | Utility-first CSS | Consistent design and reduces CSS file maintenance |
@@ -35,6 +36,7 @@ We use a global CSS file (`src/index.css`) with CSS variables for theming. All g
 
 - Components: PascalCase (e.g., `CalendarEventItem.jsx`)
 - Utilities, hooks, file as .js and .json: camelCase (e.g., `calendarUtils.js`)
+- All custom hooks MUST follow the React naming convention (start with use) (e.g., `useDateFns.js`)
 
 ### API Communication
 
