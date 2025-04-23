@@ -6,7 +6,7 @@ import { Navigate } from "react-router";
 import App from "./App.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
-import ProfileTester from "./testing/ProfileTester.jsx";
+import ProfileTester from "./pages/ProfileTester.jsx";
 import { AppProvider } from "./context/AppContext";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
