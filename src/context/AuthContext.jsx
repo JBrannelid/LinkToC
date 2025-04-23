@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }) => {
           email: userData.email,
           phoneNumber: userData.phoneNumber,
           userName: userData.userName,
+          token: token,
         });
         setIsLoading(false);
         return true;
@@ -64,6 +65,7 @@ export const AuthProvider = ({ children }) => {
       return false;
     }
   }, []);
+
   const logout = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
@@ -153,7 +155,7 @@ export const AuthProvider = ({ children }) => {
           //Display message to user if Token is getting old, "5 min left of session"
         }
       });
-    }, 15 * 60 * 1000); //How often to check if valid
+    }, 15 * 60 * 1000); // Check every 15 minutes
 
     return () => {
       clearInterval(interval);
