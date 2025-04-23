@@ -15,7 +15,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
 
@@ -161,7 +161,7 @@ export const AuthProvider = ({ children }) => {
       clearInterval(interval);
       if (sessionTimeout) clearTimeout(sessionTimeout);
     };
-  }, [checkAndRefreshToken(), sessionTimeout, user, logout]);
+  }, [checkAndRefreshToken, sessionTimeout, user, logout]);
 
   const login = async (email, password) => {
     try {
