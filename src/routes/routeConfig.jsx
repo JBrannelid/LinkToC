@@ -9,6 +9,7 @@ import RegistrationPage from "../pages/RegistrationPage";
 import StableSelectionPage from "../pages/StableSelectionPage";
 import ProfilePage from "../pages/ProfileTester";
 import ErrorPage from "../pages/ErrorPage";
+import SettingsPage from "../pages/SettingsPage";
 
 // Public Routes
 export const publicRoutes = [
@@ -41,6 +42,11 @@ export const protectedRoutes = [
   {
     path: ROUTES.HORSE_PROFILE,
     element: <ProfilePage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.SETTINGS,
+    element: <SettingsPage />,
     requiresStable: true,
   },
 ];
