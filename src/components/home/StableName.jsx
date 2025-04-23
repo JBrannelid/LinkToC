@@ -1,41 +1,43 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { stableService } from "../../api";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext.jsx";
+import { ROUTES } from "../../routes/routeConstants.js";
 
 export default function StableName({ currentStableId }) {
-  const [stableName, setStableName] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const { changeStable } = useAppContext();
+  const { currentStable, changeStable } = useAppContext();
+  const {
+    status: { loading, error },
+    getStableById,
+  } = useStableData();
+  const navigate = useNavigate();
 
-  const handleStableName = useCallback(async () => {
-    try {
-      setLoading(true);
-      const fetchStableName = await stableService.getById(currentStableId);
-
-      if (fetchStableName?.value?.name) {
-        setStableName(fetchStableName.value.name);
-        // Update the context with both ID and name
-        changeStable(currentStableId, fetchStableName.value.name);
-      }
-
-      return true;
-    } catch (error) {
-      setLoading(false);
-      return false;
-    } finally {
-      setLoading(false);
-      return false;
-    }
-  }, [currentStableId]);
-
-  //load the handleStableName as user is in the website (useCallback won't run auto)
   useEffect(() => {
-    handleStableName();
-  }, [handleStableName]);
+    // If context (global stablId) is empty. Get it from useAppContext
+    if (
+      currentStableId &&
+      (!currentStable.name || currentStable.id !== currentStableId)
+    ) {
+      const stableData = getStableById(currentStableId);
+      if (stableData && stableData.name) {
+        changeStable(currentStableId, stableData.name);
+      }
+    }
+  }, [currentStableId, currentStable, changeStable, getStableById]);
+
+  const handleStableClick = () => {
+    navigate(ROUTES.SELECT_STABLE);
+  };
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (error) return <p>Error: {error}</p>;
 
-  return <p>{stableName}</p>;
+  return (
+    <div
+      onClick={handleStableClick}
+      className="cursor-pointer hover:text-gray-900 transition-colors"
+    >
+      <p>{currentStable.name || "Inget stall kopplat"}</p>
+    </div>
+  );
 }
