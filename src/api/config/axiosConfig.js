@@ -1,5 +1,6 @@
 import axios from "axios";
 import { handleAxiosError } from "../utils/errors";
+import { useAppContext } from "../../context/AppContext";
 
 // Axios instance with default configuration
 const axiosInstance = axios.create({
@@ -28,10 +29,8 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// Get the auth token - Hardcoded. We need to implement proper local storage coockies with react useMemo()
-const getAuthToken = () => {
-  return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwianRpIjoiMjZkNDJlYTItNWFkMi00NjYzLTlhMDQtZWVjMTYyMTc2Njg1IiwibmJmIjoxNzQ0NzIzMTExLCJleHAiOjE3NDUwNjA2MTEsImlhdCI6MTc0NDcyMzExMSwiaXNzIjoiRXF1aWxvZ0FQSSIsImF1ZCI6IkVxdWlsb2dDbGllbnQifQ.Qbggs1FHzC-OmNi9IlwdKavKd5_Dy-qF9NLVrnR1p0Zhc-pYttt5sDjDsHjK-hmKRBf4Rcqx0cL9nbBdgmAvWQ";
-};
+// Get the auth token from AppContext. We need to implement proper local storage coockies with react useMemo()
+const getAuthToken = () => {};
 
 axiosInstance.interceptors.request.use(
   (config) => {
