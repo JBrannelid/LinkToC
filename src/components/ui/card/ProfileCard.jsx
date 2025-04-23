@@ -1,6 +1,6 @@
 import React, {useState, useRef} from "react";
 import Card, {classNames} from "../../../utils/cardUtils.js";
-import {triggerFileUpload, handleImageUpload} from "../../../utils/imagesUtils.js"; 
+import {triggerFileUpload, handleImageUpload} from "../../../utils/imagesUtils.js";
 
 const ProfileCard = ({
     id,
@@ -59,6 +59,7 @@ const ProfileCard = ({
             </div>
         );
     }
+
     
     const titleId = `profile${id}-title`;
     const descId = `profile${id}-desc`;
@@ -124,11 +125,11 @@ const ProfileCard = ({
                             <input type="file"
                             ref={fileInputRef}
                             id={`profile-${id}-image-upload`}
-                            accept="image/*"
-                            onChange={handleImageUpload}
+                            accept="image/*" 
+                                   onChange={(e) => handleImageUpload(e, setProfileImage)}
                             style={{display: 'none'}}/>
                             <button
-                            onClick={triggerFileUpload}
+                                onClick={() => triggerFileUpload(fileInputRef)}
                             className={classNames(
                                 "px-4",
                                 "py-2",
