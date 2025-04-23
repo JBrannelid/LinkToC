@@ -4,4 +4,5 @@ export const ENDPOINTS = {
   STABLEPOST: "api/stable-post",
   USERS: "/api/user",
   EVENTS_BY_STABLE: "/api/calendar-events",
+  WALLPOST: "api/wallpost",
 };
