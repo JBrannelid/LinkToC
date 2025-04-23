@@ -1,16 +1,16 @@
 import { Settings, Mail } from "lucide-react";
 import StableName from "../components/home/StableName";
-
-// Default stable id. Need to be dynamic depending on user acess
-const defaultStableId = 2;
+import { useAppContext } from "../context/AppContext";
 
 export default function Header() {
+  const { currentStable } = useAppContext();
+
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md">
       <Settings className="w-6 h-6 text-gray-700" />
 
       <div className="text-sm font-light">
-        <StableName id={defaultStableId} />
+        <StableName currentStableId={currentStable.id} />
       </div>
 
       <div className="relative">
