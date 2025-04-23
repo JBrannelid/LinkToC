@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
                     return false;
                 } else{
                     setUser({
+                        id: userData.id,
                         firstName: userData.firstName,
                         lastName: userData.lastName,
                         email: userData.email,
