@@ -4,18 +4,19 @@ import Calendar from "./calendar";
 import EventForm from "../forms/EventForm";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
+import { useAppContext } from "../../context/AppContext";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
   const [selectedDay, setSelectedDay] = useState(new Date());
 
-  // Hardcoded values until login and dynamic stable management
-  const CURRENT_USER_ID = 1;
-  const DEFAULT_STABLE_ID = 2;
+  // Get the global stable ID from context
+  const { currentStable, currentUser } = useAppContext();
+  const currentUserId = currentUser.id;
 
   // Custom hooks for data fetching
-  const { stableId, status: stableStatus } = useStableData(DEFAULT_STABLE_ID);
+  const { stableId, status: stableStatus } = useStableData(currentStable.id);
   const {
     events,
     users,
@@ -24,7 +25,7 @@ function CalendarDisplay() {
     updateEvent,
     deleteEvent,
     getEventsForDay,
-  } = useCalendarEvents(stableId);
+  } = useCalendarEvents(stableId || currentStable.id);
 
   // Form control functions
   const handleOpenEventForm = () => {
@@ -51,8 +52,8 @@ function CalendarDisplay() {
   const handleCreateEvent = async (eventData) => {
     const success = await createEvent({
       ...eventData,
-      stableIdFk: stableId,
-      userIdFk: CURRENT_USER_ID,
+      stableIdFk: stableId || currentStable.id,
+      userIdFk: currentUserId,
     });
 
     if (success) handleCloseEventForm();
@@ -63,8 +64,8 @@ function CalendarDisplay() {
     const success = await updateEvent({
       ...eventData,
       id: currentEvent.id,
-      stableIdFk: stableId,
-      userIdFk: CURRENT_USER_ID,
+      stableIdFk: stableId || currentStable.id,
+      userIdFk: currentUserId,
     });
 
     if (success) handleCloseEventForm();
@@ -136,7 +137,7 @@ function CalendarDisplay() {
 
       {/* Placed outside container div for full width */}
       <Calendar
-        stableId={stableId}
+        stableId={stableId || currentStable.id}
         events={events}
         users={users}
         locale={sv}

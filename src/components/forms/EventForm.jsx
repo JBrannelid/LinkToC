@@ -83,6 +83,7 @@ const EventForm = ({
       startDateTime: start.toISOString(),
       endDateTime: end.toISOString(),
       stableIdFk: data.stableId || event?.stableIdFk || DEFAULT_STABLE_ID,
+      userIdFk: event?.userIdFk, // Pass userIdFk when submit a excisting event
     });
   };
 

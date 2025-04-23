@@ -52,10 +52,8 @@ const EventItem = ({ event, index, onUpdate, onDelete }) => {
       <div className="flex-1">
         <p className="text-gray-900 font-medium truncate">{event.title}</p>
 
-        {/* Display user name if available */}
-        {event.user && (
-          <p className="text-gray-500 text-xs truncate">{userName}</p>
-        )}
+        {/* Display user name */}
+        <p className="text-gray-500 text-xs truncate">{userName}</p>
       </div>
 
       {/* Display time */}
