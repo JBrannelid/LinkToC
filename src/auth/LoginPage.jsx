@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useAuth } from './AuthContext';
+import CalendarDisplay from "../components/calendar/CalendarDisplay.jsx";
 
 const LoginForm = () => {
     const {login} = useAuth();
@@ -126,10 +127,10 @@ const LoginForm = () => {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                                 </svg>
-                                Registrerar...
+                                Loggar in...
                             </div>
                         ) : (
-                            'Sign Up'
+                            'Sign In'
                         )}
                     </button>
 
