@@ -32,7 +32,7 @@ const LoginForm = () => {
     return (
         <div className="flex flex-col h-screen">
             {/* Logo Section - Green background */}
-            <div className="bg-olive-600 py-16 flex justify-center items-center">
+            <div className="bg-[#556B2F] py-16 flex justify-center items-center">
                 <div className="h-20 w-20">
                     {/* Horse rider icon */}
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -55,7 +55,7 @@ const LoginForm = () => {
 
                     <div className="mb-2">
                         <label htmlFor="email" className="sr-only">
-                            Email
+                            E-postadress
                         </label>
                         <input
                             id="email"
@@ -69,10 +69,10 @@ const LoginForm = () => {
                             aria-describedby={errors.email ? 'email-error' : undefined}
                             disabled={isSubmitting}
                             {...register('email', {
-                                required: 'Email is required',
+                                required: 'E-postadress krävs',
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: 'Invalid email address',
+                                    message: 'Otillåten epostadress',
                                 },
                             })}
                         />
@@ -85,7 +85,7 @@ const LoginForm = () => {
 
                     <div className="mb-3">
                         <label htmlFor="password" className="sr-only">
-                            Password
+                            Lösenord
                         </label>
                         <input
                             id="password"
@@ -99,7 +99,7 @@ const LoginForm = () => {
                             aria-describedby={errors.password ? 'password-error' : undefined}
                             disabled={isSubmitting}
                             {...register('password', {
-                                required: 'Password is required',
+                                required: 'Lösenord krävs',
                             })}
                         />
                         {errors.password && (
@@ -110,18 +110,15 @@ const LoginForm = () => {
                     </div>
 
                     <div className="flex justify-end mb-6">
-                        <Link to="/forgot-password" className="text-sm text-gray-400 hover:text-gray-500">
+                        <a href="/forgot-password" className="text-sm text-gray-400 hover:text-gray-500">
                             Forgot Your Password?
-                        </Link>
+                        </a>
                     </div>
 
                     <button
                         type="submit"
-                        className={`w-full py-3 px-4 border border-transparent rounded-md text-white font-medium ${
-                            isSubmitting ? 'bg-olive-400' : 'bg-olive-600 hover:bg-olive-700'
-                        } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-olive-500`}
+                        className="w-full py-3 px-4 border border-transparent rounded-md text-white font-medium bg-[#556B2F] hover:bg-[#4B5320] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#556B2F]"
                         disabled={isSubmitting}
-                        aria-busy={isSubmitting ? 'true' : 'false'}
                     >
                         {isSubmitting ? (
                             <div className="flex justify-center items-center">
@@ -129,10 +126,10 @@ const LoginForm = () => {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                                 </svg>
-                                Signing in...
+                                Registrerar...
                             </div>
                         ) : (
-                            'Sign in'
+                            'Sign Up'
                         )}
                     </button>
 
@@ -175,9 +172,9 @@ const LoginForm = () => {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-600">
                             Don't Have an Account?{' '}
-                            <Link to="/register" className="font-medium text-yellow-500 hover:text-yellow-400">
-                                Sign up
-                            </Link>
+                            <a href="/register" className="font-medium text-yellow-500 hover:text-yellow-400">
+                                Sign In
+                            </a>
                         </p>
                     </div>
                 </form>

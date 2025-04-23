@@ -101,27 +101,41 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
+            setIsLoading(true);
             const response = await fetch('/api/fetch/login', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({email, password}),
             });
-
-            
+            const data = await response.json();
+            console.log('Login response', data);
 
             if(!response.ok){
                 const errorData = await response.json();
                 throw new Error(errorData.message || response.statusText || 'Inloggning misslyckades');
             }
-            const data = await response.json();
-            sessionStorage.setItem("authToken", data.token);
-
-            await verifyToken();
             
+            let token = null;
+            if (data.token) {
+                token = data.token;
+            } else if (data.data?.token) {
+                token = data.data.token;
+            } else if (data.result?.token) {
+                token = data.result.token;
+            }
+            
+            if(!token){
+                console.error('Unexpected response structure', data);
+                throw new Error('Authentication failed: Invalid token response');
+            }
+            sessionStorage.setItem("authToken", data.token);
+            await verifyToken();
             return true;
         } catch(error){
             console.error('Login error:' ,error);
             throw error;
+        }finally {
+            setIsLoading(false);
         }
     };
     
