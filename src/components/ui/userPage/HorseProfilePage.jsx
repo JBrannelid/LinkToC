@@ -9,7 +9,7 @@ import {
     getHorseImageAltText,
     formatHorseMetadata,
 } from '../../../utils/horseProfileUtils.js';
-import {useHorseProfile} from '../../../hooks/horseHook.js';
+import {useHorseProfile} from '../../../hooks/useHorseHook.js';
 import {handleImageUpload, triggerFileUpload} from "../../../utils/imagesUtils.js";
 import {classNames} from "../../../utils/cardUtils.js";
 import { getHorseTabs } from './HorseProfileTabs';
