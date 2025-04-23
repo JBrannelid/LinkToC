@@ -2,7 +2,7 @@ import {useState } from "react";
 import {useForm} from "react-hook-form";
 import {useAuth} from "./AuthContext.jsx";
 import authService from "../api/services/authService.js";
-import CalendarDisplay from "../components/calendar/CalendarDisplay.jsx";
+import { RabbitIcon}  from "lucide-react";
 
 const RegistrationPage = () => {
    
@@ -69,15 +69,14 @@ const RegistrationPage = () => {
         <div className="flex flex-col h-screen">
             {/* Logo Section - Green background */}
             <div className="bg-[#556B2F] py-16 flex justify-center items-center">
-                <div className="h-20 w-20" role="img" aria-label="Horse Rider Logo">
+                <RabbitIcon className="h-20 w-20" role="img" aria-label="Horse Rider Logo">
                     {/* Horse rider icon */}
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path
-                            d="M12 4C14.2091 4 16 5.79086 16 8H17.5C18.8807 8 20 9.11929 20 10.5V12H19V10.5C19 9.67157 18.3284 9 17.5 9H16.9353C16.9776 9.16357 17 9.33535 17 9.5122V14C17 15.3432 16.1652 16.5509 15 17.0765V20H14V17.9182C13.7059 17.9722 13.4037 18 13.0918 18C12.7703 18 12.4502 17.9722 12.1444 17.9181L12 18H11V17.07C9.86343 16.551 9 15.3354 9 14V11.3137L7.58579 9.89949C7.21071 9.52441 7 9.02135 7 8.5C7 7.39543 7.89543 6.5 9 6.5C9.58667 6.5 10.1669 6.76747 10.5388 7.16615C11.1079 5.36525 12.4078 4 14 4H12ZM9 7.5C8.44772 7.5 8 7.94772 8 8.5C8 8.76173 8.09763 9.01293 8.2725 9.1878L10 10.9153V14C10 15.1239 11.033 16 12.1556 16C13.2778 16 14 15.1239 14 14V9.51218C14 8.67376 13.3262 8 12.4878 8H10.6224C10.3459 7.68722 10.0417 7.41274 9.71418 7.17153C9.51122 7.28099 9.26641 7.5 9 7.5Z"
                             fill="rgba(200, 200, 200, 0.8)"
                         />
                     </svg>
-                </div>
+                </RabbitIcon>
             </div>
 
             {/* Form Section - White background */}
