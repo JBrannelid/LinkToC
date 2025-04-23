@@ -1,8 +1,16 @@
 import { useRouteError, Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
+import { ROUTES } from "../routes/routeConstants";
 
 export default function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
+  const { isAuthenticated } = useAuth();
+
+  // Redirect base on authentication status
+  const redirectTo = isAuthenticated ? ROUTES.HOME : ROUTES.LOGIN;
+  const linkText = isAuthenticated
+    ? "Gå tillbaka till huvudmenyn"
+    : "Gå till inloggning";
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
@@ -11,8 +19,8 @@ export default function ErrorPage() {
       <p className="text-gray-600 mb-8">
         {error?.statusText || error?.message || "Okänt fel"}
       </p>
-      <Link to="/" className="text-blue-600 hover:underline">
-        Gå tillbaka till huvudmenyn
+      <Link to={redirectTo} className="text-blue-600 hover:underline">
+        {linkText}
       </Link>
     </div>
   );
