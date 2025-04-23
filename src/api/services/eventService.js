@@ -1,21 +1,39 @@
+import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endpoints";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
-
 const eventService = {
   ...baseService,
 
-  create: async (data) => {
-    // baseService will handle validation of data
+  // Retrive events belong to a stableId
+  getStableEvents: async (stableId) => {
+    try {
+      const response = await axiosInstance.get(
+        `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
+      );
 
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching events by stable ID:", error);
+      return [];
+    }
+  },
+
+  create: async (data) => {
     const createData = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: 1, // Default value since we're not handling stable foreign key atm.
+      stableIdFk: data.stableIdFk,
+      userIdFk: data.userIdFk || 1, // Default to user 1
     };
 
+    console.log("Creating event with data:", createData);
     return await baseService.create(createData);
   },
 
@@ -25,14 +43,13 @@ const eventService = {
       title: data.title,
       startDateTime: data.startDateTime,
       endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk || 1,
+      stableIdFk: data.stableIdFk,
+      userIdFk: data.userIdFk || 1, // Default to user 1
     };
 
-    console.log("Sending update data:", JSON.stringify(updateData));
+    console.log("Updating event with data:", updateData);
     return await baseService.update(updateData);
   },
-
-  // Implement event-specific method to ensure DTO formatting
 };
 
 export default eventService;

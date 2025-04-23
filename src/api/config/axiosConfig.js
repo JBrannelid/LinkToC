@@ -28,15 +28,20 @@ axiosInstance.interceptors.response.use(
   }
 );
 
+// Get the auth token - Hardcoded. We need to implement proper local storage coockies with react useMemo()
 const getAuthToken = () => {
   return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwianRpIjoiMjZkNDJlYTItNWFkMi00NjYzLTlhMDQtZWVjMTYyMTc2Njg1IiwibmJmIjoxNzQ0NzIzMTExLCJleHAiOjE3NDUwNjA2MTEsImlhdCI6MTc0NDcyMzExMSwiaXNzIjoiRXF1aWxvZ0FQSSIsImF1ZCI6IkVxdWlsb2dDbGllbnQifQ.Qbggs1FHzC-OmNi9IlwdKavKd5_Dy-qF9NLVrnR1p0Zhc-pYttt5sDjDsHjK-hmKRBf4Rcqx0cL9nbBdgmAvWQ";
 };
 
 axiosInstance.interceptors.request.use(
   (config) => {
+    // Always include the token in requests
     const token = getAuthToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log("Adding authorization token to request");
+    } else {
+      console.warn("No authorization token available");
     }
 
     return config;
@@ -47,7 +52,7 @@ axiosInstance.interceptors.request.use(
     // JWT with HmacSha512 encryption for request authentication
   },
   (error) => {
-    // Handle request configuration errors
+    console.error("Request configuration error:", error);
     return Promise.reject(error);
   }
 );
