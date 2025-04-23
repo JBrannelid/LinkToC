@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Header from "./pages/Header";
 import Footer from "./pages/Footer";
 import { useAuth } from "./context/AuthContext";
@@ -7,9 +7,13 @@ import { useAppContext } from "./context/AppContext";
 function App() {
   const { isAuthenticated } = useAuth();
   const { currentStable } = useAppContext();
+  const location = useLocation();
 
-  // Only show header/footer when authenticated and with a stable
-  const showNavigation = isAuthenticated && currentStable?.id;
+  const hiddenRoutes = ["/login", "/register"];
+  const hidePages = hiddenRoutes.includes(location.pathname);
+
+  // Show nav only if authenticated, has stable, and not on login/register pages
+  const showNavigation = isAuthenticated && currentStable?.id && !hidePages;
 
   return (
     <div className="min-h-screen flex flex-col">
