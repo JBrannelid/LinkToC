@@ -61,19 +61,42 @@ export const AuthProvider = ({ children }) => {
             }
             },[]);
         
-        const checkTokenAge = useCallback(() => {
-            const token = sessionStorage.getItem("authToken");
-            if(!token) return false;
-            
-            const payload = parseJwt(token);
-            if(!payload || !payload.iat) return false;
-            
-            const issuedAt = payload.iat * 1000;
-            const currentTime = Date.now();
-            const tokenAge = currentTime - issuedAt;
-            
-            const MAX_TOKEN_AGE = 4 * 60 * 60 * 1000;
-            return tokenAge <= MAX_TOKEN_AGE;
+        const checkAndRefreshToken = useCallback(async () => {
+            try {
+                const token = sessionStorage.getItem("authToken");
+                if(!token) return false;
+
+                const payload = parseJwt(token);
+                if(!payload || !payload.iat || !payload.exp) return false
+
+                const issuedAt = payload.iat * 1000;
+                const expiresAt= payload.exp * 1000;
+                const currentTime = Date.now();
+
+                const tokenAge = currentTime - issuedAt;
+                const MAX_TOKEN_AGE = 4 * 60 * 60 * 1000;
+                const isWithinMaxAge = tokenAge <= MAX_TOKEN_AGE
+                
+                const timeUntilExpiry = expiresAt - currentTime;
+                const isNearingExpiration = timeUntilExpiry > 0 && timeUntilExpiry < 10 *60 * 1000;
+                
+                if (isWithinMaxAge && isNearingExpiration) {
+                    try {
+                        const response = await authService.refreshToken(token);
+                        
+                        if (response && response.value && response.value.token) {
+                            sessionStorage.setItem("authToken", response.value.token);
+                            return true;
+                        }
+                    }catch(refreshError){
+                        console.error('Token refresh failed',refreshError);
+                    }
+                }
+                return isWithinMaxAge && timeUntilExpiry > 0;
+            } catch(error){
+                console.error('Token check failed',error);
+                return false;
+            }
         }, []);
         
         const extendSession = useCallback(() => {
@@ -90,21 +113,24 @@ export const AuthProvider = ({ children }) => {
 
         useEffect(() => {
             const interval = setInterval(() => {
-                if (!checkTokenAge() && !sessionTimeout && user){
-                    setShowSessionWarning(true);
-                    const timeout = setTimeout(() => {
-                        logout();
-                        //Redirect to login
-                    }, 5 * 60 *1000); // 5 min warning
-                    setSessionTimeout (timeout);
-                    //Display message to user if Token is getting old, "5 min left of session"
-                }
-            }, 15 * 60 *1000); //How often to check if valid
+                checkAndRefreshToken().then(isValid => {
+                    if (!isValid && !sessionTimeout && user) {
+                        setShowSessionWarning(true);
+                        const timeout = setTimeout(() => {
+                            logout();
+                            //Redirect to login
+                        }, 5 * 60 * 1000); // 5 min warning
+                        setSessionTimeout(timeout);
+                        //Display message to user if Token is getting old, "5 min left of session"
+                    }
+                });
+            }, 15 * 60 * 1000); //How often to check if valid
+            
             return () => {
                 clearInterval(interval);
                 if (sessionTimeout) clearTimeout(sessionTimeout);
             };
-        }, [checkTokenAge, sessionTimeout, user]);
+        }, [checkAndRefreshToken(), sessionTimeout, user, logout]);
 
     const login = async (email, password) => {
         try {
@@ -193,12 +219,12 @@ export const AuthProvider = ({ children }) => {
             logout,
             authFetch,
             verifyToken,
-            checkTokenAge,
+            checkAndRefreshToken,
             extendSession,
             isAuthenticated: !!user,
             showSessionWarning
         }),
-        [user, isLoading, logout, authFetch, verifyToken, checkTokenAge, extendSession, showSessionWarning]
+        [user, isLoading, logout, authFetch, verifyToken, checkAndRefreshToken, extendSession, showSessionWarning]
     );
     return (
         <AuthContext.Provider value={authContextValue}>
