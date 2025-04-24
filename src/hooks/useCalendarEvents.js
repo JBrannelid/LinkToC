@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import eventService from "../api/services/eventService";
 import userService from "../api/services/userService";
 import { parseISO, isSameDay } from "../utils/calendarUtils";
+import { useAppContext } from "../context/AppContext.jsx";
 
 export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);
@@ -9,8 +10,9 @@ export function useCalendarEvents(stableId) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Hard-coded userID until we have logic to handle userId dynamic
-  const DEFAULT_USER_ID = 1;
+  // Get current user from context
+  const { currentUser } = useAppContext();
+  const currentUserId = currentUser.id;
 
   const fetchAndUpdateEvents = useCallback(async () => {
     try {
@@ -22,12 +24,12 @@ export function useCalendarEvents(stableId) {
       const userList = Array.isArray(userResponse) ? userResponse : [];
       setUsers(userList);
 
-      // Get events from stableId
+      // Get events for the specified stable and convert object into a array of events
       const eventsResponse = await eventService.getStableEvents(stableId);
       const eventList = Array.isArray(eventsResponse) ? eventsResponse : [];
 
       // Find current user from the user list
-      const currentUser = userList.find((user) => user.id === DEFAULT_USER_ID);
+      const currentUser = userList.find((user) => user.id === currentUserId);
 
       // Process events to ensure they have user references
       const processedEvents = eventList.map((event) => {
@@ -38,18 +40,12 @@ export function useCalendarEvents(stableId) {
           eventUser = userList.find((user) => user.id === event.userIdFk);
         }
 
-        // If no user found, assign one for testing
-        if (!eventUser && userList.length > 0) {
-          const userIndex = event.id % userList.length;
-          eventUser = userList[userIndex] || currentUser;
-        }
-
         // Return the event with user information
         return {
           ...event,
           user: eventUser || currentUser,
           userIdFk:
-            event.userIdFk || (eventUser ? eventUser.id : DEFAULT_USER_ID),
+            event.userIdFk || (eventUser ? eventUser.id : currentUserId),
         };
       });
 
@@ -62,11 +58,11 @@ export function useCalendarEvents(stableId) {
     } finally {
       setLoading(false);
     }
-  }, [stableId]);
+  }, [stableId, currentUserId]);
 
   useEffect(() => {
     fetchAndUpdateEvents();
-  }, [fetchAndUpdateEvents]);
+  }, [fetchAndUpdateEvents, stableId]);
 
   const createEvent = async (eventData) => {
     try {
@@ -76,7 +72,7 @@ export function useCalendarEvents(stableId) {
       const eventWithDetails = {
         ...eventData,
         stableIdFk: stableId,
-        userIdFk: DEFAULT_USER_ID,
+        userIdFk: currentUserId,
       };
 
       await eventService.create(eventWithDetails);
@@ -97,7 +93,7 @@ export function useCalendarEvents(stableId) {
       const eventWithDetails = {
         ...eventData,
         stableIdFk: stableId,
-        userIdFk: DEFAULT_USER_ID,
+        userIdFk: currentUserId,
       };
 
       await eventService.update(eventWithDetails);
