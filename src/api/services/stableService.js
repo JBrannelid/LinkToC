@@ -7,6 +7,10 @@ const stableService = {
   ...baseService,
 
   // Implement stable-specific method
+  
+  //Kalle på StableCompositionEndpoints
+  
+  //
 };
 
 export default stableService;
