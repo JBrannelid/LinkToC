@@ -26,7 +26,7 @@ export default function WallPost({ id }) {
     currentWallPost();
   }, [currentWallPost]);
 
-  const [isFormOpen, setIsForOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const toggleButton = () => {
     setIsFormOpen((prev) => !prev);
   };
