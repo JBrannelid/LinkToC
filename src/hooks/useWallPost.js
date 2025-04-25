@@ -1,67 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { formatDateForInput } from "../utils/calendarUtils";
+import { useState, useCallback, useEffect } from "react";
+import { wallPostService } from "../api";
 
-export const useWallPost = (event, onSubmit, onCancel) => {
-  const [wallPostData, setWallPostData] = useState({
-    title: "",
-    body: "",
-    postDateTime: "",
-    editedDateTime: "",
-  });
+export const useWallPost = (id) => {
+  const [wallPost, setWallPost] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  //Validation state
-  const [formError, setFormError] = useState(null);
-  const [isValid, setIsValid] = useState(false);
+  const currentWallPost = useCallback(async () => {
+    try {
+      setLoading(true);
+      const fetchWallPost = await wallPostService.getById(id);
+      setWallPost(fetchWallPost.value);
+      return true;
+    } catch (error) {
+      setLoading(false);
+      return false;
+    } finally {
+      setLoading(false);
+      return false;
+    }
+  }, [id]);
 
-  //When editing set form with WallPostData
   useEffect(() => {
-    if (wallPost) {
-      setWallPostData({
-        title: wallPost.title,
-        body: wallPost.body,
-        postDateTime: formatDateForInput(wallpost.postDate),
-        editedDateTime: formatDateForInput(wallPost.lastEdited),
-      });
-    }
-  }, [event]);
+    currentWallPost();
+  }, [currentWallPost]);
 
-  //update form state when input values change
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setWallPostData((wallPostData) => ({
-      ...wallPostData,
-      [name]: value,
-    }));
-
-    if (formError) {
-      setFormError(null);
-    }
-  };
-
-  //Handle submit of the form
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (onSubmit) {
-      onSubmit(wallPostData);
-    }
-  };
-
-  //Handle form cancellation
-  const handleCancel = (event) => {
-    event.preventDefault();
-    if (onCancel) {
-      onCancel();
-    }
-  };
-
-  return {
-    wallPostData,
-    formError,
-    handleChange,
-    handleSubmit,
-    handleCancel,
-    isValid,
-  };
+  return { wallPost, id, loading, error, currentWallPost };
 };
 
 export default useWallPost;

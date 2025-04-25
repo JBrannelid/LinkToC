@@ -1,32 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import WallPostForm from "../forms/WallPostForm";
-import { wallPostService } from "../../api";
+import useWallPost from "../../hooks/useWallPost";
 
 export default function WallPost({ id }) {
-  const [wallPost, setWallPost] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const currentWallPost = useCallback(async () => {
-    try {
-      setLoading(true);
-      const fetchWallPost = await wallPostService.getById(id);
-      setWallPost(fetchWallPost.value);
-      return true;
-    } catch (error) {
-      setLoading(false);
-      return false;
-    } finally {
-      setLoading(false);
-      return false;
-    }
-  }, [id]);
+  const { wallPost, loading, error, currentWallPost } = useWallPost(id);
 
   useEffect(() => {
-    currentWallPost();
-  }, [currentWallPost]);
+    const wallPostData = currentWallPost(id);
+  }, [id, currentWallPost]);
 
-  //Toggle for the form
+  //Toggle for the forma
   const [isFormOpen, setIsFormOpen] = useState(false);
   const toggleButton = () => {
     setIsFormOpen((prev) => !prev);
