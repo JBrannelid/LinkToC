@@ -30,7 +30,7 @@ const CalendarHeader = ({
         >
           {years.map((year) => (
             <option key={year} value={year}>
-              <h2>{year} </h2>
+              {year}
             </option>
           ))}
         </select>
