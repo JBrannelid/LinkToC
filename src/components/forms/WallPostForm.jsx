@@ -1,6 +1,6 @@
-import { useWallPost } from "../../hooks/useWallPostForm";
+import { useWallPostForm } from "../../hooks/useWallPostForm";
 
-const WallPost = ({ event, onSubmit, onCancel }) => {
+const WallPostForm = ({ event, onSubmit, onCancel }) => {
   const {
     wallPostData,
     formError,
@@ -8,7 +8,7 @@ const WallPost = ({ event, onSubmit, onCancel }) => {
     handleSubmit,
     handleCancel,
     isValid,
-  } = useWallPost(event, onSubmit, onCancel);
+  } = useWallPostForm(event, onSubmit, onCancel);
 
   return (
     <>
@@ -110,4 +110,4 @@ const WallPost = ({ event, onSubmit, onCancel }) => {
   );
 };
 
-export default WallPost;
+export default WallPostForm;

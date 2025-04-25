@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { formatDateForInput } from "../utils/calendarUtils";
 
-export const useWallPost = (event, onSubmit, onCancel) => {
+export const useWallPostForm = (event, onSubmit, onCancel) => {
   const [wallPostData, setWallPostData] = useState({
     title: "",
     body: "",
@@ -64,4 +64,4 @@ export const useWallPost = (event, onSubmit, onCancel) => {
   };
 };
 
-export default useWallPost;
+export default useWallPostForm;
