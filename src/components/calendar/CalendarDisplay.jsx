@@ -100,23 +100,23 @@ function CalendarDisplay() {
   }
 
   return (
-    <div className="mt-10">
-      <div className="container mx-auto px-4">
+    <div className="px-4">
+      <div className="mx-auto">
         {/* Loading and error status messages */}
         {calendarStatus.loading && events.length > 0 && (
-          <div className="text-center py-2 text-gray-500">
+          <div className="text-center py-2 text-gray">
             Vänta, vi uppdaterar kalenderdata...
           </div>
         )}
 
         {calendarStatus.error && (
-          <div className="text-center py-2 text-red-500">
+          <div className="text-center py-2 text-error-500">
             {calendarStatus.error}
           </div>
         )}
 
         {stableStatus.error && (
-          <div className="text-center py-2 text-red-500">
+          <div className="text-center py-2 text-error-500">
             {stableStatus.error}
           </div>
         )}
