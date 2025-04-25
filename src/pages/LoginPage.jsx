@@ -228,9 +228,9 @@ const LoginForm = () => {
               Saknar du konto?
               <a
                 href="/register"
-                className="font-medium text-yellow-500 hover:text-yellow-400"
+                className="font-medium text-yellow-500 hover:text-yellow-400 pl-2"
               >
-                Logga in
+                Registrera
               </a>
             </p>
           </div>
