@@ -55,7 +55,29 @@ const authService  = {
             console.error("Logout request failed:", error);
             return true;
         }
-    }
+    },
+    
+    validateResetToken: async (validateData) => {
+        if (!validateData || !validateData.email || !validateData.resetCode) {
+            throw new Error("Email and reset code are required");
+        }
+        return await axiosConfig.post(`/api/validate-reset-code`, validateData);
+    },
+    resetPassword: async (resetData) => {    
+        if (!resetData || !resetData.email || !resetData.password || !resetData.newPasswordConfirmation) {
+        throw new Error("Email and password is required");
+        }
+        if(resetData.newPassword !== resetData.newPasswordConfirmation) {
+            throw new Error("Passwords must match");
+        }
+        
+        return await axiosConfig.post(`/api/reset-password`, {
+            email: resetData.email,
+            newPassword: resetData.newPassword,
+            newPasswordConfirmation: resetData.newPasswordConfirmation
+        });
+    },
+
 }; 
 
 
