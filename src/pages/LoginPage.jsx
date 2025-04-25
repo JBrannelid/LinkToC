@@ -35,6 +35,13 @@ const LoginForm = () => {
       setIsSubmitting(false);
     }
   };
+  
+  const handleForgotPassword =() =>{
+    navigate("/forgot-password");
+  }
+  const handleRegister =() => {
+    navigate("/register");
+  }
 
   return (
     <div className="flex flex-col h-screen">
@@ -136,12 +143,12 @@ const LoginForm = () => {
           </div>
 
           <div className="flex justify-end mb-6">
-            <a
-              href="/forgot-password"
+            <button
+              onClick={handleForgotPassword}
               className="text-sm text-gray-400 hover:text-gray-500"
             >
               Glömt <span className="text-orange-300">Lösenord</span> ?
-            </a>
+            </button>
           </div>
 
           <button
@@ -226,12 +233,12 @@ const LoginForm = () => {
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               Saknar du konto?
-              <a
-                href="/register"
+              <button
+                onClick={handleRegister}
                 className="font-medium text-yellow-500 hover:text-yellow-400"
               >
                 Logga in
-              </a>
+              </button>
             </p>
           </div>
         </form>
