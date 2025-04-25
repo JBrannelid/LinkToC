@@ -1,4 +1,4 @@
-import { useWallPost } from "../../hooks/useWallPost";
+import { useWallPost } from "../../hooks/useWallPostForm";
 
 const WallPost = ({ event, onSubmit, onCancel }) => {
   const {
