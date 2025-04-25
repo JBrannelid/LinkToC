@@ -3,7 +3,7 @@ import DisplayCalendar from "../components/calendar/CalendarDisplay";
 
 export default function HomePage() {
   return (
-    <div className="">
+    <div className="pb-24">
       <section className="mb-6">
         <DisplayCalendar />
       </section>
