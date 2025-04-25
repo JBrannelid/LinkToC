@@ -5,6 +5,7 @@ import EventForm from "../forms/EventForm";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext";
+import StableName from "../layout/StableName";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -93,15 +94,20 @@ function CalendarDisplay() {
   // Loading state. Need to implement a loading component
   if ((calendarStatus.loading && events.length === 0) || stableStatus.loading) {
     return (
-      <div className="p-8 text-center">
+      <div className="py-2 text-gray">
         <p>Vänta, vi hämtar in kalenderdata...</p>
       </div>
     );
   }
 
   return (
-    <div className="px-4">
-      <div className="mx-auto">
+    <div className="mt-2">
+      <div className="container mx-auto">
+        {/* Stable Title */}
+        <div className="text-center mb-5">
+          <StableName currentStableId={currentStable.id} />
+        </div>
+
         {/* Loading and error status messages */}
         {calendarStatus.loading && events.length > 0 && (
           <div className="text-center py-2 text-gray">
