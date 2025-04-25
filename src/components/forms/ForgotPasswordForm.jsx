@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
-import { X, Send, AlertCircle } from "lucide-react"
+import { Send, AlertCircle } from "lucide-react"
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
 import FormMessage from "./formBuilder/FormMessage";
 import { ErrorTypes } from "../../api/index.js";
 
-const ForgotPasswordForm = ({onCancel, onSuccess, setParentLoading = null}) => {
+const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({type: "", text: "",});
     
@@ -29,9 +29,9 @@ const ForgotPasswordForm = ({onCancel, onSuccess, setParentLoading = null}) => {
         try {
             const response = await authService.forgotPassword(data.email);
 
-            // Success case - treat partial success (email fails but reset created) as success
+         
             if (response && (response.isSuccess || response.statusCode === 200 || response.statusCode === 201)) {
-                // Check if there was an email sending issue mentioned in the message
+               
                 if (response.message && response.message.includes("issue sending the email")) {
                     setMessage({
                         type: "warning",
