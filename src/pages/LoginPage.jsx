@@ -27,7 +27,6 @@ const LoginForm = () => {
 
     try {
       await login(data.email, data.password);
-
       navigate("/select-stable");
     } catch (error) {
       setServerError(error.message || "Fel e-postadress eller lösenord");
@@ -145,7 +144,7 @@ const LoginForm = () => {
           <div className="flex justify-end mb-6">
             <button
               onClick={handleForgotPassword}
-              className="text-sm text-gray-400 hover:text-gray-500"
+              className="text-sm text-gray-400 "
             >
               Glömt <span className="text-orange-300">Lösenord</span> ?
             </button>
@@ -231,15 +230,11 @@ const LoginForm = () => {
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
-              Saknar du konto?
-              <button
+              <button className="text-sm text-gray-600"
                 onClick={handleRegister}
-                className="font-medium text-yellow-500 hover:text-yellow-400"
               >
-                Logga in
+                Saknar du konto? <span className="font-medium text-yellow-500 hover:text-yellow-400">Registrera dig här</span>
               </button>
-            </p>
           </div>
         </form>
       </div>
