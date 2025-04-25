@@ -1,35 +1,112 @@
 @import "tailwindcss";
 
-/* Base styles using Tailwind's layer directive */
+/* Font imports (WOFF format would be better for performance) */
+@import url("https://fonts.googleapis.com/css2?family=Besley:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap");
+
+/* Theme configuration */
+@theme {
+  /* Primary Colors */
+  --color-primary: #027a48;
+  --color-primary-light: #cce4da;
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-background: #f5f5f5;
+  --color-light: #e5e5e5;
+  --color-gray: #808080;
+
+  /* Warning Colors */
+  --color-warning-300: #ffc13d;
+  --color-warning-400: #ffa600;
+
+  /* Error Colors */
+  --color-error-400: #fc6455;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  /* Olive (for buttons) */
+  --color-olive-500: #556b2f;
+  --color-olive-600: #4b5320;
+
+  /* Font Families */
+  --font-heading: "Besley", serif;
+  --font-body: "Nunito Sans", sans-serif;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Line Heights */
+  --line-height-tight: 120%;
+  --line-height-normal: 150%;
+}
+
+/* Base styles */
 @layer base {
-  html,
+  html {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-light);
+    line-height: var(--line-height-tight);
+    color: theme("colors.gray.800");
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    margin: 0;
-    padding: 0;
-    background: var(--color-bg-primary);
-    color: var(--color-text-primary);
-    font-family: sans-serif, Times, serif;
+    background-color: var(--color-background);
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-tight);
+  }
+
+  p,
+  span,
+  div,
+  li,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: var(--font-body);
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 }
 
-@theme {
-  /* Basic theme colors */
-  --color-bg-primary: #fcf7f6;
-  --color-bg-secondary: #00ad1d;
-  --color-primary-text: #15ff00;
-  --color-secondary-text: #f9faf8;
-  --color-bg-olive: #556B2F;
+/* Component styles */
+@layer components {
+  .btn-olive {
+    @apply bg-[--color-olive-500] text-white hover:bg-[--color-olive-600] focus:ring-[--color-olive-500] px-4 py-2 rounded-md transition-colors;
+  }
 
-  /* Accent colors */
+  .calendar-day-selected {
+    @apply bg-[--color-primary-light] text-[--color-primary] font-semibold;
+  }
 
-  /* UI Elements */
-
-  /* Form elements */
-
-  /* Dark Mode */
-
-  /* Fonts */
+  .nav-container {
+    @apply flex items-center justify-around bg-[--color-primary-light] p-2 rounded-full;
+  }
 }
 
-/* Apply custom variant to make hover work on all devices */
+/* Custom variant for hover */
 @custom-variant hover (&:hover);
