@@ -101,7 +101,7 @@ function CalendarDisplay() {
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 bg-background">
       <div className="container mx-auto">
         {/* Stable Title */}
         <div className="text-center mb-5">
