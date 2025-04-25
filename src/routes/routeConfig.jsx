@@ -10,6 +10,8 @@ import StableSelectionPage from "../pages/StableSelectionPage";
 import ProfilePage from "../pages/ProfileTester";
 import ErrorPage from "../pages/ErrorPage";
 import SettingsPage from "../pages/SettingsPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 
 // Public Routes
 export const publicRoutes = [
@@ -20,6 +22,14 @@ export const publicRoutes = [
   {
     path: ROUTES.REGISTER,
     element: <RegistrationPage />,
+  },
+  {
+    path: ROUTES.RESET_PASSWORD,
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: ROUTES.FORGOT_PASSWORD,
+    element: <ForgotPasswordPage />,
   },
   {
     path: "/",

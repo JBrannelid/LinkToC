@@ -5,11 +5,14 @@ import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
 import { ErrorTypes } from "../../api/index.js"
+import {NotFoundState} from "../ui/userPage/index.js";
+import FormMessage from "./formBuilder/FormMessage.jsx";
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({type: "", text: "",});
     const [codeVerified, setCodeVerified] = useState(false);
+    const [notFound, setNotFound] = useState(false);
     const navigate = useNavigate();
     
     const methods = useForm({
@@ -20,8 +23,13 @@ const ResetPasswordForm = () => {
             confirmPassword: "",
         },
     });
+    React.useEffect(() => {
+        if (setParentLoading) {
+            setParentLoading(loading);
+        }
+    }, [loading, setParentLoading]);
     
-    const {handleSubmit, getValues, formState: {errors}, trigget } = methods;
+    const {handleSubmit, getValues, formState: {errors}, trigger } = methods;
 
     const handleVerifyCode = async() => {
         const result = await trigger(["email", "resetCode"]);
@@ -31,8 +39,8 @@ const ResetPasswordForm = () => {
         setMessage({type: "", text: ""});
         try {
             const validateData ={
-                email: getValues(result.email),
-                resetCode: getValues(result.resetCode),
+                email: getValues("email"),
+                resetCode: getValues("resetCode"),
             };
             const response = await authService.validateResetToken(validateData);
             
@@ -41,6 +49,11 @@ const ResetPasswordForm = () => {
                 setMessage({
                     type: "success",
                     text: "Kod verifierad. Du kan nu sätta ett nytt lösenord."
+                });
+            }else {
+                setMessage({
+                    type: "error",
+                    text: response?.message || "Ogiltig återställningskod. Kontrollera och försök igen."
                 });
             }
         }catch(error) {
@@ -117,7 +130,31 @@ const ResetPasswordForm = () => {
     const handleBackToLogin = () => {
         navigate("/login");
     };
-    
+    const handleRequestNewCode = () =>{
+        navigate("/forgotPassword");
+    }
+    if (notFound) {
+        return (
+            <div className="w-full">
+                <NotFoundState text="Ogiltig eller utgången återställningskod" />
+                <div className="mt-6 flex flex-col gap-3">
+                    <button
+                        onClick={handleRequestNewCode}
+                        className="w-full py-2 bg-[#556B2F] hover:bg-[#4B5320] text-white rounded-md"
+                    >
+                        Begär en ny återställningskod
+                    </button>
+                    <button
+                        onClick={handleBackToLogin}
+                        className="flex items-center justify-center mx-auto mt-2 text-[#556B2F] hover:underline"
+                    >
+                        <ArrowLeft className="h-4 w-4 mr-1" />
+                        Tillbaka till inloggning
+                    </button>
+                </div>
+            </div>
+        );
+    }
     return(
         <div className="flex justify-center">
             <div className="w-[500px] p-5 rounded-sm shadow-lg bg-white bg-opacity-70">
@@ -194,15 +231,7 @@ const ResetPasswordForm = () => {
                         </>
                     )}
 
-                    {message.text && (
-                        <div className={`mt-4 p-3 rounded-md ${
-                            message.type === "success"
-                                ? "bg-green-50 text-green-700"
-                                : "bg-red-50 text-red-700"
-                        }`}>
-                            {message.text}
-                        </div>
-                    )}
+                    <FormMessage message={message}/>
 
                     <div className="mt-5">
                         <button
@@ -211,7 +240,8 @@ const ResetPasswordForm = () => {
                             disabled={loading}
                             aria-busy={loading}
                         >
-                            {loading ? "Bearbetar..." : codeVerified ? "Återställ lösenord" : "Verifiera kod"}
+                            <Shield className="h-5 w-5 mr-2" />
+                            {codeVerified ? "Återställ lösenord" : "Verifiera kod"}
                         </button>
                     </div>
 
@@ -219,8 +249,9 @@ const ResetPasswordForm = () => {
                         <button
                             type="button"
                             onClick={handleBackToLogin}
-                            className="text-[#556B2F] hover:underline"
+                            className="flex items-center justify-center mx-auto text-[#556B2F] hover:underline"
                         >
+                            <ArrowLeft className="h-4 w-4 mr-1" />
                             Tillbaka till inloggning
                         </button>
                     </div>

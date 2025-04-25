@@ -36,7 +36,7 @@ const LoginForm = () => {
   };
   
   const handleForgotPassword =() =>{
-    navigate("/forgot-password");
+    navigate("/forgotPassword");
   }
   const handleRegister =() => {
     navigate("/register");

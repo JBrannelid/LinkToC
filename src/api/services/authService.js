@@ -77,6 +77,12 @@ const authService  = {
             newPasswordConfirmation: resetData.newPasswordConfirmation
         });
     },
+    forgotPassword: async (email) => {
+        if (!email) {
+            throw new Error("Email is required");
+        }
+        return await axiosConfig.post(`/api/password-reset-email/send`, { email });
+    },
 
 }; 
 

@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
-import { X, Send } from "lucide-react"
+import { X, Send, AlertCircle } from "lucide-react"
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
+import FormMessage from "./formBuilder/FormMessage";
 import { ErrorTypes } from "../../api/index.js";
 
-const ForgotPasswordForm = ({onCancel, onSuccess}) => {
+const ForgotPasswordForm = ({onCancel, onSuccess, setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({type: "", text: "",});
     
@@ -16,19 +17,40 @@ const ForgotPasswordForm = ({onCancel, onSuccess}) => {
         },
     });
     
+    useEffect(() => {
+        if (setParentLoading) {
+            setParentLoading(loading);
+        }
+    }, [loading, setParentLoading]);
+    
     const handleSubmit = async(data) => {
         setLoading(true);
         setMessage({type: "", text: "", });
         try {
             const response = await authService.forgotPassword(data.email);
-            
-            if (response && response.isSuccess){
-                setMessage({type: "success",
+
+            // Success case - treat partial success (email fails but reset created) as success
+            if (response && (response.isSuccess || response.statusCode === 200 || response.statusCode === 201)) {
+                // Check if there was an email sending issue mentioned in the message
+                if (response.message && response.message.includes("issue sending the email")) {
+                    setMessage({
+                        type: "warning",
+                        text: 'Återställningsbegäran har skapats, men det uppstod ett problem med att skicka e-post. Om du inte får e-post inom några minuter, kontrollera din skräppostmapp eller kontakta support.',
+                    });
+                } else {
+                    setMessage({
+                        type: "success",
                         text: 'Återställningslänk har skickats till din e-post. Kontrollera din inkorg (inklusive skräppostmappen)',
-                     });
+                    });
+                }
+
                 if(onSuccess) onSuccess();
             } else {
-                setMessage({type: "error", text: response.message || "Något gick fel. Vänligen försök igen.", });
+                setMessage({
+                    type: "error",
+                    text: response.message || "Något gick fel. Vänligen försök igen.",
+                });
+                setLoading(false);
             }
         }catch(error){
             let errorMessage = 'Misslyckades att bearbeta begäran. Försök igen senare';
@@ -43,23 +65,13 @@ const ForgotPasswordForm = ({onCancel, onSuccess}) => {
 
             setMessage({ type: 'error', text: errorMessage });
             console.error('Error:', error);
-        } finally {
-            setLoading(false);
-        }
+            setLoading(false); 
+        } 
     };
     
-    return(<div className="flex justify-center">
+    return(
+        <div className="flex justify-center">
         <div className="w-[500px] p-5 rounded-sm shadow-lg bg-white bg-opacity-70">
-            <h1 className="text-xl lg:text-2xl font-bold flex items-center justify-between">
-                Glömt lösenord?
-                <button
-                    onClick={onCancel}
-                    className="p-2 text-gray-500 hover:text-gray-700"
-                    aria-label="Stäng"
-                >
-                    <X className="h-6 w-6" />
-                </button>
-            </h1>
             <p className="text-sm lg:text-base mt-2">
                 Oroa dig inte, det händer alla. Skriv din e-postadress nedan så skickar vi ett återställningsmail.
             </p>
@@ -84,11 +96,14 @@ const ForgotPasswordForm = ({onCancel, onSuccess}) => {
                     />
                 </div>
 
-                {message.text && (
-                    <div className={`mt-4 p-3 rounded-md ${message.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                        {message.text}
+                {message.type === "warning" && (
+                    <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-md flex items-start">
+                        <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
+                        <span className="text-sm text-amber-800">{message.text}</span>
                     </div>
                 )}
+                
+                <FormMessage message={message}/>
 
                 <div className="mt-5">
                     <button
@@ -98,7 +113,7 @@ const ForgotPasswordForm = ({onCancel, onSuccess}) => {
                         aria-busy={loading}
                     >
                         <Send className="h-6 w-6" />
-                        {loading ? "Bearbetar..." : "Skicka"}
+                        Skicka återställningslänk
                     </button>
                 </div>
             </FormProvider>

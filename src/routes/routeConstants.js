@@ -7,6 +7,8 @@ export const ROUTES = {
   USER_PROFILE: "/userpage/:userId",
   STABLE: "/stable/:stableId",
   SETTINGS: "/settings",
+  RESET_PASSWORD: "/resetPassword",
+  FORGOT_PASSWORD: "/forgotPassword",
 };
 
 // Dynamic routes with params
