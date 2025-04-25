@@ -1,11 +1,16 @@
 import React from "react";
 
-const UserProfileImage = ({ user, size = "medium", className = "" }) => {
+const UserProfileImage = ({
+  user,
+  size = "mini",
+  className = "",
+  customContent,
+}) => {
   // STEP 1: Set up the size of the avatar circle based on the size prop
   let sizeClass = "h-10 w-10";
 
   if (size === "mini") {
-    sizeClass = "h-5 w-5";
+    sizeClass = "h-4 w-4";
   } else if (size === "tiny") {
     sizeClass = "h-6 w-6";
   } else if (size === "small") {
@@ -18,7 +23,7 @@ const UserProfileImage = ({ user, size = "medium", className = "" }) => {
   let fontSizeClass = "text-sm";
 
   if (size === "mini" || size === "tiny") {
-    fontSizeClass = "text-xs";
+    fontSizeClass = "text-mini";
   }
 
   // STEP 3: Get user's initials
@@ -43,13 +48,19 @@ const UserProfileImage = ({ user, size = "medium", className = "" }) => {
       "bg-indigo-500",
       "bg-red-500",
       "bg-teal-500",
+      "bg-orange-500",
+      "bg-lime-500",
+      "bg-amber-500",
+      "bg-cyan-500",
+      "bg-rose-500",
+      "bg-fuchsia-500",
     ];
 
     if (typeof user.id === "number") {
       const colorIndex = user.id % colors.length;
       return colors[colorIndex];
     }
-    return "bg-gray-400";
+    return "bg-gray-500";
   }
 
   // STEP 5: Get a user name for the image alt text
@@ -79,7 +90,7 @@ const UserProfileImage = ({ user, size = "medium", className = "" }) => {
         />
       ) : (
         <span className={`${fontSizeClass} font-semibold`}>
-          {getInitials()}
+          {customContent || getInitials()}
         </span>
       )}
     </div>
