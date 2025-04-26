@@ -29,15 +29,14 @@ export default function StableName({ currentStableId }) {
     navigate(ROUTES.SELECT_STABLE);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <p className="py-2 text-gray">Loading...</p>;
+  if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (
-    <div
-      onClick={handleStableClick}
-      className="cursor-pointer hover:text-gray-900 transition-colors"
-    >
-      <p>{currentStable.name || "Inget stall kopplat"}</p>
+    <div onClick={handleStableClick}>
+      <h1 className="cursor-pointer font-normal text-2xl">
+        {currentStable.name || "Inget stall kopplat"}
+      </h1>
     </div>
   );
 }

@@ -1,12 +1,12 @@
 import React from "react";
 import { weekdayTitles } from "../../../utils/calendarUtils";
 
-// Renders the days "weekdayTitles" from CalendarUtils in the calendar grid
+// Renders the days "weekdayTitles" from CalendarUtils
 const WeekdayHeader = () => {
   return (
-    <div className="grid grid-cols-7 text-center bg-gray-100 rounded-t-lg">
+    <div className="grid grid-cols-7 text-center bg-white">
       {weekdayTitles.map((day, index) => (
-        <div key={index} className="py-2 font-medium">
+        <div key={index} className="py-2 font-">
           {day}
         </div>
       ))}

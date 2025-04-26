@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft, LogOut } from "lucide-react";
 import { ROUTES } from "../routes/routeConstants";
+import Button from "../components/ui/Button";
 
 const SettingsPage = () => {
   const { logout } = useAuth();
@@ -22,14 +23,16 @@ const SettingsPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center mb-6">
-        <button
+        <Button
+          type="secondary"
+          size="small"
           onClick={handleBack}
-          className="p-2 text-gray-600 hover:text-gray-900"
+          className="p-1"
           aria-label="Tillbaka"
         >
           <ArrowLeft className="h-6 w-6" />
-        </button>
-        <h1 className="text-2xl font-bold ml-2">Inställningar</h1>
+        </Button>
+        <h1 className="text-2xl ml-2">Inställningar</h1>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">

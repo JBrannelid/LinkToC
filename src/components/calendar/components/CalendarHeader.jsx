@@ -15,14 +15,18 @@ const CalendarHeader = ({
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   return (
-    <div className="flex justify-between items-center mb-6 px-2 sm:px-4">
+    <header className="flex items-center justify-between px-4 mb-1">
       <div className="flex items-center space-x-2">
+        {/* Display current month */}
+        <h2 className="text-xl font-bold">
+          {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
+        </h2>
         {/* Year dropdown */}
         <select
           id="year"
           value={firstDayCurrentMonth.getFullYear()}
           onChange={(e) => changeYear(Number(e.target.value))}
-          className="px-3 py-2 bg-white border border-gray-300 rounded-full text-sm"
+          className="text-xl font-bold"
         >
           {years.map((year) => (
             <option key={year} value={year}>
@@ -30,40 +34,23 @@ const CalendarHeader = ({
             </option>
           ))}
         </select>
+      </div>
+      <div className="flex space-x-1">
+        {/* Change to previous month */}
+        <button type="button" onClick={previousMonth} className="text-primary">
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+
         {/* Return to today */}
-        <button
-          type="button"
-          onClick={goToToday}
-          className="px-3 py-2 bg-white border border-gray-300 rounded-full text-sm"
-        >
+        <button type="button" onClick={goToToday} className="text-sm">
           Till idag
         </button>
-      </div>
-      <div className="flex items-center space-x-2">
-        {/* Change to previous month */}
-        <button
-          type="button"
-          onClick={previousMonth}
-          className="pl-2 text-gray-400 hover:text-gray-500"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-
-        {/* Display current month */}
-        <h2 className="text-sm">
-          {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
-        </h2>
-
         {/* Change to next month */}
-        <button
-          onClick={nextMonth}
-          type="button"
-          className="p-2 text-gray-400 hover:text-gray-500"
-        >
-          <ChevronRight className="w-5 h-5" />
+        <button type="button" onClick={nextMonth} className="text-primary">
+          <ChevronRight className="w-6 h-6" />
         </button>
       </div>
-    </div>
+    </header>
   );
 };
 
