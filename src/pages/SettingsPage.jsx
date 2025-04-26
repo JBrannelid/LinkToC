@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { ArrowLeft, LogOut } from "lucide-react";
 import { ROUTES } from "../routes/routeConstants";
-import Button from "../components/buttons/Button";
+import Button from "../components/ui/Button";
 
 const SettingsPage = () => {
   const { logout } = useAuth();
