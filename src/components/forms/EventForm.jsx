@@ -6,9 +6,7 @@ import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import TimePicker from "./formBuilder/TimePicker";
 import Button from "../ui/Button";
-
-// Component for creating or editing an event
-const DEFAULT_STABLE_ID = 2;
+import { useAppContext } from "../../context/AppContext";
 
 const EventForm = ({
   event,
@@ -18,13 +16,15 @@ const EventForm = ({
   date = new Date(),
   stables = [],
 }) => {
+  const { currentStable } = useAppContext();
+
   const methods = useForm({
     defaultValues: {
       title: "",
       description: "",
-      startTime: "08:00",
-      endTime: "09:00",
-      stableId: DEFAULT_STABLE_ID,
+      startTime: "00:00",
+      endTime: "00:00",
+      stableId: currentStable?.id,
     },
   });
 
@@ -46,7 +46,7 @@ const EventForm = ({
         description: event.content || "",
         startTime: format(start, "HH:mm"),
         endTime: format(end, "HH:mm"),
-        stableId: event.stableIdFk || DEFAULT_STABLE_ID,
+        stableId: event.stableIdFk || currentStable?.id,
       });
     } else {
       methods.reset({
@@ -54,14 +54,12 @@ const EventForm = ({
         description: "",
         startTime: getTime(date, 8),
         endTime: getTime(date, 9),
-        stableId: DEFAULT_STABLE_ID,
+        stableId: currentStable?.id,
       });
     }
-  }, [event, date, methods]);
+  }, [event, date, methods, currentStable]);
 
   const handleSubmit = (data) => {
-    console.log("Form submitted with data:", data); // Loggar data när formuläret skickas
-
     const [startHour, startMinute] = data.startTime.split(":").map(Number);
     const [endHour, endMinute] = data.endTime.split(":").map(Number);
 
@@ -77,8 +75,8 @@ const EventForm = ({
       id: event?.id,
       startDateTime: start.toISOString(),
       endDateTime: end.toISOString(),
-      stableIdFk: data.stableId || event?.stableIdFk || DEFAULT_STABLE_ID,
-      userIdFk: event?.userIdFk, // Pass userIdFk when submit a excisting event
+      stableIdFk: data.stableId || event?.stableIdFk || currentStable?.id,
+      userIdFk: event?.userIdFk,
     });
   };
 
