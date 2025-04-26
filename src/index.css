@@ -30,6 +30,9 @@
   /* Olive (for buttons) */
   --color-olive-500: #556b2f;
 
+  /* Accent for (a-link) */
+  --color-accent-orange: #ffa600;
+
   /* Font Families */
   --font-heading: "Besley", serif;
   --font-body: "Nunito Sans", sans-serif;
