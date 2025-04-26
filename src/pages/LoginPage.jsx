@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { FacebookIcon, LinkedinIcon } from "lucide-react";
-import Button from "../components/buttons/Button";
+import Button from "../components/ui/Button";
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -77,7 +77,7 @@ const LoginForm = () => {
               placeholder="Email"
               className={`w-full px-3 py-4 border ${
                 errors.email ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={isSubmitting}
@@ -111,7 +111,7 @@ const LoginForm = () => {
               placeholder="Password"
               className={`w-full px-3 py-4 border ${
                 errors.password ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.password ? "true" : "false"}
               aria-describedby={errors.password ? "password-error" : undefined}
               disabled={isSubmitting}
