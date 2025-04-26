@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../api/services/authService.js";
 import { useNavigate } from "react-router";
-import Button from "../components/buttons/Button";
+import Button from "../components/ui/Button";
 
 const RegistrationPage = () => {
   const [serverError, setServerError] = useState("");
@@ -104,7 +104,7 @@ const RegistrationPage = () => {
               placeholder="Förnamn"
               className={`w-full px-3 py-4 border ${
                 errors.firstName ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.firstName ? "true" : "false"}
               aria-describedby={
                 errors.firstName ? "firstName-error" : undefined
@@ -135,7 +135,7 @@ const RegistrationPage = () => {
               placeholder="Efternamn"
               className={`w-full px-3 py-4 border ${
                 errors.lastName ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.lastName ? "true" : "false"}
               aria-describedby={errors.lastName ? "lastName-error" : undefined}
               disabled={isSubmitting}
@@ -165,7 +165,7 @@ const RegistrationPage = () => {
               placeholder="Användarnamn"
               className={`w-full px-3 py-4 border ${
                 errors.userName ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.userName ? "true" : "false"}
               aria-describedby={errors.userName ? "userName-error" : undefined}
               disabled={isSubmitting}
@@ -198,7 +198,7 @@ const RegistrationPage = () => {
               type="tel"
               autoComplete="tel"
               placeholder="Telefonnummer (valfritt)"
-              className="w-full px-3 py-4 border border-gray rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+              className="w-full px-3 py-4 border border-gray rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary"
               disabled={isSubmitting}
               {...register("phoneNumber")}
             />
@@ -215,7 +215,7 @@ const RegistrationPage = () => {
               placeholder="Email"
               className={`w-full px-3 py-4 border ${
                 errors.email ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={isSubmitting}
@@ -249,7 +249,7 @@ const RegistrationPage = () => {
               placeholder="Lösenord"
               className={`w-full px-3 py-4 border ${
                 errors.password ? "border-error-400" : "border-gray"
-              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.password ? "true" : "false"}
               aria-describedby={errors.password ? "password-error" : undefined}
               disabled={isSubmitting}
