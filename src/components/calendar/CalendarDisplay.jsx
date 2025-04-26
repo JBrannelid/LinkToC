@@ -133,6 +133,7 @@ function CalendarDisplay() {
             event={currentEvent}
             onSubmit={currentEvent ? handleUpdateEvent : handleCreateEvent}
             onCancel={handleCloseEventForm}
+            onDeleteEvent={handleDeleteEvent}
             title={currentEvent ? "Ändra Aktivitet" : "Ny Aktivitet"}
             date={selectedDay}
             stables={stableId}
