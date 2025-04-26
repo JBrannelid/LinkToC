@@ -23,9 +23,7 @@ const EventsHeader = ({
           <X strokeWidth={4} />
         </Button>
 
-        <h1 className="text-center text-xl font-semibold uppercase">
-          {dayName}
-        </h1>
+        <h1 className="text-center text-xl uppercase">{dayName}</h1>
       </div>
     );
   }
