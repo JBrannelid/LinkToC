@@ -1,20 +1,13 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { X, Plus } from "lucide-react";
+import { X } from "lucide-react";
 import { format } from "../../utils/calendarUtils";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import TimePicker from "./formBuilder/TimePicker";
+import Button from "../ui/Button";
 
 // Component for creating or editing an event
-// Props:
-//   event     - Event data to edit; if null, the form is for a new event
-//   onSubmit  - Function to handle form submission
-//   onCancel  - Function to handle cancellation
-//   title     - Title displayed at the top of the form
-//   date      - Currently selected date
-//   stables   - List of stables for selection if the user have multiple stables
-
 const DEFAULT_STABLE_ID = 2;
 
 const EventForm = ({
@@ -67,6 +60,8 @@ const EventForm = ({
   }, [event, date, methods]);
 
   const handleSubmit = (data) => {
+    console.log("Form submitted with data:", data); // Loggar data när formuläret skickas
+
     const [startHour, startMinute] = data.startTime.split(":").map(Number);
     const [endHour, endMinute] = data.endTime.split(":").map(Number);
 
@@ -88,19 +83,21 @@ const EventForm = ({
   };
 
   return (
-    <div className="flex flex-col fixed inset-0 z-100 bg-white">
-      <div className="bg-gray-100">
-        <div className="flex items-center px-4 py-4 mt-10">
-          <button
+    <div className="flex flex-col fixed inset-0 z-100 bg-background">
+      <div className="relative flex items-center justify-center bg-primary-light py-5 px-4">
+        <div className="absolute left-4">
+          <Button
+            type="primary"
+            size="large"
+            variant="icon"
+            className="border-0 text-primary"
+            aria-label="Close"
             onClick={onCancel}
-            className="p-2 text-green-800"
-            aria-label="Stäng"
           >
-            <X className="h-6 w-6" />
-          </button>
-          <h2 className="text-xl font-semibold mx-auto">{title}</h2>
-          <div className="w-8" />
+            <X strokeWidth={4} />
+          </Button>
         </div>
+        <h2 className="text-xl text-center uppercase">{title}</h2>
       </div>
 
       <div className="h-5" />
@@ -111,35 +108,61 @@ const EventForm = ({
         footer={{ showFooter: false }}
         className="flex flex-col flex-1"
       >
-        <div className="bg-white py-6 px-4 space-y-4">
-          <TimePicker
-            name="startTime"
-            label="Tid"
-            date={formattedDate}
-            validation={{ required: "Starttid krävs" }}
-          />
-          <TimePicker
-            name="endTime"
-            label="Tid"
-            date={formattedDate}
-            validation={{ required: "Sluttid krävs" }}
+        <div className="bg-white rounded-2xl border border-primary py-4 px-6">
+          <div className="flex flex-col items-start gap-2">
+            {/* Date */}
+            <div>
+              <span>{formattedDate}</span>
+            </div>
+
+            {/* Start */}
+            <div>
+              <TimePicker
+                name="startTime"
+                label="Start"
+                validation={{ required: "Starttid krävs" }}
+              />
+            </div>
+
+            {/* End */}
+            <div>
+              <TimePicker
+                name="endTime"
+                label="Slut&nbsp;"
+                validation={{ required: "Sluttid krävs" }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="h-5" />
+
+        <div className="bg-white p-3 rounded-lg">
+          <FormInput
+            name="title"
+            placeholder="Skriv in aktivitetens namn..."
+            validation={{
+              required: "Titel krävs",
+              maxLength: {
+                value: 50,
+                message: "Max 50 tecken",
+              },
+            }}
           />
         </div>
 
-        <div className="h-20" />
-
-        <div className="bg-gray-100 flex-1 px-4 py-6">
-          <div className="flex items-center mb-4">
-            <h3 className="text-lg font-medium">Beskrivning</h3>
-            <button
-              type="submit"
-              className="bg-gray-200 hover:bg-gray-300 transition-colors text-black px-4 py-1 rounded-full flex items-center ml-auto"
-            >
-              Lägg till <Plus className="ml-1 w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="border-t opacity-20 mb-10" />
+        <div className="flex-1 px-4 py-6">
+          <Button
+            type="submit"
+            className="w-9/10 mx-auto bg-primary"
+            // Explicitly calling handleSubmit because htmlType="submit" doesn't work with React Hook Form.
+            onClick={(e) => {
+              e.preventDefault();
+              methods.handleSubmit(handleSubmit)();
+            }}
+          >
+            Lägg till
+          </Button>
 
           {stables.length > 0 && (
             <select
@@ -153,20 +176,6 @@ const EventForm = ({
               ))}
             </select>
           )}
-
-          <div className="bg-red-50 p-5 rounded-lg">
-            <FormInput
-              name="title"
-              placeholder="Skriv in din aktivitet..."
-              validation={{
-                required: "Titel krävs",
-                maxLength: {
-                  value: 50,
-                  message: "Max 50 tecken",
-                },
-              }}
-            />
-          </div>
         </div>
       </FormProvider>
     </div>
