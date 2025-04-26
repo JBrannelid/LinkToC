@@ -16,11 +16,11 @@ const EventsHeader = ({
       <div className="relative bg-primary-light py-5">
         <Button
           variant="icon"
-          className="absolute left-4 top-4 border-0"
+          className="absolute left-4 top-4 border-0 text-primary"
           aria-label="Close list of events"
           onClick={onClose}
         >
-          <X className=" text-primary" />
+          <X strokeWidth={4} />
         </Button>
 
         <h1 className="text-center text-xl font-semibold uppercase">
