@@ -12,6 +12,7 @@ const EventForm = ({
   event,
   onSubmit,
   onCancel,
+  onDeleteEvent,
   title = "",
   date = new Date(),
   stables = [],
@@ -78,6 +79,15 @@ const EventForm = ({
       stableIdFk: data.stableId || event?.stableIdFk || currentStable?.id,
       userIdFk: event?.userIdFk,
     });
+  };
+
+  const handleDelete = () => {
+    if (event && event.id && typeof onDeleteEvent === "function") {
+      onDeleteEvent(event.id);
+      onCancel();
+    } else {
+      onCancel();
+    }
   };
 
   return (
@@ -159,8 +169,21 @@ const EventForm = ({
               methods.handleSubmit(handleSubmit)();
             }}
           >
-            Lägg till
+            {event ? "Uppdatera" : "Lägg till"}
           </Button>
+
+          {event && (
+            <Button
+              type="danger"
+              className="w-9/10 mx-auto mt-2"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+            >
+              Ta bort
+            </Button>
+          )}
 
           {stables.length > 0 && (
             <select
