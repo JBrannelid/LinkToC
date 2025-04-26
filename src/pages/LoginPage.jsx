@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { Feather, FacebookIcon, LinkedinIcon, RabbitIcon } from "lucide-react";
+import { Search, FacebookIcon, LinkedinIcon, RabbitIcon } from "lucide-react";
+import Button from "../components/buttons/Button";
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -38,22 +39,16 @@ const LoginForm = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Logo Section - Green background */}
-      <div className="py-16 flex justify-center items-center bg-[#556B2F]">
-        <RabbitIcon className="h-20 w-20">
-          {/* Horse rider icon */}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path fill="rgba(200, 200, 200, 0.8)" />
-          </svg>
-        </RabbitIcon>
+      {/* Header and Horse Icon */}
+      <div className="py-15 flex justify-center items-center bg-olive-500">
+        <img
+          src="../assets/icons/horse.svg"
+          alt="Horse icon"
+          className="h-20 w-20 translate-y-9"
+        />
       </div>
 
-      {/* Form Section - White background */}
+      {/* Form Section */}
       <div className="flex-1 px-6 py-8 bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -63,11 +58,11 @@ const LoginForm = () => {
         >
           {serverError && (
             <div
-              className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md"
+              className="bg-red-50 border-l-3 border-error-400 p-3 rounded-md"
               role="alert"
               aria-live="assertive"
             >
-              <p className="text-sm text-red-700">{serverError}</p>
+              <p className="text-sm text-error-600">{serverError}</p>
             </div>
           )}
 
@@ -81,8 +76,8 @@ const LoginForm = () => {
               autoComplete="email"
               placeholder="Email"
               className={`w-full px-3 py-4 border ${
-                errors.email ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.email ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={isSubmitting}
@@ -97,7 +92,7 @@ const LoginForm = () => {
             {errors.email && (
               <p
                 id="email-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-500"
                 role="alert"
               >
                 {errors.email.message}
@@ -115,8 +110,8 @@ const LoginForm = () => {
               autoComplete="current-password"
               placeholder="Password"
               className={`w-full px-3 py-4 border ${
-                errors.password ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.password ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:border-primary`}
               aria-invalid={errors.password ? "true" : "false"}
               aria-describedby={errors.password ? "password-error" : undefined}
               disabled={isSubmitting}
@@ -127,7 +122,7 @@ const LoginForm = () => {
             {errors.password && (
               <p
                 id="password-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-500"
                 role="alert"
               >
                 {errors.password.message}
@@ -136,99 +131,75 @@ const LoginForm = () => {
           </div>
 
           <div className="flex justify-end mb-6">
-            <a
-              href="/forgot-password"
-              className="text-sm text-gray-400 hover:text-gray-500"
-            >
-              Glömt <span className="text-orange-300">Lösenord</span> ?
-            </a>
+            <p className="text-sm text-gray">
+              Glömt
+              <a
+                href="/forgot-password"
+                className="font-medium text-accent-orange pl-2"
+              >
+                Lösenord
+              </a>
+            </p>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 px-4 border border-transparent rounded-md text-white font-medium bg-[#556B2F] hover:bg-[#4B5320] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#556B2F]"
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  ></path>
-                </svg>
-                Vänligen vänta, loggar in...
-              </div>
-            ) : (
-              "Logga in"
-            )}
-          </button>
+            {isSubmitting ? "Vänligen vänta, loggar in..." : "Logga in"}
+          </Button>
 
           <div className="my-6 flex items-center">
-            <div className="flex-1 border-t border-gray-300"></div>
+            <hr className="flex-1 border-gray" />
             <span className="px-4 text-sm text-gray-500">or</span>
-            <div className="flex-1 border-t border-gray-300"></div>
+            <hr className="flex-1 border-gray" />
           </div>
 
           <div className="flex justify-center space-x-8">
-            <button
-              type="button"
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
               aria-label="Sign in with Google"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
             >
-              <Feather
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              ></Feather>
-            </button>
-            <button
-              type="button"
+              <img
+                src="../assets/icons/google.svg"
+                alt="Horse icon"
+                className="h-6 w-6 filter brightness-0 invert"
+              />
+            </Button>
+
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
               aria-label="Sign in with Facebook"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
             >
               <FacebookIcon
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                className="h-6 w-6 "
                 fill="currentColor"
               ></FacebookIcon>
-            </button>
-            <button
-              type="button"
+            </Button>
+
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
               aria-label="Sign in with LinkedIn"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
             >
-              <LinkedinIcon
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              ></LinkedinIcon>
-            </button>
+              <LinkedinIcon className="h-6 w-6" fill="currentColor" />
+            </Button>
           </div>
 
           <div className="mt-8 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray">
               Saknar du konto?
               <a
                 href="/register"
-                className="font-medium text-yellow-500 hover:text-yellow-400 pl-2"
+                className="font-medium text-accent-orange pl-2"
               >
                 Registrera
               </a>
