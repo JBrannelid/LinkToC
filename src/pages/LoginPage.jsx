@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { Search, FacebookIcon, LinkedinIcon, RabbitIcon } from "lucide-react";
+import { FacebookIcon, LinkedinIcon } from "lucide-react";
 import Button from "../components/buttons/Button";
 
 const LoginForm = () => {
