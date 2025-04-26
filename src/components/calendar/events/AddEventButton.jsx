@@ -7,6 +7,7 @@ const AddEventButton = ({ onClick }) => {
     <div className="fixed bottom-20 right-4">
       <Button
         type="primary"
+        size="small"
         variant="icon"
         className="bg-primary text-white border-0"
         aria-label="Add new event button"
