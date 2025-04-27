@@ -32,7 +32,7 @@ const NavigationBar = () => {
         </Link>
 
         <Link
-          to={buildRoute(ROUTES.STABLE, { stableId: currentStable?.id })}
+          to={buildRoute(ROUTES.STABLE_POST, { stableId: currentStable?.id })}
           className={`p-2 ${
             isActive(ROUTES.STABLE.split("/:")[0])
               ? "bg-white rounded-full"
@@ -42,12 +42,12 @@ const NavigationBar = () => {
         >
           <FeedIcon
             className={`w-6 h-6 ${
-              isActive(ROUTES.STABLE.split("/:")[0])
+              isActive(ROUTES.STABLE_POST.split("/:")[0])
                 ? "text-primary"
                 : "currentColor"
             }`}
             color={
-              isActive(ROUTES.STABLE.split("/:")[0])
+              isActive(ROUTES.STABLE_POST.split("/:")[0])
                 ? "currentColor"
                 : "currentColor"
             }
