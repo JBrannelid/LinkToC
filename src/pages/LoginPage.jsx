@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { FacebookIcon, LinkedinIcon } from "lucide-react";
 import Button from "../components/ui/Button";
 import { ROUTES } from "../routes/routeConstants";
 import { useLoadingState } from "../hooks/useLoadingState";
+import FacebookIcon from "../assets/icons/FacebookIcon";
+import LinkedinIcon from "../assets/icons/LinkedInIcon";
 
 const LoginForm = () => {
   const { login } = useAuth();
