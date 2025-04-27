@@ -1,6 +1,6 @@
 import React from "react";
-import { Loader } from "lucide-react";
 import PropTypes from "prop-types";
+import LoadingIcon from "../../assets/icons/LoadingIcon";
 
 const LoadingSpinner = ({
   size = "medium",
@@ -12,7 +12,7 @@ const LoadingSpinner = ({
 
   return (
     <span className={`animate-spin ${marginClass} ${className}`}>
-      <Loader size={iconSize} />
+      <LoadingIcon size={iconSize} color="currentColor" />
     </span>
   );
 };
