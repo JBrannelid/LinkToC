@@ -91,7 +91,7 @@ const EventForm = ({
   };
 
   return (
-    <div className="flex flex-col fixed inset-0 z-100 bg-background">
+    <div className="flex flex-col fixed inset-0 z-50 bg-background">
       <div className="relative flex items-center justify-center bg-primary-light py-5 px-4">
         <div className="absolute left-4">
           <Button
