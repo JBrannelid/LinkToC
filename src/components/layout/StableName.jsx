@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
 import { ROUTES } from "../../routes/routeConstants.js";
+import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 
 export default function StableName({ currentStableId }) {
   const { currentStable, changeStable } = useAppContext();
