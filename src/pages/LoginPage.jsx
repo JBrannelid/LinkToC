@@ -2,14 +2,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { FacebookIcon, LinkedinIcon } from "lucide-react";
 import Button from "../components/ui/Button";
+import { ROUTES } from "../routes/routeConstants";
+import { useLoadingState } from "../hooks/useLoadingState";
+import FacebookIcon from "../assets/icons/FacebookIcon";
+import LinkedinIcon from "../assets/icons/LinkedInIcon";
 
 const LoginForm = () => {
   const { login } = useAuth();
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [operationType, setOperationType] = useState("fetch");
+  const loadingState = useLoadingState(isSubmitting, operationType);
 
   const {
     register,
@@ -24,6 +29,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setOperationType("fetch");
     setServerError("");
 
     try {
@@ -37,15 +43,31 @@ const LoginForm = () => {
     }
   };
 
+  const handleRegisterClick = () => {
+    navigate(ROUTES.REGISTER);
+  };
+
   return (
-    <div className="flex flex-col h-screen">
-      {/* Header and Horse Icon */}
-      <div className="py-15 flex justify-center items-center bg-olive-500">
+    <div className="flex flex-col min-h-screen">
+      {/* Responsive header with background image */}
+      <div
+        className="relative w-full"
+        style={{ height: "clamp(200px, 30vh, 400px)" }}
+      >
         <img
-          src="../assets/icons/horse.svg"
-          alt="Horse icon"
-          className="h-20 w-20 translate-y-9"
+          src="/src/assets/images/LoginBackgroundImage.jpg"
+          alt="Horse Background"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ maxHeight: "none" }}
         />
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
+          <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-4 py-1 rounded-sm shadow-sm">
+            <h1 className="text-3xl text-black">EQUILOG</h1>
+          </div>
+          {/* <p className="mt-2 text-white text-lg drop-shadow-md">
+            Välkommen till ditt stalls digitala hjälpreda
+          </p> */}
+        </div>
       </div>
 
       {/* Form Section */}
@@ -100,7 +122,7 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="mb-3">
+          <div>
             <label htmlFor="password" className="sr-only">
               Lösenord
             </label>
@@ -130,7 +152,7 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-10">
             <p className="text-sm text-gray">
               Glömt
               <a
@@ -149,16 +171,25 @@ const LoginForm = () => {
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Vänligen vänta, loggar in..." : "Logga in"}
+            {isSubmitting ? loadingState.getMessage() : "Logga in"}
           </Button>
 
-          <div className="my-6 flex items-center">
+          <Button
+            type="secondary"
+            className="w-full"
+            onClick={handleRegisterClick}
+            disabled={isSubmitting}
+          >
+            Skapa konto
+          </Button>
+
+          <div className="my-7 flex items-center">
             <hr className="flex-1 border-gray" />
-            <span className="px-4 text-sm text-gray-500">or</span>
+            <span className="px-4 text-sm text-gray-500">eller</span>
             <hr className="flex-1 border-gray" />
           </div>
 
-          <div className="flex justify-center space-x-8">
+          <div className="flex justify-center space-x-8 mt-2">
             <Button
               variant="icon"
               size="medium"
@@ -192,18 +223,6 @@ const LoginForm = () => {
             >
               <LinkedinIcon className="h-6 w-6" fill="currentColor" />
             </Button>
-          </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray">
-              Saknar du konto?
-              <a
-                href="/register"
-                className="font-medium text-accent-orange pl-2"
-              >
-                Registrera
-              </a>
-            </p>
           </div>
         </form>
       </div>

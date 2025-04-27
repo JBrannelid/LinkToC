@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Loader } from "lucide-react";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Button = ({
   type = "primary",
@@ -20,12 +20,15 @@ const Button = ({
 
   // Global style from index.css
   const typeStyles = {
-    primary: "bg-olive-500 text-white hover:bg-primary focus:ring-primary",
-    secondary: "bg-light text-black hover:bg-gray-300 focus:ring-gray-300",
+    primary:
+      "bg-primary text-white border border-white hover:border hover:border-gray focus:ring-primary",
+    secondary:
+      "bg-white border border-primary hover:bg-gray-300 focus:ring-gray-300",
     danger: "bg-error-500 text-white hover:bg-error-600 focus:ring-error-400",
     warning:
       "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300",
-    icon: "border border-gray-300 text-gray-400 hover:bg-primary focus:ring-gray-300",
+    icon: "border border-gray text-gray hover:bg-primary focus:ring-gray-300",
+    transparent: "bg-light/0",
   };
 
   // Size
@@ -92,9 +95,7 @@ const Button = ({
       {...rest}
     >
       {loading && (
-        <span className={`animate-spin ${variant !== "icon" ? "mr-2" : ""}`}>
-          <Loader size={size === "small" ? 16 : size === "large" ? 24 : 20} />
-        </span>
+        <LoadingSpinner size={size} withMargin={variant !== "icon"} />
       )}
       {children}
     </button>
@@ -102,7 +103,13 @@ const Button = ({
 };
 
 Button.propTypes = {
-  type: PropTypes.oneOf(["primary", "secondary", "danger", "warning"]),
+  type: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "danger",
+    "warning",
+    "transparent",
+  ]),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   size: PropTypes.oneOf(["small", "medium", "large"]),

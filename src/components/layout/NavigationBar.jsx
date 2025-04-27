@@ -1,9 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
 import { ROUTES, buildRoute } from "../../routes/routeConstants";
-import { Home, Users, Rabbit, User } from "lucide-react";
 import { useAppContext } from "../../context/AppContext";
 import { isRouteActive } from "../../routes/routeUtils";
+import FeedIcon from "../../assets/icons/FeedIcon";
+import HomeIcon from "../../assets/icons/HomeIcon";
+import HorseFaceIcon from "../../assets/icons/HorseFaceIcon";
+import UserIcon from "../../assets/icons/UserIcon";
 
 const NavigationBar = () => {
   const { currentUser, selectedHorse, currentStable } = useAppContext();
@@ -23,13 +26,13 @@ const NavigationBar = () => {
           }`}
           aria-label="Hem"
         >
-          <Home
+          <HomeIcon
             className={`w-6 h-6 ${isActive(ROUTES.HOME) ? "text-primary" : ""}`}
           />
         </Link>
 
         <Link
-          to={buildRoute(ROUTES.STABLE, { stableId: currentStable?.id })}
+          to={buildRoute(ROUTES.STABLE_POST, { stableId: currentStable?.id })}
           className={`p-2 ${
             isActive(ROUTES.STABLE.split("/:")[0])
               ? "bg-white rounded-full"
@@ -37,10 +40,17 @@ const NavigationBar = () => {
           }`}
           aria-label="Stall"
         >
-          <Users
+          <FeedIcon
             className={`w-6 h-6 ${
-              isActive(ROUTES.STABLE.split("/:")[0]) ? "text-primary" : ""
+              isActive(ROUTES.STABLE_POST.split("/:")[0])
+                ? "text-primary"
+                : "currentColor"
             }`}
+            color={
+              isActive(ROUTES.STABLE_POST.split("/:")[0])
+                ? "currentColor"
+                : "currentColor"
+            }
           />
         </Link>
 
@@ -55,13 +65,7 @@ const NavigationBar = () => {
           }`}
           aria-label="Häst profil"
         >
-          <Rabbit
-            className={`w-6 h-6 ${
-              isActive(ROUTES.HORSE_PROFILE.split("/:")[0])
-                ? "text-primary"
-                : ""
-            }`}
-          />
+          <HorseFaceIcon className="w-6 h-6" size={24} />
         </Link>
 
         <Link
@@ -73,7 +77,7 @@ const NavigationBar = () => {
           }`}
           aria-label="Användarprofil"
         >
-          <User
+          <UserIcon
             className={`w-6 h-6 ${
               isActive(ROUTES.USER_PROFILE.split("/:")[0]) ? "text-primary" : ""
             }`}
