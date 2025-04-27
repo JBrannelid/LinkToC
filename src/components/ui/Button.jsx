@@ -28,6 +28,7 @@ const Button = ({
     warning:
       "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300",
     icon: "border border-gray text-gray hover:bg-primary focus:ring-gray-300",
+    transparent: "bg-light/0",
   };
 
   // Size
@@ -102,7 +103,13 @@ const Button = ({
 };
 
 Button.propTypes = {
-  type: PropTypes.oneOf(["primary", "secondary", "danger", "warning"]),
+  type: PropTypes.oneOf([
+    "primary",
+    "secondary",
+    "danger",
+    "warning",
+    "transparent",
+  ]),
   disabled: PropTypes.bool,
   loading: PropTypes.bool,
   size: PropTypes.oneOf(["small", "medium", "large"]),
