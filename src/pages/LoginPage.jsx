@@ -12,6 +12,7 @@ const LoginForm = () => {
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [operationType, setOperationType] = useState("fetch");
   const loadingState = useLoadingState(isSubmitting, operationType);
 
   const {
