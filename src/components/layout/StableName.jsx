@@ -34,7 +34,7 @@ export default function StableName({ currentStableId }) {
 
   return (
     <div onClick={handleStableClick}>
-      <h1 className="cursor-pointer font-normal text-2xl">
+      <h1 className="cursor-pointer font-normal text-2xl font-heading">
         {currentStable.name || "Inget stall kopplat"}
       </h1>
     </div>

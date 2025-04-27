@@ -18,7 +18,7 @@ const CalendarHeader = ({
     <header className="flex items-center justify-between px-4 mb-1">
       <div className="flex items-center space-x-2">
         {/* Display current month */}
-        <h2 className="text-xl font-bold">
+        <h2 className="text-xl ">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
         </h2>
         {/* Year dropdown */}
@@ -26,7 +26,7 @@ const CalendarHeader = ({
           id="year"
           value={firstDayCurrentMonth.getFullYear()}
           onChange={(e) => changeYear(Number(e.target.value))}
-          className="text-xl font-bold"
+          className="text-md"
         >
           {years.map((year) => (
             <option key={year} value={year}>

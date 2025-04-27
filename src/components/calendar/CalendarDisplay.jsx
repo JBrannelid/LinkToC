@@ -104,9 +104,9 @@ function CalendarDisplay() {
     <div className="mt-2 bg-background">
       <div className="container mx-auto">
         {/* Stable Title */}
-        <div className="text-center mb-5">
+        <h1 className="text-center mb-5 font-heading">
           <StableName currentStableId={currentStable.id} />
-        </div>
+        </h1>
 
         {/* Loading and error status messages */}
         {calendarStatus.loading && events.length > 0 && (

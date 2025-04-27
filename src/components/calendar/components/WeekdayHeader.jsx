@@ -6,9 +6,9 @@ const WeekdayHeader = () => {
   return (
     <div className="grid grid-cols-7 text-center bg-white">
       {weekdayTitles.map((day, index) => (
-        <div key={index} className="py-2 font-">
+        <p key={index} className="py-2">
           {day}
-        </div>
+        </p>
       ))}
     </div>
   );
