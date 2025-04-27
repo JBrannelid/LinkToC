@@ -108,7 +108,7 @@ const ProfileCard = ({
             <Button
               type="primary"
               onClick={onDetailsClick}
-              aria-label={`View full details for ${id.name}`}
+              aria-label={`View full details for ${name}`}
             >
               View Full Details
             </Button>
