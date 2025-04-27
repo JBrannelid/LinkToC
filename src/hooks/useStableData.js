@@ -1,13 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import stableService from "../api/services/stableService";
+import { useLoadingState } from "./useLoadingState";
 
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [operationType, setOperationType] = useState("fetch");
 
   // Use useCallback to unvoid rerendering fetch data from DB
   const fetchAndUpdateStables = useCallback(async () => {
+    setOperationType("fetch");
+
     try {
       setLoading(true);
       setError(null);
@@ -38,10 +42,13 @@ export function useStableData(stableId) {
     [stables]
   );
 
+  const loadingState = useLoadingState(loading, operationType);
+
   return {
     stables,
     stableId,
     status: { loading, error },
+    loadingState,
     fetchAndUpdateStables,
     getStableById,
   };

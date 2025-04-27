@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createHorseProfile } from "../utils/horseProfileUtils.js";
 import { horseService } from "../api/index.js";
+import { useLoadingState } from "./useLoadingState";
 
 /**
  * Hook for managing a single horse profile
@@ -11,8 +12,11 @@ export const useHorseProfile = (horseId) => {
   const [horse, setHorse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [operationType, setOperationType] = useState("fetch");
 
   const getHorseData = useCallback(async () => {
+    setOperationType("fetch");
+
     if (!horseId) {
       console.error("Horse ID is required");
       setError(true);
@@ -64,6 +68,8 @@ export const useHorseProfile = (horseId) => {
   }, [horseId]);
 
   const updateHorse = async (updateData) => {
+    setOperationType("update");
+
     if (!horseId || !updateData) {
       console.error("Horse ID or data is missing");
       return { success: false, message: "Horse ID or data is missing" };
@@ -98,6 +104,8 @@ export const useHorseProfile = (horseId) => {
   };
 
   const deleteHorse = async () => {
+    setOperationType("delete");
+
     if (!horseId) {
       console.error("Horse ID is missing");
       return { success: false, error: "Horse ID is missing" };
@@ -121,14 +129,19 @@ export const useHorseProfile = (horseId) => {
     getHorseData();
   }, [getHorseData]);
 
+  // Standardized loading state with message
+  const loadingState = useLoadingState(loading, operationType);
+
   return {
     horse,
     horseId,
     loading,
     error,
+    loadingState,
     getHorseData,
     updateHorse,
     deleteHorse,
+    loadingState,
   };
 };
 
@@ -142,6 +155,8 @@ export const useHorseManagement = () => {
   const [error, setError] = useState(false);
 
   const fetchAllHorses = useCallback(async () => {
+    setOperationType("fetch");
+
     try {
       setLoading(true);
       const response = await horseService.getAll();
@@ -173,6 +188,8 @@ export const useHorseManagement = () => {
   }, []);
 
   const createHorse = async (horseData) => {
+    setOperationType("create");
+
     if (!horseData) {
       console.error("Horse data is missing");
       return { success: false, error: "Horse data is missing" };

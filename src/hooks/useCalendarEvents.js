@@ -3,6 +3,7 @@ import eventService from "../api/services/eventService";
 import userService from "../api/services/userService";
 import { parseISO, isSameDay } from "../utils/calendarUtils";
 import { useAppContext } from "../context/AppContext.jsx";
+import { useLoadingState } from "./useLoadingState";
 
 export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);
@@ -13,8 +14,11 @@ export function useCalendarEvents(stableId) {
   // Get current user from context
   const { currentUser } = useAppContext();
   const currentUserId = currentUser.id;
+  const [operationType, setOperationType] = useState("fetch");
 
   const fetchAndUpdateEvents = useCallback(async () => {
+    setOperationType("fetch");
+
     try {
       setLoading(true);
       setError(null);
@@ -65,6 +69,8 @@ export function useCalendarEvents(stableId) {
   }, [fetchAndUpdateEvents, stableId]);
 
   const createEvent = async (eventData) => {
+    setOperationType("create");
+
     try {
       setLoading(true);
       setError(null);
@@ -86,6 +92,8 @@ export function useCalendarEvents(stableId) {
   };
 
   const updateEvent = async (eventData) => {
+    setOperationType("update");
+
     try {
       setLoading(true);
       setError(null);
@@ -107,6 +115,8 @@ export function useCalendarEvents(stableId) {
   };
 
   const deleteEvent = async (eventId) => {
+    setOperationType("delete");
+
     try {
       setLoading(true);
       setError(null);
@@ -123,6 +133,8 @@ export function useCalendarEvents(stableId) {
 
   const getEventsForDay = useCallback(
     (day) => {
+      setOperationType("fetch");
+
       if (!events.length) return [];
 
       return events
@@ -135,10 +147,13 @@ export function useCalendarEvents(stableId) {
     [events]
   );
 
+  const loadingState = useLoadingState(loading, operationType);
+
   return {
     events,
     users,
     calendarStatus: { loading, error },
+    loadingState,
     createEvent,
     updateEvent,
     deleteEvent,
