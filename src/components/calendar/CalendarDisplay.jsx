@@ -7,6 +7,7 @@ import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext";
 import StableName from "../layout/StableName";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { useLoadingState } from "../../hooks/useLoadingState";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -18,11 +19,16 @@ function CalendarDisplay() {
   const currentUserId = currentUser.id;
 
   // Custom hooks for data fetching
-  const { stableId, status: stableStatus } = useStableData(currentStable.id);
+  const {
+    stableId,
+    status: stableStatus,
+    loadingState: stableLoadingState,
+  } = useStableData(currentStable.id);
   const {
     events,
     users,
     calendarStatus,
+    loadingState: calendarLoadingState,
     createEvent,
     updateEvent,
     deleteEvent,
@@ -97,8 +103,11 @@ function CalendarDisplay() {
     return (
       <div className="py-2 text-gray flex items-center justify-center">
         <LoadingSpinner size="medium" className="text-gray" />
-
-        <p>Vänta, vi hämtar in kalenderdata...</p>
+        <p>
+          {stableStatus.loading
+            ? stableLoadingState.getMessage()
+            : calendarLoadingState.getMessage()}
+        </p>
       </div>
     );
   }
@@ -115,7 +124,7 @@ function CalendarDisplay() {
         {calendarStatus.loading && events.length > 0 && (
           <div className="text-center py-2 flex items-center justify-center">
             <LoadingSpinner size="small" className="text-gray" />
-            <span>Vänta, vi uppdaterar kalenderdata...</span>
+            <span>{calendarLoadingState.getMessage()}</span>
           </div>
         )}
 

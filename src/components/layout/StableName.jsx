@@ -4,6 +4,7 @@ import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
 import { ROUTES } from "../../routes/routeConstants.js";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
+import { useLoadingState } from "../../hooks/useLoadingState";
 
 export default function StableName({ currentStableId }) {
   const { currentStable, changeStable } = useAppContext();
@@ -12,6 +13,7 @@ export default function StableName({ currentStableId }) {
     getStableById,
   } = useStableData();
   const navigate = useNavigate();
+  const loadingState = useLoadingState(loading, "fetch");
 
   useEffect(() => {
     // If context (global stablId) is empty. Get it from useAppContext
@@ -34,7 +36,7 @@ export default function StableName({ currentStableId }) {
     return (
       <div className="flex items-center py-2">
         <LoadingSpinner size="small" className="text-gray" />
-        <span>Laddar stall...</span>
+        <span>{loadingState.getMessage()}</span>
       </div>
     );
 

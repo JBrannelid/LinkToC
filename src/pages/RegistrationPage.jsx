@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../api/services/authService.js";
 import { useNavigate } from "react-router";
 import Button from "../components/ui/Button";
+import { useLoadingState } from "../hooks/useLoadingState";
 
 const RegistrationPage = () => {
   const [serverError, setServerError] = useState("");
@@ -25,10 +26,13 @@ const RegistrationPage = () => {
       phoneNumber: "",
     },
   });
+  const [operationType, setOperationType] = useState("create");
+  const loadingState = useLoadingState(isSubmitting, operationType);
 
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
+      setOperationType("create");
       setServerError("");
 
       console.log("Submitting registration data:", data);
@@ -290,7 +294,7 @@ const RegistrationPage = () => {
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Registrerar..." : "Skapa konto"}
+            {isSubmitting ? loadingState.getMessage() : "Skapa konto"}
           </Button>
 
           <Button

@@ -5,12 +5,14 @@ import { useAuth } from "../context/AuthContext";
 import { FacebookIcon, LinkedinIcon } from "lucide-react";
 import Button from "../components/ui/Button";
 import { ROUTES } from "../routes/routeConstants";
+import { useLoadingState } from "../hooks/useLoadingState";
 
 const LoginForm = () => {
   const { login } = useAuth();
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const loadingState = useLoadingState(isSubmitting, operationType);
 
   const {
     register,
@@ -25,6 +27,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setOperationType("fetch");
     setServerError("");
 
     try {
@@ -166,7 +169,7 @@ const LoginForm = () => {
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Vänligen vänta, loggar in..." : "Logga in"}
+            {isSubmitting ? loadingState.getMessage() : "Logga in"}
           </Button>
 
           <Button
