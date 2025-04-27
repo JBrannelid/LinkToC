@@ -6,6 +6,7 @@ import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext";
 import StableName from "../layout/StableName";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -91,10 +92,12 @@ function CalendarDisplay() {
     }
   };
 
-  // Loading state. Need to implement a loading component
+  // Loading state
   if ((calendarStatus.loading && events.length === 0) || stableStatus.loading) {
     return (
-      <div className="py-2 text-gray">
+      <div className="py-2 text-gray flex items-center justify-center">
+        <LoadingSpinner size="medium" className="text-gray" />
+
         <p>Vänta, vi hämtar in kalenderdata...</p>
       </div>
     );
@@ -110,8 +113,9 @@ function CalendarDisplay() {
 
         {/* Loading and error status messages */}
         {calendarStatus.loading && events.length > 0 && (
-          <div className="text-center py-2 text-gray">
-            Vänta, vi uppdaterar kalenderdata...
+          <div className="text-center py-2 flex items-center justify-center">
+            <LoadingSpinner size="small" className="text-gray" />
+            <span>Vänta, vi uppdaterar kalenderdata...</span>
           </div>
         )}
 
