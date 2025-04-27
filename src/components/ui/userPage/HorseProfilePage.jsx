@@ -3,7 +3,6 @@ import {
   PageContainer,
   PageBody,
   ProfileTabs,
-  LoadingState,
   NotFoundState,
   PageImage,
 } from "./";
@@ -19,21 +18,25 @@ import {
 } from "../../../utils/imagesUtils.js";
 import { classNames } from "../../../utils/cardUtils.js";
 import { getHorseTabs } from "./HorseProfileTabs";
+import LoadingSpinner from "../LoadingSpinner.jsx";
 
 export const ProfilePage = ({
   horseId,
   imageUrl,
-  loadingText = "Loading profile...",
-  notFoundText = "No profile data found",
+  notFoundText = "Ingen hästprofil hittades",
   placeholderImageUrl,
 }) => {
   const { horse, loading, error } = useHorseProfile(horseId);
   const [profileImage, setProfileImage] = useState(imageUrl || null);
   const fileInputRef = useRef(null);
 
-  if (loading) {
-    return <LoadingState text={loadingText} />;
-  }
+  if (loading)
+    return (
+      <div className="flex items-center py-2">
+        <LoadingSpinner size="small" className="text-gray" />
+        <span>Laddar...</span>
+      </div>
+    );
 
   if (error || !horse) {
     return <NotFoundState text={notFoundText} />;

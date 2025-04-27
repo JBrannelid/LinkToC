@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
-import LoadingState from "../components/ui/userPage/LoadingState";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import useStableData from "../hooks/useStableData";
 
 const StableSelectionPage = () => {
@@ -17,9 +17,13 @@ const StableSelectionPage = () => {
     navigate("/home");
   };
 
-  if (loading) {
-    return <LoadingState text="Laddar..." />;
-  }
+  if (loading)
+    return (
+      <div className="flex items-center justify-center p-4">
+        <LoadingSpinner size="medium" className="text-gray" />
+        <p>Laddar hem hästdata...</p>
+      </div>
+    );
 
   if (error) {
     return (

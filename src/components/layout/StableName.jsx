@@ -29,7 +29,14 @@ export default function StableName({ currentStableId }) {
     navigate(ROUTES.SELECT_STABLE);
   };
 
-  if (loading) return <p className="py-2 text-gray">Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex items-center py-2">
+        <LoadingSpinner size="small" className="text-gray" />
+        <span>Laddar stall...</span>
+      </div>
+    );
+
   if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (

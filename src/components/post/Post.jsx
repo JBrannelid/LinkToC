@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { stablePostService } from "../../api";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 export default function Post({ id }) {
   const [post, setPost] = useState();
@@ -25,7 +26,13 @@ export default function Post({ id }) {
     handlePost();
   }, [handlePost]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex items-center py-2">
+        <LoadingSpinner size="small" className="text-gray" />
+        <span>Laddar...</span>
+      </div>
+    );
   if (error) return <p>Error: {error.message}</p>;
 
   return (
