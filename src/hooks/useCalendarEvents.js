@@ -133,8 +133,6 @@ export function useCalendarEvents(stableId) {
 
   const getEventsForDay = useCallback(
     (day) => {
-      setOperationType("fetch");
-
       if (!events.length) return [];
 
       return events
