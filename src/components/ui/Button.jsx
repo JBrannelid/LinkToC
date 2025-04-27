@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Loader } from "lucide-react";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Button = ({
   type = "primary",
@@ -94,9 +94,7 @@ const Button = ({
       {...rest}
     >
       {loading && (
-        <span className={`animate-spin ${variant !== "icon" ? "mr-2" : ""}`}>
-          <Loader size={size === "small" ? 16 : size === "large" ? 24 : 20} />
-        </span>
+        <LoadingSpinner size={size} withMargin={variant !== "icon"} />
       )}
       {children}
     </button>
