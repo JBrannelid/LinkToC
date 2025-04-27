@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { FacebookIcon, LinkedinIcon } from "lucide-react";
 import Button from "../components/ui/Button";
+import { ROUTES } from "../routes/routeConstants";
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -35,6 +36,10 @@ const LoginForm = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleRegisterClick = () => {
+    navigate(ROUTES.REGISTER);
   };
 
   return (
@@ -100,7 +105,7 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="mb-3">
+          <div>
             <label htmlFor="password" className="sr-only">
               Lösenord
             </label>
@@ -130,7 +135,7 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end mb-10">
             <p className="text-sm text-gray">
               Glömt
               <a
@@ -152,13 +157,22 @@ const LoginForm = () => {
             {isSubmitting ? "Vänligen vänta, loggar in..." : "Logga in"}
           </Button>
 
-          <div className="my-6 flex items-center">
+          <Button
+            type="secondary"
+            className="w-full"
+            onClick={handleRegisterClick}
+            disabled={isSubmitting}
+          >
+            Skapa konto
+          </Button>
+
+          <div className="my-7 flex items-center">
             <hr className="flex-1 border-gray" />
-            <span className="px-4 text-sm text-gray-500">or</span>
+            <span className="px-4 text-sm text-gray-500">eller</span>
             <hr className="flex-1 border-gray" />
           </div>
 
-          <div className="flex justify-center space-x-8">
+          <div className="flex justify-center space-x-8 mt-2">
             <Button
               variant="icon"
               size="medium"
@@ -192,18 +206,6 @@ const LoginForm = () => {
             >
               <LinkedinIcon className="h-6 w-6" fill="currentColor" />
             </Button>
-          </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-gray">
-              Saknar du konto?
-              <a
-                href="/register"
-                className="font-medium text-accent-orange pl-2"
-              >
-                Registrera
-              </a>
-            </p>
           </div>
         </form>
       </div>
