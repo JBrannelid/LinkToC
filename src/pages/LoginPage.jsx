@@ -43,14 +43,26 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Header and Horse Icon */}
-      <div className="py-15 flex justify-center items-center bg-olive-500">
+    <div className="flex flex-col min-h-screen">
+      {/* Responsive header with background image */}
+      <div
+        className="relative w-full"
+        style={{ height: "clamp(200px, 30vh, 400px)" }}
+      >
         <img
-          src="../assets/icons/horse.svg"
-          alt="Horse icon"
-          className="h-20 w-20 translate-y-9"
+          src="/src/assets/images/LoginBackgroundImage.jpg"
+          alt="Horse Background"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ maxHeight: "none" }}
         />
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
+          <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-4 py-1 rounded-sm shadow-sm">
+            <h1 className="text-3xl text-black">EQUILOG</h1>
+          </div>
+          {/* <p className="mt-2 text-white text-lg drop-shadow-md">
+            Välkommen till ditt stalls digitala hjälpreda
+          </p> */}
+        </div>
       </div>
 
       {/* Form Section */}
