@@ -10,6 +10,8 @@ import StableSelectionPage from "../pages/StableSelectionPage";
 import ProfilePage from "../pages/ProfileTester";
 import ErrorPage from "../pages/ErrorPage";
 import SettingsPage from "../pages/SettingsPage";
+import StablePostPage from "../pages/StablePostPage";
+import UserProfilePage from "../pages/UserProfilePage";
 
 // Public Routes
 export const publicRoutes = [
@@ -40,6 +42,11 @@ export const protectedRoutes = [
     requiresStable: false,
   },
   {
+    path: ROUTES.STABLE_POST,
+    element: <StablePostPage />,
+    requiresStable: false,
+  },
+  {
     path: ROUTES.HORSE_PROFILE,
     element: <ProfilePage />,
     requiresStable: true,
@@ -47,6 +54,11 @@ export const protectedRoutes = [
   {
     path: ROUTES.SETTINGS,
     element: <SettingsPage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.USER_PROFILE,
+    element: <UserProfilePage />,
     requiresStable: true,
   },
 ];
