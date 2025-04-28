@@ -3,11 +3,13 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   SELECT_STABLE: "/select-stable",
-  HORSE_PROFILE: "/horsepage/:horseId",
+  HORSE_PROFILE: "/horse-page/:horseId",
   USER_PROFILE: "/userpage/:userId",
   STABLE: "/stable/:stableId",
   STABLE_POST: "/stablePost/:stableId",
   SETTINGS: "/settings",
+  RESET_PASSWORD: "/reset-password",
+  FORGOT_PASSWORD: "/forgot-password",
 };
 
 // Dynamic routes with params

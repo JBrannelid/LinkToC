@@ -21,8 +21,13 @@ export const AuthProvider = ({ children }) => {
 
   const parseJwt = (token) => {
     try {
-      return JSON.parse(atob(token.split(".")[1]));
-    } catch (e) {
+      const parts = token.split('.');
+      if (parts.length < 2) {
+        return null;
+      }
+      return JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+    } catch (error) {
+      console.error('Error decoding JWT:', error);
       return null;
     }
   };

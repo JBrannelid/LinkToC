@@ -1,9 +1,9 @@
-@import "tailwindcss";
-
 /* Font imports (WOFF format would be better for performance) */
 @import url("https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap");
+
+@import "tailwindcss";
 
 /* Theme configuration */
 @theme {
@@ -26,9 +26,6 @@
   --color-error-400: #fc6455;
   --color-error-500: #ef4444;
   --color-error-600: #dc2626;
-
-  /* Olive (for buttons) */
-  --color-olive-500: #556b2f;
 
   /* Accent for (a-link) */
   --color-accent-orange: #ffa600;
