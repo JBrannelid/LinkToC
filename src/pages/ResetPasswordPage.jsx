@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate} from "react-router";
 import { RabbitIcon } from "lucide-react";
 import ResetPasswordForm from "../components/forms/ResetPasswordForm";
@@ -9,6 +9,11 @@ import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer
 const ResetPasswordPage = () => {
     const [loading, setLoading] = useState(false);    
     const navigate = useNavigate();
+ 
+    useEffect(() => {
+        console.log("Parent component loading state:", loading);
+    }, [loading]);
+    
     const handleGoBack = () => {
         navigate("/login");
     }
@@ -37,14 +42,14 @@ const ResetPasswordPage = () => {
                             <LoadingState text={"Bearbetar..."} />  
                         </div>
                         
-                    ): (
+                    ): null}
+                    
                         <AuthFormContainer
                             title="Återställ lösenord"
                             subtitle="Ange din e-postadress och återställningskoden du fick via e-post."
                             >
                             <ResetPasswordForm setParentLoading={setLoading} />
                         </AuthFormContainer>
-                        )}
                 </div>
             </div>
         </div>

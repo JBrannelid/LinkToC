@@ -6,11 +6,12 @@ import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
 import FormMessage from "./formBuilder/FormMessage";
 import { ErrorTypes } from "../../api/index.js";
+import {useNavigate} from "react-router";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({type: "", text: "",});
-    
+    const navigate = useNavigate();
     const methods = useForm({
         defaultValues: {
             email: '',
@@ -43,7 +44,8 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
                         text: 'Återställningslänk har skickats till din e-post. Kontrollera din inkorg (inklusive skräppostmappen)',
                     });
                 }
-
+                sessionStorage.setItem('resetPasswordEmail', data.email);
+                
                 if(onSuccess) onSuccess();
             } else {
                 setMessage({
@@ -65,21 +67,17 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
 
             setMessage({ type: 'error', text: errorMessage });
             console.error('Error:', error);
-            setLoading(false); 
+            setLoading(false);
+            
         } 
     };
     
     return(
-        <div className="flex justify-center">
-        <div className="w-[500px] p-5 rounded-sm shadow-lg bg-white bg-opacity-70">
-            <p className="text-sm lg:text-base mt-2">
-                Oroa dig inte, det händer alla. Skriv din e-postadress nedan så skickar vi ett återställningsmail.
-            </p>
-            <p className="text-xs mt-2">
-                <span>OBS: </span>Kontrollera din skräppostmapp
-            </p>
-
             <FormProvider methods={methods} onSubmit={handleSubmit} footer={{ showFooter: false }}>
+                <p className="text-xs mt-2">
+                    <span>OBS: </span>Kontrollera din skräppostmapp
+                </p>
+                
                 <div className="mt-4">
                     <FormInput
                         name="email"
@@ -108,17 +106,16 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
                 <div className="mt-5">
                     <button
                         type="submit"
-                        className="w-full bg-[#556B2F] hover:bg-[#4B5320] p-2 rounded-md text-white"
+                        className="w-full bg-[#556B2F] hover:bg-[#4B5320] p-2 rounded-md text-white flex items-center justify-center"
                         disabled={loading}
                         aria-busy={loading}
+                        
                     >
-                        <Send className="h-6 w-6" />
-                        Skicka återställningslänk
+                        <Send className="h-5 w-5 mr-2" />
+                        <span>Skicka återställningslänk</span>
                     </button>
                 </div>
             </FormProvider>
-        </div>
-    </div>
     );
 };
 

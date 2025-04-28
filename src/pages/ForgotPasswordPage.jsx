@@ -16,8 +16,8 @@ const ForgotPasswordPage = () => {
     const handleSuccess = () => {
         setSuccess(true);
         setTimeout(() => {
-            navigate("/login");
-        }, 5000);
+            navigate("/resetPassword");
+        });
     };
     
     return (
