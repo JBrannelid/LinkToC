@@ -1,16 +1,24 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "date-fns";
+import { parseISO } from "../../utils/calendarUtils";
 import WallPostForm from "../forms/WallPostForm";
 import useWallPost from "../../hooks/useWallPost";
 import Pin from "../../assets/icons/Pin";
 import ChevronDown from "../../assets/icons/ChevronDown";
+import { useAppContext } from "../../context/AppContext";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
-export default function WallPost({ id }) {
-  const { wallPost, loading, error, currentWallPost } = useWallPost(id);
+export default function WallPost({}) {
+  const { currentStable } = useAppContext();
+  const { wallPost, loading, error, currentWallPost } = useWallPost(
+    currentStable?.id
+  );
 
   useEffect(() => {
-    const wallPostData = currentWallPost(id);
-  }, [id, currentWallPost]);
+    if (currentStable?.id) {
+      currentWallPost();
+    }
+  }, [currentStable?.id, currentWallPost]);
 
   //Toggle for the form
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -24,7 +32,26 @@ export default function WallPost({ id }) {
     setIsExpanded(!isExpanded);
   };
 
-  if (loading) return <p>Loading...</p>;
+  // Safe date formatting function
+  const formatData = (dateString) => {
+    try {
+      const date = parseISO(dateString);
+      return format(date, "yyyy-MM-dd HH:mm");
+    } catch (error) {
+      console.log("Invalid date format:", dateString);
+      return "Unknown date";
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-4">
+        <LoadingSpinner size="medium" className="text-gray" />
+        <span className="ml-2">Laddar...</span>
+      </div>
+    );
+  }
+
   if (error) return <p>Error: {error.message}</p>;
 
   return (
@@ -50,7 +77,6 @@ export default function WallPost({ id }) {
                 />
               </div>
             </div>
-
             {isExpanded && (
               <div className="px-4 pb-4">
                 <p className="font-light text-sm">{wallPost.body}</p>
@@ -58,15 +84,13 @@ export default function WallPost({ id }) {
 
                 {wallPost?.lastEdited ? (
                   <p className="font-light text-xs">
-                    Edited: (
-                    {format(new Date(wallPost.lastEdited), "yyyy-MM-dd HH:mm")})
+                    Edited: ({formatData(wallPost.lastEdited)})
                   </p>
-                ) : (
+                ) : wallPost?.postDate ? (
                   <p className="font-light text-xs">
-                    Posted: (
-                    {format(new Date(wallPost.postDate), "yyyy-MM-dd HH:mm")})
+                    Posted: ({formatData(wallPost.postDate)})
                   </p>
-                )}
+                ) : null}
 
                 <div>
                   <button
@@ -85,35 +109,6 @@ export default function WallPost({ id }) {
       ) : (
         <p>Inga tillgänglig händelse</p>
       )}
-      {/* Older ver */}
-      {/* {wallPost ? (
-        <div className="bg-bg-primary p-6 mb-6 rounded-lg shadow-md border-2 border-bg-secondary">
-          <h2 className="underline">{wallPost.title}</h2>
-          <div>
-            <input type="checkbox" onChange={isChecked} checked={isOpen} />
-
-            {isOpen && (
-              <div>
-                <p>{wallPost.body}</p>
-                <p>{wallPost.postDate}</p>
-
-                <div>
-                  <button
-                    onClick={toggleForm}
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    {isFormOpen ? "Close" : "Edit Post"}
-                  </button>
-
-                  {isFormOpen && <WallPostForm />}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <p>No post available</p>
-      )} */}
     </>
   );
 }
