@@ -20,7 +20,7 @@ import { getHorseTabs } from "./HorseProfileTabs";
 import LoadingSpinner from "../LoadingSpinner.jsx";
 import Button from "../Button.jsx";
 
-const ProfilePage = ({
+const HorseProfilePage = ({
   horseId,
   imageUrl,
   notFoundText = "Ingen hästprofil hittades",
@@ -80,7 +80,7 @@ const ProfilePage = ({
   );
 };
 
-ProfilePage.propTypes = {
+HorseProfilePage.propTypes = {
   horseId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   imageUrl: PropTypes.string,
   loadingText: PropTypes.string,
@@ -88,4 +88,4 @@ ProfilePage.propTypes = {
   placeholderImageUrl: PropTypes.string,
 };
 
-export default ProfilePage;
+export default HorseProfilePage;
