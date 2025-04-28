@@ -24,6 +24,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
         title: event.title,
         body: event.body,
         postDateTime: formatDateForInput(event.postDate),
+        // editedDateTime: formatDateForInput(event.lastEdited),
       });
     }
   }, [event]);
@@ -45,11 +46,6 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (!wallPostData.title.trim()) {
-      setFormError("Titel är obligatorisk");
-      return;
-    }
-
     if (onSubmit) {
       onSubmit(wallPostData);
     }
@@ -57,7 +53,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
 
   //Handle form cancellation
   const handleCancel = (event) => {
-    if (event) event.preventDefault();
+    event.preventDefault();
     if (onCancel) {
       onCancel();
     }
