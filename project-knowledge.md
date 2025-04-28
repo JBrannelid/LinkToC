@@ -38,6 +38,9 @@ We use a global CSS file (`src/index.css`) with CSS variables for theming. All g
 - Utilities, hooks, file as .js and .json: camelCase (e.g., `calendarUtils.js`)
 - All custom hooks MUST follow the React naming convention (start with use) (e.g., `useDateFns.js`)
 
+### Icons lib
+- Icons lib for svg icons: https://www.svgrepo.com/vectors/people/
+
 ### API Communication
 
 - All API calls should be made through service files in the `src/api/` directory

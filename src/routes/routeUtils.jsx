@@ -16,3 +16,12 @@ export const createProtectedRoute = (routeConfig) => {
 export const createProtectedRoutes = (routes) => {
   return routes.map(createProtectedRoute);
 };
+
+export const isRouteActive = (routePath, currentPath) => {
+  // /route/:id", check the base part
+  if (routePath.includes("/:")) {
+    return currentPath.startsWith(routePath.split("/:")[0]);
+  }
+  // For exact paths
+  return currentPath.startsWith(routePath);
+};

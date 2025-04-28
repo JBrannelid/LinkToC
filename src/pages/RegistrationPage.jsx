@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext.jsx";
 import authService from "../api/services/authService.js";
-import { RabbitIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+import Button from "../components/ui/Button";
+import { useLoadingState } from "../hooks/useLoadingState";
 import {createSuccessMessage, getErrorMessage} from "../utils/errorUtils.js";
 
 const RegistrationPage = () => {
@@ -27,18 +28,23 @@ const RegistrationPage = () => {
       phoneNumber: "",
     },
   });
+  const [operationType, setOperationType] = useState("create");
+  const loadingState = useLoadingState(isSubmitting, operationType);
 
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
+      setOperationType("create");
       setServerError("");
-      
+
+      console.log("Submitting registration data:", data);
 
       // Submit registration data and get response
       const response = await authService.register(data);
 
       // Check if the registration was successful
       if (response && response.isSuccess) {
+       
         // Attempt to log in with the newly registered credentials
         try {
           await login(data.email, data.password);
@@ -65,27 +71,29 @@ const RegistrationPage = () => {
     }
   };
   return (
-    <div className="flex flex-col h-screen">
-      {/* Logo Section - Green background */}
-      <div className="bg-[#556B2F] py-16 flex justify-center items-center">
-        <RabbitIcon
-          className="h-20 w-20"
-          role="img"
-          aria-label="Horse Rider Logo"
-        >
-          {/* Horse rider icon */}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path fill="rgba(200, 200, 200, 0.8)" />
-          </svg>
-        </RabbitIcon>
+    <div className="flex flex-col min-h-screen">
+      {/* Responsive header with background image */}
+      <div
+        className="relative w-full"
+        style={{ height: "clamp(200px, 30vh, 400px)" }}
+      >
+        <img
+          src="/src/assets/images/LoginBackgroundImage.jpg"
+          alt="Horse Background"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ maxHeight: "none" }}
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
+          <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-4 py-1 rounded-sm shadow-sm">
+            <h1 className="text-3xl text-black">EQUILOG</h1>
+          </div>
+          {/* <p className="mt-2 text-white text-lg drop-shadow-md">
+            Välkommen till ditt stalls digitala hjälpreda
+          </p> */}
+        </div>
       </div>
 
-      {/* Form Section - White background */}
+      {/* Form Section */}
       <div className="flex-1 px-6 py-8 bg-white overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -95,11 +103,11 @@ const RegistrationPage = () => {
         >
           {serverError && (
             <div
-              className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md"
+              className="bg-red-50 border-l-3 border-error-400 p-3 rounded-md"
               role="alert"
               aria-live="assertive"
             >
-              <p className="text-sm text-red-700">{serverError}</p>
+              <p className="text-sm text-error-600">{serverError}</p>
             </div>
           )}
 
@@ -112,8 +120,8 @@ const RegistrationPage = () => {
               type="text"
               placeholder="Förnamn"
               className={`w-full px-3 py-4 border ${
-                errors.firstName ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.firstName ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.firstName ? "true" : "false"}
               aria-describedby={
                 errors.firstName ? "firstName-error" : undefined
@@ -126,7 +134,7 @@ const RegistrationPage = () => {
             {errors.firstName && (
               <p
                 id="firstName-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-600"
                 role="alert"
               >
                 {errors.firstName.message}
@@ -143,8 +151,8 @@ const RegistrationPage = () => {
               type="text"
               placeholder="Efternamn"
               className={`w-full px-3 py-4 border ${
-                errors.lastName ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.lastName ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.lastName ? "true" : "false"}
               aria-describedby={errors.lastName ? "lastName-error" : undefined}
               disabled={isSubmitting}
@@ -155,7 +163,7 @@ const RegistrationPage = () => {
             {errors.lastName && (
               <p
                 id="firstName-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-600"
                 role="alert"
               >
                 {errors.lastName.message}
@@ -173,8 +181,8 @@ const RegistrationPage = () => {
               autoComplete="username"
               placeholder="Användarnamn"
               className={`w-full px-3 py-4 border ${
-                errors.userName ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.userName ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.userName ? "true" : "false"}
               aria-describedby={errors.userName ? "userName-error" : undefined}
               disabled={isSubmitting}
@@ -189,7 +197,7 @@ const RegistrationPage = () => {
             {errors.userName && (
               <p
                 id="userName-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-600"
                 role="alert"
               >
                 {errors.userName.message}
@@ -197,6 +205,7 @@ const RegistrationPage = () => {
             )}
           </div>
 
+          {/* No requiered validation for phonenumber sense it is optional */}
           <div className="mb-2">
             <label htmlFor="phoneNumber" className="sr-only">
               Telefonnummer
@@ -206,7 +215,7 @@ const RegistrationPage = () => {
               type="tel"
               autoComplete="tel"
               placeholder="Telefonnummer (valfritt)"
-              className="w-full px-3 py-4 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900"
+              className="w-full px-3 py-4 border border-gray rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary"
               disabled={isSubmitting}
               {...register("phoneNumber")}
             />
@@ -222,8 +231,8 @@ const RegistrationPage = () => {
               autoComplete="email"
               placeholder="Email"
               className={`w-full px-3 py-4 border ${
-                errors.email ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.email ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={isSubmitting}
@@ -238,7 +247,7 @@ const RegistrationPage = () => {
             {errors.email && (
               <p
                 id="email-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-400"
                 role="alert"
               >
                 {errors.email.message}
@@ -256,8 +265,8 @@ const RegistrationPage = () => {
               autoComplete="new-password"
               placeholder="Lösenord"
               className={`w-full px-3 py-4 border ${
-                errors.password ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.password ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.password ? "true" : "false"}
               aria-describedby={errors.password ? "password-error" : undefined}
               disabled={isSubmitting}
@@ -272,54 +281,32 @@ const RegistrationPage = () => {
             {errors.password && (
               <p
                 id="password-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-600"
                 role="alert"
               >
                 {errors.password.message}
               </p>
             )}
           </div>
-
-          <button
-            type="submit"
-            className="w-full py-3 px-4 border border-transparent rounded-md text-white font-medium bg-[#556B2F] hover:bg-[#4B5320] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#556B2F]"
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  ></path>
-                </svg>
-                Registrerar...
-              </div>
-            ) : (
-              "Registrera"
-            )}
-          </button>
-          <button
-            type="button" // prevent form submission
+            {isSubmitting ? loadingState.getMessage() : "Skapa konto"}
+          </Button>
+
+          <Button
+            type="secondary"
+            htmlType="button"
+            className="w-full mt-3"
             onClick={() => navigate("/login")}
             className="w-full mt-3 py-3 px-4 border border-gray-300 rounded-md text-gray-700 font-medium bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
-            Gå tillbaka
-          </button>
+            Redan Registrerad
+          </Button>
         </form>
       </div>
     </div>

@@ -2,13 +2,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { Feather, FacebookIcon, LinkedinIcon, RabbitIcon } from "lucide-react";
+import Button from "../components/ui/Button";
+import { ROUTES } from "../routes/routeConstants";
+import { useLoadingState } from "../hooks/useLoadingState";
+import FacebookIcon from "../assets/icons/FacebookIcon";
+import LinkedinIcon from "../assets/icons/LinkedInIcon";
 
 const LoginForm = () => {
   const { login } = useAuth();
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [operationType, setOperationType] = useState("fetch");
+  const loadingState = useLoadingState(isSubmitting, operationType);
 
   const {
     register,
@@ -23,10 +29,12 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
+    setOperationType("fetch");
     setServerError("");
 
     try {
       await login(data.email, data.password);
+
       navigate("/select-stable");
     } catch (error) {
       setServerError(error.message || "Fel e-postadress eller lösenord");
@@ -38,28 +46,35 @@ const LoginForm = () => {
   const handleForgotPassword =() =>{
     navigate("/forgotPassword");
   }
-  const handleRegister =() => {
-    navigate("/register");
-  }
+
+  const handleRegisterClick = () => {
+    navigate(ROUTES.REGISTER);
+  };
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Logo Section - Green background */}
-      <div className="py-16 flex justify-center items-center bg-[#556B2F]">
-        <RabbitIcon className="h-20 w-20">
-          {/* Horse rider icon */}
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path fill="rgba(200, 200, 200, 0.8)" />
-          </svg>
-        </RabbitIcon>
+    <div className="flex flex-col min-h-screen">
+      {/* Responsive header with background image */}
+      <div
+        className="relative w-full"
+        style={{ height: "clamp(200px, 30vh, 400px)" }}
+      >
+        <img
+          src="/src/assets/images/LoginBackgroundImage.jpg"
+          alt="Horse Background"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ maxHeight: "none" }}
+        />
+        <div className="absolute inset-0 flex flex-col items-center justify-end pb-2">
+          <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-4 py-1 rounded-sm shadow-sm">
+            <h1 className="text-3xl text-black">EQUILOG</h1>
+          </div>
+          {/* <p className="mt-2 text-white text-lg drop-shadow-md">
+            Välkommen till ditt stalls digitala hjälpreda
+          </p> */}
+        </div>
       </div>
 
-      {/* Form Section - White background */}
+      {/* Form Section */}
       <div className="flex-1 px-6 py-8 bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -69,11 +84,11 @@ const LoginForm = () => {
         >
           {serverError && (
             <div
-              className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md"
+              className="bg-red-50 border-l-3 border-error-400 p-3 rounded-md"
               role="alert"
               aria-live="assertive"
             >
-              <p className="text-sm text-red-700">{serverError}</p>
+              <p className="text-sm text-error-600">{serverError}</p>
             </div>
           )}
 
@@ -87,8 +102,8 @@ const LoginForm = () => {
               autoComplete="email"
               placeholder="Email"
               className={`w-full px-3 py-4 border ${
-                errors.email ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.email ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={isSubmitting}
@@ -103,7 +118,7 @@ const LoginForm = () => {
             {errors.email && (
               <p
                 id="email-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-500"
                 role="alert"
               >
                 {errors.email.message}
@@ -111,7 +126,7 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="mb-3">
+          <div>
             <label htmlFor="password" className="sr-only">
               Lösenord
             </label>
@@ -121,8 +136,8 @@ const LoginForm = () => {
               autoComplete="current-password"
               placeholder="Password"
               className={`w-full px-3 py-4 border ${
-                errors.password ? "border-red-300" : "border-gray-300"
-              } rounded-md focus:outline-none focus:ring-1 focus:ring-olive-500 focus:border-olive-500 text-gray-900`}
+                errors.password ? "border-error-400" : "border-gray"
+              } rounded-md focus:outline-none  focus:ring-primary focus:ring-1 focus:border-primary`}
               aria-invalid={errors.password ? "true" : "false"}
               aria-describedby={errors.password ? "password-error" : undefined}
               disabled={isSubmitting}
@@ -133,7 +148,7 @@ const LoginForm = () => {
             {errors.password && (
               <p
                 id="password-error"
-                className="mt-1 text-sm text-red-600"
+                className="mt-1 text-sm text-error-500"
                 role="alert"
               >
                 {errors.password.message}
@@ -141,100 +156,77 @@ const LoginForm = () => {
             )}
           </div>
 
-          <div className="flex justify-end mb-6">
-            <button
-              onClick={handleForgotPassword}
-              className="text-sm text-gray-400 "
-            >
-              Glömt <span className="text-orange-300">Lösenord</span> ?
-            </button>
+          <div className="flex justify-end mb-10">
+            <p className="text-sm text-gray">
+              Glömt
+              <a
+                href="/forgot-password"
+                className="font-medium text-accent-orange pl-2"
+              >
+                Lösenord
+              </a>
+            </p>
           </div>
 
-          <button
-            type="submit"
-            className="w-full py-3 px-4 border border-transparent rounded-md text-white font-medium bg-[#556B2F] hover:bg-[#4B5320] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#556B2F]"
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="w-full"
+            loading={isSubmitting}
             disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <div className="flex justify-center items-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                  ></path>
-                </svg>
-                Vänligen vänta, loggar in...
-              </div>
-            ) : (
-              "Logga in"
-            )}
-          </button>
+            {isSubmitting ? loadingState.getMessage() : "Logga in"}
+          </Button>
 
-          <div className="my-6 flex items-center">
-            <div className="flex-1 border-t border-gray-300"></div>
-            <span className="px-4 text-sm text-gray-500">or</span>
-            <div className="flex-1 border-t border-gray-300"></div>
+          <Button
+            type="secondary"
+            className="w-full"
+            onClick={handleRegisterClick}
+            disabled={isSubmitting}
+          >
+            Skapa konto
+          </Button>
+
+          <div className="my-7 flex items-center">
+            <hr className="flex-1 border-gray" />
+            <span className="px-4 text-sm text-gray-500">eller</span>
+            <hr className="flex-1 border-gray" />
           </div>
 
-          <div className="flex justify-center space-x-8">
-            <button
-              type="button"
+          <div className="flex justify-center space-x-8 mt-2">
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
               aria-label="Sign in with Google"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
             >
-              <Feather
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              ></Feather>
-            </button>
-            <button
-              type="button"
+              <img
+                src="../assets/icons/google.svg"
+                alt="Horse icon"
+                className="h-6 w-6 filter brightness-0 invert"
+              />
+            </Button>
+
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
               aria-label="Sign in with Facebook"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
             >
               <FacebookIcon
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                className="h-6 w-6 "
                 fill="currentColor"
               ></FacebookIcon>
-            </button>
-            <button
-              type="button"
-              aria-label="Sign in with LinkedIn"
-              className="p-2 rounded-full border border-gray-300 hover:bg-gray-50"
-            >
-              <LinkedinIcon
-                className="h-6 w-6 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              ></LinkedinIcon>
-            </button>
-          </div>
+            </Button>
 
-          <div className="mt-8 text-center">
-              <button className="text-sm text-gray-600"
-                onClick={handleRegister}
-              >
-                Saknar du konto? <span className="font-medium text-yellow-500 hover:text-yellow-400">Registrera dig här</span>
-              </button>
+            <Button
+              variant="icon"
+              size="medium"
+              className="bg-gray text-white"
+              aria-label="Sign in with LinkedIn"
+            >
+              <LinkedinIcon className="h-6 w-6" fill="currentColor" />
+            </Button>
           </div>
         </form>
       </div>

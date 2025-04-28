@@ -6,6 +6,7 @@ export const ROUTES = {
   HORSE_PROFILE: "/horsepage/:horseId",
   USER_PROFILE: "/userpage/:userId",
   STABLE: "/stable/:stableId",
+  STABLE_POST: "/stablePost/:stableId",
   SETTINGS: "/settings",
   RESET_PASSWORD: "/resetPassword",
   FORGOT_PASSWORD: "/forgotPassword",
