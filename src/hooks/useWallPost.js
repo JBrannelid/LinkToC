@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { wallPostService } from "../api";
 
-export const useWallPost = (id) => {
+export const useWallPost = (stableId) => {
   const [wallPost, setWallPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,23 +9,29 @@ export const useWallPost = (id) => {
   const currentWallPost = useCallback(async () => {
     try {
       setLoading(true);
-      const fetchWallPost = await wallPostService.getById(id);
+      setError(null);
+
+      const fetchWallPost = await wallPostService.getById(stableId);
       setWallPost(fetchWallPost.value);
+
       return true;
     } catch (error) {
+      setError(error);
       setLoading(false);
+
       return false;
     } finally {
       setLoading(false);
-      return false;
     }
-  }, [id]);
+  }, [stableId]);
 
   useEffect(() => {
-    currentWallPost();
-  }, [currentWallPost]);
+    if (stableId) {
+      currentWallPost();
+    }
+  }, [stableId, currentWallPost]);
 
-  return { wallPost, id, loading, error, currentWallPost };
+  return { wallPost, loading, error, currentWallPost };
 };
 
 export default useWallPost;
