@@ -3,16 +3,16 @@ import { format } from "date-fns";
 import { parseISO } from "../../utils/calendarUtils";
 import WallPostForm from "../forms/WallPostForm";
 import useWallPost from "../../hooks/useWallPost";
-import Pin from "../../assets/icons/Pin";
-import ChevronDown from "../../assets/icons/ChevronDown";
+import PinIcon from "../../assets/icons/PinIcon";
+import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
 import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import Button from "../ui/Button";
 
 export default function WallPost({}) {
   const { currentStable } = useAppContext();
-  const { wallPost, loading, error, currentWallPost } = useWallPost(
-    currentStable?.id
-  );
+  const { wallPost, loading, error, currentWallPost, updateWallPost } =
+    useWallPost(currentStable?.id);
 
   useEffect(() => {
     if (currentStable?.id) {
@@ -30,6 +30,17 @@ export default function WallPost({}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleSubmitWallPost = async (updatedData) => {
+    try {
+      const success = await updateWallPost(updatedData);
+      if (success) {
+        setIsFormOpen(false);
+      }
+    } catch (error) {
+      console.error("Error updating wall post:", error);
+    }
   };
 
   // Formatt data
@@ -66,12 +77,12 @@ export default function WallPost({}) {
               aria-label="Expandable important message"
             >
               <div className="text-primary mr-3">
-                <Pin className="w-6 h-6" />
+                <PinIcon className="w-6 h-6" />
               </div>
               <p className="flex-1">{wallPost.title}</p>
               <div className="text-primary">
-                <ChevronDown
-                  className={`w-6 h-6 transition-transform ${
+                <ChevronDownIcon
+                  className={`w-5 h-5 transition-transform ${
                     isExpanded ? "rotate-180" : ""
                   }`}
                 />
@@ -92,15 +103,19 @@ export default function WallPost({}) {
                   </p>
                 ) : null}
 
-                <div>
-                  <button
-                    onClick={toggleForm}
-                    className="px-2 py-1 bg-olive-500 text-white rounded hover:bg-olive-600 text-sm"
-                  >
-                    {isFormOpen ? "Close" : "Edit Post"}
-                  </button>
-
-                  {isFormOpen && <WallPostForm />}
+                <div className="mt-3">
+                  <Button type="secondary" size="small" onClick={toggleForm}>
+                    {isFormOpen ? "Avbryt" : "Redigera"}
+                  </Button>
+                  <div className="mt-5">
+                    {isFormOpen && (
+                      <WallPostForm
+                        event={wallPost}
+                        onSubmit={handleSubmitWallPost}
+                        onCancel={toggleForm}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             )}
