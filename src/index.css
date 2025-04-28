@@ -1,35 +1,110 @@
+/* Font imports (WOFF format would be better for performance) */
+@import url("https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&display=swap");
+
 @import "tailwindcss";
 
-/* Base styles using Tailwind's layer directive */
+/* Theme configuration */
+@theme {
+  /* Primary Colors */
+  --color-primary: #027a48;
+  --color-primary-light: #cce4da;
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-background: #f4f4f4;
+  --color-light: #e5e5e5;
+  --color-gray: #808080;
+
+  /* Warning Colors */
+  --color-warning-300: #ffc13d;
+  --color-warning-400: #ffa600;
+
+  /* Error Colors */
+  --color-error-400: #fc6455;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+
+  /* Accent for (a-link) */
+  --color-accent-orange: #ffa600;
+
+  /* Font Families */
+  --font-heading: "Besley", serif;
+  --font-body: "Nunito Sans", sans-serif;
+
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Line Heights */
+  --line-height-tight: 120%;
+  --line-height-normal: 150%;
+
+  /* Font Sizes */
+  --fontsize-xxs: 0.625rem; /* 10px */
+}
+
+/* Base styles */
 @layer base {
-  html,
+  html {
+    font-family: var(--font-body);
+    font-weight: var(--font-weight-light);
+    line-height: var(--line-height-tight);
+    color: theme("colors.gray.800");
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
   body {
-    margin: 0;
-    padding: 0;
-    background: var(--color-bg-primary);
-    color: var(--color-text-primary);
-    font-family: sans-serif, Times, serif;
+    background-color: var(--color-background);
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading) !important;
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-tight);
+  }
+
+  p,
+  span,
+  div,
+  li,
+  input,
+  textarea,
+  select,
+  button {
+    font-family: var(--font-body);
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
   }
 }
 
-@theme {
-  /* Basic theme colors */
-  --color-bg-primary: #fcf7f6;
-  --color-bg-secondary: #00ad1d;
-  --color-primary-text: #15ff00;
-  --color-secondary-text: #f9faf8;
-  --color-bg-olive: #556B2F;
-
-  /* Accent colors */
-
-  /* UI Elements */
-
-  /* Form elements */
-
-  /* Dark Mode */
-
-  /* Fonts */
+/* Component styles */
+@layer components {
+  .nav-container {
+    @apply flex items-center justify-around bg-primary-light shadow-md p-2 rounded-full;
+  }
+  .text-mini {
+    font-size: 8px;
+  }
 }
 
-/* Apply custom variant to make hover work on all devices */
+/* Custom variant for hover */
 @custom-variant hover (&:hover);

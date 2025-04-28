@@ -5,6 +5,9 @@ import EventForm from "../forms/EventForm";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext";
+import StableName from "../layout/StableName";
+import LoadingSpinner from "../ui/LoadingSpinner";
+import { useLoadingState } from "../../hooks/useLoadingState";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -16,11 +19,16 @@ function CalendarDisplay() {
   const currentUserId = currentUser.id;
 
   // Custom hooks for data fetching
-  const { stableId, status: stableStatus } = useStableData(currentStable.id);
+  const {
+    stableId,
+    status: stableStatus,
+    loadingState: stableLoadingState,
+  } = useStableData(currentStable.id);
   const {
     events,
     users,
     calendarStatus,
+    loadingState: calendarLoadingState,
     createEvent,
     updateEvent,
     deleteEvent,
@@ -90,33 +98,44 @@ function CalendarDisplay() {
     }
   };
 
-  // Loading state. Need to implement a loading component
+  // Loading state
   if ((calendarStatus.loading && events.length === 0) || stableStatus.loading) {
     return (
-      <div className="p-8 text-center">
-        <p>Vänta, vi hämtar in kalenderdata...</p>
+      <div className="py-2 text-gray flex items-center justify-center">
+        <LoadingSpinner size="medium" className="text-gray" />
+        <p>
+          {stableStatus.loading
+            ? stableLoadingState.getMessage()
+            : calendarLoadingState.getMessage()}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="mt-10">
-      <div className="container mx-auto px-4">
+    <div className="mt-2 bg-background">
+      <div className="container mx-auto">
+        {/* Stable Title */}
+        <h1 className="text-center mb-5 font-heading">
+          <StableName currentStableId={currentStable.id} />
+        </h1>
+
         {/* Loading and error status messages */}
         {calendarStatus.loading && events.length > 0 && (
-          <div className="text-center py-2 text-gray-500">
-            Vänta, vi uppdaterar kalenderdata...
+          <div className="text-center py-2 flex items-center justify-center">
+            <LoadingSpinner size="small" className="text-gray" />
+            <span>{calendarLoadingState.getMessage()}</span>
           </div>
         )}
 
         {calendarStatus.error && (
-          <div className="text-center py-2 text-red-500">
+          <div className="text-center py-2 text-error-500">
             {calendarStatus.error}
           </div>
         )}
 
         {stableStatus.error && (
-          <div className="text-center py-2 text-red-500">
+          <div className="text-center py-2 text-error-500">
             {stableStatus.error}
           </div>
         )}
@@ -127,6 +146,7 @@ function CalendarDisplay() {
             event={currentEvent}
             onSubmit={currentEvent ? handleUpdateEvent : handleCreateEvent}
             onCancel={handleCloseEventForm}
+            onDeleteEvent={handleDeleteEvent}
             title={currentEvent ? "Ändra Aktivitet" : "Ny Aktivitet"}
             date={selectedDay}
             stables={stableId}

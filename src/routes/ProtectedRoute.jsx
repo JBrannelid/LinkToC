@@ -2,6 +2,7 @@ import { Navigate, useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { useAppContext } from "../context/AppContext";
 import { ROUTES } from "./routeConstants";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const ProtectedRoute = ({ children, requiresStable = false }) => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -9,9 +10,9 @@ const ProtectedRoute = ({ children, requiresStable = false }) => {
   const location = useLocation();
 
   if (isLoading) {
-    // Loading . We need to inplement a loading component here
     return (
       <div className="flex justify-center items-center h-screen">
+        <LoadingSpinner size="medium" className="text-gray" />
         <p>Verifierar autentisering...</p>
       </div>
     );

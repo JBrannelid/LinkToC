@@ -70,7 +70,7 @@ const Calendar = ({
   };
 
   return (
-    <div className="pt-4 w-full">
+    <div className="w-full">
       <div className="w-full">
         <div className="grid md:grid md:grid-cols-2 md:divide-x md:divide-accent-secondary/50">
           {/* Calendar */}

@@ -1,26 +1,21 @@
-import { Settings, Mail } from "lucide-react";
-import StableName from "./StableName";
 import { useAppContext } from "../../context/AppContext";
 import { Link } from "react-router";
 import { ROUTES } from "../../routes/routeConstants";
+import SettingIcon from "../../assets/icons/SettingIcon";
+import NotificationIcon from "../../assets/icons/NotificationIcon";
 
 export default function Header() {
   const { currentStable } = useAppContext();
 
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md">
+    <header className="flex items-center justify-between p-4">
       <Link to={ROUTES.SETTINGS} aria-label="Inställningar">
-        <Settings className="w-6 h-6 text-gray-700 hover:text-gray-900" />
+        <SettingIcon strokeWidth={9} className="w-7 h-7 text-olive-500" />
       </Link>
 
-      <div className="text-sm font-light">
-        <StableName currentStableId={currentStable.id} />
-      </div>
-
-      <div className="relative">
-        <Mail className="w-6 h-6 text-gray-700" />
-        <span className="absolute top-0 right-0 inline-flex h-2 w-2 rounded-full bg-red-500" />
-      </div>
+      <Link to="/notifications" aria-label="Notifikationer">
+        <NotificationIcon className="w-6 h-6 text-olive-500" />
+      </Link>
     </header>
   );
 }

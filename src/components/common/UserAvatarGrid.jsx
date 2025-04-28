@@ -13,7 +13,7 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
 
   return (
     <div
-      className="w-full h-full flex items-center justify-center p-1"
+      className="w-full h-full flex items-start justify-start p-1"
       onClick={(e) => {
         // Prevent redender from parent elements
         e.stopPropagation();
@@ -23,22 +23,25 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
         }
       }}
     >
-      <div className="grid grid-cols-2 gap-0.5 max-w-full max-h-full">
+      <div className="grid grid-cols-2 pl-0.5 gap-0.5 max-w-full max-h-full">
         {displayUsers.map((user, index) => (
-          <div key={index} className="flex justify-center items-center">
+          <div key={index}>
             <UserProfileImage
               user={user}
               size="mini"
-              className="border border-white"
+              className="border border-background"
             />
           </div>
         ))}
 
         {exceedsMaximumUserImage && (
-          <div className="flex justify-center items-center">
-            <div className="flex items-center justify-center h-5 w-5 rounded-full bg-gray-200 text-xs font-medium text-gray-600 border border-white">
-              +{remainingUsersCount}
-            </div>
+          <div className="flex justify-start items-start">
+            <UserProfileImage
+              user={{ id: "counter" }}
+              size="mini"
+              className="border border-background"
+              customContent={`+${remainingUsersCount}`}
+            />
           </div>
         )}
       </div>
