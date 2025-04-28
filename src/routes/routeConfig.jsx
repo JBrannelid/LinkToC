@@ -12,6 +12,8 @@ import ErrorPage from "../pages/ErrorPage";
 import SettingsPage from "../pages/SettingsPage";
 import StablePostPage from "../pages/StablePostPage";
 import UserProfilePage from "../pages/UserProfilePage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
+import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 
 // Public Routes
 export const publicRoutes = [
@@ -22,6 +24,14 @@ export const publicRoutes = [
   {
     path: ROUTES.REGISTER,
     element: <RegistrationPage />,
+  },
+  {
+    path: ROUTES.RESET_PASSWORD,
+    element: <ResetPasswordPage />,
+  },
+  {
+    path: ROUTES.FORGOT_PASSWORD,
+    element: <ForgotPasswordPage />,
   },
   {
     path: "/",

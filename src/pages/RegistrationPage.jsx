@@ -5,10 +5,12 @@ import authService from "../api/services/authService.js";
 import { useNavigate } from "react-router";
 import Button from "../components/ui/Button";
 import { useLoadingState } from "../hooks/useLoadingState";
+import {createSuccessMessage, getErrorMessage} from "../utils/errorUtils.js";
 
 const RegistrationPage = () => {
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState({type: "", text: "",});
   const { login } = useAuth();
   const navigate = useNavigate();
   const {
@@ -42,8 +44,7 @@ const RegistrationPage = () => {
 
       // Check if the registration was successful
       if (response && response.isSuccess) {
-        console.log("Registration successful:", response);
-
+       
         // Attempt to log in with the newly registered credentials
         try {
           await login(data.email, data.password);
@@ -53,18 +54,18 @@ const RegistrationPage = () => {
           console.error("Auto-login failed after registration:", loginError);
           // Even if auto-login fails, registration was successful
           // Redirect to login page with a success message
-          console.log(
-            "Registration successful. Please log in with your credentials.",
-            response
-          );
+          setMessage(createSuccessMessage(
+              "Registration successful. Please log in with your credentials."
+          ));
         }
       } else {
         // Handle API response indicating failure
         throw new Error(response?.message || "Registration failed");
       }
     } catch (error) {
-      console.error("Registration failed", error);
-      setServerError(error.message || "Registration failed. Please try again.");
+      setServerError(getErrorMessage(error, {
+        defaultMessage: "Registration failed. Please try again."
+      }).text);
     } finally {
       setIsSubmitting(false);
     }
