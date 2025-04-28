@@ -91,16 +91,16 @@ const WallPostForm = ({ event, onSubmit, onCancel }) => {
               <button
                 type="button"
                 onClick={handleCancel}
-                className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+                className="px-2 py-1 border border-gray-300 rounded hover:bg-gray-100"
               >
                 <p>Cancel</p>
               </button>
 
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                className="px-2 py-1 bg-olive-500 text-white rounded hover:bg-olive-600"
               >
-                {event ? "Save changes" : "Create Post"}
+                {event ? "Save" : "Create"}
               </button>
             </div>
           </div>
