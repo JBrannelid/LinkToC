@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
-import { wallPostService } from "../api";
+import wallPostService from "../api/services/wallPostService";
 
-export const useWallPost = (id) => {
+export const useWallPost = (stableId) => {
   const [wallPost, setWallPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -9,23 +9,59 @@ export const useWallPost = (id) => {
   const currentWallPost = useCallback(async () => {
     try {
       setLoading(true);
-      const fetchWallPost = await wallPostService.getById(id);
+      setError(null);
+
+      const fetchWallPost = await wallPostService.getById(stableId);
       setWallPost(fetchWallPost.value);
+
       return true;
     } catch (error) {
+      setError(error);
       setLoading(false);
+
       return false;
     } finally {
       setLoading(false);
-      return false;
     }
-  }, [id]);
+  }, [stableId]);
+
+  const updateWallPost = async (data) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const updateData = {
+        stableIdFk: stableId,
+        title: data.title,
+        body: data.body,
+
+        // id: wallPost.id,
+        // title: data.title,
+        // body: data.body,
+        // lastEdited: new Date().toISOString(),
+        // stableIdFk: stableId,
+      };
+
+      await wallPostService.update(updateData);
+
+      // Refresh data
+      await currentWallPost();
+      return true;
+    } catch (error) {
+      setError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    currentWallPost();
-  }, [currentWallPost]);
+    if (stableId) {
+      currentWallPost();
+    }
+  }, [stableId, currentWallPost]);
 
-  return { wallPost, id, loading, error, currentWallPost };
+  return { wallPost, loading, error, currentWallPost, updateWallPost };
 };
 
 export default useWallPost;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDateForInput } from "../utils/calendarUtils";
 
 export const useWallPostForm = (event, onSubmit, onCancel) => {
@@ -6,7 +6,11 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
     title: "",
     body: "",
     postDateTime: "",
-    editedDateTime: "",
+
+    // title: "",
+    // body: "",
+    // postDateTime: "",a
+    // editedDateTime: "",
   });
 
   //Validation state
@@ -20,7 +24,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
         title: event.title,
         body: event.body,
         postDateTime: formatDateForInput(event.postDate),
-        editedDateTime: formatDateForInput(event.lastEdited),
+        // editedDateTime: formatDateForInput(event.lastEdited),
       });
     }
   }, [event]);
@@ -41,6 +45,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
   //Handle submit of the form
   const handleSubmit = (event) => {
     event.preventDefault();
+
     if (onSubmit) {
       onSubmit(wallPostData);
     }
