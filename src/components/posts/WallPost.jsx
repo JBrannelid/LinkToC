@@ -32,7 +32,7 @@ export default function WallPost({}) {
     setIsExpanded(!isExpanded);
   };
 
-  // Safe date formatting function
+  // Formatt data
   const formatData = (dateString) => {
     try {
       const date = parseISO(dateString);
