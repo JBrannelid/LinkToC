@@ -1,6 +1,6 @@
 import React from "react";
 import DisplayCalendar from "../components/calendar/CalendarDisplay";
-import Wallpage from "../components/layout/WallPage";
+import WallPost from "../components/posts/WallPost";
 
 export default function HomePage() {
   return (
@@ -9,7 +9,7 @@ export default function HomePage() {
         <DisplayCalendar />
       </section>
       <section>
-        <Wallpage />
+        <WallPost />
       </section>
     </div>
   );
