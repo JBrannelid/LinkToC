@@ -303,7 +303,6 @@ const RegistrationPage = () => {
             htmlType="button"
             className="w-full mt-3"
             onClick={() => navigate("/login")}
-            className="w-full mt-3 py-3 px-4 border border-gray-300 rounded-md text-gray-700 font-medium bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
             Redan Registrerad
           </Button>

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
-import { ErrorTypes } from "../../api/index.js"
 import {NotFoundState} from "../ui/userPage/index.js";
 import FormMessage from "./formBuilder/FormMessage.jsx";
 import { Shield, ArrowLeft } from "lucide-react";
@@ -15,6 +14,7 @@ import {
     createSuccessMessage,
     createErrorMessage
 } from "../../utils/errorUtils";
+import {ROUTES} from "../../routes/index.jsx";
 
 const ResetPasswordForm = ({setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
@@ -41,9 +41,7 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
     }, []);
     
     useEffect(() => {
-      
         if (setParentLoading) {
-            
             setParentLoading(loading);
         }
     }, [loading, setParentLoading]);
@@ -56,18 +54,28 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
     const {handleSubmit, getValues, formState: {errors}, trigger } = methods;
 
     const handleVerifyCode = async() => {
-        console.log("Starting code verification...");
         const result = await trigger(["email", "resetCode"]);
         if(!result){
-            console.log("Form validation failed");
             return;
-        } 
+        }
+        const email = getValues("email") || emailFromStorage;
+        if (!email) {
+            setMessage({
+                type: "error",
+                text: "E-postadress saknas. Vänligen ange din e-postadress."
+            });
+            return;
+        }
+
+        if (email !== getValues("email")) {
+            setValue("email", email);
+        }
         
         setLoading(true);
         setMessage({type: "", text: ""});
         try {
             const validateData = {
-                email: getValues("email"),
+                email: email,
                 resetCode: getValues("resetCode"),
             };
 
@@ -76,6 +84,8 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
             if(response && response.isSuccess) {
                 setCodeVerified(true);
                 setMessage(createSuccessMessage("Kod verifierad. Du kan nu sätta ett nytt lösenord."));
+                sessionStorage.setItem('resetPasswordEmail', email);
+                
             } else {
                 setMessage(createErrorMessage(
                     response?.message || "Ogiltig återställningskod. Kontrollera och försök igen."
@@ -96,21 +106,22 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
     };
     const onSubmit = async (data) => {
         if(!codeVerified){
-            
             await handleVerifyCode();
             return;
         }
        
         if (data.password !== data.confirmPassword){
-
-            setMessage(createErrorMessage("Löseorden matchar inte. Försök igen."));
+            setMessage(createErrorMessage("Lösenorden matchar inte. Försök igen."));
             return;
         }
         setLoading(true);
         setMessage({type: "", text: ""});
+
+        const email = data.email || emailFromStorage || sessionStorage.getItem('resetPasswordEmail');
+        
         try {
             const resetData = {
-                email: data.email,
+                email: email,
                 newPassword: data.password,
                 newPasswordConfirmation: data.confirmPassword
             };
@@ -120,8 +131,8 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
                 setMessage(createSuccessMessage(
                     "Ditt lösenord har återställts. Du kommer att omdirigeras till inloggningssidan."
                 ));
-
-                setTimeout(() => {navigate("/login")}, 3000);
+                sessionStorage.removeItem('resetPasswordEmail');
+                setTimeout(() => {navigate(ROUTES.LOGIN)}, 3000);
             } else {
                 setMessage(createErrorMessage(
                     response?.message || "Något gick fel. Vänligen försök igen."
@@ -137,10 +148,10 @@ const ResetPasswordForm = ({setParentLoading = null}) => {
     };
     
     const handleBackToLogin = () => {
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
     };
     const handleRequestNewCode = () =>{
-        navigate("/forgotPassword");
+        navigate(ROUTES.FORGOT_PASSWORD);
     }
     if (shouldShowResetCodeNotFound(message, notFound)) {
         return (

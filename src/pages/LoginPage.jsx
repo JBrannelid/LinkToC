@@ -35,7 +35,7 @@ const LoginForm = () => {
     try {
       await login(data.email, data.password);
 
-      navigate("/select-stable");
+      navigate(ROUTES.SELECT_STABLE);
     } catch (error) {
       setServerError(error.message || "Fel e-postadress eller lösenord");
     } finally {
@@ -44,7 +44,7 @@ const LoginForm = () => {
   };
   
   const handleForgotPassword =() =>{
-    navigate("/forgotPassword");
+    navigate(ROUTES.FORGOT_PASSWORD);
   }
 
   const handleRegisterClick = () => {
@@ -160,7 +160,7 @@ const LoginForm = () => {
             <p className="text-sm text-gray">
               Glömt
               <a
-                href="/forgot-password"
+                onClick={handleForgotPassword}
                 className="font-medium text-accent-orange pl-2"
               >
                 Lösenord

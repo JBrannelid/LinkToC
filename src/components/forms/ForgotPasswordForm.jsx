@@ -5,7 +5,6 @@ import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
 import FormMessage from "./formBuilder/FormMessage";
-import {useNavigate} from "react-router";
 import {
     getErrorMessage,
     createSuccessMessage,
@@ -16,7 +15,6 @@ import {
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({type: "", text: "",});
-    const navigate = useNavigate();
     const methods = useForm({
         defaultValues: {
             email: '',

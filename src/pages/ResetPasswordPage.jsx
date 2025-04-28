@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
-import { useNavigate} from "react-router";
 import { RabbitIcon } from "lucide-react";
 import ResetPasswordForm from "../components/forms/ResetPasswordForm";
-import {LoadingState} from "../components/ui/userPage/index.js";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer.jsx";
 
 
 const ResetPasswordPage = () => {
-    const [loading, setLoading] = useState(false);    
-    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
  
     useEffect(() => {
     }, [loading]);
@@ -35,7 +33,7 @@ const ResetPasswordPage = () => {
                 <div className="w-full max-w-md">
                     {loading ? (
                         <div className="flex items-center justify-center w-full">
-                            <LoadingState text={"Bearbetar..."} />  
+                            <LoadingSpinner text={"Bearbetar..."} />  
                         </div>
                         
                     ): null}

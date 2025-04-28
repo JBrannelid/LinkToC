@@ -3,6 +3,7 @@ import {useNavigate} from "react-router"
 import { ArrowLeft, RabbitIcon} from "lucide-react"
 import ForgotPasswordForm from "../components/forms/ForgotPasswordForm"
 import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer.jsx";
+import {ROUTES} from "../routes/index.jsx";
 
 const ForgotPasswordPage = () => {
     const navigate = useNavigate();
@@ -10,13 +11,13 @@ const ForgotPasswordPage = () => {
     const [loading, setLoading] = useState(false);
     
     const handleGoBack = () => {
-        navigate("/login");
+        navigate(ROUTES.LOGIN);
     };
     
     const handleSuccess = () => {
         setSuccess(true);
         setTimeout(() => {
-            navigate("/resetPassword");
+            navigate(ROUTES.RESET_PASSWORD);
         });
     };
     
