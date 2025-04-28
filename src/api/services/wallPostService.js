@@ -29,14 +29,18 @@ const wallPostService = {
 
   update: async (data) => {
     const updateData = {
-      id: data.id,
+      stableIdFk: data.stableIdFk,
       title: data.title,
       body: data.body,
-      lastEdited: new Date().toISOString(),
-      stableIdFk: data.stableIdFk,
+
+      // id: data.id,
+      // title: data.title,
+      // body: data.body,
+      // lastEdited: data.lastEdited,
+      // stableIdFk: data.stableIdFk,
     };
 
-    return await baseService.update(updateData);
+    return await axiosConfig.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
   },
 };
 
