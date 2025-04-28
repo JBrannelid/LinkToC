@@ -22,7 +22,7 @@ const MobileEventsView = ({
   const formattedDate = formatFullDayDate(selectedDay, locale);
 
   return (
-    <div className="flex flex-col fixed inset-0 bg-white z-50 shadow-lg rounded-md overflow-hidden">
+    <div className="flex flex-col fixed inset-0 bg-white z-20 shadow-lg rounded-md overflow-hidden">
       <EventsHeader
         selectedDay={selectedDay}
         dayName={dayName}
