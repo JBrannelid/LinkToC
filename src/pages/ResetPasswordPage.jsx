@@ -11,12 +11,8 @@ const ResetPasswordPage = () => {
     const navigate = useNavigate();
  
     useEffect(() => {
-        console.log("Parent component loading state:", loading);
     }, [loading]);
     
-    const handleGoBack = () => {
-        navigate("/login");
-    }
     
     return(
         <div className="flex flex-col min-h-screen">

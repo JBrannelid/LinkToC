@@ -5,8 +5,13 @@ import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
 import FormMessage from "./formBuilder/FormMessage";
-import { ErrorTypes } from "../../api/index.js";
 import {useNavigate} from "react-router";
+import {
+    getErrorMessage,
+    createSuccessMessage,
+    createWarningMessage,
+    createErrorMessage
+} from "../../utils/errorUtils.js";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
     const [loading, setLoading] = useState(false);
@@ -30,46 +35,31 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null}) => {
         try {
             const response = await authService.forgotPassword(data.email);
 
-         
             if (response && (response.isSuccess || response.statusCode === 200 || response.statusCode === 201)) {
-               
                 if (response.message && response.message.includes("issue sending the email")) {
-                    setMessage({
-                        type: "warning",
-                        text: 'Återställningsbegäran har skapats, men det uppstod ett problem med att skicka e-post. Om du inte får e-post inom några minuter, kontrollera din skräppostmapp eller kontakta support.',
-                    });
+                    setMessage(createWarningMessage(
+                        'Återställningsbegäran har skapats, men det uppstod ett problem med att skicka e-post. Om du inte får e-post inom några minuter, kontrollera din skräppostmapp eller kontakta support.'
+                    ));
                 } else {
-                    setMessage({
-                        type: "success",
-                        text: 'Återställningslänk har skickats till din e-post. Kontrollera din inkorg (inklusive skräppostmappen)',
-                    });
+                    setMessage(createSuccessMessage(
+                        'Återställningslänk har skickats till din e-post. Kontrollera din inkorg (inklusive skräppostmappen)'
+                    ));
                 }
                 sessionStorage.setItem('resetPasswordEmail', data.email);
-                
+
                 if(onSuccess) onSuccess();
             } else {
-                setMessage({
-                    type: "error",
-                    text: response.message || "Något gick fel. Vänligen försök igen.",
-                });
+                setMessage(createErrorMessage(
+                    response.message || "Något gick fel. Vänligen försök igen."
+                ));
                 setLoading(false);
             }
-        }catch(error){
-            let errorMessage = 'Misslyckades att bearbeta begäran. Försök igen senare';
-
-            if (error.type === ErrorTypes.VALIDATION) {
-                errorMessage = error.message || 'Vänligen verifiera din e-postadress.';
-            } else if (error.type === ErrorTypes.NETWORK) {
-                errorMessage = 'Nätverksfel. Kontrollera din anslutning.';
-            } else if (error.type === ErrorTypes.SERVER) {
-                errorMessage = 'Serverfel. Vänligen försök igen senare.';
-            }
-
-            setMessage({ type: 'error', text: errorMessage });
-            console.error('Error:', error);
+        } catch(error) {
+            setMessage(getErrorMessage(error, {
+                defaultMessage: 'Misslyckades att bearbeta begäran. Försök igen senare'
+            }));
             setLoading(false);
-            
-        } 
+        }
     };
     
     return(
