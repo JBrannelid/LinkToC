@@ -7,7 +7,7 @@ import HomePage from "../pages/HomePage";
 import LoginPage from "../pages/LoginPage";
 import RegistrationPage from "../pages/RegistrationPage";
 import StableSelectionPage from "../pages/StableSelectionPage";
-import ProfilePage from "../pages/ProfileTester";
+import HorseProfilePage from "../pages/HorseProfilePage";
 import ErrorPage from "../pages/ErrorPage";
 import SettingsPage from "../pages/SettingsPage";
 import StablePostPage from "../pages/StablePostPage";
@@ -58,7 +58,7 @@ export const protectedRoutes = [
   },
   {
     path: ROUTES.HORSE_PROFILE,
-    element: <ProfilePage />,
+    element: <HorseProfilePage />,
     requiresStable: true,
   },
   {
