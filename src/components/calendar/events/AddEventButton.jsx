@@ -1,6 +1,6 @@
 import React from "react";
-import { Plus } from "lucide-react";
 import Button from "../../ui/Button";
+import PlusIcon from "../../../assets/icons/PlusIcon";
 
 const AddEventButton = ({ onClick }) => {
   return (
@@ -12,7 +12,7 @@ const AddEventButton = ({ onClick }) => {
         aria-label="Add new event button"
         onClick={onClick}
       >
-        <Plus className="h-5 w-6 bg-primary text-white " strokeWidth={3} />
+        <PlusIcon className="h-5 w-6 bg-primary text-white " strokeWidth={3} />
       </Button>
     </div>
   );
