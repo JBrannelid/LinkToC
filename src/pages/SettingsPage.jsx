@@ -138,7 +138,7 @@ const SettingsPage = () => {
           <div className="grid grid-cols-1 justify-items-center gap-5">
             <Button
               type="primary"
-              className="w-10/12"
+              className="w-9/10"
               onClick={handleSwitchStable}
             >
               Byt stall
@@ -146,7 +146,7 @@ const SettingsPage = () => {
 
             <Button
               type="secondary"
-              className="w-10/12 "
+              className="w-9/10 "
               onClick={handleLogout}
               loading={loading}
             >
