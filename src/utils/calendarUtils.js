@@ -63,7 +63,8 @@ export function formatYear(date, locale) {
 
 // Format month
 export function formatMonth(date, locale) {
-  return format(date, "MMMM", { locale });
+  const monthString = format(date, "MMMM", { locale });
+  return monthString.charAt(0).toUpperCase() + monthString.slice(1);
 }
 
 // Format day number
@@ -94,30 +95,29 @@ export const weekdayTitles = ["M", "T", "O", "T", "F", "L", "S"];
 export function getDayButtonClasses(day, selectedDay, firstDayCurrentMonth) {
   return classNames(
     // Base styling for all day buttons
-    "mx-auto flex h-8 w-8 items-center justify-center rounded-full",
-
-    // Grey out days from other months. Not used at the moment sense we add overlay for dates !isSameMonth
-    !isSameMonth(day, firstDayCurrentMonth) && "text-gray-500",
+    "mx-auto flex h-8 w-8 items-center justify-center rounded-full pointer-events-none",
 
     // Standard text color for current month days
     isSameMonth(day, firstDayCurrentMonth) &&
       !isToday(day) &&
       !isSameDay(day, selectedDay) &&
-      "text-gray-800",
+      "text-black",
 
     // Highlight today (if not selected)
-    isToday(day) && !isSameDay(day, selectedDay) && "text-primary-text",
+    isToday(day) && !isSameDay(day, selectedDay) && "text-primary",
+
+    // Highlight Selected day - is today
+    isSameDay(day, selectedDay) &&
+      isToday(day) &&
+      "text-primary font-extrabold",
 
     // Selected day (not today)
-    isSameDay(day, selectedDay) && !isToday(day) && "text-gray-500",
-
-    // Selected day is today
-    isSameDay(day, selectedDay) && isToday(day) && "text-emerald-400",
+    isSameDay(day, selectedDay) && !isToday(day) && "text-black",
 
     // Hover effect for unselected days
-    !isSameDay(day, selectedDay) && "hover:bg-gray-200",
+    !isSameDay(day, selectedDay) && "hover:text-primary hover:font-bold",
 
     // Bold for selected day or today
-    (isSameDay(day, selectedDay) || isToday(day)) && "font-semibold"
+    (isSameDay(day, selectedDay) || isToday(day)) && "font-bold"
   );
 }
