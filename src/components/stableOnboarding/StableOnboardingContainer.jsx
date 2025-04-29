@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import { useNavigate} from "react-router";
 import { useAppContext} from "../../context/AppContext.jsx";
 import { ROUTES } from "../../routes/index.jsx";
-import WelcomeScreen from "index.js";
-import CreateStableScreen from "index.js";
+import WelcomeScreen from "./WelcomeScreen.jsx";
+import CreateStableScreen from "./CreateStableScreen.jsx";
 import {stableService} from "../../api/index.js";
 import { getErrorMessage} from "../../utils/errorUtils.js";
-import { useLoadingState } from "../../hooks/useLoadingState.jsx";
+import { useLoadingState } from "../../hooks/useLoadingState.js";
 import SettingIcon from "../../assets/icons/SettingIcon.jsx";
 
 const StableOnboardingContainer = () => {
@@ -111,12 +111,7 @@ const StableOnboardingContainer = () => {
     // };
 
     return (
-        <div className="min-h-screen bg-black py-4">
-            <div className="mx-auto max-w-md bg-white p-4 min-h-[90vh]">
-                {/* Settings icon at the top-left corner of all screens */}
-                <div className="mb-4">
-                    <SettingIcon strokeWidth={9} className="w-7 h-7 text-primary" />
-                </div>
+            <div className="container mx-auto px-4 py-8">
 
                 {/* Render current screen */}
                 {currentStep === "welcome" && (
@@ -150,7 +145,7 @@ const StableOnboardingContainer = () => {
                 {/*    />*/}
                 {/*)}*/}
             </div>
-        </div>
+        
     );
 };
 

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import {FormProvider, FormInput, FormMessage } from "./index.js"
 import Button from "../ui/Button.jsx"
 
-const createStableForm = ({
+const CreateStableForm = ({
     initialStableName = "",
     onSubmit,
     onCancel,
@@ -33,6 +33,7 @@ const createStableForm = ({
     const handleSubmit = (data) => {
         if (onSubmit) {
             onSubmit(data.stableName);
+            
         }
     };
     
@@ -62,20 +63,14 @@ const createStableForm = ({
             <div className="space-y-3 mt-6">
                 <Button
                     type="submit"
-                    className="w-full bg-primary"
                     loading={isLoading}
                     disabled={isLoading}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        methods.handleSubmit(handleSubmit)();
-                    }}
                 >
                     {isLoading && loadingState ? loadingState.getMessage() : "Fortsätt"}
                 </Button>
 
                 <Button
                     type="secondary"
-                    className="w-full"
                     onClick={onCancel}
                     disabled={isLoading}
                 >
@@ -86,6 +81,6 @@ const createStableForm = ({
     );
 };
 
-export default createStableForm;
+export default CreateStableForm;
 
 

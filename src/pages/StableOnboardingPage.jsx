@@ -3,11 +3,10 @@ import StableOnboardingContainer from "../components/stableOnboarding/StableOnbo
 
 const StableOnboardingPage = () => {
     return (
-        <div className="min-h-screen bg-black py-4">
-            <div className="mx-auto max-w-md bg-white">
+            <div>
                 <StableOnboardingContainer />
             </div>
-        </div>
+      
     );
 };
 
