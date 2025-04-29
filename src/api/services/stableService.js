@@ -5,12 +5,15 @@ const baseService = createBaseService(ENDPOINTS.STABLE);
 
 const stableService = {
   ...baseService,
+  
+  
+  createWithWallPost: async (data) => {
+    if (!data || !data.name) {
+      throw new Error("Stable name is required");
+    }
 
-  // Implement stable-specific method
-  
-  //Kalle på StableCompositionEndpoints
-  
-  //
+    return await baseService.post(`${ENDPOINTS.STABLE}/create-with-wall-post`, data);
+  },
 };
 
 export default stableService;
