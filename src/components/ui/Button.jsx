@@ -21,7 +21,7 @@ const Button = ({
   // Global style from index.css
   const typeStyles = {
     primary:
-      "bg-primary text-white border border-white hover:border hover:border-primary-light focus:ring-primary focus:outline-none focus:ring-3",
+      "bg-primary text-white hover:border hover:border-primary-light focus:ring-primary focus:outline-none focus:ring-3",
     secondary:
       "bg-white border border-primary  focus:ring-primary-light focus:outline-none focus:ring-3",
     danger:
@@ -41,7 +41,7 @@ const Button = ({
 
   // Variant styles
   const variantStyles = {
-    default: "rounded-md",
+    default: "",
     icon: "rounded-full p-2",
   };
 
