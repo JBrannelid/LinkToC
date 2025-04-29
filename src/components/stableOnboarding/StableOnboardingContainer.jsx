@@ -35,7 +35,7 @@ const StableOnboardingContainer = () => {
         const result = await handleCreateStable(data);
 
         if (result.success) {
-           
+            sessionStorage.removeItem('isFirstLogin');
             navigate(ROUTES.HOME);
         }
         
