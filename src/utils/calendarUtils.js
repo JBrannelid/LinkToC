@@ -63,7 +63,8 @@ export function formatYear(date, locale) {
 
 // Format month
 export function formatMonth(date, locale) {
-  return format(date, "MMMM", { locale });
+  const monthString = format(date, "MMMM", { locale });
+  return monthString.charAt(0).toUpperCase() + monthString.slice(1);
 }
 
 // Format day number
