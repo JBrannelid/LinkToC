@@ -26,8 +26,32 @@ export const useStableOnboarding = () => {
     const [operationType, setOperationType] = useState("create");
     const [error, setError] = useState(null);
     const [message, setMessage] = useState({ type: "", text: "" });
-    const [isFirstLogin, setIsFirstLogin] = useState(false);
+    const [isFirstLogin, setIsFirstLogin] = useState(true);
 
+    useEffect(() => {
+        
+        const checkFirstLogin = async () => {
+            try {
+                
+                const isFirstLoginFlag = sessionStorage.getItem('isFirstLogin') === 'true';
+
+                if (isFirstLoginFlag) {
+                    setIsFirstLogin(true);
+                    return;
+                }
+                
+                const userStables = await stableService.getUserStables();
+                setIsFirstLogin(userStables.length === 0);
+            } catch (error) {
+                console.error("Error checking first login status:", error);
+                setIsFirstLogin(true);
+            }
+        };
+
+        if (user?.id) {
+            checkFirstLogin();
+        }
+    }, [user]);
     useEffect(() => {
         setError(null);
         setMessage({ type: "", text: "" });
