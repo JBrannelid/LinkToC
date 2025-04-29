@@ -2,64 +2,59 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { Pencil } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { useAppContext } from "../context/AppContext";
 import { ROUTES } from "../routes/routeConstants";
 import Button from "../components/ui/Button";
 import ModalHeader from "../components/layout/ModalHeader";
+import UserProfileForm from "../components/forms/UserProfileForm";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useUserData } from "../hooks/useUserData";
+import {
+  handleManageStables,
+  handleTermsOfService,
+  handleSupport,
+  handleCookieSettings,
+  handleSwitchStable,
+  handleLogout,
+} from "../utils/userUtils";
 
 const SettingsPage = () => {
   const { logout, user } = useAuth();
-  const { currentStable } = useAppContext();
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
+  const [showUserEditProfilForm, setShowUserEditProfilForm] = useState(false);
+
+  // Fetch user data with error and load handeling
+  const { userData, userLoading, userError, loadingState, fetchUserData } =
+    useUserData();
 
   // Handle navigation to profile edit page
   const handleEditProfile = () => {
-    // Implement Logic
-    console.log("Edit profile clicked");
+    setShowUserEditProfilForm(true);
   };
 
-  // Handle navigation to stable management page
-  const handleManageStables = () => {
-    console.log("Manage Stables clicked");
+  // Display fresh user data after update
+  const handleProfileUpdateSuccess = () => {
+    fetchUserData();
+    setShowUserEditProfilForm(false);
   };
 
-  // Handle terms of service navigation
-  const handleTermsOfService = () => {
-    console.log("Terms of service clicked");
-  };
+  // Display loading spinner
+  if (userLoading) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <LoadingSpinner size="medium" className="text-gray" />
+        <p className="ml-2">{loadingState.getMessage()}</p>
+      </div>
+    );
+  }
 
-  // Handle support navigation
-  const handleSupport = () => {
-    console.log("Support clicked");
-  };
-
-  // Handle cookie settings
-  const handleCookieSettings = () => {
-    console.log("Cookie settings clicked");
-  };
-
-  // Handle switch stable action
-  const handleSwitchStable = () => {
-    navigate(ROUTES.SELECT_STABLE);
-  };
-
-  // Handle logout action
-  const handleLogout = async () => {
-    try {
-      setLoading(true);
-      await logout();
-      navigate(ROUTES.LOGIN);
-    } catch (error) {
-      console.error("Logout error:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Get data from database (userData) or JWT (user)
+  const displayUser = userData || user;
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
-      {/* Header with primary-light background */}
+      {/* Header */}
       <div className="bg-primary-light">
         <ModalHeader title="Inställningar" />
       </div>
@@ -70,20 +65,23 @@ const SettingsPage = () => {
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
             <img
               src={
-                user?.profileImage || "/src/assets/images/userPlaceholder.jpg"
+                displayUser?.profileImage ||
+                "/src/assets/images/userPlaceholder.jpg"
               }
-              alt="Profile image"
+              alt={`Profile image of ${user.firstName} ${user.lastName}`}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-medium">
-              {user?.firstName} {user?.lastName || "Test Testsson"}
+              {displayUser?.firstName} {displayUser?.lastName || "Okänd"}
             </h3>
-            <p className="text-gray-600">{user?.email || "namn@gmail.com"}</p>
+            <p className="text-grey">
+              {displayUser?.email || "Inge mailadress registrerad"}
+            </p>
           </div>
           <Button
-            onClick={handleEditProfile}
+            onClick={() => handleEditProfile(setShowUserEditProfilForm)}
             className="p-2 text-primary"
             type="icon"
             aria-label="Redigera användarprofil"
@@ -92,11 +90,18 @@ const SettingsPage = () => {
           </Button>
         </div>
 
-        {/* Menu items */}
+        {/* If user data fetch failed */}
+        {userError && (
+          <div className="bg-red-50 border-l-4 border-error-400 p-4 text-error-600">
+            {userError}
+          </div>
+        )}
+
+        {/* Menu buttons */}
         <Button
           type="secondary"
           className="w-full text-left justify-start px-4"
-          onClick={handleEditProfile}
+          onClick={() => handleEditProfile(setShowUserEditProfilForm)}
         >
           Redigera profil
         </Button>
@@ -106,7 +111,7 @@ const SettingsPage = () => {
           className="w-full text-left justify-start px-4"
           onClick={handleManageStables}
         >
-          Hantera stall
+          Stallförfrågningar
         </Button>
 
         <Button
@@ -139,7 +144,7 @@ const SettingsPage = () => {
             <Button
               type="primary"
               className="w-9/10"
-              onClick={handleSwitchStable}
+              onClick={() => handleSwitchStable(navigate, ROUTES)}
             >
               Byt stall
             </Button>
@@ -147,7 +152,7 @@ const SettingsPage = () => {
             <Button
               type="secondary"
               className="w-9/10 "
-              onClick={handleLogout}
+              onClick={() => handleLogout(logout, navigate, setLoading, ROUTES)}
               loading={loading}
             >
               Logga ut
@@ -155,6 +160,15 @@ const SettingsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Display User profile form */}
+      {showUserEditProfilForm && (
+        <UserProfileForm
+          onClose={() => setShowUserEditProfilForm(false)}
+          onSuccess={handleProfileUpdateSuccess}
+          userData={userData}
+        />
+      )}
     </div>
   );
 };
