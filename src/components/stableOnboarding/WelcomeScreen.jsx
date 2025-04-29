@@ -2,7 +2,7 @@ import React from "react";
 import Button from "../ui/Button.jsx";
 import SettingIcon from "../../assets/icons/SettingIcon.jsx"
 
-const WelcomePage = ({onCreateStable, onJoinStable}) => {
+const WelcomeScreen = ({onCreateStable, onJoinStable}) => {
     return (
         <div className="flex flex-col items-center min-h-screen">
             <div className="self-start mb-2 sm:mb-4">
@@ -40,4 +40,4 @@ const WelcomePage = ({onCreateStable, onJoinStable}) => {
         </div>
     );
 };
-export default WelcomePage;
+export default WelcomeScreen;
