@@ -23,7 +23,7 @@ const Button = ({
     primary:
       "bg-primary text-white border border-white hover:border hover:border-gray focus:ring-primary",
     secondary:
-      "bg-white border border-primary hover:bg-gray-300 focus:ring-gray-300",
+      "bg-white border border-primary hover:bg-gray-300 focus:ring-gray-300 drop-shadow-md",
     danger: "bg-error-500 text-white hover:bg-error-600 focus:ring-error-400",
     warning:
       "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300",

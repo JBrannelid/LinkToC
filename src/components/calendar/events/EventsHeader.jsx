@@ -1,6 +1,5 @@
 import React from "react";
-import { X } from "lucide-react";
-import Button from "../../ui/Button";
+import ModalHeader from "../../layout/ModalHeader";
 
 const EventsHeader = ({
   selectedDay,
@@ -13,18 +12,13 @@ const EventsHeader = ({
   // Mobile header with close button
   if (viewMode === "mobile") {
     return (
-      <div className="relative bg-primary-light py-5">
-        <Button
-          variant="icon"
-          className="absolute left-4 top-4 border-0 text-primary"
-          aria-label="Close list of events"
-          onClick={onClose}
-        >
-          <X strokeWidth={4} />
-        </Button>
-
-        <h1 className="text-center text-xl uppercase">{dayName}</h1>
-      </div>
+      <ModalHeader
+        title={dayName}
+        showCloseBtn={true}
+        onCloseClick={onClose}
+        className="bg-primary-light"
+        render="left"
+      />
     );
   }
 

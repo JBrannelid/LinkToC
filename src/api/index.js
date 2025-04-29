@@ -2,10 +2,13 @@
 import eventService from "./services/eventService";
 import stableService from "./services/stableService";
 import stablePostService from "./services/stablePostService";
+import wallPostService from "./services/wallPostService";
 import horseService from "./services/horseService";
+import authService from "./services/authService";
+import userService from "./services/userService";
 
 // Export endpoint configurations
-import { ENDPOINTS } from "./services/endPoints";
+import { ENDPOINTS } from "./services/endpoints";
 
 // Export error handling utilities
 import { ErrorTypes, createError, handleAxiosError } from "./utils/errors";
@@ -16,7 +19,10 @@ export {
   eventService,
   stableService,
   stablePostService,
-    horseService,
+  wallPostService,
+  horseService,
+  userService,
+  authService,
 
   // Endpoint configurations
   ENDPOINTS,
