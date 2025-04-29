@@ -1,14 +1,3 @@
-// Handle navigation to profile edit page
-export const handleEditProfile = () => {
-  setShowProfileForm(true);
-};
-
-// Refresh user data after update
-export const profileUpdateSuccess = () => {
-  fetchUserData();
-  setShowProfileForm(false);
-};
-
 // Handle navigation to stable management page
 export const handleManageStables = () => {
   console.log("Manage Stables clicked");
@@ -30,12 +19,12 @@ export const handleCookieSettings = () => {
 };
 
 // Handle switch stable action
-export const handleSwitchStable = () => {
+export const handleSwitchStable = (navigate, ROUTES) => {
   navigate(ROUTES.SELECT_STABLE);
 };
 
 // Handle logout action
-export const handleLogout = async () => {
+export const handleLogout = async (logout, navigate, setLoading, ROUTES) => {
   try {
     setLoading(true);
     await logout();
