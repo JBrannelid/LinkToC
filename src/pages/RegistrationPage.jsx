@@ -49,7 +49,7 @@ const RegistrationPage = () => {
         // Attempt to log in with the newly registered credentials
         try {
           await login(data.email, data.password);
-          // Redirect to dashboard or home page after successful login
+          sessionStorage.setItem('isFirstLogin', 'true');
           navigate(ROUTES.STABLE_ONBOARDING);
         } catch (loginError) {
           navigate(ROUTES.LOGIN);
