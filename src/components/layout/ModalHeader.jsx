@@ -8,6 +8,7 @@ const ModalHeader = ({
   title,
   className = "",
   render = "left", // "left/right
+  children,
 
   // Close btn
   showCloseBtn = false,
@@ -50,6 +51,7 @@ const ModalHeader = ({
       )}
 
       <h1 className="text-center text-xl uppercase">{title}</h1>
+      {children}
     </div>
   );
 };
