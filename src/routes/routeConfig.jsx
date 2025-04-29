@@ -14,6 +14,7 @@ import StablePostPage from "../pages/StablePostPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import FirstLoginPage from "../pages/FirstLoginPage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -71,6 +72,12 @@ export const protectedRoutes = [
     element: <UserProfilePage />,
     requiresStable: true,
   },
+  {
+    path: ROUTES.STABLE_ONBOARDING,
+    element: <FirstLoginPage/>,
+    requiresStable: false,
+  },
+
 ];
 
 // Error handling
