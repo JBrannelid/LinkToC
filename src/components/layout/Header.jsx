@@ -9,12 +9,12 @@ export default function Header() {
 
   return (
     <header className="flex items-center justify-between p-4">
-      <Link to={ROUTES.SETTINGS} aria-label="Inställningar">
-        <SettingIcon strokeWidth={9} className="w-7 h-7 text-olive-500" />
+      <Link to={ROUTES.SETTINGS} aria-label="Link to setting page">
+        <SettingIcon strokeWidth={6} className="w-6 h-6 text-primary" />
       </Link>
 
-      <Link to="/notifications" aria-label="Notifikationer">
-        <NotificationIcon className="w-6 h-6 text-olive-500" />
+      <Link to={ROUTES.NOTOFICATIONS} aria-label="Link to notification page">
+        <NotificationIcon className="w-6 h-6 text-primary" />
       </Link>
     </header>
   );
