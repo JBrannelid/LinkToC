@@ -1,30 +1,35 @@
 import React from "react";
-import { X, LogOut } from "lucide-react";
 import Button from "../ui/Button";
+import SettingIcon from "../../assets/icons/SettingIcon";
+import CloseIcon from "../../assets/icons/CloseIcon";
 
 const ModalHeader = ({
+  // Button configuration
   title,
   className = "",
+  render = "left", // "left/right
 
   // Close btn
   showCloseBtn = false,
-  closeBtn = <X strokeWidth={4} />,
+  closeBtn = <CloseIcon strokeWidth={4} />,
   CloseAriaLabel = "Close module",
   onCloseClick,
 
   // Setting btn
-  showGearButton = false,
-  gearBtn = <LogOut />,
-  gearAriaLabel = "Open Settings",
-  onGearClick,
+  showSettingBtn = false,
+  settingBtn = <SettingIcon strokeWidth={2} />,
+  settingAriaLabel = "Open Settings",
+  onSettingClick,
 }) => {
+  const buttonPosition = render === "right" ? "right-4" : "left-4";
+
   return (
-    <div className={`relative bg-primary-light py-5 ${className}`}>
+    <div className={`relative py-5 ${className}`}>
       {/* close btn */}
       {showCloseBtn && (
         <Button
           variant="icon"
-          className="absolute left-4 top-4 border-0 text-primary"
+          className={`absolute ${buttonPosition} top-4 border-0 text-primary`}
           aria-label={CloseAriaLabel}
           onClick={onCloseClick}
         >
@@ -33,14 +38,14 @@ const ModalHeader = ({
       )}
 
       {/* Setting btn */}
-      {showGearButton && (
+      {showSettingBtn && (
         <Button
           variant="icon"
-          className="absolute left-4 top-4 border-0 text-primary"
-          aria-label={gearAriaLabel}
-          onClick={onGearClick}
+          className={`absolute ${buttonPosition} top-4 border-0 text-primary`}
+          aria-label={settingAriaLabel}
+          onClick={onSettingClick}
         >
-          {gearBtn}
+          {settingBtn}
         </Button>
       )}
 
