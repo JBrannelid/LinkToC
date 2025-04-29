@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router";
 import Header from "./components/layout/Header";
-import Footer from "./components/layout/Footer";
+import NavigationFooter from "./components/layout/NavigationFooter";
 import { useAuth } from "./context/AuthContext";
 import { useAppContext } from "./context/AppContext";
 
@@ -29,7 +29,7 @@ function App() {
 
       {showNavigation && (
         <footer>
-          <Footer />
+          <NavigationFooter />
         </footer>
       )}
     </div>
