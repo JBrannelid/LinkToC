@@ -1,8 +1,8 @@
 import { Outlet, useLocation } from "react-router";
-import Header from "./components/layout/Header";
 import NavigationFooter from "./components/layout/NavigationFooter";
 import { useAuth } from "./context/AuthContext";
 import { useAppContext } from "./context/AppContext";
+import HeaderContainer from "./components/layout/HeaderContainer";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -17,11 +17,7 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {showNavigation && (
-        <header>
-          <Header />
-        </header>
-      )}
+      {showNavigation && <HeaderContainer />}
 
       <main className="flex-1">
         <Outlet />
