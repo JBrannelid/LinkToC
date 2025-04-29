@@ -8,14 +8,14 @@ const HeaderContainer = () => {
   const location = useLocation();
   const currentPath = location.pathname;
 
-  // Check if current path should have primary-light background for header
-  const isPrimaryLightRoute =
+  // Check if current path should have primary-light bg for header
+  const routesWithPrimaryLightBg =
     currentPath === ROUTES.SETTINGS ||
     currentPath.startsWith("/userpage/") ||
     currentPath.startsWith("/horse-page/") ||
     currentPath.startsWith("/stablePost/");
 
-  const backgroundClass = isPrimaryLightRoute ? "bg-primary-light" : "";
+  const backgroundClass = routesWithPrimaryLightBg ? "bg-primary-light" : "";
 
   return (
     <div className={backgroundClass}>
