@@ -14,13 +14,20 @@ const userService = {
     return users.filter((user) => user.stableIdFk === stableId);
   },
 
-  createUser: async (userData, stableId) => {
-    const createData = {
-      ...userData,
-      stableIdFk: stableId,
-    };
+  getById: async (id) => {
+    if (!id) {
+      throw new Error("User ID is required");
+    }
 
-    return await baseService.create(createData);
+    return await baseService.getById(id);
+  },
+
+  update: async (userData) => {
+    if (!userData || !userData.id) {
+      throw new Error("User ID is required for update");
+    }
+
+    return await baseService.update(userData);
   },
 };
 
