@@ -4,12 +4,15 @@ import SettingIcon from "../../assets/icons/SettingIcon.jsx"
 
 const WelcomeScreen = ({onCreateStable, onJoinStable}) => {
     return (
-        <div className="flex flex-col items-center min-h-screen">
+        <div  className="flex flex-col items-center min-h-screen"
+              role="region"
+              aria-labelledby="welcome-heading">
+            
             <div className="self-start mb-2 sm:mb-4">
-                <SettingIcon strokeWidth={9} className="w-6 h-6 sm:w-7 sm:h-7 text-primary"/>
+                <SettingIcon strokeWidth={9} className="w-6 h-6 sm:w-7 sm:h-7 text-primary" aria-hidden="true" />
             </div>
             
-            <h1 className="text2-xl sm:text-3xl text-center my-4 sm:my-6 font-heading">EQUILOQ</h1>
+            <h1 id="welcome-heading" className="text2-xl sm:text-3xl text-center my-4 sm:my-6 font-heading">EQUILOQ</h1>
             
             <div className="w-full my-2 sm:my-4 px-2 sm:px-4">
                 <div className="relative">
