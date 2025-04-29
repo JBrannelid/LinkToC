@@ -84,7 +84,7 @@ const SettingsPage = () => {
           </div>
           <Button
             onClick={handleEditProfile}
-            className="p-2 border-0 text-primary"
+            className="p-2 text-primary"
             type="icon"
             aria-label="Redigera användarprofil"
           >
