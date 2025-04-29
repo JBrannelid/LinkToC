@@ -18,10 +18,8 @@ const WallPostForm = ({ event, onSubmit, onCancel }) => {
       try {
         setIsSubmitting(true);
 
-        // Add timestamp
         const updatedData = {
           ...formData,
-          editedDateTime: new Date().toISOString(),
         };
 
         await onSubmit(updatedData);
