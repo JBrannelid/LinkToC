@@ -92,7 +92,13 @@ const EventForm = ({
 
   return (
     <div className="flex flex-col fixed inset-0 z-30 bg-background">
-      <ModalHeader title={title} showCloseBtn={true} onCloseClick={onCancel} />
+      <ModalHeader
+        title={title}
+        showCloseBtn={true}
+        onCloseClick={onCancel}
+        className="bg-primary-light"
+        render="left"
+      />
 
       <div className="h-5" />
 

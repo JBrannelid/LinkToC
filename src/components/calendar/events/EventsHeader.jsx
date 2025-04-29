@@ -12,7 +12,13 @@ const EventsHeader = ({
   // Mobile header with close button
   if (viewMode === "mobile") {
     return (
-      <ModalHeader title={dayName} showCloseBtn={true} onCloseClick={onClose} />
+      <ModalHeader
+        title={dayName}
+        showCloseBtn={true}
+        onCloseClick={onClose}
+        className="bg-primary-light"
+        render="left"
+      />
     );
   }
 
