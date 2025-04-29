@@ -16,19 +16,19 @@ const Button = ({
 }) => {
   // Base styles for all buttons
   const baseStyles =
-    "flex items-center justify-center transition-colors drop-shadow-md";
+    "flex items-center justify-center transition-colors drop-shadow-md rounded-lg";
 
   // Global style from index.css
   const typeStyles = {
     primary:
       "bg-primary text-white hover:border hover:border-primary-light focus:ring-primary focus:outline-none focus:ring-3",
     secondary:
-      "bg-white border border-primary  focus:ring-primary-light focus:outline-none focus:ring-3",
+      "bg-white border border-primary focus:ring-primary-light focus:outline-none focus:ring-3",
     danger:
       "bg-error-500 text-white hover:bg-error-600 focus:ring-error-400 focus:outline-none focus:ring-3",
     warning:
       "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300 focus:outline-none focus:ring-3",
-    icon: "bg-transparent border-none rounded-none shadow-none",
+    icon: "bg-transparent border-none shadow-none",
     transparent: "bg-light/0",
   };
 
