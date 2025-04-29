@@ -2,9 +2,8 @@ import React, {useState} from 'react';
 import { useNavigate} from "react-router";
 import { useAppContext} from "../../context/AppContext.jsx";
 import { ROUTES } from "../../routes/index.jsx";
-import WelcomePage from "";
-import CreateStablePage from "";
-import JoinStablePage from "";
+import WelcomeScreen from "index.js";
+import CreateStableScreen from "index.js";
 import {stableService} from "../../api/index.js";
 import { getErrorMessage} from "../../utils/errorUtils.js";
 import { useLoadingState } from "../../hooks/useLoadingState.jsx";
@@ -16,7 +15,7 @@ const StableOnboardingContainer = () => {
 
     const [currentStep, setCurrentStep] = useState("welcome");
     const [stableName, setStableName] = useState("");
-    const [searchQuery, setSearchQuery] = useState("");
+    // const [searchQuery, setSearchQuery] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [operationType, setOperationType] = useState("create");
@@ -41,9 +40,9 @@ const StableOnboardingContainer = () => {
         setStableName(event.target.value);
     };
     
-    const handleSearchQueryChange = (event) => {
-        setSearchQuery(event.target.value);
-    }
+    // const handleSearchQueryChange = (event) => {
+    //     setSearchQuery(event.target.value);
+    // }
     
     const handleCreateStable = async () => {
         if (!stableName.trim()) {
@@ -85,31 +84,31 @@ const StableOnboardingContainer = () => {
             setLoading(false);
         }
     };
-    const handleSearchStable = async () => {
-        if (!searchQuery.trim()) {
-            setError(getErrorMessage({
-                type: "validation",
-                message: "Sökfältet får inte vara tomt"
-            }).text);
-            return;
-        }
-
-        setLoading(true);
-        setOperationType("fetch");
-        setError(null);
-
-        try {
-            // This would be replaced with the actual search implementation
-            setError(getErrorMessage({
-                type: "server",
-                message: "Sökfunktionen är inte implementerad ännu"
-            }).text);
-        } catch (err) {
-            setError(getErrorMessage(err).text);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // const handleSearchStable = async () => {
+    //     if (!searchQuery.trim()) {
+    //         setError(getErrorMessage({
+    //             type: "validation",
+    //             message: "Sökfältet får inte vara tomt"
+    //         }).text);
+    //         return;
+    //     }
+    //
+    //     setLoading(true);
+    //     setOperationType("fetch");
+    //     setError(null);
+    //
+    //     try {
+    //         // This would be replaced with the actual search implementation
+    //         setError(getErrorMessage({
+    //             type: "server",
+    //             message: "Sökfunktionen är inte implementerad ännu"
+    //         }).text);
+    //     } catch (err) {
+    //         setError(getErrorMessage(err).text);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
 
     return (
         <div className="min-h-screen bg-black py-4">
@@ -121,14 +120,14 @@ const StableOnboardingContainer = () => {
 
                 {/* Render current screen */}
                 {currentStep === "welcome" && (
-                    <WelcomePage
+                    <WelcomeScreen
                         onCreateStable={handleGoToCreateStable}
                         onJoinStable={handleGoToJoinStable}
                     />
                 )}
 
                 {currentStep === "create" && (
-                    <CreateStablePage
+                    <CreateStableScreen
                         stableName={stableName}
                         onStableNameChange={handleStableNameChange}
                         onSubmit={handleCreateStable}
@@ -139,17 +138,17 @@ const StableOnboardingContainer = () => {
                     />
                 )}
 
-                {currentStep === "join" && (
-                    <JoinStablePage
-                        searchQuery={searchQuery}
-                        onSearchQueryChange={handleSearchQueryChange}
-                        onSubmit={handleSearchStable}
-                        onBack={handleGoBack}
-                        isLoading={loading}
-                        loadingState={loadingState}
-                        error={error}
-                    />
-                )}
+                {/*{currentStep === "join" && (*/}
+                {/*    <JoinStablePage*/}
+                {/*        searchQuery={searchQuery}*/}
+                {/*        onSearchQueryChange={handleSearchQueryChange}*/}
+                {/*        onSubmit={handleSearchStable}*/}
+                {/*        onBack={handleGoBack}*/}
+                {/*        isLoading={loading}*/}
+                {/*        loadingState={loadingState}*/}
+                {/*        error={error}*/}
+                {/*    />*/}
+                {/*)}*/}
             </div>
         </div>
     );
