@@ -2,9 +2,9 @@ import React from "react";
 import { formatTimeOnly } from "../../../utils/calendarUtils";
 import UserProfileImage from "../../common/UserProfileImage";
 
-const EventItem = ({ event, index, onUpdate, onDelete }) => {
+const EventItem = ({ event, index, onUpdate }) => {
   // Background for even/odd events rows
-  const bgColor = index % 2 === 0 ? "bg-white" : "bg-background";
+  const bgColor = index % 2 === 0 ? "bg-background" : "bg-white ";
 
   // Get username or display unknown user
   const userName =
