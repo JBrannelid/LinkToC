@@ -63,11 +63,16 @@ export default function WallPost({}) {
     );
   }
 
-  if (error) return <p>Error: {error.message}</p>;
+  //Error for everything except NotFound 404
+  if (error && error.status !== 404) {
+    return <p>Error: {error.message}</p>;
+  }
 
   return (
     <>
-      {wallPost ? (
+      {/* Ternary operator of wallPost on condition: Null or not Null? */}
+      {wallPost !== null ? (
+        // if true
         <div className="mt-5 px-2">
           <h2 className="text-2xl mb-2">Väggen</h2>
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
@@ -91,8 +96,6 @@ export default function WallPost({}) {
             {isExpanded && (
               <div className="px-4 pb-4">
                 <p className="font-light text-sm">{wallPost.body}</p>
-                <br />
-
                 {wallPost?.lastEdited ? (
                   <p className="font-light text-xs">
                     Edited: ({formatData(wallPost.lastEdited)})
@@ -122,7 +125,51 @@ export default function WallPost({}) {
           </div>
         </div>
       ) : (
-        <p>Inga tillgänglig händelse</p>
+        //if false wallPost == null
+        <div className="mt-5 px-2">
+          <h2 className="text-2xl mb-2">Väggen</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div
+              className="p-4 flex items-center cursor-pointer"
+              onClick={toggleExpand}
+              aria-label="Expandable important message"
+            >
+              <div className="text-primary mr-3">
+                <PinIcon className="w-6 h-6" />
+              </div>
+              <p className="flex-1">Händelse i stallet</p>
+              <div className="text-primary">
+                <ChevronDownIcon
+                  className={`w-5 h-5 transition-transform ${
+                    isExpanded ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
+            </div>
+            {isExpanded && (
+              <div className="px-4 pb-4">
+                <p className="font-light text-sm">
+                  Detaljer om händelse i stallet
+                </p>
+
+                <div className="mt-3">
+                  <Button type="secondary" size="small" onClick={toggleForm}>
+                    {isFormOpen ? "Avbryt" : "Redigera"}
+                  </Button>
+                  <div className="mt-5">
+                    {isFormOpen && (
+                      <WallPostForm
+                        event={wallPost}
+                        onSubmit={handleSubmitWallPost}
+                        onCancel={toggleForm}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </>
   );
