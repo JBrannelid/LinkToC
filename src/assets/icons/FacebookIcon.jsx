@@ -1,28 +1,26 @@
 import React from "react";
 
 const FacebookIcon = ({
-  width = 24,
-  height = 24,
   className = "",
-  color = "currentColor",
+  fillColor = "currentColor",
+  strokeColor = "currentColor",
+  strokeWidth = "1",
 }) => {
   return (
     <svg
-      width={width}
-      height={height}
-      viewBox="-5 0 20 20"
-      version="1.1"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
       <title>Facebook</title>
-      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <g transform="translate(-385.000000, -7399.000000)" fill={color}>
-          <g transform="translate(56.000000, 160.000000)">
-            <path d="M335.821282,7259 L335.821282,7250 L338.553693,7250 L339,7246 L335.821282,7246 L335.821282,7244.052 C335.821282,7243.022 335.847593,7242 337.286884,7242 L338.744689,7242 L338.744689,7239.14 C338.744689,7239.097 337.492497,7239 336.225687,7239 C333.580004,7239 331.923407,7240.657 331.923407,7243.7 L331.923407,7246 L329,7246 L329,7250 L331.923407,7250 L331.923407,7259 L335.821282,7259 Z" />
-          </g>
-        </g>
-      </g>
+      <path
+        d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3V2z"
+        fill={fillColor}
+        stroke={strokeColor}
+        strokeWidth={strokeWidth}
+      />
     </svg>
   );
 };

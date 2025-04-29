@@ -1,17 +1,14 @@
 import React from "react";
 
-const LinkedinIcon = ({
-  width = 24,
-  height = 24,
-  className = "",
-  color = "currentColor",
-}) => {
+const LinkedinIcon = ({ className, color = "currentColor" }) => {
   return (
     <svg
-      width={width}
-      height={height}
-      viewBox="0 0 20 20"
-      version="1.1"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill={color}
+      stroke={color}
+      strokeWidth="1"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
