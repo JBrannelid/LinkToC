@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../routes/index.jsx";
 import WelcomeScreen from "./WelcomeScreen.jsx";
-import CreateStableScreen from "./CreateStableScreen.jsx";
 import JoinStableScreen from "./JoinStableScreen.jsx";
 import { useStableOnboarding } from "../../hooks/useStableOnboarding";
+import {CreateStableForm} from "../forms/index.js";
+import OnboardingLayout from "../OnboardingLayout.jsx";
 
 const StableOnboardingContainer = () => {
     const navigate = useNavigate();
-
-  
+    
     const {
         currentStep,
         isFirstLogin,
@@ -40,7 +40,6 @@ const StableOnboardingContainer = () => {
         }
         
     };
-
     
     const handleStableJoinSuccess = async (data) => {
         if (data.action === 'join' && data.stableId) {
@@ -61,37 +60,53 @@ const StableOnboardingContainer = () => {
     const handleGoToJoinStable = () => navigateToStep("join");
     const handleGoBack = () => navigateToStep("welcome");
 
+    const renderCurrentStep = () => {
+        switch (currentStep) {
+            case "welcome":
+                return (
+                    <OnboardingLayout title="EQUILOQ">
+                        <WelcomeScreen
+                            onCreateStable={handleGoToCreateStable}
+                            onJoinStable={handleGoToJoinStable}
+                        />
+                    </OnboardingLayout>
+                );
+
+            case "create":
+                return (
+                    <OnboardingLayout title "Create new Stable">
+                        <CreateStableForm
+                            formMethods={formMethods}
+                            onSubmit={handleStableCreationSuccess}
+                            onCancel={handleGoBack}
+                            isLoading={loading}
+                            loadingState={loadingState}
+                            error={error}
+                            message={message}
+                        />                       
+                    </OnboardingLayout>
+                );
+
+            case "join":
+                return (
+                    <OnboardingLayout title="Join Stable">
+                        <JoinStableScreen
+                            onSubmit={handleStableJoinSuccess}
+                            onBack={handleGoBack}
+                            isLoading={loading}
+                            loadingState={loadingState}
+                            error={error}
+                        />                       
+                    </OnboardingLayout>
+                );
+
+            default:
+                return <div>Unknown step</div>;
+        }
+    };
     return (
         <div className="container mx-auto px-4 py-8" role="main" aria-live="polite">
-            {/* Conditional rendering based on current step */}
-            {currentStep === "welcome" && (
-                <WelcomeScreen
-                    onCreateStable={handleGoToCreateStable}
-                    onJoinStable={handleGoToJoinStable}
-                />
-            )}
-
-            {currentStep === "create" && (
-                <CreateStableScreen
-                    formMethods={formMethods}
-                    onSubmit={handleStableCreationSuccess}
-                    onBack={handleGoBack}
-                    isLoading={loading}
-                    loadingState={loadingState}
-                    message={message}
-                    error={error}
-                />
-            )}
-
-            {currentStep === "join" && (
-                <JoinStableScreen
-                    onSubmit={handleStableJoinSuccess}
-                    onBack={handleGoBack}
-                    isLoading={loading}
-                    loadingState={loadingState}
-                    error={error}
-                />
-            )}
+            {renderCurrentStep()}
         </div>
     );
 };
