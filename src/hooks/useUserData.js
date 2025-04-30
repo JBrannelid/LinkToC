@@ -13,6 +13,10 @@ export const useUserData = (userId) => {
   // If no userId is provided, use current user's ID from auth context
   const currentUserId = userId || user?.id;
 
+  const extractUserData = (response) => {
+    return response?.data || response?.value || response;
+  };
+
   const fetchAndUpdateUserData = useCallback(async () => {
     if (!currentUserId) return;
 
@@ -22,10 +26,9 @@ export const useUserData = (userId) => {
       setError(null);
 
       const response = await userService.getById(currentUserId);
+      const responseUserData = extractUserData(response);
 
-      const responsUserData = response?.data || response?.value || response;
-
-      setUserData(responsUserData);
+      setUserData(responseUserData);
       return true;
     } catch (err) {
       setError(err.message || "Failed to fetch user data");
@@ -35,13 +38,11 @@ export const useUserData = (userId) => {
     }
   }, [currentUserId]);
 
-  useEffect(() => {
-    if (currentUserId) {
-      fetchAndUpdateUserData();
-    }
-  }, [fetchAndUpdateUserData, currentUserId]);
-
   const updateUserData = async (data) => {
+    if (!currentUserId) {
+      throw new Error("User ID is required");
+    }
+
     try {
       setLoading(true);
       setOperationType("update");
@@ -69,6 +70,12 @@ export const useUserData = (userId) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (currentUserId) {
+      fetchAndUpdateUserData();
+    }
+  }, [fetchAndUpdateUserData, currentUserId]);
 
   const loadingState = useLoadingState(loading, operationType);
 
