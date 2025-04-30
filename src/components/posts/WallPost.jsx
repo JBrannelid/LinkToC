@@ -49,6 +49,13 @@ export default function WallPost({}) {
     }
   };
 
+  const handleCreateWallPost = async (formData) => {
+    const success = await createWallPost(formData);
+    if (success) {
+      setIsFormOpen(false);
+    }
+  };
+
   // Formatt data
   const formatData = (dateString) => {
     try {
@@ -166,7 +173,7 @@ export default function WallPost({}) {
                     {isFormOpen && (
                       <WallPostForm
                         event={wallPost}
-                        onSubmit={handleSubmitWallPost}
+                        onSubmit={handleCreateWallPost}
                         onCancel={toggleForm}
                       />
                     )}
