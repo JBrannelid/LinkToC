@@ -11,8 +11,14 @@ import Button from "../ui/Button";
 
 export default function WallPost({}) {
   const { currentStable } = useAppContext();
-  const { wallPost, loading, error, currentWallPost, updateWallPost } =
-    useWallPost(currentStable?.id);
+  const {
+    wallPost,
+    loading,
+    error,
+    currentWallPost,
+    updateWallPost,
+    createWallPost,
+  } = useWallPost(currentStable?.id);
 
   useEffect(() => {
     if (currentStable?.id) {
@@ -137,7 +143,7 @@ export default function WallPost({}) {
               <div className="text-primary mr-3">
                 <PinIcon className="w-6 h-6" />
               </div>
-              <p className="flex-1">Händelse i stallet</p>
+              <p className="flex-1">Hittade ingen händelse i stallet</p>
               <div className="text-primary">
                 <ChevronDownIcon
                   className={`w-5 h-5 transition-transform ${
@@ -149,12 +155,12 @@ export default function WallPost({}) {
             {isExpanded && (
               <div className="px-4 pb-4">
                 <p className="font-light text-sm">
-                  Detaljer om händelse i stallet
+                  Inga detaljer om händelse i stallet
                 </p>
 
                 <div className="mt-3">
                   <Button type="secondary" size="small" onClick={toggleForm}>
-                    {isFormOpen ? "Avbryt" : "Redigera"}
+                    {isFormOpen ? "Avbryt" : "Skapa"}
                   </Button>
                   <div className="mt-5">
                     {isFormOpen && (
