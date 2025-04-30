@@ -27,21 +27,20 @@ const AdminSettingsPage = () => {
     </>
   );
 
-  // Add fallback for currentStable name
-  const renderAdditionalContent = ({ currentStable }) => (
-    <div className="bg-white rounded-lg p-4 mt-4">
-      <h3 className="font-medium mb-2">Admin Information</h3>
-      <p className="text-sm text-gray">
+  // Display user as a reminder of extra admin setting for current stable
+  const renderAdminInfo = ({ currentStable }) => (
+    <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg border border-primary">
+      <h3 className="text-primary text-sm">
         Du är admin för {currentStable?.name}.
-      </p>
+      </h3>
     </div>
   );
 
   return (
     <BaseSettingsPage
-      title="Admin Inställningar"
+      title="Inställningar"
       renderMenuItems={renderMenuItems}
-      renderAdditionalContent={renderAdditionalContent}
+      renderAdditionalContent={renderAdminInfo}
     />
   );
 };
