@@ -3,6 +3,13 @@ import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
 
+// User role constants
+const USER_ROLES = {
+  USER: 0,
+  ADMIN: 1,
+  MANAGER: 2,
+};
+
 export const useAppContext = () => {
   const context = useContext(AppContext);
   return context;
@@ -44,12 +51,21 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const getCurrentStableRole = useCallback(() => {
+    if (!user || !currentStable || !user.stableRoles) {
+      return USER_ROLES.USER; // Default to regular user
+    }
+
+    return user.stableRoles[currentStable.id] || USER_ROLES.USER; // Default to regular user
+  }, [user, currentStable]);
+
   const contextValue = {
     currentUser: user,
     currentStable,
     changeStable,
     selectedHorse,
     setSelectedHorse,
+    getCurrentStableRole,
   };
 
   return (
