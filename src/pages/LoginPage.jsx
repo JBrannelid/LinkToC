@@ -6,7 +6,7 @@ import Button from "../components/ui/Button";
 import { ROUTES } from "../routes/routeConstants";
 import { useLoadingState } from "../hooks/useLoadingState";
 import FacebookIcon from "../assets/icons/FacebookIcon";
-import LinkedinIcon from "../assets/icons/LinkedInIcon";
+import LinkedinIcon from "../assets/icons/LinkedinIcon";
 import GoogleIcon from "../assets/icons/GoogleIcon";
 
 const LoginForm = () => {
