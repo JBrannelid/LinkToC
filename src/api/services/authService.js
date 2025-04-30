@@ -1,6 +1,7 @@
 import createBaseService from "./baseService.js";
 import {ENDPOINTS}  from "./endpoints.js";
 import axiosConfig from "../config/axiosConfig.js";
+import tokenStorage from "../../utils/tokenStorage.js"
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 
@@ -25,16 +26,23 @@ const authService  = {
     // RefreshToken: POST /api/auth/refreshToken
     refreshToken: async () => {
         try {
-            const token = sessionStorage.getItem("authToken");
-            if (!token) {
+            const refreshToken = tokenStorage.getRefreshToken();
+            if (!refreshToken) {
                 throw new Error("No token available");
             }
 
-            return await axiosConfig.post(`${ENDPOINTS.AUTH}/refresh-token`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`
+            const response = await axiosConfig.post(`${ENDPOINTS.AUTH}/refresh-token`, 
+                { refreshToken: refreshToken }
+            );
+            
+            if (response && response.isSuccess && response.value) {
+                const { accessToken, refreshToken: newRefreshToken } = response.value;
+                
+                if (accessToken && newRefreshToken) {
+                    tokenStorage.storeTokens(accessToken, newRefreshToken);
                 }
-            });
+            }
+            return response;
         } catch (error) {
             console.error("Token refresh failed:", error);
             throw error;
@@ -42,17 +50,24 @@ const authService  = {
     },
     
     // Logout: POST /api/auth/logout
-    logout: async (token) => {
+    logout: async () => {
         try {
-            if(!token) return true;
+            const refreshToken = tokenStorage.getRefreshToken();
+            if(!refreshToken) return true;
             
-            return await axiosConfig.post(`${ENDPOINTS.AUTH}/logout`, {}, {
+            const result = await axiosConfig.post(`${ENDPOINTS.AUTH}/revoke-token`, 
+                { refreshToken }, 
+                {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${tokenStorage.getAccessToken()}`
                 }
-            });
+            }
+            );
+            tokenStorage.clearTokens();
+            return result;
         }catch(error) {
             console.error("Logout request failed:", error);
+            tokenStorage.clearTokens();
             return true;
         }
     },
