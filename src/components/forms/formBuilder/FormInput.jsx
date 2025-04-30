@@ -20,7 +20,7 @@ const FormInput = ({
   return (
     <div className="w-full">
       {/* Optional label text */}
-      {label && <label className="block mb-1 font-medium ">{label}</label>}
+      {label && <label className=" text-gray text-sm">{label}</label>}
 
       <input
         type={type}
