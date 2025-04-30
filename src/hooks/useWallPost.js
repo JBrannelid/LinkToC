@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import wallPostService from "../api/services/wallPostService";
+import { useAppContext } from "../context/AppContext";
 
 export const useWallPost = (stableId) => {
   const [wallPost, setWallPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { currentStable } = useAppContext();
 
   const currentWallPost = useCallback(async () => {
     try {
@@ -60,13 +62,13 @@ export const useWallPost = (stableId) => {
       setLoading(true);
       setError(null);
 
-      const createData = {
-        stableIdFk: stableId,
+      const createNewPost = {
+        stableIdFk: currentStable.id,
         title: data.title,
         body: data.body,
       };
 
-      await wallPostService.update(updateData);
+      await wallPostService.create(createNewPost);
 
       // Refresh data
       await currentWallPost();
