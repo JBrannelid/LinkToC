@@ -1,5 +1,4 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
 import { ROLES } from "../../utils/userUtils";
 import UserSettingsPage from "../../pages/UserSettingsPage";
