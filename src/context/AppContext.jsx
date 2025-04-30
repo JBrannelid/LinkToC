@@ -9,13 +9,6 @@ import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
 
-// User role constants
-const USER_ROLES = {
-  USER: 0,
-  ADMIN: 1,
-  MANAGER: 2,
-};
-
 export const useAppContext = () => {
   const context = useContext(AppContext);
   return context;
@@ -62,7 +55,7 @@ export const AppProvider = ({ children }) => {
       return USER_ROLES.USER; // Default to regular user
     }
 
-    return user.stableRoles[currentStable.id] || USER_ROLES.USER; // Default to regular user
+    return user.stableRoles[currentStable.id] || USER_ROLES.ADMIN; // Default to regular user
   }, [user, currentStable]);
 
   const contextValue = {
@@ -77,6 +70,13 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
+};
+
+// User role constants. Remove when we have a contact with BE
+export const USER_ROLES = {
+  USER: 0,
+  ADMIN: 1,
+  MANAGER: 2,
 };
 
 export default AppContext;
