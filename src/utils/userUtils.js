@@ -1,29 +1,23 @@
-// Handle navigation to stable management page
 export const handleManageStables = () => {
   console.log("Manage Stables clicked");
 };
 
-// Handle terms of service navigation
 export const handleTermsOfService = () => {
   console.log("Terms of service clicked");
 };
 
-// Handle support navigation
 export const handleSupport = () => {
   console.log("Support clicked");
 };
 
-// Handle cookie settings
 export const handleCookieSettings = () => {
   console.log("Cookie settings clicked");
 };
 
-// Handle switch stable action
 export const handleSwitchStable = (navigate, ROUTES) => {
   navigate(ROUTES.SELECT_STABLE);
 };
 
-// Handle logout action
 export const handleLogout = async (logout, navigate, setLoading, ROUTES) => {
   try {
     setLoading(true);
@@ -34,4 +28,31 @@ export const handleLogout = async (logout, navigate, setLoading, ROUTES) => {
   } finally {
     setLoading(false);
   }
+};
+
+export const handleProfileUpdate = async (
+  data,
+  updateUserData,
+  verifyToken
+) => {
+  const result = await updateUserData(data);
+
+  if (result.success) {
+    // Refresh user token to get updated info
+    await verifyToken();
+  }
+
+  return result;
+};
+
+export const formatUserFullName = (user) => {
+  if (!user) return "Okänd";
+  return `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Okänd";
+};
+
+export const getProfileImageUrl = (
+  profileImageUrl,
+  fallbackUrl = "/src/assets/images/userPlaceholder.jpg"
+) => {
+  return profileImageUrl || fallbackUrl;
 };
