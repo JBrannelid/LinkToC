@@ -6,12 +6,11 @@ const baseService = createBaseService(ENDPOINTS.USERS);
 const userService = {
   ...baseService,
 
-  // Get user base on a specifik stable Id
-  getStableUsers: async (stableId) => {
-    const users = await baseService.getAll();
-
-    // Filtering user by stable-Id should be handle by backend?
-    return users.filter((user) => user.stableIdFk === stableId);
+  // Aske BE for endpoint responsibole for: fetch all stables and roles for a specific user
+  //   { stableIdFk: 101, role: 'admin' },
+  //   { stableIdFk: 102, role: 'viewer' }
+  getUserStables: async (userId) => {
+    return await api.get(`/api/user/getUserStables/${userId}`);
   },
 
   getById: async (id) => {
