@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         // Fetch user-stable roles from the API
         try {
           // Get user base on a specifik stable Id
-          const userStablesResponse = await userService.getStableUsers(userId);
+          const userStablesResponse = await userService.getUserStables(userId);
 
           // Extract stable roles from the response
           const stableRoles = Array.isArray(userStablesResponse)
