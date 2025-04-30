@@ -16,18 +16,19 @@ const Button = ({
 }) => {
   // Base styles for all buttons
   const baseStyles =
-    "flex items-center justify-center transition-colors focus:outline-none focus:ring-1 focus:ring-offset-2";
+    "flex items-center justify-center transition-colors drop-shadow-md rounded-lg";
 
   // Global style from index.css
   const typeStyles = {
     primary:
-      "bg-primary text-white border border-white hover:border hover:border-gray focus:ring-primary",
+      "bg-primary text-white hover:border hover:border-primary-light focus:ring-primary focus:outline-none focus:ring-3",
     secondary:
-      "bg-white border border-primary hover:bg-gray-300 focus:ring-gray-300 drop-shadow-md",
-    danger: "bg-error-500 text-white hover:bg-error-600 focus:ring-error-400",
+      "bg-white border border-primary focus:ring-primary-light focus:outline-none focus:ring-3",
+    danger:
+      "bg-error-500 text-white hover:bg-error-600 focus:ring-error-400 focus:outline-none focus:ring-3",
     warning:
-      "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300",
-    icon: "border border-gray text-gray hover:bg-primary focus:ring-gray-300",
+      "bg-warning-300 text-gray-800 hover:bg-warning-400 focus:ring-warning-300 focus:outline-none focus:ring-3",
+    icon: "bg-transparent border-none shadow-none",
     transparent: "bg-light/0",
   };
 
@@ -40,7 +41,7 @@ const Button = ({
 
   // Variant styles
   const variantStyles = {
-    default: "rounded-md",
+    default: "",
     icon: "rounded-full p-2",
   };
 

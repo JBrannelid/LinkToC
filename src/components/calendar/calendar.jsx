@@ -33,7 +33,7 @@ const Calendar = ({
   }, [selectedDay, getEventsForDay]);
 
   // Handle day selection
-  const handleSelectDay = (day) => {
+  const handleSelectDay = (day, openEvents = false) => {
     if (onSelectDay) {
       onSelectDay(day);
     }
@@ -42,7 +42,10 @@ const Calendar = ({
       setCurrentDayEvents(getEventsForDay(day));
     }
 
-    setIsEventPanelOpen(true);
+    // Only open events panel on second click (openEvents flag)
+    if (openEvents) {
+      setIsEventPanelOpen(true);
+    }
   };
 
   // Get unique users with events on a specific day

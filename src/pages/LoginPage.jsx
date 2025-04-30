@@ -7,6 +7,7 @@ import { ROUTES } from "../routes/routeConstants";
 import { useLoadingState } from "../hooks/useLoadingState";
 import FacebookIcon from "../assets/icons/FacebookIcon";
 import LinkedinIcon from "../assets/icons/LinkedInIcon";
+import GoogleIcon from "../assets/icons/GoogleIcon";
 
 const LoginForm = () => {
   const { login } = useAuth();
@@ -42,10 +43,10 @@ const LoginForm = () => {
       setIsSubmitting(false);
     }
   };
-  
-  const handleForgotPassword =() =>{
+
+  const handleForgotPassword = () => {
     navigate(ROUTES.FORGOT_PASSWORD);
-  }
+  };
 
   const handleRegisterClick = () => {
     navigate(ROUTES.REGISTER);
@@ -200,32 +201,25 @@ const LoginForm = () => {
               className="bg-gray text-white"
               aria-label="Sign in with Google"
             >
-              <img
-                src="../assets/icons/google.svg"
-                alt="Horse icon"
-                className="h-6 w-6 filter brightness-0 invert"
-              />
+              <GoogleIcon className="w-5 h-5 text-primary" />
             </Button>
 
             <Button
               variant="icon"
               size="medium"
-              className="bg-gray text-white"
+              className="bg-primary"
               aria-label="Sign in with Facebook"
             >
-              <FacebookIcon
-                className="h-6 w-6 "
-                fill="currentColor"
-              ></FacebookIcon>
+              <FacebookIcon className="w-10 h-10 text-primary" />
             </Button>
 
             <Button
               variant="icon"
               size="medium"
-              className="bg-gray text-white"
+              className="bg-primary"
               aria-label="Sign in with LinkedIn"
             >
-              <LinkedinIcon className="h-6 w-6" fill="currentColor" />
+              <LinkedinIcon className="w-6 h-6 text-primary" />
             </Button>
           </div>
         </form>
