@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import { FormProvider, FormInput, FormMessage } from "./index.js";
 import Button from "../ui/Button.jsx";
+import { createErrorMessage } from "../../utils/errorUtils.js";
 
 const CreateStableForm = ({
                               formMethods,
@@ -8,43 +9,47 @@ const CreateStableForm = ({
                               onCancel,
                               isLoading = false,
                               loadingState = null,
-                              message = { type: "", text: "" }
+    error = null,
+                              message = null
                           }) => {
-
-    // Handle form submission
+    
+    const [formError, setFormError] = useState(null);
     const handleSubmit = formMethods.handleSubmit((data) => {
+        setFormError(null);
+
         if (onSubmit) {
-            onSubmit({
-                name: data.stableName,
-                streetAddress: data.streetAddress,
-                postCode: data.postCode,
-                county: data.county,
-                typeOfStable: data.typeOfStable,
-                stableBoxes: data.stableBoxes
-            });
+            try {
+                onSubmit(data);
+            } catch (err) {
+                setFormError(createErrorMessage("An error occurred when creating stable! Try again later."));
+            }
         }
     });
+    const inputClass = "w-full px-3 py-2 border border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary";
 
+    const displayError = formError || (error ? { type: "error", text: error } : null);
     return (
         <FormProvider
             methods={formMethods}
             onSubmit={handleSubmit}
             className="w-full"
+            showFooter={{showFooter:false}}
         >
             <div className="mb-6 space-y-4">
                 {/* Stable Name Field */}
                 <div>
                     <label htmlFor="stableName" className="block text-sm mb-1 font-medium">
-                        Välj stallets namn
+                        Choose Stable Name
                     </label>
                     <FormInput
                         id="stableName"
                         name="stableName"
-                        placeholder="Stallets namn..."
+                        placeholder="Stable Name..."
                         validation={{
-                            required: "Stallets namn är obligatoriskt"
+                            required: "Stable name is mandatory"
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                        className={inputClass}
+                        disabled={isLoading}
                         aria-required="true"
                     />
                 </div>
@@ -52,32 +57,33 @@ const CreateStableForm = ({
                 {/* Address Fields */}
                 <div>
                     <label htmlFor="streetAddress" className="block text-sm mb-1 font-medium">
-                        Stallets adress
+                        Stable Address
                     </label>
                     <FormInput
                         id="streetAddress"
                         name="streetAddress"
-                        placeholder="Gatuadress..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary mb-2"
+                        placeholder="Address..."
+                        className={inputClass}
                     />
 
                     <div className="grid grid-cols-2 gap-2">
                         <FormInput
-                            id="postCode"
-                            name="postCode"
-                            placeholder="Postnummer..."
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                            id="county"
+                            name="county"
+                            placeholder="County..."
+                            validation={{
+                                required: "County is mandatory"
+                            }}
+                            className={inputClass}
+                            disabled={isLoading}
+                            aria-required="true"
                         />
 
                         <FormInput
-                            id="county"
-                            name="county"
-                            placeholder="Postadress..."
-                            validation={{
-                                required: "Postadress är obligatoriskt"
-                            }}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                            aria-required="true"
+                            id="postCode"
+                            name="postCode"
+                            placeholder="Postcode..."
+                            className={inputClass}
                         />
                     </div>
                 </div>
@@ -85,56 +91,56 @@ const CreateStableForm = ({
                 {/* Stable Type Field */}
                 <div>
                     <label htmlFor="typeOfStable" className="block text-sm mb-1 font-medium">
-                        Typ av stall
+                        Type of stable
                     </label>
                     <FormInput
                         id="typeOfStable"
                         name="typeOfStable"
-                        placeholder="ex. Ridskola"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
+                        placeholder="ex. Riding School"
+                        className={inputClass}                    />
                 </div>
 
                 {/* Stable Boxes Field */}
                 <div>
                     <label htmlFor="stableBoxes" className="block text-sm mb-1 font-medium">
-                        Antal boxar i stallet
+                        Number of boxes in the stable
                     </label>
                     <div className="flex">
                         <FormInput
                             id="stableBoxes"
                             name="stableBoxes"
-                            placeholder="Antal..."
+                            placeholder="Number..."
                             type="number"
-                            className="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                            min="0"
+                            className={inputClass}
+                            disabled={isLoading}
+                            aria-label="Number of boxes"
                         />
-                        <div className="w-24 ml-2">
-                            <input
-                                type="text"
-                                value="Boxar"
-                                disabled
-                                className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-500"
-                                aria-hidden="true"
-                            />
-                        </div>
                     </div>
                 </div>
             </div>
+            
+            {displayError && (
+                <FormMessage message={displayError} />
+            )}
 
-            {/* Message display */}
-            <FormMessage message={message} />
+            {message && message.text && !displayError && (
+                <FormMessage message={message} />
+            )}
+
 
             {/* Action buttons */}
             <div className="space-y-3 mt-8">
                 <Button
                     type="primary"
                     htmlType="submit"
+                    onClick={handleSubmit}
                     loading={isLoading}
                     disabled={isLoading}
                     className="w-full"
                     aria-busy={isLoading ? "true" : "false"}
                 >
-                    {isLoading && loadingState ? loadingState.getMessage() : "Skapa stall"}
+                    {isLoading && loadingState ? loadingState.getMessage() : "Create Stable"}
                 </Button>
 
                 <Button
@@ -143,7 +149,7 @@ const CreateStableForm = ({
                     disabled={isLoading}
                     className="w-full"
                 >
-                    Gå tillbaka
+                    Return
                 </Button>
             </div>
         </FormProvider>

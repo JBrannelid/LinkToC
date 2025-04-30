@@ -1,6 +1,5 @@
 import React from "react";
-import StableOnboardingContainer from "../components/stableOnboarding/StableOnboardingContainer";
-
+import {StableOnboardingContainer} from "../components/stableOnboarding/index.js"
 const StableOnboardingPage = () => {
     return (
             <div>

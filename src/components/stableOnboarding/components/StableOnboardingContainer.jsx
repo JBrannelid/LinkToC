@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router";
-import { ROUTES } from "../../routes/index.jsx";
+import { ROUTES } from "../../../routes/index.jsx";
 import WelcomeScreen from "./WelcomeScreen.jsx";
-import JoinStableScreen from "./JoinStableScreen.jsx";
-import { useStableOnboarding } from "../../hooks/useStableOnboarding";
-import {CreateStableForm} from "../forms/index.js";
+import { useStableOnboarding } from "../../../hooks/useStableOnboarding";
+import { CreateStableForm, JoinStableForm } from "../../forms/index.js";
 import OnboardingLayout from "../OnboardingLayout.jsx";
 
 const StableOnboardingContainer = () => {
@@ -46,11 +45,10 @@ const StableOnboardingContainer = () => {
             const result = await handleJoinStable(data.stableId, data.stableName);
 
             if (result.success) {
-                // Navigate to home page on success
+                
                 navigate(ROUTES.HOME);
             }
         } else {
-            // This is just a search action
             return await handleSearchStable(data);
         }
     };
@@ -64,7 +62,7 @@ const StableOnboardingContainer = () => {
         switch (currentStep) {
             case "welcome":
                 return (
-                    <OnboardingLayout title="EQUILOQ">
+                    <OnboardingLayout title="EQUILOQ" showImage={true}>
                         <WelcomeScreen
                             onCreateStable={handleGoToCreateStable}
                             onJoinStable={handleGoToJoinStable}
@@ -74,10 +72,10 @@ const StableOnboardingContainer = () => {
 
             case "create":
                 return (
-                    <OnboardingLayout title "Create new Stable">
+                    <OnboardingLayout title="Create new Stable" showImage={false}>
                         <CreateStableForm
                             formMethods={formMethods}
-                            onSubmit={handleStableCreationSuccess}
+                            onSubmit={handleStableCreationSuccess} 
                             onCancel={handleGoBack}
                             isLoading={loading}
                             loadingState={loadingState}
@@ -89,13 +87,15 @@ const StableOnboardingContainer = () => {
 
             case "join":
                 return (
-                    <OnboardingLayout title="Join Stable">
-                        <JoinStableScreen
-                            onSubmit={handleStableJoinSuccess}
-                            onBack={handleGoBack}
+                    <OnboardingLayout title="Join Stable" showImage={false}>
+                        <JoinStableForm
+                            formMethods={formMethods}
+                            onSubmit={handleGoToJoinStable}
+                            onCancel={handleGoBack}
                             isLoading={loading}
                             loadingState={loadingState}
                             error={error}
+                            message={message}
                         />                       
                     </OnboardingLayout>
                 );

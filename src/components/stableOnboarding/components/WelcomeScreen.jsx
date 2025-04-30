@@ -1,9 +1,9 @@
 import React from "react";
-import Button from "../ui/Button.jsx";
+import Button from "../../ui/Button.jsx";
 
 const WelcomeScreen = ({onCreateStable, onJoinStable}) => {
     return (
-        <div>
+        <div className="space-y-3">
             <Button
                 type="primary"
                 className="w-full"

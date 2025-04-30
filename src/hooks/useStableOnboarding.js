@@ -8,12 +8,12 @@ import { useForm } from "react-hook-form";
 
 export const useStableOnboarding = () => {
     const {user} = useAuth();
-    const {currentStable, changeStable} = useAppContext();
+    const { changeStable} = useAppContext();
     
     const formMethods = useForm({
         defaultValues:{
             stableName: "",
-            streetAdress: "",
+            streetAddress: "",
             postCode: "",
             county: "",
             typeOfStable: "Private Stable",
@@ -64,7 +64,7 @@ export const useStableOnboarding = () => {
     }, []);
 
     const handleCreateStable = useCallback(async (formData) => {
-        if (!formData.stableName || !formData.stableName.trim()) {
+        if (!formData.stableName || !formData.stableName.trim())  {
             setMessage({
                 type: "error",
                 text: "Stable Name is required",
@@ -86,19 +86,23 @@ export const useStableOnboarding = () => {
                 typeOfStable: formData.typeOfStable,
                 stableBoxes: parseInt(formData.stableBoxes, 10) || 0
             };
-
             
             const response = await stableService.createWithWallPost(stableData);
 
-            
-            if (response && (response.isSuccess || response.statusCode === 200 || response.statusCode === 201)) {
-                
-                const stableData = response.value?.stableDto;
+            if (response && response.isSuccess) {
 
+                const tempStableData = {
+                    id: 'pending', 
+                    name: formData.stableName.trim()
+                };
+                localStorage.setItem('currentStable', JSON.stringify(tempStableData));
+                changeStable('pending', formData.stableName.trim());
+                setMessage({
+                    type: "success",
+                    text: response.message || "Stable created successfully."
+                });
                 
-                changeStable(stableData.id, stableData.name);
-
-                return { success: true, stableId: stableData.id, stableName: stableData.name };
+                return { success: true, message: response.message };
             } else {
                 
                 const errorMessage = getErrorMessage({

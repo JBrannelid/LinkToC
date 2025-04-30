@@ -8,11 +8,6 @@ const FormProvider = ({
   onSubmit,
   children,
   className = "",
-  footer = {
-    submitText: "Submit",
-    showFooter: true,
-    footerClassName: "bg-gray-100 px-4 py-6",
-  },
 }) => {
   const { handleSubmit } = methods;
 
@@ -22,21 +17,6 @@ const FormProvider = ({
       <form onSubmit={handleSubmit(onSubmit)} className={className}>
         {/* Form content area */}
         <div className="px-4 py-6">{children}</div>
-
-        {/* Optional footer with custom submit button */}
-        {footer.showFooter && (
-          <div className={footer.footerClassName}>
-            {/* Header and submit button */}
-            <div className="flex items-center mb-4">
-              <h3 className="text-lg font-medium">Description</h3>
-              <div className="flex ml-auto space-x-2">
-                <Button type="submit" className="">
-                  {footer.submitText}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </form>
     </RHFFormProvider>
   );
