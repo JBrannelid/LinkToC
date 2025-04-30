@@ -4,7 +4,11 @@ import { useAppContext } from "../context/AppContext";
 import { ROUTES } from "./routeConstants";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
-const ProtectedRoute = ({ children, requiresStable = false }) => {
+const ProtectedRoute = ({
+  children,
+  requiresStable = false,
+  requiredRoles = [],
+}) => {
   const { isAuthenticated, isLoading } = useAuth();
   const { currentStable } = useAppContext();
   const location = useLocation();
@@ -16,6 +20,22 @@ const ProtectedRoute = ({ children, requiresStable = false }) => {
         <p>Verifierar autentisering...</p>
       </div>
     );
+  }
+
+  // Check if user has one of the required roles for the current stable
+  const checkUserRole = () => {
+    // Allow access even if the user haven't recived a role for development testing
+    // Need to be removed when implementation is done from be
+    if (!requiredRoles || requiredRoles.length === 0) return true;
+
+    const currentRole = getCurrentStableRole();
+
+    return requiredRoles.includes(currentRole);
+  };
+
+  if (!checkUserRole()) {
+    // Redirect to home if user doesn't have required role for this stable
+    return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
   }
 
   if (!isAuthenticated) {
