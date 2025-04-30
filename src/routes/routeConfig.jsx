@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
+import SettingsRouter from "../components/settings/SettingsRouter";
 
 // Pages components
 import HomePage from "../pages/HomePage";
@@ -75,6 +76,11 @@ export const protectedRoutes = [
   {
     path: ROUTES.NOTOFICATIONS,
     element: <NotificationPage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.SETTINGS,
+    element: <SettingsRouter />,
     requiresStable: true,
   },
 ];
