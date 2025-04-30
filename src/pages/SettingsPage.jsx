@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { Pencil } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../routes/routeConstants";
 import Button from "../components/ui/Button";
@@ -8,6 +7,7 @@ import ModalHeader from "../components/layout/ModalHeader";
 import UserProfileForm from "../components/forms/UserProfileForm";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useUserData } from "../hooks/useUserData";
+import PenIcon from "../assets/icons/PenIcon";
 import {
   handleManageStables,
   handleTermsOfService,
@@ -85,7 +85,7 @@ const SettingsPage = () => {
             type="icon"
             aria-label="Redigera användarprofil"
           >
-            <Pencil className="w-5 h-5" />
+            <PenIcon className="w-9 h-9" />
           </Button>
         </div>
 
