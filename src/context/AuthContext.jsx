@@ -21,17 +21,23 @@ export const AuthProvider = ({ children }) => {
 
   const parseJwt = (token) => {
     try {
-      const parts = token.split('.');
+      const parts = token.split(".");
       if (parts.length < 2) {
         return null;
       }
-      return JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const decoded = JSON.parse(
+        atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+      );
+
+      // Extract role information [user[0] admin[1] masteradmin[2]]
+      return decoded;
     } catch (error) {
-      console.error('Error decoding JWT:', error);
+      console.error("Error decoding JWT:", error);
       return null;
     }
   };
 
+  // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
@@ -50,7 +56,10 @@ export const AuthProvider = ({ children }) => {
       } else {
         const userId = userData.sub;
 
-        setUser({
+        console.warn("Invalid or expired JWT token", userData);
+
+        // Set basic user
+        const basicUserInfo = {
           id: userId,
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -58,7 +67,36 @@ export const AuthProvider = ({ children }) => {
           phoneNumber: userData.phoneNumber,
           userName: userData.userName,
           token: token,
-        });
+        };
+
+        // Fetch user-stable roles from the API
+        try {
+          // Get user base on a specifik stable Id
+          const userStablesResponse = await userService.getStableUsers(userId);
+
+          // Extract stable roles from the response
+          const stableRoles = Array.isArray(userStablesResponse)
+            ? userStablesResponse.reduce((rolesByStableId, stableRole) => {
+                rolesByStableId[stableRole.stableIdFk] = stableRole.role;
+                return rolesByStableId;
+              }, {})
+            : {};
+
+          // Set complete user info with roles
+          setUser({
+            ...basicUserInfo,
+            stableRoles: stableRoles,
+          });
+        } catch (rolesError) {
+          console.error(
+            "Failed to fetch user-stable roles:",
+            rolesError,
+            basicUserInfo
+          );
+          // Set basic user if role fetch fails
+          setUser(basicUserInfo);
+        }
+
         setIsLoading(false);
         return true;
       }
