@@ -1,3 +1,4 @@
+import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
 
@@ -10,7 +11,9 @@ const userService = {
   //   { stableIdFk: 101, role: 'admin' },
   //   { stableIdFk: 102, role: 'viewer' }
   getUserStables: async (userId) => {
-    return await api.get(`/api/user/getUserStables/${userId}`);
+    return await axiosInstance.get(
+      `${ENDPOINTS.USERS}/getUserStables/${userId}`
+    );
   },
 
   getById: async (id) => {
