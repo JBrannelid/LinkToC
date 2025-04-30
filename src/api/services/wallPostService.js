@@ -16,7 +16,7 @@ const wallPostService = {
       stableIdFk: data.stableIdFk,
     };
 
-    return await baseService.create(createData);
+    return await baseService.post(`/api/wallpost/create`, createData);
   },
 
   getById: async (stableId) => {
@@ -32,12 +32,6 @@ const wallPostService = {
       stableIdFk: data.stableIdFk,
       title: data.title,
       body: data.body,
-
-      // id: data.id,
-      // title: data.title,
-      // body: data.body,
-      // lastEdited: data.lastEdited,
-      // stableIdFk: data.stableIdFk,
     };
 
     return await axiosConfig.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
