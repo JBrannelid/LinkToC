@@ -21,7 +21,6 @@ const WallPostForm = ({ event, onSubmit, onCancel }) => {
         // Add timestamp
         const updatedData = {
           ...formData,
-          editedDateTime: new Date().toISOString(),
         };
 
         await onSubmit(updatedData);
@@ -41,7 +40,7 @@ const WallPostForm = ({ event, onSubmit, onCancel }) => {
 
   return (
     <div className="bg-white p-6 mb-6 rounded-lg shadow-md border-2 border-primary">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           {/* title input */}
           <div className="col-span-2">
