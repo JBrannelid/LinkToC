@@ -44,6 +44,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     defaultValues: {
       firstName: "",
       lastName: "",
+      email: "",
+      phoneNumber: "",
     },
   });
 
@@ -53,6 +55,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       methods.reset({
         firstName: userData.firstName || "",
         lastName: userData.lastName || "",
+        email: userData.email || "",
+        phoneNumber: userData.phoneNumber || "",
       });
     }
   }, [userData, methods]);
@@ -152,29 +156,54 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
               <div className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
+                    {/* Firstname field */}
                     <FormInput
                       label="Förnamn"
                       name="firstName"
+                      labelPosition="above"
                       validation={{ required: "Förnamn krävs" }}
                     />
                   </div>
                   <div>
+                    {/* Lastname field */}
                     <FormInput
                       label="Efternamn"
                       name="lastName"
+                      labelPosition="above"
                       validation={{ required: "Efternamn krävs" }}
                     />
                   </div>
                 </div>
-                {/* Vi behöver lägga till en formatInput for email och phonenumber också */}
-                <div className="space-y-4">
-                  <label className="text-gray text-sm">Email</label>
-                  <p>{userData?.email}</p>
+                {/* Email field */}
+                <div className="space-y-2">
+                  <FormInput
+                    label="Email"
+                    name="email"
+                    labelPosition="above"
+                    validation={{
+                      required: "Email krävs",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Ogiltig email adress",
+                      },
+                    }}
+                  />
                 </div>
 
-                <div>
-                  <label className="text-gray text-sm">Telefonnummer</label>
-                  <p>{userData?.phoneNumber}</p>
+                {/* Phone number field */}
+                <div className="space-y-2">
+                  <FormInput
+                    label="Telefonnummer"
+                    name="phoneNumber"
+                    labelPosition="above"
+                    validation={{
+                      pattern: {
+                        value:
+                          /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
+                        message: "Ogiltigt telefonnummer format",
+                      },
+                    }}
+                  />
                 </div>
               </div>
             </div>
