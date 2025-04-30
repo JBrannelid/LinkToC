@@ -55,13 +55,44 @@ export const useWallPost = (stableId) => {
     }
   };
 
+  const createWallPost = async (data) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const createData = {
+        stableIdFk: stableId,
+        title: data.title,
+        body: data.body,
+      };
+
+      await wallPostService.update(updateData);
+
+      // Refresh data
+      await currentWallPost();
+      return true;
+    } catch (error) {
+      setError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (stableId) {
       currentWallPost();
     }
   }, [stableId, currentWallPost]);
 
-  return { wallPost, loading, error, currentWallPost, updateWallPost };
+  return {
+    wallPost,
+    loading,
+    error,
+    currentWallPost,
+    updateWallPost,
+    createWallPost,
+  };
 };
 
 export default useWallPost;
