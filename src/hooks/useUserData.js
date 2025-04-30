@@ -52,6 +52,8 @@ export const useUserData = (userId) => {
         id: currentUserId,
         firstName: data.firstName,
         lastName: data.lastName,
+        // email: data.email,
+        // phoneNumber: data.phoneNumber
       };
 
       const response = await userService.update(updateData);
