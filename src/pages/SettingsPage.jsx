@@ -15,6 +15,8 @@ import {
   handleCookieSettings,
   handleSwitchStable,
   handleLogout,
+  formatUserFullName,
+  getProfileImageUrl,
 } from "../utils/userUtils";
 
 const SettingsPage = () => {
@@ -51,6 +53,8 @@ const SettingsPage = () => {
 
   // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
+  const userFullName = formatUserFullName(displayUser);
+  const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
@@ -64,18 +68,13 @@ const SettingsPage = () => {
         <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg">
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
             <img
-              src={
-                displayUser?.profileImage ||
-                "/src/assets/images/userPlaceholder.jpg"
-              }
-              alt={`Profile image of ${user.firstName} ${user.lastName}`}
+              src={profileImageUrl}
+              alt={`Profile image of ${userFullName}`}
               className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-medium">
-              {displayUser?.firstName} {displayUser?.lastName || "Okänd"}
-            </h3>
+            <h3 className="text-lg font-medium">{userFullName}</h3>
             <p className="text-grey">
               {displayUser?.email || "Inge mailadress registrerad"}
             </p>
