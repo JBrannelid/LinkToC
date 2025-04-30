@@ -16,7 +16,7 @@ const wallPostService = {
       stableIdFk: data.stableIdFk,
     };
 
-    return await baseService.post(`/api/wallpost/create`, createData);
+    return await axiosConfig.post(`${ENDPOINTS.WALLPOST}/create`, createData);
   },
 
   getById: async (stableId) => {
