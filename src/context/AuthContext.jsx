@@ -9,7 +9,6 @@ import {
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
-import { USER_ROLES } from "../context/AppContext.jsx";
 
 const AuthContext = createContext();
 
