@@ -52,7 +52,7 @@ export const AppProvider = ({ children }) => {
 
   const getCurrentStableRole = useCallback(() => {
     if (!user || !currentStable || !user.stableRoles) {
-      return USER_ROLES.USER; // Default to regular user
+      return USER_ROLES.ADMIN; // Default to regular user
     }
 
     return user.stableRoles[currentStable.id] || USER_ROLES.ADMIN; // Default to regular user
