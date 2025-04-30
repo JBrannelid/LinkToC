@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppContext } from "../../context/AppContext";
-import { ROLES } from "../../utils/userUtils";
+import { USER_ROLES } from "../../context/AppContext";
 import UserSettingsPage from "../../pages/UserSettingsPage";
 import AdminSettingsPage from "../../pages/AdminSettingsPage";
 
@@ -11,12 +11,14 @@ const SettingsRouter = () => {
   const currentRole = getCurrentStableRole();
 
   // Pass admin routes
-  if (currentRole === ROLES.USER_ADMIN || currentRole === ROLES.MASTER_ADMIN) {
+  if (currentRole === USER_ROLES.ADMIN || USER_ROLES === USER_ROLES.MANAGER) {
     return <AdminSettingsPage />;
   }
 
-  // Pass user routes
-  return <UserSettingsPage />;
+  if (currentRole === USER_ROLES.USER) {
+    // Pass user routes
+    return <UserSettingsPage />;
+  }
 };
 
 export default SettingsRouter;
