@@ -11,12 +11,22 @@ const FormInput = ({
   className = "",
   labelPosition = "inline",
   errorMessage = "Detta fält krävs",
+  isPasswordMasked = false,
   ...rest
 }) => {
   const {
     register,
     formState: { errors },
   } = useFormContext();
+
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+  const handlePasswordFocus = () => {
+    if (isPasswordMasked && !isPasswordFocused) {
+      setValue(name, ""); // empty fields
+      setIsPasswordFocused(true);
+    }
+  };
 
   return (
     <div
@@ -43,6 +53,11 @@ const FormInput = ({
           focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
           transition-colors duration-200`}
         {...register(name, validation)}
+        onFocus={
+          type === "password" && isMaskedPassword
+            ? handlePasswordFocus
+            : undefined
+        }
         {...rest}
       />
       {errors[name] && (
