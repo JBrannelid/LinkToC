@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 // A form input component that integrates with React Hook Form
@@ -54,7 +54,7 @@ const FormInput = ({
           transition-colors duration-200`}
         {...register(name, validation)}
         onFocus={
-          type === "password" && isMaskedPassword
+          type === "password" && isPasswordMasked
             ? handlePasswordFocus
             : undefined
         }
