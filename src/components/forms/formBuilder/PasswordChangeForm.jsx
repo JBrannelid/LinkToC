@@ -44,6 +44,7 @@ const PasswordChangeForm = ({ onCancel }) => {
                 label="Nuvarande lösenord"
                 type="password"
                 labelPosition="above"
+                autocomplete="current-password"
                 validation={{
                   required: "Vänligen ange ditt nuvarande lösenord",
                 }}
@@ -77,6 +78,7 @@ const PasswordChangeForm = ({ onCancel }) => {
                 label="Nytt lösenord"
                 type="password"
                 labelPosition="above"
+                autocomplete="new-password"
                 validation={{
                   required: "Vänligen ange ditt nya lösenord",
                   minLength: {
