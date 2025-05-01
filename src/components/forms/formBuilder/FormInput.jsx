@@ -12,6 +12,8 @@ const FormInput = ({
   labelPosition = "inline",
   errorMessage = "Detta fält krävs",
   isPasswordMasked = false,
+  autoComplete,
+  inputClassName = "",
   ...rest
 }) => {
   const {
@@ -58,7 +60,7 @@ const FormInput = ({
             ? handlePasswordFocus
             : undefined
         }
-        autoComplete={autocomplete}
+        autoComplete={autoComplete}
         {...rest}
       />
       {errors[name] && (
