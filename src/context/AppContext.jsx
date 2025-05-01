@@ -9,7 +9,6 @@ import { useAuth } from "./AuthContext";
 import userService from "../api/services/userService";
 
 const AppContext = createContext();
-const [roleCache, setRoleCache] = useState({});
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
@@ -17,10 +16,8 @@ export const useAppContext = () => {
 };
 
 export const AppProvider = ({ children }) => {
-  // Get authentication state from AuthContext
   const { user } = useAuth();
-
-  // Current stable state (for the selected stable)
+  const [roleCache, setRoleCache] = useState({});
   const [currentStable, setCurrentStable] = useState(() => {
     // Try to load from localStorage on initial render
     const savedStable = localStorage.getItem("currentStable");
