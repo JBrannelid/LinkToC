@@ -49,15 +49,16 @@ const FormInput = ({
         type={type}
         placeholder={placeholder}
         className={`form-input w-full px-3 py-2 border rounded-md 
-          ${errors[name] ? "border-error-500" : "border-primary-light"} 
-          focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
-          transition-colors duration-200`}
+    ${errors[name] ? "border-error-500" : "border-primary-light"} 
+    focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
+    transition-colors duration-200 ${inputClassName}`}
         {...register(name, validation)}
         onFocus={
           type === "password" && isPasswordMasked
             ? handlePasswordFocus
             : undefined
         }
+        autoComplete={autocomplete}
         {...rest}
       />
       {errors[name] && (
