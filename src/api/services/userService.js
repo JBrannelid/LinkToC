@@ -45,24 +45,12 @@ const userService = {
 
     return await baseService.update(userData);
   },
-  // Suggested implementation for userService.delete
-  delete: async (id) => {
-    if (!id) {
-      throw new Error("User ID is required");
+  delete: async (userId) => {
+    if (!userId) {
+      throw new Error("User ID is required for deletion");
     }
 
-    try {
-      const response = await axiosInstance.delete(
-        `${ENDPOINTS.USERS}/delete/${id}`
-      );
-      console.log("Raw API delete response:", response);
-
-      // If the response is already processed, just return it
-      return response;
-    } catch (error) {
-      console.error("Error in userService.delete:", error);
-      throw error;
-    }
+    return await baseService.delete(userId);
   },
 };
 
