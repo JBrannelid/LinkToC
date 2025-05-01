@@ -252,6 +252,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
               ) : (
                 <PasswordChangeForm
                   onCancel={() => setShowPasswordForm(false)}
+                  user={userData || user}
                   onSuccess={() => {
                     setShowPasswordForm(false);
                     setMessage(createSuccessMessage("Lösenord uppdaterat"));
