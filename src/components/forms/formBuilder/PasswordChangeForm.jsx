@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import Button from "../../ui/Button";
 import FormInput from "../formBuilder/FormInput";
+import { useAuth } from "../../../context/AuthContext";
 
 const PasswordChangeForm = ({ onCancel }) => {
   const [step, setStep] = useState(1); // 1 = original, 2 = new password
@@ -10,9 +11,11 @@ const PasswordChangeForm = ({ onCancel }) => {
     watch,
     handleSubmit,
     reset,
+    register,
   } = useFormContext();
 
   const newPassword = watch("new_password");
+  const { user } = useAuth();
 
   const verifyCurrentPassword = (data) => {
     // Ask BE how we will procced with password changes.
@@ -30,7 +33,20 @@ const PasswordChangeForm = ({ onCancel }) => {
   return (
     <div className="bg-white rounded-lg p-4 border border-primary-light">
       <h3 className="font-semibold mb-4">Ändra lösenord</h3>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form id="password-change-form" onSubmit={(e) => e.preventDefault()}>
+        {/* The key is making a visible field first, then hiding it with CSS */}
+        <div className="sr-only">
+          <label htmlFor="username">Email</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            autoComplete="username"
+            defaultValue={user?.email || ""}
+            {...register("username")}
+            readOnly
+          />
+        </div>
         {step === 1 && (
           <>
             <p className="text-sm mb-4">
@@ -44,7 +60,7 @@ const PasswordChangeForm = ({ onCancel }) => {
                 label="Nuvarande lösenord"
                 type="password"
                 labelPosition="above"
-                autocomplete="current-password"
+                autoComplete="current-password"
                 validation={{
                   required: "Vänligen ange ditt nuvarande lösenord",
                 }}
@@ -78,7 +94,7 @@ const PasswordChangeForm = ({ onCancel }) => {
                 label="Nytt lösenord"
                 type="password"
                 labelPosition="above"
-                autocomplete="new-password"
+                autoComplete="new-password"
                 validation={{
                   required: "Vänligen ange ditt nya lösenord",
                   minLength: {
@@ -95,6 +111,7 @@ const PasswordChangeForm = ({ onCancel }) => {
                 label="Bekräfta nytt lösenord"
                 type="password"
                 labelPosition="above"
+                autoComplete="new-password"
                 validation={{
                   required: "Vänligen bekräfta ditt nya lösenord",
                   validate: (value) =>
