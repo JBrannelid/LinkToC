@@ -45,6 +45,13 @@ const userService = {
 
     return await baseService.update(userData);
   },
+  delete: async (userId) => {
+    if (!userId) {
+      throw new Error("User ID is required for deletion");
+    }
+
+    return await baseService.delete(userId);
+  },
 };
 
 export default userService;
