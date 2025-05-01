@@ -17,6 +17,7 @@ import {
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import { userService } from "../../api";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -92,6 +93,30 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
           defaultMessage: "Det gick inte att uppdatera profilen. Försök igen.",
         })
       );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const deleteUser = async () => {
+    try {
+      setSubmitting(true);
+
+      const response = await userService.delete(userId);
+
+      if (response && (response.isSuccess || response.statusCode === 200)) {
+        await logout();
+        navigate(ROUTES.LOGIN); // route to login
+      } else {
+        throw new Error(response?.message || "Kunde inte radera konto");
+      }
+    } catch (error) {
+      setMessage(
+        getErrorMessage(error, {
+          defaultMessage: "Kunde inte radera kontot. Försök igen senare.",
+        })
+      );
+      setShowDeleteConfirm(false);
     } finally {
       setSubmitting(false);
     }
@@ -290,9 +315,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
             <Button
               type="danger"
               className="w-full mb-5"
-              onClick={() => {
-                setShowDeleteConfirm(false);
-              }}
+              onClick={deleteUser}
+              loading={submitting}
             >
               Ja
             </Button>
