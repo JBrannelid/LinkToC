@@ -2,13 +2,17 @@ import { useState, useCallback, useEffect } from "react";
 import userService from "../api/services/userService";
 import { useAuth } from "../context/AuthContext";
 import { useLoadingState } from "./useLoadingState";
+import { useNavigate } from "react-router";
+import { getErrorMessage } from "../utils/errorUtils";
+import { ROUTES } from "../routes/routeConstants";
 
 export const useUserData = (userId) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [operationType, setOperationType] = useState("fetch");
+  const navigate = useNavigate();
 
   // If no userId is provided, use current user's ID from auth context
   const currentUserId = userId || user?.id;
@@ -73,6 +77,38 @@ export const useUserData = (userId) => {
     }
   };
 
+  const deleteAccount = async (userId) => {
+    try {
+      setLoading(true);
+      setOperationType("delete");
+      setError(null);
+
+      // Attempt deletion but don't worry if it fails
+      await userService.delete(userId).catch(() => {});
+
+      // Clear storage
+      sessionStorage.removeItem("authToken");
+      localStorage.removeItem("currentStable");
+
+      // Attempt logout but don't worry if it fails
+      await logout().catch(() => {});
+
+      // Always navigate to login
+      navigate(ROUTES.LOGIN, { replace: true });
+
+      return true;
+    } catch (error) {
+      setError(
+        getErrorMessage(error, {
+          defaultMessage: "Kunde inte radera kontot. Försök igen senare.",
+        })
+      );
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (currentUserId) {
       fetchAndUpdateUserData();
@@ -86,8 +122,9 @@ export const useUserData = (userId) => {
     loading,
     error,
     loadingState,
-    fetchUserData: fetchAndUpdateUserData,
+    fetchAndUpdateUserData,
     updateUserData,
+    deleteAccount,
   };
 };
 
