@@ -14,6 +14,7 @@ import {
   getProfileImageUrl,
   formatUserFullName,
 } from "../../utils/userUtils";
+import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
@@ -46,6 +47,9 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       lastName: "",
       email: "",
       phoneNumber: "",
+      current_password: "",
+      new_password: "",
+      confirm_password: "",
     },
   });
 
@@ -103,6 +107,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       </div>
     );
   }
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
@@ -212,18 +217,30 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
             <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
               <div className="flex justify-between items-center">
                 <h2 className="font-bold">Lösenord</h2>
-                <Button type="icon" aria-label="Redigera lösenord">
+                <Button
+                  type="icon"
+                  aria-label="Redigera lösenord"
+                  onClick={() => setShowPasswordForm(!showPasswordForm)}
+                >
                   <PenIcon className="w-7 h-7 text-primary" />
                 </Button>
               </div>
               <div className="mt-2">
-                {/* ReadOnly */}
-                <input
-                  type="password"
-                  value="xxxxxxxxxx"
-                  readOnly
-                  className="w-full"
-                />
+                {!showPasswordForm ? (
+                  <div className="mt-2">
+                    <div className="w-full px-3 py-2 border rounded-md border-primary-light">
+                      ••••••••••
+                    </div>
+                  </div>
+                ) : (
+                  <PasswordChangeForm
+                    onCancel={() => setShowPasswordForm(false)}
+                    onSuccess={() => {
+                      setShowPasswordForm(false);
+                      setMessage(createSuccessMessage("Lösenord uppdaterat"));
+                    }}
+                  />
+                )}
               </div>
             </div>
 
