@@ -7,8 +7,20 @@ const baseService = createBaseService(ENDPOINTS.USERS);
 const userService = {
   ...baseService,
 
-  // Fetching a specific user's role for a given stable
-  // Example response: { stableIdFk: 1, Role: 0 }
+  // Ask BE to get to specifik endpoints
+  // 1. /api/user/getUserStables/{userId}
+  //  1.a) Example response:  { "stableIdFk": 1, "role": 0 }
+  // 2. /api/user/{userId}/stables/{stableId}/role
+  //  2.a) Example response: { Role: 0 }
+  getUserStables: async (userId) => {
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+    return await axiosInstance.get(
+      `${ENDPOINTS.USERS}/getUserStables/${userId}`
+    );
+  },
+
   getUserStableRole: async (userId, stableId) => {
     if (!userId || !stableId) {
       throw new Error("User ID and Stable ID are required");
