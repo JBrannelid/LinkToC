@@ -235,33 +235,29 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
 
             {/* Password Section */}
             <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-              <div className="flex justify-between items-center">
-                <h2 className="font-bold">Lösenord</h2>
-                <Button
-                  type="icon"
-                  aria-label="Redigera lösenord"
-                  onClick={() => setShowPasswordForm(!showPasswordForm)}
-                >
-                  <PenIcon className="w-7 h-7 text-primary" />
-                </Button>
-              </div>
-              <div className="mt-2">
-                {!showPasswordForm ? (
-                  <div className="mt-2">
-                    <div className="w-full px-3 py-2 border rounded-md border-primary-light">
-                      ••••••••••
-                    </div>
+              <h2 className="font-bold">Lösenord</h2>
+              {!showPasswordForm ? (
+                <div className="mt-5 flex justify-center py-1 p-2">
+                  <div className="w-full px-5 py-3 border rounded-full border-gray/40 bg-light/50">
+                    <p className="p-0">••••••••••</p>
                   </div>
-                ) : (
-                  <PasswordChangeForm
-                    onCancel={() => setShowPasswordForm(false)}
-                    onSuccess={() => {
-                      setShowPasswordForm(false);
-                      setMessage(createSuccessMessage("Lösenord uppdaterat"));
-                    }}
-                  />
-                )}
-              </div>
+                  <Button
+                    type="icon"
+                    aria-label="Redigera lösenord"
+                    onClick={() => setShowPasswordForm(!showPasswordForm)}
+                  >
+                    <PenIcon className="w-7 h-7 text-primary" />
+                  </Button>
+                </div>
+              ) : (
+                <PasswordChangeForm
+                  onCancel={() => setShowPasswordForm(false)}
+                  onSuccess={() => {
+                    setShowPasswordForm(false);
+                    setMessage(createSuccessMessage("Lösenord uppdaterat"));
+                  }}
+                />
+              )}
             </div>
 
             <FormMessage message={message} />
