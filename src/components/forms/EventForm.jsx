@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { X } from "lucide-react";
 import { format } from "../../utils/calendarUtils";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import TimePicker from "./formBuilder/TimePicker";
 import Button from "../ui/Button";
 import { useAppContext } from "../../context/AppContext";
+import ModalHeader from "../layout/ModalHeader";
 
 const EventForm = ({
   event,
@@ -92,21 +92,13 @@ const EventForm = ({
 
   return (
     <div className="flex flex-col fixed inset-0 z-30 bg-background">
-      <div className="relative flex items-center justify-center bg-primary-light py-5 px-4">
-        <div className="absolute left-4">
-          <Button
-            type="primary"
-            size="large"
-            variant="icon"
-            className="border-0 text-primary"
-            aria-label="Close"
-            onClick={onCancel}
-          >
-            <X strokeWidth={4} />
-          </Button>
-        </div>
-        <h2 className="text-xl text-center uppercase">{title}</h2>
-      </div>
+      <ModalHeader
+        title={title}
+        showCloseBtn={true}
+        onCloseClick={onCancel}
+        className="bg-primary-light"
+        render="left"
+      />
 
       <div className="h-5" />
 

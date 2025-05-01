@@ -14,6 +14,7 @@ import StablePostPage from "../pages/StablePostPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import NotificationPage from "../pages/NotificationPage";
 
 // Public Routes
 export const publicRoutes = [
@@ -69,6 +70,11 @@ export const protectedRoutes = [
   {
     path: ROUTES.USER_PROFILE,
     element: <UserProfilePage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.NOTOFICATIONS,
+    element: <NotificationPage />,
     requiresStable: true,
   },
 ];

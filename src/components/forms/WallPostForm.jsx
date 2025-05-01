@@ -18,7 +18,6 @@ const WallPostForm = ({ event, onSubmit, onCancel }) => {
       try {
         setIsSubmitting(true);
 
-        // Add timestamp
         const updatedData = {
           ...formData,
         };

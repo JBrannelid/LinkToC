@@ -1,11 +1,10 @@
 import React from "react";
-import { X } from "lucide-react";
 import { formatTimeOnly } from "../../../utils/calendarUtils";
 import UserProfileImage from "../../common/UserProfileImage";
 
-const EventItem = ({ event, index, onUpdate, onDelete }) => {
+const EventItem = ({ event, index, onUpdate }) => {
   // Background for even/odd events rows
-  const bgColor = index % 2 === 0 ? "bg-white" : "bg-background";
+  const bgColor = index % 2 === 0 ? "bg-background" : "bg-white ";
 
   // Get username or display unknown user
   const userName =
@@ -19,13 +18,6 @@ const EventItem = ({ event, index, onUpdate, onDelete }) => {
   const handleItemClick = () => {
     if (onUpdate) {
       onUpdate(event.id);
-    }
-  };
-
-  const handleDeleteClick = (e) => {
-    e.stopPropagation();
-    if (onDelete) {
-      onDelete(event.id);
     }
   };
 
@@ -53,19 +45,6 @@ const EventItem = ({ event, index, onUpdate, onDelete }) => {
         {/* –{" "}
         {formatTimeOnly(event.endDateTime)} */}
       </div>
-
-      {/* Delete button */}
-      {/* {onDelete && (
-        <div className="relative ml-2">
-          <button
-            onClick={handleDeleteClick}
-            className="p-2 text-red-500 hover:text-red-900"
-            aria-label={`Delete event: ${event.title}`}
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-      )} */}
     </li>
   );
 };

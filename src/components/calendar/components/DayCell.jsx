@@ -23,26 +23,34 @@ const DayCell = ({
   // Check if this is the selected day
   const isSelected = calendarUtils.isSameDay(day, selectedDay);
 
+  // Handle click on day cell
+  const handleDayClick = () => {
+    // If day is already selected, open events
+    if (isSelected) {
+      // Open events for this day
+      onSelectDay(day, true); // Added boolean flag to indicate it's the second click
+    } else {
+      // Just select the day
+      onSelectDay(day, false); // First click just selects the day
+    }
+  };
+
   return (
-    <div className={`${colStartClass} p-0.5 relative flex flex-col`}>
+    <div className={`${colStartClass} p-0.5 relative flex flex-col `}>
       {/* Day container */}
       <div
-        className="relative w-full h-10 bg-background"
-        onClick={() => onSelectDay(day)}
+        className="relative w-full h-10 bg-background cursor-pointer 
+                   transition-colors duration-300 hover:bg-light hover:opacity-40 rounded-lg"
+        onClick={handleDayClick}
       >
         {/* User profile image for users with events on this day */}
         {hasEvents && dayUsers.length > 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
             <UserAvatarGrid
               users={dayUsers}
-              onSelectUser={() => onSelectDay(day)}
+              onSelectUser={() => handleDayClick()}
             />
           </div>
-        )}
-
-        {/* Highlight border for selected day */}
-        {isSelected && (
-          <div className="absolute inset-0 border-2 border-gray-400/60 z-10 rounded-lg pointer-events-none"></div>
         )}
 
         {/* Fill divs outside current month */}
