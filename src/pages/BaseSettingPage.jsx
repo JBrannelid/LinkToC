@@ -15,6 +15,8 @@ import {
   formatUserFullName,
   getProfileImageUrl,
 } from "../utils/userUtils";
+import ConfirmationModal from "../components/ui/ConfirmationModal";
+import LogoutIcon from "../assets/icons/LogoutIcon";
 
 // Reusable menu item component
 export const SettingsMenuItem = ({ label, onClick, icon }) => (
@@ -42,6 +44,7 @@ const BaseSettingsPage = ({
 
   const [loading, setLoading] = useState(false);
   const [showUserEditProfileForm, setShowUserEditProfileForm] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Fetch user data with error and load handling
   const { userData, userLoading, userError, loadingState, fetchUserData } =
@@ -62,6 +65,22 @@ const BaseSettingsPage = ({
       </div>
     );
   }
+
+  const handleShowLogoutModal = () => {
+    setShowLogoutConfirm(true);
+  };
+  const handleLogoutConfirmed = async () => {
+    try {
+      setLoading(true);
+      await logout();
+      navigate(ROUTES.LOGIN);
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
+      setShowLogoutConfirm(false);
+    }
+  };
 
   // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
@@ -136,13 +155,29 @@ const BaseSettingsPage = ({
             <Button
               type="secondary"
               className="w-9/10"
-              onClick={() => handleLogout(logout, navigate, setLoading, ROUTES)}
+              onClick={handleShowLogoutModal}
               loading={loading}
             >
               Logga ut
             </Button>
           </div>
         </div>
+        <ConfirmationModal
+          isOpen={showLogoutConfirm}
+          onClose={() => setShowLogoutConfirm(false)}
+          onConfirm={handleLogoutConfirmed}
+          loading={loading}
+          title="Vill du logga ut?"
+          confirmButtonText="Logga ut"
+          confirmButtonType="danger"
+          icon={
+            <LogoutIcon
+              size={70}
+              backgroundColor="bg-error-500"
+              iconColor="text-white"
+            />
+          }
+        ></ConfirmationModal>
       </div>
 
       {/* Display User profile form */}

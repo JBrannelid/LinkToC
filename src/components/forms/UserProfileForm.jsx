@@ -17,6 +17,7 @@ import {
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -291,39 +292,21 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       </div>
 
       {/* Delete modual */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-30">
-          <div className="bg-white rounded-lg w-9/10 p-7 shadow-lg border border-light">
-            <div className="flex justify-center mb-4">
-              <HandRaisedIcon
-                size={70}
-                backgroundColor="bg-error-500"
-                iconColor="text-white"
-              />
-            </div>
-            <h3 className="text-2xl text-center mb-4">
-              Vill du radera kontot?
-            </h3>
-            <Button
-              type="danger"
-              className="w-full mb-5"
-              onClick={handleDelete}
-              loading={submitting}
-            >
-              Ja
-            </Button>
-            <Button
-              type="secondary"
-              className="w-full border-none"
-              onClick={() => setShowDeleteConfirm(false)}
-            >
-              Nej
-            </Button>
-          </div>
-        </div>
-      )}
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        loading={submitting}
+        title="Vill du radera kontot?"
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor="bg-error-500"
+            iconColor="text-white"
+          />
+        }
+      />
     </div>
   );
 };
-
 export default UserProfileForm;
