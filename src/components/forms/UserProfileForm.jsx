@@ -17,10 +17,14 @@ import {
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import { userService } from "../../api";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
+  const {
+    deleteAccount,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useUserData();
   const userId = user?.id;
 
   // Use our hook for fetching and updating the user
@@ -66,6 +70,12 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     }
   }, [userData, methods]);
 
+  useEffect(() => {
+    if (deleteError) {
+      setMessage(getErrorMessage(deleteError));
+    }
+  }, [deleteError]);
+
   const onSubmit = async (data) => {
     try {
       setSubmitting(true);
@@ -98,28 +108,13 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     }
   };
 
-  const deleteUser = async () => {
-    try {
-      setSubmitting(true);
-
-      const response = await userService.delete(userId);
-
-      if (response && (response.isSuccess || response.statusCode === 200)) {
-        await logout();
-        navigate(ROUTES.LOGIN); // route to login
-      } else {
-        throw new Error(response?.message || "Kunde inte radera konto");
-      }
-    } catch (error) {
-      setMessage(
-        getErrorMessage(error, {
-          defaultMessage: "Kunde inte radera kontot. Försök igen senare.",
-        })
-      );
+  const handleDelete = async () => {
+    setSubmitting(true);
+    const success = await deleteAccount(userId);
+    if (!success) {
       setShowDeleteConfirm(false);
-    } finally {
-      setSubmitting(false);
     }
+    setSubmitting(false);
   };
 
   // Show loading state while fetching user data
@@ -315,7 +310,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
             <Button
               type="danger"
               className="w-full mb-5"
-              onClick={deleteUser}
+              onClick={handleDelete}
               loading={submitting}
             >
               Ja
