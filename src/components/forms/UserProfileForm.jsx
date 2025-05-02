@@ -14,11 +14,18 @@ import {
   getProfileImageUrl,
   formatUserFullName,
 } from "../../utils/userUtils";
+import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
+  const {
+    deleteAccount,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useUserData();
   const userId = user?.id;
 
   // Use our hook for fetching and updating the user
@@ -44,6 +51,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     defaultValues: {
       firstName: "",
       lastName: "",
+      email: "",
+      phoneNumber: "",
+      current_password: "",
+      new_password: "",
+      confirm_password: "",
     },
   });
 
@@ -53,9 +65,17 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       methods.reset({
         firstName: userData.firstName || "",
         lastName: userData.lastName || "",
+        email: userData.email || "",
+        phoneNumber: userData.phoneNumber || "",
       });
     }
   }, [userData, methods]);
+
+  useEffect(() => {
+    if (deleteError) {
+      setMessage(getErrorMessage(deleteError));
+    }
+  }, [deleteError]);
 
   const onSubmit = async (data) => {
     try {
@@ -89,6 +109,15 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     }
   };
 
+  const handleDelete = async () => {
+    setSubmitting(true);
+    const success = await deleteAccount(userId);
+    if (!success) {
+      setShowDeleteConfirm(false);
+    }
+    setSubmitting(false);
+  };
+
   // Show loading state while fetching user data
   if (loading && !userData) {
     return (
@@ -99,6 +128,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       </div>
     );
   }
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
@@ -152,50 +182,84 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
               <div className="space-y-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
+                    {/* Firstname field */}
                     <FormInput
                       label="Förnamn"
                       name="firstName"
+                      labelPosition="above"
                       validation={{ required: "Förnamn krävs" }}
                     />
                   </div>
                   <div>
+                    {/* Lastname field */}
                     <FormInput
                       label="Efternamn"
                       name="lastName"
+                      labelPosition="above"
                       validation={{ required: "Efternamn krävs" }}
                     />
                   </div>
                 </div>
-                {/* Vi behöver lägga till en formatInput for email och phonenumber också */}
-                <div className="space-y-4">
-                  <label className="text-gray text-sm">Email</label>
-                  <p>{userData?.email}</p>
+                {/* Email field */}
+                <div className="space-y-2">
+                  <FormInput
+                    label="Email"
+                    name="email"
+                    labelPosition="above"
+                    validation={{
+                      required: "Email krävs",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "Ogiltig email adress",
+                      },
+                    }}
+                  />
                 </div>
 
-                <div>
-                  <label className="text-gray text-sm">Telefonnummer</label>
-                  <p>{userData?.phoneNumber}</p>
+                {/* Phone number field */}
+                <div className="space-y-2">
+                  <FormInput
+                    label="Telefonnummer"
+                    name="phoneNumber"
+                    labelPosition="above"
+                    validation={{
+                      pattern: {
+                        value:
+                          /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
+                        message: "Ogiltigt telefonnummer format",
+                      },
+                    }}
+                  />
                 </div>
               </div>
             </div>
 
             {/* Password Section */}
             <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-              <div className="flex justify-between items-center">
-                <h2 className="font-bold">Lösenord</h2>
-                <Button type="icon" aria-label="Redigera lösenord">
-                  <PenIcon className="w-7 h-7 text-primary" />
-                </Button>
-              </div>
-              <div className="mt-2">
-                {/* ReadOnly */}
-                <input
-                  type="password"
-                  value="xxxxxxxxxx"
-                  readOnly
-                  className="w-full"
+              <h2 className="font-bold">Lösenord</h2>
+              {!showPasswordForm ? (
+                <div className="mt-5 flex justify-center py-1 p-2">
+                  <div className="w-full px-5 py-3 border rounded-full border-gray/40 bg-light/50">
+                    <p className="p-0">••••••••••</p>
+                  </div>
+                  <Button
+                    type="icon"
+                    aria-label="Redigera lösenord"
+                    onClick={() => setShowPasswordForm(!showPasswordForm)}
+                  >
+                    <PenIcon className="w-7 h-7 text-primary" />
+                  </Button>
+                </div>
+              ) : (
+                <PasswordChangeForm
+                  onCancel={() => setShowPasswordForm(false)}
+                  user={userData || user}
+                  onSuccess={() => {
+                    setShowPasswordForm(false);
+                    setMessage(createSuccessMessage("Lösenord uppdaterat"));
+                  }}
                 />
-              </div>
+              )}
             </div>
 
             <FormMessage message={message} />
@@ -228,40 +292,21 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       </div>
 
       {/* Delete modual */}
-      {showDeleteConfirm && (
-        <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-30">
-          <div className="bg-white rounded-lg w-9/10 p-7 shadow-lg border border-light">
-            <div className="flex justify-center mb-4">
-              <HandRaisedIcon
-                size={70}
-                backgroundColor="bg-error-500"
-                iconColor="text-white"
-              />
-            </div>
-            <h3 className="text-2xl text-center mb-4">
-              Vill du radera kontot?
-            </h3>
-            <Button
-              type="danger"
-              className="w-full mb-5"
-              onClick={() => {
-                setShowDeleteConfirm(false);
-              }}
-            >
-              Ja
-            </Button>
-            <Button
-              type="secondary"
-              className="w-full border-none"
-              onClick={() => setShowDeleteConfirm(false)}
-            >
-              Nej
-            </Button>
-          </div>
-        </div>
-      )}
+      <ConfirmationModal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleDelete}
+        loading={submitting}
+        title="Vill du radera kontot?"
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor="bg-error-500"
+            iconColor="text-white"
+          />
+        }
+      />
     </div>
   );
 };
-
 export default UserProfileForm;

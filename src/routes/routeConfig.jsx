@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
+import SettingsRouter from "../components/settings/SettingsRouter";
 
 // Pages components
 import HomePage from "../pages/HomePage";
@@ -9,7 +10,6 @@ import RegistrationPage from "../pages/RegistrationPage";
 import StableSelectionPage from "../pages/StableSelectionPage";
 import HorseProfilePage from "../pages/HorseProfilePage";
 import ErrorPage from "../pages/ErrorPage";
-import SettingsPage from "../pages/SettingsPage";
 import StablePostPage from "../pages/StablePostPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
@@ -64,11 +64,6 @@ export const protectedRoutes = [
     requiresStable: true,
   },
   {
-    path: ROUTES.SETTINGS,
-    element: <SettingsPage />,
-    requiresStable: true,
-  },
-  {
     path: ROUTES.USER_PROFILE,
     element: <UserProfilePage />,
     requiresStable: true,
@@ -79,11 +74,15 @@ export const protectedRoutes = [
     requiresStable: true,
   },
   {
+    path: ROUTES.SETTINGS,
+    element: <SettingsRouter />,
+    requiresStable: true,
+  },
+  {
     path: ROUTES.STABLE_ONBOARDING,
     element: <StableOnboardingPage />,
     requiresStable: false,
   },
-
 ];
 
 // Error handling
