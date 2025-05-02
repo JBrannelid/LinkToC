@@ -20,7 +20,7 @@ const SettingsRouter = () => {
         const role =
           DEV_OVERRIDE_ROLE !== null
             ? DEV_OVERRIDE_ROLE
-            : await getCurrentStableRole();
+            : getCurrentStableRole();
         setCurrentRole(role);
       } catch (error) {
         console.error("Error checking role:", error);
