@@ -20,7 +20,7 @@ const ProtectedRoute = ({
     if (requiredRoles && requiredRoles.length > 0) {
       const checkRole = async () => {
         try {
-          const currentRole = await getCurrentStableRole();
+          const currentRole = getCurrentStableRole();
           setHasRequiredRole(requiredRoles.includes(currentRole));
         } catch (error) {
           console.error("Error checking role:", error);
