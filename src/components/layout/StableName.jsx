@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 import { useLoadingState } from "../../hooks/useLoadingState";
 
-export default function StableName({ currentStableId }) {
+export default function StableName() {
   const { currentStable } = useAppContext();
   const {
     status: { loading, error },
@@ -22,8 +22,8 @@ export default function StableName({ currentStableId }) {
   if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (
-    <h1 className="cursor-pointer font-normal text-2xl font-heading">
+    <span className="cursor-pointer font-normal text-2xl font-heading">
       {currentStable.name || "Inget stall kopplat"}
-    </h1>
+    </span>
   );
 }
