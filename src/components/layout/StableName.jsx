@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 import { useLoadingState } from "../../hooks/useLoadingState";
 
-export default function StableName({ currentStableId }) {
+export default function StableName() {
   const { currentStable } = useAppContext();
   const {
     status: { loading, error },
