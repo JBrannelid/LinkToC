@@ -12,9 +12,9 @@ import {
   isSameMonth,
   startOfWeek,
   endOfWeek,
-  parseISO as dateFnsParseISO,
   isYesterday,
   startOfYesterday,
+  parseISO as dateFnsParseISO,
   compareDesc as dateFnsCompareDesc,
 } from "date-fns";
 
@@ -34,7 +34,7 @@ export {
   endOfWeek,
   isYesterday,
   startOfYesterday,
-  dateFnsCompareDesc as compareDesc,
+  dateFnsCompareDesc,
 };
 
 // Combines multiple CSS class names into a single string, filtering out falsy values
