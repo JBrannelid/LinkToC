@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useAppContext } from "../context/AppContext";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useStablePosts } from "../hooks/useStablePosts";
-import PostList from "../components/stablePost/PostList";
+import PostContainer from "../components/stablePost/PostContainer";
 
 export default function StablePostPage() {
   const { currentStable } = useAppContext();
@@ -36,7 +36,7 @@ export default function StablePostPage() {
         <ModalHeader title="Flödet" />
       </div>
       <div className="flex-1 px-6 py-2 overflow-y-auto">
-        <PostList posts={posts} user={user} />
+        <PostContainer posts={posts} user={user} />
       </div>
     </div>
   );
