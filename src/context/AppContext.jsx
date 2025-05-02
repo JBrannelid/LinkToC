@@ -6,7 +6,6 @@ import React, {
   useCallback,
 } from "react";
 import { useAuth } from "./AuthContext";
-import userService from "../api/services/userService";
 
 const AppContext = createContext();
 
@@ -53,25 +52,11 @@ export const AppProvider = ({ children }) => {
     if (!currentStable || !user.stableRoles) {
       return USER_ROLES.USER; // Set to baser user if we don't know stable role och missing a stable id
     }
+    const role = user.stableRoles[currentStable.id]; // Return role or fallback to base user
 
-    // Check cacheKey
-    const cacheKey = `${user.id}_${currentStable.id}`;
-    if (roleCache[cacheKey]) {
-      return roleCache[cacheKey];
-    }
-
-    try {
-      const response = await userService.getUserStableRole(
-        user.id,
-        currentStable.id
-      );
-      const role = response.role || USER_ROLES.USER; // Return role or fallback to base user
-      setRoleCache((prev) => ({ ...prev, [cacheKey]: role }));
-      return role;
-    } catch (error) {
-      return USER_ROLES.USER; // Fallback to base user
-    }
-  }, [user?.id, currentStable?.id, roleCache]);
+    setRoleCache((prev) => ({ ...prev, [cacheKey]: role }));
+    return role !== undefined ? role : USER_ROLES.USER; // Fallback to base user
+  }, [user?.stableRoles, currentStable?.id]);
 
   const contextValue = {
     currentUser: user,
