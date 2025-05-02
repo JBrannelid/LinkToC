@@ -1,19 +1,36 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
+import axiosConfig from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.STABLEPOST);
 
 const stablePostService = {
   ...baseService,
 
+  getStablePosts: async (stableId) => {
+    const response = await axiosConfig.get(
+      `${ENDPOINTS.STABLEPOST}/stable/${stableId}`
+    );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
+    }
+
+    return [];
+  },
+
   create: async (data) => {
-    // baseService will handle validation of data
+    if (!data) {
+      throw new Error("Post data is required");
+    }
 
     const createData = {
+      userIdFk: data.userIdFk,
+      stableIdFk: data.stableIdFk,
       title: data.title,
-      startDateTime: data.startDateTime,
-      endDateTime: data.endDateTime,
-      stableIdFk: 1, // Default value since we're not handling stable foreign key atm.
+      content: data.content,
+      date: data.date || new Date().toISOString(),
+      isPinned: data.isPinned || false,
     };
 
     return await baseService.create(createData);
@@ -23,16 +40,11 @@ const stablePostService = {
     const updateData = {
       id: data.id,
       title: data.title,
-      startDateTime: data.startDateTime,
-      endDateTime: data.endDateTime,
-      stableIdFk: data.stableIdFk || 1,
+      content: data.content,
+      isPinned: data.isPinned,
     };
-
-    console.log("Sending update data:", JSON.stringify(updateData));
     return await baseService.update(updateData);
   },
-
-  // Implement event-specific method to ensure DTO formatting
 };
 
 export default stablePostService;
