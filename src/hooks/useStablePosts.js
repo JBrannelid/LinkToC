@@ -16,10 +16,16 @@ export function useStablePosts(stableId) {
       setLoading(true);
       setError(null);
 
+      // For now, fetch all post from db
+      // We need a specific endpoint to fetch a stablePost for a specific stable
+      const response = await stablePostService.getAll();
+
       // Get all stable posts base on a stable id
-      const response = await stablePostService.getStablePosts(stableId);
-      const postList = Array.isArray(response) ? response : [];
-      setPosts(postList);
+      // const response = await stablePostService.getStablePosts(stableId);
+
+      setPosts(response);
+
+      console.log("Stable posts response:", response);
 
       return true;
     } catch (error) {
