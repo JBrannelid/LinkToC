@@ -10,7 +10,8 @@ export const ROUTES = {
   SETTINGS: "/settings",
   RESET_PASSWORD: "/reset-password",
   FORGOT_PASSWORD: "/forgot-password",
-  NOTOFICATIONS: "/notifications",
+  STABLE_ONBOARDING: "/stable-onboarding",
+  NOTIFICATIONS: "/notifications",
 };
 
 // Dynamic routes with params

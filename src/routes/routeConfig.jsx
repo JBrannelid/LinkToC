@@ -14,6 +14,7 @@ import StablePostPage from "../pages/StablePostPage";
 import UserProfilePage from "../pages/UserProfilePage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
+import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
 import NotificationPage from "../pages/NotificationPage";
 
 // Public Routes
@@ -68,7 +69,7 @@ export const protectedRoutes = [
     requiresStable: true,
   },
   {
-    path: ROUTES.NOTOFICATIONS,
+    path: ROUTES.NOTIFICATIONS,
     element: <NotificationPage />,
     requiresStable: true,
   },
@@ -76,6 +77,11 @@ export const protectedRoutes = [
     path: ROUTES.SETTINGS,
     element: <SettingsRouter />,
     requiresStable: true,
+  },
+  {
+    path: ROUTES.STABLE_ONBOARDING,
+    element: <StableOnboardingPage />,
+    requiresStable: false,
   },
 ];
 
