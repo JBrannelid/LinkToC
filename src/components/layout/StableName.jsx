@@ -22,8 +22,8 @@ export default function StableName() {
   if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (
-    <h1 className="cursor-pointer font-normal text-2xl font-heading">
+    <span className="cursor-pointer font-normal text-2xl font-heading">
       {currentStable.name || "Inget stall kopplat"}
-    </h1>
+    </span>
   );
 }
