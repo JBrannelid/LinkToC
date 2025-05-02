@@ -76,9 +76,8 @@ export default function WallPost({}) {
               onClick={toggleExpand}
               aria-label="Expandable important message"
             >
-              <div className="text-primary mr-3">
-                <PinIcon className="w-6 h-6" />
-              </div>
+              <PinIcon className="w-6 h-6 text-primary" />
+
               <p className="flex-1">{wallPost.title}</p>
               <div className="text-primary">
                 <ChevronDownIcon
