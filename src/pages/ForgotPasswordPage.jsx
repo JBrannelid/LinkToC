@@ -45,17 +45,17 @@ const ForgotPasswordPage = () => {
           {success ? (
             <AuthFormContainer title="Epost skickad!">
               <div className="bg-green-50 p-5 rounded-md">
-                <h2 className="text-xl font-bold text-green-700">
+                <h2 className="text-xl font-bold text-primary">
                   E-post skickad!
                 </h2>
-                <p className="mt-2">
+                <p className="mt-5">
                   Instruktioner för att återställa ditt lösenord har skickats
                   till din e-post. Kontrollera din inkorg (och skräppost) för
                   att få vidare anvisningar.
                 </p>
                 <button
                   onClick={handleGoBack}
-                  className="mt-4 flex items-center text-[#556B2F] hover:underline"
+                  className="mt-5 flex items-center text-primary hover:underline"
                 >
                   <ArrowLeft className="h-4 w-4 mr-1" />
                   Tillbaka till inloggning
