@@ -23,7 +23,7 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
         }
       }}
     >
-      <div className="grid grid-cols-2 pl-0.5 gap-0.5 max-w-full max-h-full">
+      <div className="flex flex-wrap gap-0.5 justify-evenly sm:gap-1 sm:justify-start lg:pl-2">
         {displayUsers.map((user, index) => (
           <div key={index}>
             <UserProfileImage
@@ -35,14 +35,12 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
         ))}
 
         {exceedsMaximumUserImage && (
-          <div className="flex justify-start items-start">
-            <UserProfileImage
-              user={{ id: "counter" }}
-              size="mini"
-              className="border border-background"
-              customContent={`+${remainingUsersCount}`}
-            />
-          </div>
+          <UserProfileImage
+            user={{ id: "counter" }}
+            size="mini"
+            className="border border-background"
+            customContent={`+${remainingUsersCount}`}
+          />
         )}
       </div>
     </div>
