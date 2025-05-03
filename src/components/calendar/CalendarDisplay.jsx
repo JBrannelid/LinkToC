@@ -153,7 +153,6 @@ function CalendarDisplay() {
             users={users}
           />
         )}
-        {/* Placed outside container div for full width */}
         <Calendar
           stableId={stableId || currentStable.id}
           events={events}

@@ -4,7 +4,7 @@ import WallPost from "../components/posts/WallPost";
 
 export default function HomePage() {
   return (
-    <div className="pb-24">
+    <div className="h-screen pb-30">
       <section>
         <DisplayCalendar />
       </section>
