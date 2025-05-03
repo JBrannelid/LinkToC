@@ -18,7 +18,8 @@ const PostItem = ({ post }) => {
     );
   }
 
-  // Format post date and time
+  // Will we display post date to the user?
+  // Not implemented in current HiFi-Mockup
   const formatPostDate = (dateString) => {
     try {
       return format(parseISO(dateString), "yyyy-MM-dd");
@@ -27,7 +28,6 @@ const PostItem = ({ post }) => {
     }
   };
 
-  // Format just the time part of the post date
   const formatPostTime = (dateString) => {
     try {
       return format(parseISO(dateString), "HH:mm");
