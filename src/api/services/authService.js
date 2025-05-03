@@ -80,25 +80,29 @@ const authService = {
     }
     return await axiosConfig.post(`/api/validate-reset-code`, validateData);
   },
+
   resetPassword: async (resetData) => {
     if (
       !resetData ||
       !resetData.email ||
-      !resetData.password ||
-      !resetData.newPasswordConfirmation
+      !resetData.newPassword ||
+      !resetData.confirmPassword ||
+      !resetData.token
     ) {
-      throw new Error("Email and password is required");
+      throw new Error("All fields are required");
     }
+
     if (resetData.newPassword !== resetData.newPasswordConfirmation) {
       throw new Error("Passwords must match");
     }
 
     return await axiosConfig.post(`/api/reset-password`, {
-      email: resetData.email,
       newPassword: resetData.newPassword,
-      newPasswordConfirmation: resetData.newPasswordConfirmation,
+      confirmPassword: resetData.confirmPassword,
+      token: resetData.token,
     });
   },
+
   forgotPassword: async (email) => {
     if (!email) {
       throw new Error("Email is required");
