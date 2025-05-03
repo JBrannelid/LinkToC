@@ -116,7 +116,7 @@ function CalendarDisplay() {
     <div className="mt-2 bg-background">
       <div className="mx-auto">
         {/* Stable Title */}
-        <h1 className="text-center mb-5 font-heading">
+        <h1 className="text-center mb-5 font-heading md:pb-10">
           <StableName currentStableId={currentStable.id} />
         </h1>
 
