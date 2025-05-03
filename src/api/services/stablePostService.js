@@ -9,7 +9,7 @@ const stablePostService = {
 
   getStablePosts: async (stableId) => {
     const response = await axiosInstance.get(
-      `${ENDPOINTS.STABLEPOST}${stableId}`
+      `${ENDPOINTS.STABLEPOSTBYID}${stableId}`
     );
 
     if (response && response.isSuccess && Array.isArray(response.value)) {
