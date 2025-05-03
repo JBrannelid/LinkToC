@@ -16,7 +16,7 @@ const EventsList = ({
   }
 
   return (
-    <ul className="divide-y divide-gray-100 overflow-y-auto pb-30">
+    <ul className="divide-y divide-gray-100 overflow-y-auto max-h-110 scrollbar-none">
       {events.map((event, index) => (
         <EventItem
           key={event.id}
