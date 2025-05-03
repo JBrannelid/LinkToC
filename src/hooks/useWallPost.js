@@ -57,18 +57,42 @@ export const useWallPost = (stableId) => {
     }
   };
 
-  const createWallPost = async (data) => {
+  // creates empty wallPost with only stable ID
+  const createWallPost = async () => {
     try {
       setLoading(true);
       setError(null);
 
       const createNewPost = {
         stableIdFk: currentStable.id,
+      };
+
+      await wallPostService.create(createNewPost);
+
+      // Refresh data
+      await currentWallPost();
+      return true;
+    } catch (error) {
+      setError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //creates new Content (title & body) for WallPost
+  const replaceWallPost = async (data) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const replaceWallPost = {
+        stableIdFk: currentStable.id,
         title: data.title,
         body: data.body,
       };
 
-      await wallPostService.create(createNewPost);
+      await wallPostService.replace(replaceWallPost);
 
       // Refresh data
       await currentWallPost();
@@ -94,6 +118,7 @@ export const useWallPost = (stableId) => {
     currentWallPost,
     updateWallPost,
     createWallPost,
+    replaceWallPost,
   };
 };
 

@@ -36,6 +36,16 @@ const wallPostService = {
 
     return await axiosConfig.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
   },
+
+  replace: async (data) => {
+    const replaceData = {
+      stableIdFk: data.stableIdFk,
+      title: data.title,
+      body: data.body,
+    };
+
+    return await axiosConfig.put(`${ENDPOINTS.WALLPOST}/replace`, replaceData);
+  },
 };
 
 export default wallPostService;

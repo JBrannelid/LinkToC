@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { formatDateForInput } from "../utils/calendarUtils";
+import { useAppContext } from "../context/AppContext";
 
 export const useWallPostForm = (event, onSubmit, onCancel) => {
+  const { currentStable } = useAppContext();
   const [wallPostData, setWallPostData] = useState({
     title: "",
     body: "",
     postDateTime: "",
+    stableIdFk: "",
 
     // title: "",
     // body: "",
@@ -24,6 +27,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
         title: event.title,
         body: event.body,
         postDateTime: formatDateForInput(event.postDate),
+        stableIdFk: currentStable.id,
         // editedDateTime: formatDateForInput(event.lastEdited),
       });
     }
