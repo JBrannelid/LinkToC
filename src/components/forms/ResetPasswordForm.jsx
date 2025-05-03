@@ -12,6 +12,7 @@ import {
   createSuccessMessage,
   createErrorMessage,
 } from "../../utils/errorUtils";
+import Button from "../ui/Button";
 
 const ResetPasswordForm = ({ setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
       console.error("No token found in URL");
       setMessage(
         createErrorMessage(
-          "Ingen återställningskod hittades i URL:en. Kontrollera länken i ditt e-postmeddelande."
+          "Ingen återställningskod hittades. Kontrollera länken i ditt epost"
         )
       );
     }
@@ -105,16 +106,6 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
         );
       }
     } catch (error) {
-      // Enhanced error logging
-      console.error("Reset password error:", error);
-
-      // If there's error.response from axios, log that too
-      if (error.response) {
-        console.error("Server response data:", error.response.data);
-        console.error("Server response status:", error.response.status);
-        console.error("Server response headers:", error.response.headers);
-      }
-
       setMessage(
         getErrorMessage(error, {
           defaultMessage:
@@ -138,6 +129,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
           label="Nytt lösenord"
           type="password"
           placeholder="Ange nytt lösenord"
+          labelPosition="above"
           validation={{
             required: "Lösenord krävs",
             minLength: {
@@ -154,6 +146,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
           label="Bekräfta lösenord"
           type="password"
           placeholder="Bekräfta ditt nya lösenord"
+          labelPosition="above"
           validation={{
             required: "Vänligen bekräfta ditt lösenord",
           }}
@@ -162,27 +155,23 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
 
       <FormMessage message={message} />
 
-      <div className="mt-5">
-        <button
+      <div className="mt-5 grid grid-cols-1">
+        <Button
           type="submit"
-          className="w-full bg-primary hover:bg-primary/90 p-2 rounded-md text-white flex items-center justify-center"
+          className="w-9/10"
           disabled={loading || !token}
           aria-busy={loading}
         >
           <Shield className="h-5 w-5 mr-2" />
           <span>Återställ lösenord</span>
-        </button>
+        </Button>
       </div>
 
       <div className="mt-4 text-center">
-        <button
-          type="button"
-          onClick={handleBackToLogin}
-          className="flex items-center justify-center mx-auto text-primary hover:underline"
-        >
+        <Button type="button" onClick={handleBackToLogin} className="w-9/10">
           <ArrowLeft className="h-4 w-4 mr-1" />
           <span>Tillbaka till inloggning</span>
-        </button>
+        </Button>
       </div>
     </FormProvider>
   );
