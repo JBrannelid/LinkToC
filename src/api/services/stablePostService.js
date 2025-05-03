@@ -1,6 +1,6 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
-import axiosConfig from "../config/axiosConfig";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.STABLEPOST);
 
@@ -8,8 +8,8 @@ const stablePostService = {
   ...baseService,
 
   getStablePosts: async (stableId) => {
-    const response = await axiosConfig.get(
-      `${ENDPOINTS.STABLEPOST}/stable/${stableId}`
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLEPOSTBYID}${stableId}`
     );
 
     if (response && response.isSuccess && Array.isArray(response.value)) {

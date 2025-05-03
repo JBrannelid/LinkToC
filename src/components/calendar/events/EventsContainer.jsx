@@ -32,7 +32,28 @@ const EventsContainer = ({
   // Display mobileview
   if (viewMode === "mobile") {
     return (
-      <MobileEventsView
+      <div className="md:hidden mb-10">
+        <MobileEventsView
+          selectedDay={selectedDay}
+          events={sortedEvents}
+          format={format}
+          formatFullDayDate={formatFullDayDate}
+          locale={locale}
+          noEventsMessage={noEventsMessage}
+          onUpdateEvent={onUpdateEvent}
+          onDeleteEvent={onDeleteEvent}
+          onAddEvent={onAddEvent}
+          onClose={onClose}
+          isOpen={isOpen}
+        />
+      </div>
+    );
+  }
+
+  // Fallback to DesktopEventsView
+  return (
+    <div className="mb-12">
+      <DesktopEventsView
         selectedDay={selectedDay}
         events={sortedEvents}
         format={format}
@@ -42,25 +63,8 @@ const EventsContainer = ({
         onUpdateEvent={onUpdateEvent}
         onDeleteEvent={onDeleteEvent}
         onAddEvent={onAddEvent}
-        onClose={onClose}
-        isOpen={isOpen}
       />
-    );
-  }
-
-  // Fallback to DesktopEventsView
-  return (
-    <DesktopEventsView
-      selectedDay={selectedDay}
-      events={sortedEvents}
-      format={format}
-      formatFullDayDate={formatFullDayDate}
-      locale={locale}
-      noEventsMessage={noEventsMessage}
-      onUpdateEvent={onUpdateEvent}
-      onDeleteEvent={onDeleteEvent}
-      onAddEvent={onAddEvent}
-    />
+    </div>
   );
 };
 
