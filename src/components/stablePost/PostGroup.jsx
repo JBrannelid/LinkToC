@@ -10,7 +10,7 @@ const PostGroup = ({ title, posts, user }) => {
       <div className="flex justify-between">
         <h2 className="text-xl">{title}</h2>
       </div>
-      {/* Map through a list of post and print out postId, content and user  */}
+      {/* Loop through posts and render a PostItem for each post with id, post and auther */}
       {posts.map((post) => (
         <PostItem key={post.id} post={post} user={user} />
       ))}
