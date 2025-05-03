@@ -86,10 +86,11 @@ export default PostItem;
         "id": 1,
         "firstName": "Test",
         "lastName": "Testsson",
-        "profileImage": "url/to/image.jpg"
       }
     },
     "message": null
   }
 }*/
 // A prepare endpoint i stableService: `${ENDPOINTS.STABLEPOST}${stableId}`
+
+// I creacte, skicka med userID och stableFK
