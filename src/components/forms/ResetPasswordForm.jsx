@@ -34,8 +34,9 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
 
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
+      console.log("Token found in URL:", tokenFromUrl);
     } else {
-      // If no token in URL, show error message
+      console.error("No token found in URL");
       setMessage(
         createErrorMessage(
           "Ingen återställningskod hittades i URL:en. Kontrollera länken i ditt e-postmeddelande."
@@ -73,13 +74,16 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
     setMessage({ type: "", text: "" });
 
     try {
+      // Log what we're sending to API
       const resetData = {
         token: token,
         newPassword: data.password,
         confirmPassword: data.confirmPassword,
       };
+      console.log("Sending reset data:", resetData);
 
       const response = await authService.resetPassword(resetData);
+      console.log("Reset password response:", response);
 
       if (response && response.isSuccess) {
         setMessage(
@@ -93,6 +97,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
           navigate(ROUTES.LOGIN);
         }, 3000);
       } else {
+        console.error("API returned unsuccessful response:", response);
         setMessage(
           createErrorMessage(
             response?.message || "Något gick fel. Vänligen försök igen."
@@ -100,6 +105,16 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
         );
       }
     } catch (error) {
+      // Enhanced error logging
+      console.error("Reset password error:", error);
+
+      // If there's error.response from axios, log that too
+      if (error.response) {
+        console.error("Server response data:", error.response.data);
+        console.error("Server response status:", error.response.status);
+        console.error("Server response headers:", error.response.headers);
+      }
+
       setMessage(
         getErrorMessage(error, {
           defaultMessage:

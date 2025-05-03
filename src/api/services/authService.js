@@ -84,22 +84,20 @@ const authService = {
   resetPassword: async (resetData) => {
     if (
       !resetData ||
-      !resetData.email ||
+      !resetData.token ||
       !resetData.newPassword ||
-      !resetData.confirmPassword ||
-      !resetData.token
+      !resetData.confirmPassword
     ) {
-      throw new Error("All fields are required");
+      throw new Error("Token and new password are required");
     }
-
-    if (resetData.newPassword !== resetData.newPasswordConfirmation) {
+    if (resetData.newPassword !== resetData.confirmPassword) {
       throw new Error("Passwords must match");
     }
 
     return await axiosConfig.post(`/api/reset-password`, {
+      token: resetData.token,
       newPassword: resetData.newPassword,
       confirmPassword: resetData.confirmPassword,
-      token: resetData.token,
     });
   },
 
