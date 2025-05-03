@@ -11,6 +11,7 @@ import {
   createWarningMessage,
   createErrorMessage,
 } from "../../utils/errorUtils.js";
+import Button from "../ui/Button.jsx";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);
@@ -142,18 +143,17 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
       </div>
 
       {message.type === "warning" && (
-        <div className="mt-3 p-3 bg-amber-50 border border-amber-200 rounded-md flex items-start">
+        <div className="mt-3 p-3 bg-amber-50 border border-b-warning-300 rounded-md flex items-start">
           <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
-          <span className="text-sm text-amber-800">{message.text}</span>
+          <span className="text-sm text-error-600">{message.text}</span>
         </div>
       )}
 
       <FormMessage message={message} />
 
       <div className="mt-5">
-        <button
+        <Button
           type="submit"
-          className="w-full bg-[#556B2F] hover:bg-[#4B5320] p-2 rounded-md text-white flex items-center justify-center"
           disabled={loading || cooldownRemaining > 0}
           aria-busy={loading}
         >
@@ -163,7 +163,7 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
               ? `Vänta ${cooldownRemaining} sekunder...`
               : "Skicka återställningslänk"}
           </span>
-        </button>
+        </Button>
         <p className="text-xs pt-5 text-error-500">
           <span>OBS: </span>Kontrollera din skräppostmapp
         </p>
