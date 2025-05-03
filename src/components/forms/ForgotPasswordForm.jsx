@@ -66,12 +66,7 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
     setMessage({ type: "", text: "" });
 
     try {
-      console.log("Attempting to send password reset email to:", data.email);
-
       const response = await authService.forgotPassword(data.email);
-
-      // Log the full response for debugging
-      console.log("Password reset API response:", response);
 
       if (
         response &&
@@ -112,22 +107,6 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
         );
       }
     } catch (error) {
-      // Enhanced error logging
-      console.error("Detailed password reset error:", error);
-
-      // If there's error.response from axios, log that too
-      if (error.response) {
-        console.error("Server response data:", error.response.data);
-        console.error("Server response status:", error.response.status);
-        console.error("Server response headers:", error.response.headers);
-      }
-
-      // If there's a specific error type or status, log it
-      if (error.type || error.status) {
-        console.error("Error type:", error.type);
-        console.error("Error status:", error.status);
-      }
-
       setMessage(
         getErrorMessage(error, {
           defaultMessage:
@@ -145,16 +124,13 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
       onSubmit={handleSubmit}
       footer={{ showFooter: false }}
     >
-      <p className="text-xs mt-2">
-        <span>OBS: </span>Kontrollera din skräppostmapp
-      </p>
-
       <div className="mt-4">
         <FormInput
           name="email"
           label="E-post"
           type="email"
           placeholder="exempel@email.com"
+          labelPosition="above"
           validation={{
             required: "Vänligen ange en giltig e-postadress",
             pattern: {
@@ -188,6 +164,9 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
               : "Skicka återställningslänk"}
           </span>
         </button>
+        <p className="text-xs pt-5 text-error-500">
+          <span>OBS: </span>Kontrollera din skräppostmapp
+        </p>
       </div>
     </FormProvider>
   );
