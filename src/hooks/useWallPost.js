@@ -64,7 +64,7 @@ export const useWallPost = (stableId) => {
       setError(null);
 
       const createNewPost = {
-        stableIdFk: currentStable.id,
+        stableId: currentStable.id,
       };
 
       await wallPostService.create(createNewPost);

@@ -5,15 +5,17 @@ import axiosConfig from "../config/axiosConfig";
 const baseService = createBaseService(ENDPOINTS.WALLPOST);
 
 const wallPostService = {
-  ...baseService,
+  ...baseService, // baseService will handle validation of data
 
   create: async (data) => {
-    // baseService will handle validation of data
+    if (!data.stableIdFk) {
+      throw new Error("stableId is required");
+    }
 
     const createData = {
+      stableId: data.stableId,
       title: data.title,
       body: data.body,
-      stableIdFk: data.stableIdFk,
     };
 
     return await axiosConfig.post(`${ENDPOINTS.WALLPOST}/create`, createData);
@@ -23,7 +25,6 @@ const wallPostService = {
     if (!stableId) {
       throw new Error("Stable ID is required");
     }
-
     return await axiosConfig.get(`/api/wallpost/${stableId}`);
   },
 
