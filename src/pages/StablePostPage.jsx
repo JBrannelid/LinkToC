@@ -5,13 +5,15 @@ import { useAppContext } from "../context/AppContext";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useStablePosts } from "../hooks/useStablePosts";
 import PostContainer from "../components/stablePost/PostContainer";
+import { useParams } from "react-router";
 
 export default function StablePostPage() {
+  const { stableId: urlStableId } = useParams();
   const { currentStable } = useAppContext();
   const { user } = useAuth();
 
-  // Use stableId from context
-  const currentStableId = currentStable?.id;
+  // Use stableId from context or url params
+  const currentStableId = urlStableId || currentStable?.id;
 
   // Fetch user data with error and load handling
   const {
