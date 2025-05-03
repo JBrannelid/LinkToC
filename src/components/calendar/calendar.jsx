@@ -75,7 +75,9 @@ const Calendar = ({
   return (
     <div className="w-full">
       <div className="w-full">
-        <div className="grid md:grid-cols-[58%_1fr] md:divide-x md:divide-primary-light">
+        {/*   md:divide-x md:divide-primary-light md:rounded-lg md:overflow-hidden */}
+
+        <div className="grid md:grid-cols-[58%_1fr] lg:grid-cols-[60%_40%] md:overflow-hidden">
           {/* Calendar */}
           <div className="md:w-full">
             <CalendarHeader
