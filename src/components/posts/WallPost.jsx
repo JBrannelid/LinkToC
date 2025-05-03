@@ -91,53 +91,66 @@ export default function WallPost({}) {
   }
 
   //In case not found, create empty WallPost with Stable ID
-  if (error == 404 || wallPost == null) {
-    handleCreateWallPost(currentStable.id);
+  if (error?.status === 404 || wallPost == null) {
+    return (
+      <div className="mt-5 px-2">
+        <h2 className="text-2xl mb-2">Väggen</h2>
+        <div className="bg-white rounded-lg shadow-sm p-4 flex items-center cursor-pointer">
+          <p className="flex-1">Ingen händelse hittades</p>
+          <Button type="primary" onClick={handleCreateWallPost}>
+            Skapa
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <WallPostCard
-      title={
-        wallPost.title ? wallPost.title : "Hittade ingen händelse i stallet"
-      }
-      isExpanded={isExpanded}
-      toggleExpand={toggleExpand}
-      actions={
-        <Button type="secondary" size="small" onClick={toggleForm}>
-          {isFormOpen ? "Avbryt" : wallPost.title ? "Redigera" : "Skapa"}
-        </Button>
-      }
-      form={
-        isFormOpen && (
-          <WallPostForm
-            event={wallPost}
-            onSubmit={
-              wallPost.title ? handleSubmitWallPost : handleReplaceWallPost
-            }
-            onCancel={toggleForm}
-          />
-        )
-      }
-    >
-      {wallPost.body ? (
-        <>
-          <p className="font-light text-sm">{wallPost.body}</p>
-          {wallPost.lastEdited ? (
-            <p className="font-light text-xs">
-              Edited: ({formatData(wallPost.lastEdited)})
-            </p>
-          ) : wallPost.postDate ? (
-            <p className="font-light text-xs">
-              Posted: ({formatData(wallPost.postDate)})
-            </p>
-          ) : null}
-        </>
-      ) : (
-        <p className="font-light text-sm">
-          Inga detaljer om händelse i stallet
-        </p>
-      )}
-    </WallPostCard>
+    <div className="mt-5 px-2">
+      <h2 className="text-2xl mb-2">Väggen</h2>
+      <WallPostCard
+        title={
+          wallPost?.title ? wallPost.title : "Hittade ingen händelse i stallet"
+        }
+        isExpanded={isExpanded}
+        toggleExpand={toggleExpand}
+        actions={
+          <Button type="secondary" size="small" onClick={toggleForm}>
+            {isFormOpen ? "Avbryt" : wallPost?.title ? "Redigera" : "Skapa"}
+          </Button>
+        }
+        form={
+          isFormOpen && (
+            <WallPostForm
+              event={wallPost}
+              onSubmit={
+                wallPost.title ? handleSubmitWallPost : handleReplaceWallPost
+              }
+              onCancel={toggleForm}
+            />
+          )
+        }
+      >
+        {wallPost?.body ? (
+          <>
+            <p className="font-light text-sm">{wallPost.body}</p>
+            {wallPost.lastEdited ? (
+              <p className="font-light text-xs">
+                Edited: ({formatData(wallPost.lastEdited)})
+              </p>
+            ) : wallPost.postDate ? (
+              <p className="font-light text-xs">
+                Posted: ({formatData(wallPost.postDate)})
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className="font-light text-sm">
+            Inga detaljer om händelse i stallet
+          </p>
+        )}
+      </WallPostCard>
+    </div>
   );
 
   // return (
