@@ -4,9 +4,12 @@ import { weekdayTitles } from "../../../utils/calendarUtils";
 // Renders the days "weekdayTitles" from CalendarUtils
 const WeekdayHeader = () => {
   return (
-    <div className="grid grid-cols-7 text-center bg-white">
+    <div className="grid grid-cols-7 bg-white w-full md:h-auto md:pl-2 md:pr-2 rounded-t-lg md:shadow-md">
       {weekdayTitles.map((day, index) => (
-        <p key={index} className="py-2">
+        <p
+          key={index}
+          className="py-2 flex items-center justify-center text-sm font-medium"
+        >
           {day}
         </p>
       ))}
