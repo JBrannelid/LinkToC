@@ -94,6 +94,24 @@
   a:hover {
     text-decoration: underline;
   }
+
+  /* Custom Scrollbar Styling */
+  * {
+    scrollbar-color: var(--color-primary);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+  }
 }
 
 /* Component styles */
