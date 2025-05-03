@@ -15,21 +15,56 @@ import {
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
+  const [cooldownRemaining, setCooldownRemaining] = useState(0);
+
   const methods = useForm({
     defaultValues: {
       email: "",
     },
   });
 
+  // Effect to update parent loading state
   useEffect(() => {
     if (setParentLoading) {
       setParentLoading(loading);
     }
   }, [loading, setParentLoading]);
 
+  // Effect to handle cooldown timer
+  useEffect(() => {
+    let timerId;
+
+    if (cooldownRemaining > 0) {
+      timerId = setTimeout(() => {
+        setCooldownRemaining((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
+  }, [cooldownRemaining]);
+
   const handleSubmit = async (data) => {
+    // Check if we're in the cooldown period
+    const now = Date.now();
+    if (lastSubmitTime > 0 && now - lastSubmitTime < 60000) {
+      const remainingSeconds = Math.ceil(
+        (60000 - (now - lastSubmitTime)) / 1000
+      );
+      setCooldownRemaining(remainingSeconds);
+      setMessage(
+        createWarningMessage(
+          `Vänligen vänta ${remainingSeconds} sekunder innan du försöker igen.`
+        )
+      );
+      return;
+    }
+
     setLoading(true);
     setMessage({ type: "", text: "" });
+
     try {
       console.log("Attempting to send password reset email to:", data.email);
 
@@ -44,6 +79,10 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
           response.statusCode === 200 ||
           response.statusCode === 201)
       ) {
+        // Set cooldown timer
+        setLastSubmitTime(now);
+        setCooldownRemaining(60);
+
         // Success handling remains the same
         if (
           response.message &&
@@ -71,7 +110,6 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
             response?.message || "Något gick fel. Vänligen försök igen."
           )
         );
-        setLoading(false);
       }
     } catch (error) {
       // Enhanced error logging
@@ -96,6 +134,7 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
             "Misslyckades att bearbeta begäran. Försök igen senare",
         })
       );
+    } finally {
       setLoading(false);
     }
   };
@@ -139,11 +178,15 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
         <button
           type="submit"
           className="w-full bg-[#556B2F] hover:bg-[#4B5320] p-2 rounded-md text-white flex items-center justify-center"
-          disabled={loading}
+          disabled={loading || cooldownRemaining > 0}
           aria-busy={loading}
         >
           <Send className="h-5 w-5 mr-2" />
-          <span>Skicka återställningslänk</span>
+          <span>
+            {cooldownRemaining > 0
+              ? `Vänta ${cooldownRemaining} sekunder...`
+              : "Skicka återställningslänk"}
+          </span>
         </button>
       </div>
     </FormProvider>
