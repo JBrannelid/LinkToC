@@ -137,37 +137,45 @@ export const AuthProvider = ({ children }) => {
 
   const checkAndRefreshToken = useCallback(async () => {
     try {
+      // Get the access and refresh tokens from storage
       const token = sessionStorage.getItem("authToken");
-      if (!token) return false;
+      const refreshToken = sessionStorage.getItem("refreshToken");
 
+      if (!token || !refreshToken) return false;
+
+      // Parse the JWT to check expiration
       const payload = parseJwt(token);
-      if (!payload || !payload.iat || !payload.exp) return false;
+      if (!payload || !payload.exp) return false;
 
-      const issuedAt = payload.iat * 1000;
-      const expiresAt = payload.exp * 1000;
+      const expiresAt = payload.exp * 1000; // Convert to milliseconds
       const currentTime = Date.now();
-
-      const tokenAge = currentTime - issuedAt;
-      const MAX_TOKEN_AGE = 4 * 60 * 60 * 1000;
-      const isWithinMaxAge = tokenAge <= MAX_TOKEN_AGE;
-
       const timeUntilExpiry = expiresAt - currentTime;
-      const isNearingExpiration =
-        timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000;
 
-      if (isWithinMaxAge && isNearingExpiration) {
+      // If token is close to expiring (less than 10 minutes), refresh it
+      if (timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000) {
         try {
-          const response = await authService.refreshToken(token);
+          // Call your refresh token API
+          const response = await authService.refreshToken(refreshToken);
 
-          if (response && response.value && response.value.token) {
-            sessionStorage.setItem("authToken", response.value.token);
-            return true;
+          // Check if the response contains new tokens
+          if (response && response.isSuccess && response.value) {
+            const newAccessToken = response.value.accessToken;
+            const newRefreshToken = response.value.refreshToken;
+
+            if (newAccessToken && newRefreshToken) {
+              // Store the new tokens
+              sessionStorage.setItem("authToken", newAccessToken);
+              sessionStorage.setItem("refreshToken", newRefreshToken);
+              return true;
+            }
           }
         } catch (refreshError) {
           console.error("Token refresh failed", refreshError);
         }
       }
-      return isWithinMaxAge && timeUntilExpiry > 0;
+
+      // Return true if token is still valid
+      return timeUntilExpiry > 0;
     } catch (error) {
       console.error("Token check failed", error);
       return false;
@@ -214,29 +222,24 @@ export const AuthProvider = ({ children }) => {
       // Use authService to login
       const response = await authService.login({ email, password });
 
-      if (response.data && typeof response.data === "object") {
-        console.log("Data keys:", Object.keys(response.data));
-      }
-
       // Handle the API response
       if (!response) {
         throw new Error("Login failed: No response from server");
       }
 
-      // Extract token
-      const token = response?.value?.token;
-      if (!token) {
+      // Extract tokens
+      const accessToken = response?.value?.accessToken;
+      const refreshToken = response?.value?.refreshToken;
+
+      if (!accessToken || !refreshToken) {
         console.error("Unexpected response structure", response);
         throw new Error("Authentication failed: Invalid token response");
       }
 
-      if (!token) {
-        console.error("Unexpected response structure", response);
-        throw new Error("Authentication failed: Invalid token response");
-      }
+      // Store tokens
+      sessionStorage.setItem("authToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
 
-      // Store token and verify it
-      sessionStorage.setItem("authToken", token);
       await verifyToken();
       return true;
     } catch (error) {
