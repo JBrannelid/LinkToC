@@ -36,10 +36,20 @@ const PostItem = ({ post }) => {
     }
   };
 
-  // Use post author data if available, otherwise fallback to current user
-  const displayUser = post.user ? post.user : user;
-  const userFullName = formatUserFullName(displayUser) || "Unknown User";
-  const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+  // Create a user object from the post DTO
+  const displayUser = {
+    firstName: post.posterFirstName || "Unknown",
+    lastName: post.posterLastName || "",
+
+    // Not in use
+    profileImage: post.posterProfileImage,
+  };
+
+  const userFullName =
+    `${displayUser.firstName} ${displayUser.lastName}`.trim() || "Unknown User";
+
+  // Until we have solved image handeling all post is display with a default user image
+  const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
 
   return (
     <div className="bg-background pb-2">
@@ -82,10 +92,8 @@ export default PostItem;
       "content": "Please make sure to clean up after your horse and follow the new scheduling system for arena time.",
       "date": "2025-05-02T00:00:00",
       "isPinned": true
-      "user": {
-        "id": 1,
-        "firstName": "Test",
-        "lastName": "Testsson",
+      "posterFirstName": "Test",
+      "posterLastName": "Testsson",
       }
     },
     "message": null
