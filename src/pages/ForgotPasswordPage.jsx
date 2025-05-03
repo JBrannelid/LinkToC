@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft, RabbitIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
 import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer.jsx";
 import { ROUTES } from "../routes/index.jsx";

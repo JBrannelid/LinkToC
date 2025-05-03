@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { RabbitIcon } from "lucide-react";
 import ResetPasswordForm from "../components/forms/ResetPasswordForm";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer";
