@@ -58,13 +58,14 @@ export const useWallPost = (stableId) => {
   };
 
   // creates empty wallPost with only stable ID
-  const createWallPost = async () => {
+  const createWallPost = async (data) => {
+    console.log("createWallPost called with data:", data); // Debugging
     try {
       setLoading(true);
       setError(null);
 
       const createNewPost = {
-        stableId: currentStable.id,
+        stableId: data.stableId,
       };
 
       await wallPostService.create(createNewPost);

@@ -9,18 +9,21 @@ import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Button from "../ui/Button";
 import WallPostCard from "./WallPostCard";
+import { useStableData } from "../../hooks/useStableData";
 
 export default function WallPost({}) {
   const { currentStable } = useAppContext();
+  const { stableId } = useStableData(currentStable.id);
   const {
     wallPost,
     loading,
     error,
     currentWallPost,
     updateWallPost,
-    createWallPost,
     replaceWallPost,
   } = useWallPost(currentStable?.id);
+
+  const { createWallPost } = useWallPost(currentStable.id);
 
   useEffect(() => {
     if (currentStable?.id) {
@@ -52,11 +55,38 @@ export default function WallPost({}) {
   };
 
   const handleCreateWallPost = async () => {
-    const success = await createWallPost();
-    if (success) {
-      setIsFormOpen(false);
+    if (!stableId && !currentStable?.id) {
+      console.error("Stable ID is missing");
+      return;
+    }
+
+    console.log("Stable ID:", stableId || currentStable.id); // Debugging
+
+    try {
+      const success = await createWallPost({
+        stableId: stableId || currentStable.id,
+      });
+      if (success) {
+        console.log("success!");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  // const handleCreateWallPost = async () => {
+  //   console.log("create loading");
+  //   try {
+  //     const success = await createWallPost({
+  //       stableIdFk: stableId || currentStable.id,
+  //     });
+  //     if (success) {
+  //       console.log("success!");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleReplaceWallPost = async (formData) => {
     const success = await replaceWallPost(formData);
