@@ -8,14 +8,14 @@ const wallPostService = {
   ...baseService, // baseService will handle validation of data
 
   create: async (data) => {
-    if (!data.stableIdFk) {
+    if (!data.stableId) {
       throw new Error("stableId is required");
     }
 
     const createData = {
       stableId: data.stableId,
-      title: data.title,
-      body: data.body,
+      // title: data.title || "",
+      // body: data.body || "",
     };
 
     return await axiosConfig.post(`${ENDPOINTS.WALLPOST}/create`, createData);
