@@ -8,17 +8,20 @@ const wallPostService = {
   ...baseService, // baseService will handle validation of data
 
   create: async (data) => {
-    if (!data.stableId) {
+    if (!data.stableIdFk) {
       throw new Error("stableId is required");
     }
 
     const createData = {
-      stableId: data.stableId,
-      // title: data.title || "",
-      // body: data.body || "",
+      stableIdFk: data.stableIdFk,
+      title: "",
+      body: "",
     };
-
-    return await axiosConfig.post(`${ENDPOINTS.WALLPOST}/create`, createData);
+    console.log("Sending to Backend", createData);
+    return await axiosConfig.post(
+      `${ENDPOINTS.WALLPOST}/create?stableId=${data.stableIdFk}`,
+      createData
+    );
   },
 
   getById: async (stableId) => {
