@@ -10,15 +10,13 @@ const WallPostCard = ({
   form,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
       <div
         className="p-4 flex items-center cursor-pointer"
         onClick={toggleExpand}
         aria-label="Expandable important message"
       >
-        <div className="text-primary mr-3">
-          <PinIcon className="w-6 h-6" />
-        </div>
+        <PinIcon className="w-6 h-6 text-primary" />
 
         <p className="flex-1">{title}</p>
 

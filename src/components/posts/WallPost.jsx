@@ -112,17 +112,17 @@ export default function WallPost({}) {
   //In case not found, create empty WallPost with Stable ID
   if (error?.status === 404 || wallPost == null) {
     return (
-      <div className="mt-5 px-2">
-        <h2 className="text-2xl mb-2">Väggen</h2>
+      <div className="px-2 md:px-0 w-full md:max-w-[58%]">
+        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Väggen</h2>
 
         {/* Show success message if set */}
         {successMessage && (
-          <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
+          <div className="bg-warning-300 p-4 rounded mb-4">
             {successMessage}
           </div>
         )}
 
-        <div className="bg-white rounded-lg shadow-sm p-4 flex items-center cursor-pointer">
+        <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
           <p className="flex-1">Ingen händelse hittades</p>
           <Button type="primary" onClick={handleCreateWallPost}>
             Skapa
@@ -133,8 +133,8 @@ export default function WallPost({}) {
   }
 
   return (
-    <div className="mt-5 px-2">
-      <h2 className="text-2xl mb-2">Väggen</h2>
+    <div className="px-2 md:px-0 w-full md:max-w-[58%]">
+      <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Väggen</h2>
       <WallPostCard
         title={
           wallPost?.title ? wallPost.title : "Hittade ingen händelse i stallet"
@@ -178,65 +178,5 @@ export default function WallPost({}) {
         )}
       </WallPostCard>
     </div>
-    <>
-      {wallPost ? (
-        <div className="px-2 md:px-0 w-full md:max-w-[58%]">
-          <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
-            Väggen
-          </h2>
-          <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
-            <div
-              className="p-4 flex items-center cursor-pointer"
-              onClick={toggleExpand}
-              aria-label="Expandable important message"
-            >
-              <PinIcon className="w-6 h-6 text-primary" />
-
-              <p className="flex-1">{wallPost.title}</p>
-              <div className="text-primary">
-                <ChevronDownIcon
-                  className={`w-5 h-5 transition-transform ${
-                    isExpanded ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
-            </div>
-            {isExpanded && (
-              <div className="px-4 pb-4">
-                <p className="font-light text-sm">{wallPost.body}</p>
-                <br />
-
-                {wallPost?.lastEdited ? (
-                  <p className="font-light text-xs">
-                    Edited: ({formatData(wallPost.lastEdited)})
-                  </p>
-                ) : wallPost?.postDate ? (
-                  <p className="font-light text-xs">
-                    Posted: ({formatData(wallPost.postDate)})
-                  </p>
-                ) : null}
-
-                <div className="mt-3">
-                  <Button type="secondary" size="small" onClick={toggleForm}>
-                    {isFormOpen ? "Avbryt" : "Redigera"}
-                  </Button>
-                  <div className="mt-5">
-                    {isFormOpen && (
-                      <WallPostForm
-                        event={wallPost}
-                        onSubmit={handleSubmitWallPost}
-                        onCancel={toggleForm}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      ) : (
-        <p>Inga tillgänglig händelse</p>
-      )}
-    </>
   );
 }
