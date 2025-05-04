@@ -64,10 +64,10 @@ export default function WallPost({}) {
 
     try {
       const success = await createWallPost({
-        stableId: stableId || currentStable.id,
+        stableIdFk: stableId || currentStable.id,
       });
       if (success) {
-        console.log("success!");
+        console.log("success in creating WallPost");
       }
     } catch (error) {
       console.error(error);
