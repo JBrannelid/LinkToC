@@ -36,12 +36,6 @@ export const useWallPost = (stableId) => {
         stableIdFk: stableId,
         title: data.title,
         body: data.body,
-
-        // id: wallPost.id,
-        // title: data.title,
-        // body: data.body,
-        // lastEdited: new Date().toISOString(),
-        // stableIdFk: stableId,
       };
 
       await wallPostService.update(updateData);
