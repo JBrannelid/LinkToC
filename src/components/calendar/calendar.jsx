@@ -75,9 +75,11 @@ const Calendar = ({
   return (
     <div className="w-full">
       <div className="w-full">
-        <div className="grid md:grid md:grid-cols-2 md:divide-x md:divide-accent-secondary/50">
+        {/*   md:divide-x md:divide-primary-light md:rounded-lg md:overflow-hidden */}
+
+        <div className="grid md:grid-cols-[58%_1fr] lg:grid-cols-[60%_40%] md:overflow-hidden">
           {/* Calendar */}
-          <div className="md:pr-6">
+          <div className="md:w-full">
             <CalendarHeader
               firstDayCurrentMonth={dateUtils.firstDayCurrentMonth}
               locale={locale}
@@ -98,7 +100,7 @@ const Calendar = ({
           </div>
 
           {/* Desktop events view */}
-          <div className="hidden md:block pl-10 px-4">
+          <div className="hidden md:block h-full pl-10 px-4">
             <EventsContainer
               selectedDay={selectedDay}
               events={currentDayEvents}

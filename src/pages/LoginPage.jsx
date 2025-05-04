@@ -158,14 +158,8 @@ const LoginForm = () => {
           </div>
 
           <div className="flex justify-end mb-10">
-            <p className="text-sm text-gray">
-              Glömt
-              <a
-                onClick={handleForgotPassword}
-                className="font-medium text-accent-orange pl-2"
-              >
-                Lösenord
-              </a>
+            <p className="text-sm font-light">
+              <a onClick={handleForgotPassword}>Glömt Lösenord?</a>
             </p>
           </div>
 

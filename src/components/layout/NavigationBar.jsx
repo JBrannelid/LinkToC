@@ -17,7 +17,7 @@ const NavigationBar = () => {
   const isActive = (path) => isRouteActive(path, currentPath);
 
   return (
-    <div className="px-4 pb-4">
+    <div className="w-full md:max-w-[70%] mx-auto">
       <nav className="nav-container">
         <Link
           to={ROUTES.HOME}

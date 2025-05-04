@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import { format } from "../../utils/calendarUtils";
+import { format } from "../../../utils/calendarUtils.js";
 
 // Date picker component that integrates with React Hook Form
 

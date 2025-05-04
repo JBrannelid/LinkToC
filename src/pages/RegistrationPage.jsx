@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import Button from "../components/ui/Button";
 import { useLoadingState } from "../hooks/useLoadingState";
 import {createSuccessMessage, getErrorMessage} from "../utils/errorUtils.js";
+import { ROUTES } from "../routes";
 
 const RegistrationPage = () => {
   const [serverError, setServerError] = useState("");
@@ -48,12 +49,10 @@ const RegistrationPage = () => {
         // Attempt to log in with the newly registered credentials
         try {
           await login(data.email, data.password);
-          // Redirect to dashboard or home page after successful login
-          console.log("Login successful:", response);
+          sessionStorage.setItem('isFirstLogin', 'true');
+          navigate(ROUTES.STABLE_ONBOARDING);
         } catch (loginError) {
-          console.error("Auto-login failed after registration:", loginError);
-          // Even if auto-login fails, registration was successful
-          // Redirect to login page with a success message
+          navigate(ROUTES.LOGIN);
           setMessage(createSuccessMessage(
               "Registration successful. Please log in with your credentials."
           ));
@@ -302,7 +301,7 @@ const RegistrationPage = () => {
             type="secondary"
             htmlType="button"
             className="w-full mt-3"
-            onClick={() => navigate("/login")}
+            onClick={() => navigate(ROUTES.LOGIN)}
           >
             Redan Registrerad
           </Button>

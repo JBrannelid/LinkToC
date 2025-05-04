@@ -7,4 +7,5 @@ export const ENDPOINTS = {
   EVENTS_BY_STABLE: "/api/calendar-events",
   WALLPOST: "api/wallpost",
   AUTH: "/api/auth",
+  STABLEPOSTBYID: "/api/stable-post-by-stable-id/",
 };

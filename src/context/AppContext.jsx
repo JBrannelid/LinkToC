@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useAuth } from "./AuthContext";
 
 const AppContext = createContext();
@@ -9,10 +15,8 @@ export const useAppContext = () => {
 };
 
 export const AppProvider = ({ children }) => {
-  // Get authentication state from AuthContext
   const { user } = useAuth();
-
-  // Current stable state (for the selected stable)
+  const [roleCache, setRoleCache] = useState({});
   const [currentStable, setCurrentStable] = useState(() => {
     // Try to load from localStorage on initial render
     const savedStable = localStorage.getItem("currentStable");
@@ -44,17 +48,35 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  const getCurrentStableRole = useCallback(async () => {
+    if (!currentStable || !user.stableRoles) {
+      return USER_ROLES.USER; // Set to baser user if we don't know stable role och missing a stable id
+    }
+    const role = user.stableRoles[currentStable.id]; // Return role or fallback to base user
+
+    setRoleCache((prev) => ({ ...prev, [cacheKey]: role }));
+    return role !== undefined ? role : USER_ROLES.USER; // Fallback to base user
+  }, [user?.stableRoles, currentStable?.id]);
+
   const contextValue = {
     currentUser: user,
     currentStable,
     changeStable,
     selectedHorse,
     setSelectedHorse,
+    getCurrentStableRole,
   };
 
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
+};
+
+// User role constants. Remove when we have a contact with BE
+export const USER_ROLES = {
+  USER: 0,
+  ADMIN: 1,
+  MANAGER: 2,
 };
 
 export default AppContext;

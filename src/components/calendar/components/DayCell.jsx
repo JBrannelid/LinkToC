@@ -36,11 +36,10 @@ const DayCell = ({
   };
 
   return (
-    <div className={`${colStartClass} p-0.5 relative flex flex-col `}>
+    <div className={`${colStartClass} p-0.5 md:p-1 relative flex flex-col`}>
       {/* Day container */}
       <div
-        className="relative w-full h-10 bg-background cursor-pointer 
-                   transition-colors duration-300 hover:bg-light hover:opacity-40 rounded-lg"
+        className="relative w-full h-10 md:h-12 lg:h-14 bg-background cursor-pointer transition-colors duration-300 hover:bg-light hover:opacity-40 rounded-lg"
         onClick={handleDayClick}
       >
         {/* User profile image for users with events on this day */}

@@ -114,9 +114,9 @@ function CalendarDisplay() {
 
   return (
     <div className="mt-2 bg-background">
-      <div className="container mx-auto">
+      <div className="mx-auto">
         {/* Stable Title */}
-        <h1 className="text-center mb-5 font-heading">
+        <h1 className="text-center mb-5 font-heading md:pb-10">
           <StableName currentStableId={currentStable.id} />
         </h1>
 
@@ -153,22 +153,20 @@ function CalendarDisplay() {
             users={users}
           />
         )}
+        <Calendar
+          stableId={stableId || currentStable.id}
+          events={events}
+          users={users}
+          locale={sv}
+          noEventsMessage="Inga schemalagda händelser"
+          onAddEvent={handleOpenEventForm}
+          onUpdateEvent={handleOpenUpdateForm}
+          onDeleteEvent={handleDeleteEvent}
+          getEventsForDay={getEventsForDay}
+          selectedDay={selectedDay}
+          onSelectDay={setSelectedDay}
+        />
       </div>
-
-      {/* Placed outside container div for full width */}
-      <Calendar
-        stableId={stableId || currentStable.id}
-        events={events}
-        users={users}
-        locale={sv}
-        noEventsMessage="Inga schemalagda händelser"
-        onAddEvent={handleOpenEventForm}
-        onUpdateEvent={handleOpenUpdateForm}
-        onDeleteEvent={handleDeleteEvent}
-        getEventsForDay={getEventsForDay}
-        selectedDay={selectedDay}
-        onSelectDay={setSelectedDay}
-      />
     </div>
   );
 }

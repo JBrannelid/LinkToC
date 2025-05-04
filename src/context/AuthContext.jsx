@@ -8,6 +8,7 @@ import {
 } from "react";
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
+import userService from "../api/services/userService";
 
 const AuthContext = createContext();
 
@@ -21,17 +22,23 @@ export const AuthProvider = ({ children }) => {
 
   const parseJwt = (token) => {
     try {
-      const parts = token.split('.');
+      const parts = token.split(".");
       if (parts.length < 2) {
         return null;
       }
-      return JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+      const decoded = JSON.parse(
+        atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+      );
+
+      // Extract role information [user[0] admin[1] masteradmin[2]]
+      return decoded;
     } catch (error) {
-      console.error('Error decoding JWT:', error);
+      console.error("Error decoding JWT:", error);
       return null;
     }
   };
 
+  // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
@@ -50,7 +57,10 @@ export const AuthProvider = ({ children }) => {
       } else {
         const userId = userData.sub;
 
-        setUser({
+        console.warn("Invalid or expired JWT token", userData);
+
+        // Set basic user
+        const basicUserInfo = {
           id: userId,
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -58,7 +68,36 @@ export const AuthProvider = ({ children }) => {
           phoneNumber: userData.phoneNumber,
           userName: userData.userName,
           token: token,
-        });
+        };
+
+        // Fetch user-stable roles from the API
+        try {
+          // Get user base on a specifik stable Id
+          const userStablesResponse = await userService.getUserStables(userId);
+
+          // Extract stable roles from the response
+          const stableRoles = Array.isArray(userStablesResponse)
+            ? userStablesResponse.reduce((rolesByStableId, stableRole) => {
+                rolesByStableId[stableRole.stableIdFk] = stableRole.role;
+                return rolesByStableId;
+              }, {})
+            : {};
+
+          // Set complete user info with roles
+          setUser({
+            ...basicUserInfo,
+            stableRoles: stableRoles,
+          });
+        } catch (rolesError) {
+          console.error(
+            "Failed to fetch user-stable roles:",
+            rolesError,
+            basicUserInfo
+          );
+          // Set basic user if role fetch fails
+          setUser(basicUserInfo);
+        }
+
         setIsLoading(false);
         return true;
       }
@@ -98,37 +137,45 @@ export const AuthProvider = ({ children }) => {
 
   const checkAndRefreshToken = useCallback(async () => {
     try {
+      // Get the access and refresh tokens from storage
       const token = sessionStorage.getItem("authToken");
-      if (!token) return false;
+      const refreshToken = sessionStorage.getItem("refreshToken");
 
+      if (!token || !refreshToken) return false;
+
+      // Parse the JWT to check expiration
       const payload = parseJwt(token);
-      if (!payload || !payload.iat || !payload.exp) return false;
+      if (!payload || !payload.exp) return false;
 
-      const issuedAt = payload.iat * 1000;
-      const expiresAt = payload.exp * 1000;
+      const expiresAt = payload.exp * 1000; // Convert to milliseconds
       const currentTime = Date.now();
-
-      const tokenAge = currentTime - issuedAt;
-      const MAX_TOKEN_AGE = 4 * 60 * 60 * 1000;
-      const isWithinMaxAge = tokenAge <= MAX_TOKEN_AGE;
-
       const timeUntilExpiry = expiresAt - currentTime;
-      const isNearingExpiration =
-        timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000;
 
-      if (isWithinMaxAge && isNearingExpiration) {
+      // If token is close to expiring (less than 10 minutes), refresh it
+      if (timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000) {
         try {
-          const response = await authService.refreshToken(token);
+          // Call your refresh token API
+          const response = await authService.refreshToken(refreshToken);
 
-          if (response && response.value && response.value.token) {
-            sessionStorage.setItem("authToken", response.value.token);
-            return true;
+          // Check if the response contains new tokens
+          if (response && response.isSuccess && response.value) {
+            const newAccessToken = response.value.accessToken;
+            const newRefreshToken = response.value.refreshToken;
+
+            if (newAccessToken && newRefreshToken) {
+              // Store the new tokens
+              sessionStorage.setItem("authToken", newAccessToken);
+              sessionStorage.setItem("refreshToken", newRefreshToken);
+              return true;
+            }
           }
         } catch (refreshError) {
           console.error("Token refresh failed", refreshError);
         }
       }
-      return isWithinMaxAge && timeUntilExpiry > 0;
+
+      // Return true if token is still valid
+      return timeUntilExpiry > 0;
     } catch (error) {
       console.error("Token check failed", error);
       return false;
@@ -175,29 +222,24 @@ export const AuthProvider = ({ children }) => {
       // Use authService to login
       const response = await authService.login({ email, password });
 
-      if (response.data && typeof response.data === "object") {
-        console.log("Data keys:", Object.keys(response.data));
-      }
-
       // Handle the API response
       if (!response) {
         throw new Error("Login failed: No response from server");
       }
 
-      // Extract token
-      const token = response?.value?.token;
-      if (!token) {
+      // Extract tokens
+      const accessToken = response?.value?.accessToken;
+      const refreshToken = response?.value?.refreshToken;
+
+      if (!accessToken || !refreshToken) {
         console.error("Unexpected response structure", response);
         throw new Error("Authentication failed: Invalid token response");
       }
 
-      if (!token) {
-        console.error("Unexpected response structure", response);
-        throw new Error("Authentication failed: Invalid token response");
-      }
+      // Store tokens
+      sessionStorage.setItem("authToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
 
-      // Store token and verify it
-      sessionStorage.setItem("authToken", token);
       await verifyToken();
       return true;
     } catch (error) {

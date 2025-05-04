@@ -9,21 +9,25 @@ function App() {
   const { currentStable } = useAppContext();
   const location = useLocation();
 
-  const hiddenRoutes = ["/login", "/register"];
-  const hidePages = hiddenRoutes.includes(location.pathname);
+  const headerHiddenRoutes = ["/login", "/register"];
+  const shouldHideHeader = headerHiddenRoutes.includes(location.pathname);
+
+  const footerHiddenRoutes = ["/stable-onboarding"];
+  const shouldHideFooter = footerHiddenRoutes.includes(location.pathname);
 
   // Show nav only if authenticated, has stable, and not on login/register pages
-  const showNavigation = isAuthenticated && currentStable?.id && !hidePages;
+  const showHeader = isAuthenticated && currentStable?.id && !shouldHideHeader;
+  const showFooterNav = isAuthenticated && !shouldHideFooter;
 
   return (
     <div className="min-h-screen flex flex-col">
-      {showNavigation && <HeaderContainer />}
+      {showHeader && <HeaderContainer />}
 
       <main className="flex-1">
         <Outlet />
       </main>
 
-      {showNavigation && (
+      {showFooterNav && (
         <footer>
           <NavigationFooter />
         </footer>

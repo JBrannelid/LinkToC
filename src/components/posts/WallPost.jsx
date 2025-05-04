@@ -178,5 +178,65 @@ export default function WallPost({}) {
         )}
       </WallPostCard>
     </div>
+    <>
+      {wallPost ? (
+        <div className="px-2 md:px-0 w-full md:max-w-[58%]">
+          <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
+            Väggen
+          </h2>
+          <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
+            <div
+              className="p-4 flex items-center cursor-pointer"
+              onClick={toggleExpand}
+              aria-label="Expandable important message"
+            >
+              <PinIcon className="w-6 h-6 text-primary" />
+
+              <p className="flex-1">{wallPost.title}</p>
+              <div className="text-primary">
+                <ChevronDownIcon
+                  className={`w-5 h-5 transition-transform ${
+                    isExpanded ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
+            </div>
+            {isExpanded && (
+              <div className="px-4 pb-4">
+                <p className="font-light text-sm">{wallPost.body}</p>
+                <br />
+
+                {wallPost?.lastEdited ? (
+                  <p className="font-light text-xs">
+                    Edited: ({formatData(wallPost.lastEdited)})
+                  </p>
+                ) : wallPost?.postDate ? (
+                  <p className="font-light text-xs">
+                    Posted: ({formatData(wallPost.postDate)})
+                  </p>
+                ) : null}
+
+                <div className="mt-3">
+                  <Button type="secondary" size="small" onClick={toggleForm}>
+                    {isFormOpen ? "Avbryt" : "Redigera"}
+                  </Button>
+                  <div className="mt-5">
+                    {isFormOpen && (
+                      <WallPostForm
+                        event={wallPost}
+                        onSubmit={handleSubmitWallPost}
+                        onCancel={toggleForm}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <p>Inga tillgänglig händelse</p>
+      )}
+    </>
   );
 }
