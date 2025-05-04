@@ -54,6 +54,9 @@ export default function WallPost({}) {
     }
   };
 
+  // Create WallPost when 404: Not Found
+  const [successMessage, setSuccessMessage] = useState("");
+
   const handleCreateWallPost = async () => {
     if (!stableId && !currentStable?.id) {
       console.error("Stable ID is missing");
@@ -67,7 +70,7 @@ export default function WallPost({}) {
         stableIdFk: stableId || currentStable.id,
       });
       if (success) {
-        console.log("success in creating WallPost");
+        setSuccessMessage("Vänligen uppdatera sidan");
       }
     } catch (error) {
       console.error(error);
@@ -125,6 +128,14 @@ export default function WallPost({}) {
     return (
       <div className="mt-5 px-2">
         <h2 className="text-2xl mb-2">Väggen</h2>
+
+        {/* Show success message if set */}
+        {successMessage && (
+          <div className="bg-green-100 text-green-800 p-4 rounded mb-4">
+            {successMessage}
+          </div>
+        )}
+
         <div className="bg-white rounded-lg shadow-sm p-4 flex items-center cursor-pointer">
           <p className="flex-1">Ingen händelse hittades</p>
           <Button type="primary" onClick={handleCreateWallPost}>
