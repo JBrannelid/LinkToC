@@ -5,7 +5,7 @@ const tokenStorage = {
     },
 
     setAccessToken: (token) => {
-        sessionStorage.setItem("authToken", token);
+        sessionStorage.setItem("authToken",token);
     },
 
     removeAccessToken: () => {
@@ -18,7 +18,7 @@ const tokenStorage = {
     },
 
     setRefreshToken: (token) => {
-        sessionStorage.setItem("refreshToken", token);
+        sessionStorage.setItem( "refreshToken",token);
     },
 
     removeRefreshToken: () => {
@@ -32,8 +32,8 @@ const tokenStorage = {
     },
 
     clearTokens: () => {
-        tokenStorage.removeAccessToken("authToken");
-        tokenStorage.removeRefreshToken("refreshToken");
+        tokenStorage.removeAccessToken();
+        tokenStorage.removeRefreshToken();
     }
 };
 
