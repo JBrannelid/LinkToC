@@ -122,6 +122,9 @@
   .text-mini {
     font-size: 8px;
   }
+  .tab-button-settings {
+    @apply w-full rounded-full border border-primary;
+  }
 }
 
 @layer utilities {
@@ -131,6 +134,13 @@
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+  .no-effects {
+    outline: none !important;
+    box-shadow: none !important;
+    --tw-ring-offset-width: 0 !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+    --tw-ring-offset-shadow: 0 0 #0000 !important;
   }
 }
 
