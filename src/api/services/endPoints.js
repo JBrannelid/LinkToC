@@ -8,4 +8,5 @@ export const ENDPOINTS = {
   WALLPOST: "api/wallpost",
   AUTH: "/api/auth",
   STABLEPOSTBYID: "/api/stable-post-by-stable-id/",
+  EXTRACT_USER_ROLES: "/api/userstables/user/",
 };
