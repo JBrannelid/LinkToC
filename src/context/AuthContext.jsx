@@ -99,7 +99,9 @@ export const AuthProvider = ({ children }) => {
   const checkAndRefreshToken = useCallback(async () => {
     try {
       const token = sessionStorage.getItem("authToken");
-      if (!token) return false;
+      const refreshToken = sessionStorage.getItem("refreshToken");
+      
+      if (!token || !refreshToken) return false;
 
       const payload = parseJwt(token);
       if (!payload || !payload.iat || !payload.exp) return false;
@@ -118,11 +120,17 @@ export const AuthProvider = ({ children }) => {
 
       if (isWithinMaxAge && isNearingExpiration) {
         try {
-          const response = await authService.refreshToken(token);
+          const response = await authService.refreshToken(refreshToken);
 
-          if (response && response.value && response.value.token) {
-            sessionStorage.setItem("authToken", response.value.token);
-            return true;
+          if (response && response.isSuccess && response.value) {
+            const newAccessToken = response.value.accessToken;
+            const newRefreshToken = response.value.refreshToken;
+            
+            if(newAccessToken &&  newRefreshToken) {
+              sessionStorage.setItem("authToken", newAccessToken);
+              sessionStorage.setItem("refreshToken", newRefreshToken);
+              return true;
+            }
           }
         } catch (refreshError) {
           console.error("Token refresh failed", refreshError);
@@ -174,30 +182,23 @@ export const AuthProvider = ({ children }) => {
 
       // Use authService to login
       const response = await authService.login({ email, password });
-
-      if (response.data && typeof response.data === "object") {
-        console.log("Data keys:", Object.keys(response.data));
-      }
-
+      
       // Handle the API response
       if (!response) {
         throw new Error("Login failed: No response from server");
       }
 
-      // Extract token
-      const token = response?.value?.token;
-      if (!token) {
-        console.error("Unexpected response structure", response);
+      const accessToken = response?.value?.accessToken;
+      const refreshToken = response?.value?.refreshToken;
+
+      if (!accessToken || !refreshToken) {
+        console.error("API Response structure:", response);
         throw new Error("Authentication failed: Invalid token response");
       }
-
-      if (!token) {
-        console.error("Unexpected response structure", response);
-        throw new Error("Authentication failed: Invalid token response");
-      }
-
       // Store token and verify it
-      sessionStorage.setItem("authToken", token);
+      sessionStorage.setItem("authToken", accessToken);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      
       await verifyToken();
       return true;
     } catch (error) {
