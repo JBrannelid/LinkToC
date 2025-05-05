@@ -12,7 +12,8 @@ const HeaderContainer = () => {
   const routesWithPrimaryLightBg =
     currentPath === ROUTES.SETTINGS ||
     currentPath.startsWith("/userpage/") ||
-    currentPath.startsWith("/horse-page/");
+    currentPath.startsWith("/horse-page/") ||
+    currentPath.startsWith("/manage-stable");
   const backgroundClass = routesWithPrimaryLightBg ? "bg-primary-light" : "";
 
   return (
