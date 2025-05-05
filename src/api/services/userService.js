@@ -58,7 +58,7 @@ const userService = {
   } 
 */
   updateUserStableRole: async (userId, stableId, role) => {
-    return await axiosInstance.put(`api/user/update_user_role${userId}`, {
+    return await axiosInstance.put(`/api/user/role/${userId}`, {
       stableId,
       role,
     });
