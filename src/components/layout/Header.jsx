@@ -8,7 +8,9 @@ import Button from "../ui/Button";
 
 export default function Header() {
   const location = useLocation();
-  const showBackButton = location.pathname.includes("/manage-stable");
+  const showBackButton =
+    location.pathname.includes("/manage-stable") ||
+    location.pathname.includes("/stable-requests");
 
   return (
     <div className="relative py-5">
