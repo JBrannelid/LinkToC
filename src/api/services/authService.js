@@ -86,13 +86,6 @@ const authService  = {
     }
   },
 
-  validateResetToken: async (validateData) => {
-    if (!validateData || !validateData.email || !validateData.resetCode) {
-      throw new Error("Email and reset code are required");
-    }
-    return await axiosConfig.post(`/api/validate-reset-code`, validateData);
-  },
-
   resetPassword: async (resetData) => {
     if (
       !resetData ||
