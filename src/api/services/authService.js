@@ -5,15 +5,27 @@ import tokenStorage from "../../utils/tokenStorage.js";
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 
-const authService = {
-  ...baseService,
-  // Login: POST /api/auth/login
-  login: async (loginData) => {
-    if (!loginData || !loginData.email || !loginData.password) {
-      throw new Error("Email and password are required");
-    }
-    return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
-  },
+const authService  = {
+    ...baseService,
+    // Login: POST /api/auth/login
+    login: async (loginData) => {
+        if (!loginData || !loginData.email || !loginData.password) {
+            throw new Error("Email and password are required");
+        }
+        try {
+            return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
+        }catch(error) {
+            if(error.response) {
+                const errorMessage = error.response.data?.message || "Authentication failed. Please check your credentials.";
+                throw new Error(errorMessage);
+            } else if(error.request) {
+                throw new Error("No response from authentication server. Please try again later.");
+            } else {
+                throw new Error(`Error setting up authentication request: ${error.message}`);
+            }
+        }
+        
+    },
 
   // Register: POST /api/auth/register
   register: async (registerData) => {
