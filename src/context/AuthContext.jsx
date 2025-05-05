@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
       );
 
-      // Extract role information [user[0] admin[1] masteradmin[2]]
+      // Extract role information [user[2] admin[1] masteradmin[0]]
       return decoded;
     } catch (error) {
       console.error("Error decoding JWT:", error);
