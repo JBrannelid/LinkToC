@@ -12,6 +12,7 @@ export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   STABLE_ONBOARDING: "/stable-onboarding",
   NOTIFICATIONS: "/notifications",
+  MANAGE_STABLE: "/manage-stable",
 };
 
 // Dynamic routes with params
