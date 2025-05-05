@@ -15,7 +15,7 @@ const StableManagementPage = () => {
         <div className="bg-primary-light">
           <ModalHeader
             title="Hantera stall"
-            showCloseBtn={true}
+            showCloseBtn={false}
             onCloseClick={() => window.history.back()}
           />
         </div>
