@@ -14,9 +14,7 @@ const userService = {
     if (!userId) {
       throw new Error("User ID is required");
     }
-    return await axiosInstance.get(
-      `${ENDPOINTS.USERS}/getUserStables/${userId}`
-    );
+    return await axiosInstance.get(`/api/userstables/user/${userId}`);
   },
 
   getById: async (id) => {
