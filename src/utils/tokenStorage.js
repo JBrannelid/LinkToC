@@ -27,8 +27,8 @@ const tokenStorage = {
 
     // Combined methods for convenience
     storeTokens: (accessToken, refreshToken) => {
-        tokenStorage.setAccessToken("authToken", accessToken);
-        tokenStorage.setRefreshToken("refreshToken", refreshToken);
+        tokenStorage.setAccessToken(accessToken);
+        tokenStorage.setRefreshToken(refreshToken);
     },
 
     clearTokens: () => {
