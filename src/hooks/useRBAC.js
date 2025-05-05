@@ -7,21 +7,23 @@ export function useRBAC() {
 
   const hasRole = useCallback(
     (requiredRoles) => {
-      if (!requiredRoles || requiredRoles.length === 0) return true;
-
       const currentRole = getCurrentStableRole();
-      return Array.isArray(requiredRoles)
-        ? requiredRoles.includes(currentRole)
-        : currentRole === requiredRoles;
+      if (!requiredRoles?.length) return true;
+
+      // Ensures requiredRoles is treated as an array and checks for inclusion
+      const roles = Array.isArray(requiredRoles)
+        ? requiredRoles
+        : [requiredRoles];
+      return roles.includes(currentRole);
     },
     [getCurrentStableRole]
   );
 
   const hasAdminAccess = useCallback(() => {
     const currentRole = getCurrentStableRole();
-    return (
-      currentRole === USER_ROLES.ADMIN || currentRole === USER_ROLES.MANAGER
-    );
+
+    // Checks if the current role is either ADMIN or MANAGER
+    return [USER_ROLES.ADMIN, USER_ROLES.MANAGER].includes(currentRole);
   }, [getCurrentStableRole]);
 
   return { hasRole, hasAdminAccess };
