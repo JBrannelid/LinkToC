@@ -1,14 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import BaseSettingsPage, { SettingsMenuItem } from "./BaseSettingPage";
+import { ROUTES } from "../routes/routeConstants";
 import {
   handleTermsOfService,
   handleSupport,
   handleCookieSettings,
-  handleManageStables,
+  handleStableRequests,
 } from "../utils/userUtils";
 
 const UserSettingsPage = () => {
-  // Only destructure what you need
+  const navigate = useNavigate();
+
   const renderMenuItems = ({ setShowUserEditProfileForm }) => (
     <>
       <SettingsMenuItem
@@ -17,7 +20,7 @@ const UserSettingsPage = () => {
       />
       <SettingsMenuItem
         label="Stallförfrågningar"
-        onClick={handleManageStables}
+        onClick={() => handleStableRequests(navigate, ROUTES)}
       />
       <SettingsMenuItem
         label="Terms of service"
