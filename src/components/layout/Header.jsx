@@ -1,21 +1,51 @@
-import { Link } from "react-router";
+import React from "react";
+import { Link, useLocation } from "react-router";
 import { ROUTES } from "../../routes/routeConstants";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import NotificationIcon from "../../assets/icons/NotificationIcon";
+import CloseIcon from "../../assets/icons/CloseIcon";
+import Button from "../ui/Button";
 
 export default function Header() {
+  const location = useLocation();
+  const showBackButton = location.pathname.includes("/manage-stable");
+
   return (
-    <header className="flex items-center justify-between p-4 md:justify-start md:pt-6 md:gap-10">
-      <Link to={ROUTES.SETTINGS} aria-label="Inställningar">
+    <div className="relative py-5">
+      {/* Left side */}
+      <Link
+        to={ROUTES.SETTINGS} // Open settings
+        aria-label="Inställningar"
+        className="absolute left-4 top-4"
+      >
         <SettingIcon
           strokeWidth={9}
-          className="w-6 h-6 md:w-8 md:h-8  text-primary"
+          className="w-6 h-6 md:w-8 md:h-8 text-primary"
         />
       </Link>
 
-      <Link to="/notifications" aria-label="Notifikationer">
-        <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
-      </Link>
-    </header>
+      {/* Right side */}
+      {showBackButton ? (
+        <Button
+          type="icon"
+          onClick={() => window.history.back()} // Go back
+          aria-label="Gå tillbaka"
+          className="absolute right-0 top-3 border-0 text-primary"
+        >
+          <CloseIcon
+            strokeWidth={4}
+            className="w-6 h-6 md:w-8 md:h-8 text-primary"
+          />
+        </Button>
+      ) : (
+        <Link
+          to="/notifications" // Open notification
+          aria-label="Notifikationer"
+          className="absolute right-4 top-4 border-0 text-primary"
+        >
+          <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+        </Link>
+      )}
+    </div>
   );
 }
