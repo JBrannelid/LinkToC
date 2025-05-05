@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import { useAppContext } from "../context/AppContext";
+import { useRBAC } from "../hooks/useRBAC";
 import { ROUTES } from "./routeConstants";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 
@@ -11,33 +11,11 @@ const ProtectedRoute = ({
   requiredRoles = [],
 }) => {
   const { isAuthenticated, isLoading } = useAuth();
-  const { currentStable, getCurrentStableRole } = useAppContext();
+  const { currentStable } = useAppContext();
+  const { hasRole } = useRBAC();
   const location = useLocation();
-  const [roleChecked, setRoleChecked] = useState(false);
-  const [hasRequiredRole, setHasRequiredRole] = useState(true);
 
-  useEffect(() => {
-    if (requiredRoles && requiredRoles.length > 0) {
-      const checkRole = async () => {
-        try {
-          const currentRole = getCurrentStableRole();
-          setHasRequiredRole(requiredRoles.includes(currentRole));
-        } catch (error) {
-          console.error("Error checking role:", error);
-          setHasRequiredRole(false);
-        } finally {
-          setRoleChecked(true);
-        }
-      };
-
-      checkRole();
-    } else {
-      setRoleChecked(true);
-      setHasRequiredRole(true);
-    }
-  }, [getCurrentStableRole, requiredRoles, currentStable?.id]);
-
-  if (isLoading || (requiredRoles.length > 0 && !roleChecked)) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <LoadingSpinner size="medium" className="text-gray" />
@@ -46,8 +24,8 @@ const ProtectedRoute = ({
     );
   }
 
-  if (!hasRequiredRole) {
-    // Redirect to home if user doesn't have required role for this stable
+  if (requiredRoles.length > 0 && !hasRole(requiredRoles)) {
+    // Redirect to home if user doesn't have required role
     return <Navigate to={ROUTES.HOME} state={{ from: location }} replace />;
   }
 
