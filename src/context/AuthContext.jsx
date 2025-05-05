@@ -1,17 +1,10 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState,} from "react";
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
 import tokenStorage from "../utils/tokenStorage.js";
 
-const AuthContext = createContext();
+const AuthContext = createContext(undefined);
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -28,12 +21,10 @@ export const AuthProvider = ({ children }) => {
       if (parts.length < 2) {
         return null;
       }
-      const decoded = JSON.parse(
-        atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
-      );
-
       // Extract role information [user[0] admin[1] masteradmin[2]]
-      return decoded;
+      return JSON.parse(
+          atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
+      );
     } catch (error) {
       console.error("Error decoding JWT:", error);
       return null;
@@ -154,18 +145,14 @@ export const AuthProvider = ({ children }) => {
       const timeUntilExpiry = expiresAt - currentTime;
       
       const totalLifetime = expiresAt - issuedAt;
-
-      console.log("Current access token expires in:", timeUntilExpiry / 1000, "seconds");
-      console.log("Total token lifetime:", totalLifetime / 1000, "seconds");
+      
 
       if (timeUntilExpiry < totalLifetime * 0.5) {
-        console.log("Proactively refreshing token");
         setRefreshing(true);
         
         const response = await authService.refreshToken();
 
         if (response && response.isSuccess && response.value) {
-          console.log("Token refreshed successfully");
           setRefreshing(false);
           return true;
         }
