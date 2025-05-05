@@ -9,6 +9,7 @@ import {
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
+import tokenStorage from "../utils/tokenStorage.js";
 
 const AuthContext = createContext();
 
@@ -138,8 +139,7 @@ export const AuthProvider = ({ children }) => {
   const checkAndRefreshToken = useCallback(async () => {
     try {
       // Get the access and refresh tokens from storage
-      const token = sessionStorage.getItem("authToken");
-      const refreshToken = sessionStorage.getItem("refreshToken");
+      const token = tokenStorage.getAccessToken();
 
       if (!token || !refreshToken) return false;
 
@@ -155,20 +155,13 @@ export const AuthProvider = ({ children }) => {
       if (timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000) {
         try {
           // Call your refresh token API
-          const response = await authService.refreshToken(refreshToken);
+          const response = await authService.refreshToken();
+          
+            if (response && response.isSuccess && response.value) {
 
-          // Check if the response contains new tokens
-          if (response && response.isSuccess && response.value) {
-            const newAccessToken = response.value.accessToken;
-            const newRefreshToken = response.value.refreshToken;
-
-            if (newAccessToken && newRefreshToken) {
-              // Store the new tokens
-              sessionStorage.setItem("authToken", newAccessToken);
-              sessionStorage.setItem("refreshToken", newRefreshToken);
               return true;
             }
-          }
+          
         } catch (refreshError) {
           console.error("Token refresh failed", refreshError);
         }
