@@ -18,6 +18,7 @@ import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
 import NotificationPage from "../pages/NotificationPage";
 import StableManagementPage from "../pages/StableManagementPage";
+import StableRequestsPage from "../pages/StableRequestsPage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -90,6 +91,11 @@ export const protectedRoutes = [
     element: <StableManagementPage />,
     requiresStable: true,
     requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
+  },
+  {
+    path: ROUTES.STABLE_REQUESTS,
+    element: <StableRequestsPage />,
+    requiresStable: true,
   },
 ];
 
