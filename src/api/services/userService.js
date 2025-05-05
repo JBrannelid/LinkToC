@@ -14,7 +14,9 @@ const userService = {
     }
 
     // The axios interceptor will handle the response formatting and error handling
-    const response = await axiosInstance.get(`/api/userstables/user/${userId}`);
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.EXTRACT_USER_ROLES}${userId}`
+    );
 
     // Just return the value array directly
     return response.value;
