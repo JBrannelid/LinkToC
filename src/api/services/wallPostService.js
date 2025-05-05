@@ -5,25 +5,29 @@ import axiosConfig from "../config/axiosConfig";
 const baseService = createBaseService(ENDPOINTS.WALLPOST);
 
 const wallPostService = {
-  ...baseService,
+  ...baseService, // baseService will handle validation of data
 
   create: async (data) => {
-    // baseService will handle validation of data
+    if (!data.stableIdFk) {
+      throw new Error("stableId is required");
+    }
 
     const createData = {
-      title: data.title,
-      body: data.body,
       stableIdFk: data.stableIdFk,
+      title: "",
+      body: "",
     };
-
-    return await baseService.create(createData);
+    console.log("Sending to Backend", createData);
+    return await axiosConfig.post(
+      `${ENDPOINTS.WALLPOST}/create?stableId=${data.stableIdFk}`,
+      createData
+    );
   },
 
   getById: async (stableId) => {
     if (!stableId) {
       throw new Error("Stable ID is required");
     }
-
     return await axiosConfig.get(`/api/wallpost/${stableId}`);
   },
 
@@ -32,15 +36,19 @@ const wallPostService = {
       stableIdFk: data.stableIdFk,
       title: data.title,
       body: data.body,
-
-      // id: data.id,
-      // title: data.title,
-      // body: data.body,
-      // lastEdited: data.lastEdited,
-      // stableIdFk: data.stableIdFk,
     };
 
     return await axiosConfig.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
+  },
+
+  replace: async (data) => {
+    const replaceData = {
+      stableIdFk: data.stableIdFk,
+      title: data.title,
+      body: data.body,
+    };
+
+    return await axiosConfig.put(`${ENDPOINTS.WALLPOST}/replace`, replaceData);
   },
 };
 

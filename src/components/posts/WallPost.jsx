@@ -8,11 +8,22 @@ import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
 import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Button from "../ui/Button";
+import WallPostCard from "./WallPostCard";
+import { useStableData } from "../../hooks/useStableData";
 
 export default function WallPost({}) {
   const { currentStable } = useAppContext();
-  const { wallPost, loading, error, currentWallPost, updateWallPost } =
-    useWallPost(currentStable?.id);
+  const { stableId } = useStableData(currentStable.id);
+  const {
+    wallPost,
+    loading,
+    error,
+    currentWallPost,
+    updateWallPost,
+    replaceWallPost,
+  } = useWallPost(currentStable?.id);
+
+  const { createWallPost } = useWallPost(currentStable.id);
 
   useEffect(() => {
     if (currentStable?.id) {
@@ -43,6 +54,36 @@ export default function WallPost({}) {
     }
   };
 
+  // Create WallPost when 404: Not Found
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleCreateWallPost = async () => {
+    if (!stableId && !currentStable?.id) {
+      console.error("Stable ID is missing");
+      return;
+    }
+
+    console.log("Stable ID:", stableId || currentStable.id); // Debugging
+
+    try {
+      const success = await createWallPost({
+        stableIdFk: stableId || currentStable.id,
+      });
+      if (success) {
+        setSuccessMessage("Vänligen uppdatera sidan");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleReplaceWallPost = async (formData) => {
+    const success = await replaceWallPost(formData);
+    if (success) {
+      setIsFormOpen(false);
+    }
+  };
+
   // Formatt data
   const formatData = (dateString) => {
     try {
@@ -63,68 +104,87 @@ export default function WallPost({}) {
     );
   }
 
-  if (error) return <p>Error: {error.message}</p>;
+  //Error for everything except NotFound 404
+  if (error && error.status !== 404) {
+    return <p>Error: {error.message}</p>;
+  }
 
-  return (
-    <>
-      {wallPost ? (
-        <div className="px-2 md:px-0 w-full md:max-w-[58%]">
-          <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
-            Väggen
-          </h2>
-          <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
-            <div
-              className="p-4 flex items-center cursor-pointer"
-              onClick={toggleExpand}
-              aria-label="Expandable important message"
+  //In case not found, create empty WallPost with Stable ID
+  if (error?.status === 404 || wallPost == null) {
+    return (
+      <div className="px-2 md:px-0 w-full md:max-w-[58%]">
+        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Väggen</h2>
+
+        {/* Show success message if set */}
+        {successMessage && (
+          <div className="bg-warning-300 p-4 rounded mb-4">
+            {successMessage}
+          </div>
+        )}
+
+        <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
+          <div className="flex flex-row">
+            <p className="flex-1 p-3">Ingen händelse hittades</p>
+
+            <Button
+              className="flex-none"
+              type="primary"
+              size="small"
+              onClick={handleCreateWallPost}
             >
-              <PinIcon className="w-6 h-6 text-primary" />
-
-              <p className="flex-1">{wallPost.title}</p>
-              <div className="text-primary">
-                <ChevronDownIcon
-                  className={`w-5 h-5 transition-transform ${
-                    isExpanded ? "rotate-180" : ""
-                  }`}
-                />
-              </div>
-            </div>
-            {isExpanded && (
-              <div className="px-4 pb-4">
-                <p className="font-light text-sm">{wallPost.body}</p>
-                <br />
-
-                {wallPost?.lastEdited ? (
-                  <p className="font-light text-xs">
-                    Edited: ({formatData(wallPost.lastEdited)})
-                  </p>
-                ) : wallPost?.postDate ? (
-                  <p className="font-light text-xs">
-                    Posted: ({formatData(wallPost.postDate)})
-                  </p>
-                ) : null}
-
-                <div className="mt-3">
-                  <Button type="secondary" size="small" onClick={toggleForm}>
-                    {isFormOpen ? "Avbryt" : "Redigera"}
-                  </Button>
-                  <div className="mt-5">
-                    {isFormOpen && (
-                      <WallPostForm
-                        event={wallPost}
-                        onSubmit={handleSubmitWallPost}
-                        onCancel={toggleForm}
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
+              Skapa
+            </Button>
           </div>
         </div>
-      ) : (
-        <p>Inga tillgänglig händelse</p>
-      )}
-    </>
+      </div>
+    );
+  }
+
+  return (
+    <div className="px-2 md:px-0 w-full md:max-w-[58%]">
+      <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Väggen</h2>
+      <WallPostCard
+        title={
+          wallPost?.title ? wallPost.title : "Hittade ingen händelse i stallet"
+        }
+        isExpanded={isExpanded}
+        toggleExpand={toggleExpand}
+        actions={
+          <Button type="secondary" size="small" onClick={toggleForm}>
+            {isFormOpen ? "Avbryt" : wallPost?.title ? "Redigera" : "Skapa"}
+          </Button>
+        }
+        form={
+          isFormOpen && (
+            <WallPostForm
+              event={wallPost}
+              onSubmit={
+                wallPost.title ? handleSubmitWallPost : handleReplaceWallPost
+              }
+              onCancel={toggleForm}
+            />
+          )
+        }
+      >
+        {wallPost?.body ? (
+          <>
+            <p className="font-light text-sm">{wallPost.body}</p>
+            {wallPost.lastEdited ? (
+              <p className="font-light text-xs">
+                Edited: ({formatData(wallPost.lastEdited)})
+              </p>
+            ) : wallPost.postDate ? (
+              <p className="font-light text-xs">
+                Posted: ({formatData(wallPost.postDate)})
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className="font-light text-sm">
+            Inga detaljer om händelse i stallet
+          </p>
+        )}
+      </WallPostCard>
+    </div>
   );
 }
