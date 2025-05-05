@@ -12,7 +12,19 @@ const authService  = {
         if (!loginData || !loginData.email || !loginData.password) {
             throw new Error("Email and password are required");
         }
-        return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
+        try {
+            return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
+        }catch(error) {
+            if(error.response) {
+                const errorMessage = error.response.data?.message || "Authentication failed. Please check your credentials.";
+                throw new Error(errorMessage);
+            } else if(error.request) {
+                throw new Error("No response from authentication server. Please try again later.");
+            } else {
+                throw new Error(`Error setting up authentication request: ${error.message}`);
+            }
+        }
+        
     },
 
     // Register: POST /api/auth/register
