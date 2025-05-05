@@ -1,3 +1,4 @@
+import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
 
@@ -6,21 +7,39 @@ const baseService = createBaseService(ENDPOINTS.USERS);
 const userService = {
   ...baseService,
 
-  // Get user base on a specifik stable Id
-  getStableUsers: async (stableId) => {
-    const users = await baseService.getAll();
-
-    // Filtering user by stable-Id should be handle by backend?
-    return users.filter((user) => user.stableIdFk === stableId);
+  // Ask BE to get to specifik endpoints
+  // 1. /api/user/getUserStables/{userId}
+  //  1.a) Example response:  { "stableIdFk": 1, "role": 0 }
+  getUserStables: async (userId) => {
+    if (!userId) {
+      throw new Error("User ID is required");
+    }
+    return await axiosInstance.get(
+      `${ENDPOINTS.USERS}/getUserStables/${userId}`
+    );
   },
 
-  createUser: async (userData, stableId) => {
-    const createData = {
-      ...userData,
-      stableIdFk: stableId,
-    };
+  getById: async (id) => {
+    if (!id) {
+      throw new Error("User ID is required");
+    }
 
-    return await baseService.create(createData);
+    return await baseService.getById(id);
+  },
+
+  update: async (userData) => {
+    if (!userData || !userData.id) {
+      throw new Error("User ID is required for update");
+    }
+
+    return await baseService.update(userData);
+  },
+  delete: async (userId) => {
+    if (!userId) {
+      throw new Error("User ID is required for deletion");
+    }
+
+    return await baseService.delete(userId);
   },
 };
 

@@ -7,6 +7,13 @@ import FormMessage from "./formBuilder/FormMessage";
 import CreateStableForm from "./CreateStableForm.jsx";
 import JoinStableForm from "./JoinStableForm.jsx";
 
-export { EventForm, FormInput, FormProvider, TimePicker, DatePicker, FormMessage, CreateStableForm, JoinStableForm };
-
-export default EventForm;
+export {
+  EventForm,
+  FormInput,
+  FormProvider,
+  TimePicker,
+  DatePicker,
+  FormMessage,
+  CreateStableForm,
+  JoinStableForm,
+};

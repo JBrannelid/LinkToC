@@ -11,10 +11,9 @@ function App() {
 
   const headerHiddenRoutes = ["/login", "/register"];
   const shouldHideHeader = headerHiddenRoutes.includes(location.pathname);
-  
+
   const footerHiddenRoutes = ["/stable-onboarding"];
   const shouldHideFooter = footerHiddenRoutes.includes(location.pathname);
-  
 
   // Show nav only if authenticated, has stable, and not on login/register pages
   const showHeader = isAuthenticated && currentStable?.id && !shouldHideHeader;
@@ -28,7 +27,7 @@ function App() {
         <Outlet />
       </main>
 
-      {showFooterNav &&(
+      {showFooterNav && (
         <footer>
           <NavigationFooter />
         </footer>

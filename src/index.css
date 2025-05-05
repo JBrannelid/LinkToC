@@ -94,15 +94,43 @@
   a:hover {
     text-decoration: underline;
   }
+
+  /* Custom Scrollbar Styling */
+  * {
+    scrollbar-color: var(--color-primary);
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-primary-light);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+  }
 }
 
 /* Component styles */
 @layer components {
   .nav-container {
-    @apply flex items-center justify-around bg-primary-light shadow-md p-2 rounded-full;
+    @apply flex items-center justify-around bg-primary-light shadow-md p-2 rounded-full px-6 py-2;
   }
   .text-mini {
     font-size: 8px;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
