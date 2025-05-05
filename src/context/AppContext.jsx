@@ -72,9 +72,9 @@ export const AppProvider = ({ children }) => {
 
 // User role constants. Remove when we have a contact with BE
 export const USER_ROLES = {
-  USER: 0,
+  USER: 2,
   ADMIN: 1,
-  MANAGER: 2,
+  MANAGER: 0,
 };
 
 export default AppContext;
