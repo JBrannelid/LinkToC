@@ -57,8 +57,6 @@ export const AuthProvider = ({ children }) => {
       } else {
         const userId = userData.sub;
 
-        console.warn("Invalid or expired JWT token", userData);
-
         // Set basic user
         const basicUserInfo = {
           id: userId,
@@ -95,7 +93,10 @@ export const AuthProvider = ({ children }) => {
             basicUserInfo
           );
           // Set basic user if role fetch fails
-          setUser(basicUserInfo);
+          setUser({
+            ...basicUserInfo,
+            stableRoles: {},
+          });
         }
 
         setIsLoading(false);
