@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
+  const [isRefreshing, setRefreshing] = useState(false);
 
   const parseJwt = (token) => {
     try {
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }) => {
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = tokenStorage.getAccessToken();
       if (!token) {
         setUser(null);
         setIsLoading(false);
@@ -51,15 +52,14 @@ export const AuthProvider = ({ children }) => {
 
       const userData = parseJwt(token);
       if (!userData || userData.exp * 1000 <= Date.now()) {
-        sessionStorage.removeItem("authToken");
+        console.warn("Invalid or expired JWT token", userData);
+        tokenStorage.removeAccessToken();
         setUser(null);
         setIsLoading(false);
         return false;
       } else {
         const userId = userData.sub;
-
-        console.warn("Invalid or expired JWT token", userData);
-
+        
         // Set basic user
         const basicUserInfo = {
           id: userId,
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Token verification error:", error);
-      sessionStorage.removeItem("authToken");
+      tokenStorage.removeAccessToken();
       setUser(null);
       setIsLoading(false);
       return false;
@@ -113,8 +113,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
-      sessionStorage.removeItem("authToken");
+      const token = tokenStorage.getAccessToken("authToken");
+      tokenStorage.removeAccessToken();
       setUser(null);
       setShowSessionWarning(false);
 
@@ -139,35 +139,40 @@ export const AuthProvider = ({ children }) => {
   const checkAndRefreshToken = useCallback(async () => {
     try {
       // Get the access and refresh tokens from storage
-      const token = tokenStorage.getAccessToken();
+      const accessToken = tokenStorage.getAccessToken();
+      const refreshToken = tokenStorage.getRefreshToken();
 
-      if (!token || !refreshToken) return false;
+      if (!refreshToken || !accessToken) return false;
 
       // Parse the JWT to check expiration
-      const payload = parseJwt(token);
+      const payload = parseJwt(accessToken);
       if (!payload || !payload.exp) return false;
 
-      const expiresAt = payload.exp * 1000; // Convert to milliseconds
+      const issuedAt = payload.iat * 1000;
+      const expiresAt = payload.exp * 1000; 
       const currentTime = Date.now();
       const timeUntilExpiry = expiresAt - currentTime;
+      
+      const totalLifetime = expiresAt - issuedAt;
 
-      // If token is close to expiring (less than 10 minutes), refresh it
-      if (timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000) {
-        try {
-          // Call your refresh token API
-          const response = await authService.refreshToken();
-          
-            if (response && response.isSuccess && response.value) {
+      console.log("Current access token expires in:", timeUntilExpiry / 1000, "seconds");
+      console.log("Total token lifetime:", totalLifetime / 1000, "seconds");
 
-              return true;
-            }
-          
-        } catch (refreshError) {
-          console.error("Token refresh failed", refreshError);
+      if (timeUntilExpiry < totalLifetime * 0.5) {
+        console.log("Proactively refreshing token");
+        setRefreshing(true);
+        
+        const response = await authService.refreshToken();
+
+        if (response && response.isSuccess && response.value) {
+          console.log("Token refreshed successfully");
+          setRefreshing(false);
+          return true;
         }
+        setRefreshing(false);
       }
 
-      // Return true if token is still valid
+      // Return true if accessToken is still valid
       return timeUntilExpiry > 0;
     } catch (error) {
       console.error("Token check failed", error);
@@ -190,17 +195,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       checkAndRefreshToken().then((isValid) => {
-        if (!isValid && !sessionTimeout && user) {
-          setShowSessionWarning(true);
-          const timeout = setTimeout(() => {
-            logout();
-            //Redirect to login
-          }, 5 * 60 * 1000); // 5 min warning
-          setSessionTimeout(timeout);
-          //Display message to user if Token is getting old, "5 min left of session"
+        if (!isValid &&  user) {
+         authService.refreshToken().catch((err) => {
+           console.error("Refresh retry failed:", err);
+           if (!tokenStorage.getRefreshToken()) {
+             logout();
+           }
+         })
         }
       });
-    }, 15 * 60 * 1000); // Check every 15 minutes
+    }, 30 * 1000);
 
     return () => {
       clearInterval(interval);
@@ -230,8 +234,8 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Store tokens
-      sessionStorage.setItem("authToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
+      tokenStorage.setAccessToken(accessToken);
+      tokenStorage.setRefreshToken(refreshToken);
 
       await verifyToken();
       return true;
@@ -250,7 +254,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Session expired. Please log in again.");
       }
 
-      const token = sessionStorage.getItem("authToken");
+      const token = tokenStorage.getAccessToken();
 
       const authOptions = {
         ...options,
