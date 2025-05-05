@@ -1,4 +1,11 @@
-import {createContext, useCallback, useContext, useEffect, useMemo, useState,} from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
@@ -22,9 +29,7 @@ export const AuthProvider = ({ children }) => {
         return null;
       }
       // Extract role information [user[0] admin[1] masteradmin[2]]
-      return JSON.parse(
-          atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
-      );
+      return JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
     } catch (error) {
       console.error("Error decoding JWT:", error);
       return null;
@@ -50,11 +55,7 @@ export const AuthProvider = ({ children }) => {
         return false;
       } else {
         const userId = userData.sub;
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> main
         // Set basic user
         const basicUserInfo = {
           id: userId,
@@ -147,16 +148,15 @@ export const AuthProvider = ({ children }) => {
       if (!payload || !payload.exp) return false;
 
       const issuedAt = payload.iat * 1000;
-      const expiresAt = payload.exp * 1000; 
+      const expiresAt = payload.exp * 1000;
       const currentTime = Date.now();
       const timeUntilExpiry = expiresAt - currentTime;
-      
+
       const totalLifetime = expiresAt - issuedAt;
-      
 
       if (timeUntilExpiry < totalLifetime * 0.5) {
         setRefreshing(true);
-        
+
         const response = await authService.refreshToken();
 
         if (response && response.isSuccess && response.value) {
@@ -189,13 +189,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       checkAndRefreshToken().then((isValid) => {
-        if (!isValid &&  user) {
-         authService.refreshToken().catch((err) => {
-           console.error("Refresh retry failed:", err);
-           if (!tokenStorage.getRefreshToken()) {
-             logout();
-           }
-         })
+        if (!isValid && user) {
+          authService.refreshToken().catch((err) => {
+            console.error("Refresh retry failed:", err);
+            if (!tokenStorage.getRefreshToken()) {
+              logout();
+            }
+          });
         }
       });
     }, 30 * 1000);
