@@ -9,6 +9,7 @@ import {
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
+import tokenStorage from "../utils/tokenStorage.js";
 
 const AuthContext = createContext();
 
@@ -252,12 +253,24 @@ export const AuthProvider = ({ children }) => {
 
   const authFetch = useCallback(
     async (url, options = {}) => {
-      const isValid = await verifyToken();
+      let isValid = await verifyToken();
+      
       if (!isValid) {
+        try {
+          const refreshResult = await authService.refreshToken();
+          if (refreshResult && refreshResult.isSuccess) {
+            isValid = await verifyToken();
+          }
+        }catch (error) {
+          console.error("Token refresh during fetch failed:", error);
+        }
+      }
+      if (!isValid) {
+        // await logout();
         throw new Error("Session expired. Please log in again.");
       }
 
-      const token = sessionStorage.getItem("authToken");
+      const token = tokenStorage.getAccessToken();
 
       const authOptions = {
         ...options,
