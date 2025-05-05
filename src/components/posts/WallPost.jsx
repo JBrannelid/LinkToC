@@ -123,10 +123,18 @@ export default function WallPost({}) {
         )}
 
         <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
-          <p className="flex-1">Ingen händelse hittades</p>
-          <Button type="primary" onClick={handleCreateWallPost}>
-            Skapa
-          </Button>
+          <div className="flex flex-row">
+            <p className="flex-1 p-3">Ingen händelse hittades</p>
+
+            <Button
+              className="flex-none"
+              type="primary"
+              size="small"
+              onClick={handleCreateWallPost}
+            >
+              Skapa
+            </Button>
+          </div>
         </div>
       </div>
     );
