@@ -5,8 +5,6 @@ import UserSettingsPage from "../../pages/UserSettingsPage";
 import AdminSettingsPage from "../../pages/AdminSettingsPage";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
-const DEV_OVERRIDE_ROLE = USER_ROLES.USER; // For dev. purpose
-
 // Decide routing based on the user's role in the current stable
 const SettingsRouter = () => {
   const { getCurrentStableRole } = useAppContext();
@@ -16,11 +14,7 @@ const SettingsRouter = () => {
   useEffect(() => {
     const checkRole = async () => {
       try {
-        // For dev. purpose. Remove if-statment when we have a BE contact
-        const role =
-          DEV_OVERRIDE_ROLE !== null
-            ? DEV_OVERRIDE_ROLE
-            : getCurrentStableRole();
+        const role = getCurrentStableRole();
         setCurrentRole(role);
       } catch (error) {
         console.error("Error checking role:", error);

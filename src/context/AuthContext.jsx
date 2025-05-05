@@ -1,17 +1,17 @@
 import {
   createContext,
+  useCallback,
   useContext,
-  useState,
   useEffect,
   useMemo,
-  useCallback,
+  useState,
 } from "react";
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
 import tokenStorage from "../utils/tokenStorage.js";
 
-const AuthContext = createContext();
+const AuthContext = createContext(undefined);
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
+  const [isRefreshing, setRefreshing] = useState(false);
 
   const parseJwt = (token) => {
     try {
@@ -27,12 +28,8 @@ export const AuthProvider = ({ children }) => {
       if (parts.length < 2) {
         return null;
       }
-      const decoded = JSON.parse(
-        atob(parts[1].replace(/-/g, "+").replace(/_/g, "/"))
-      );
-
       // Extract role information [user[0] admin[1] masteradmin[2]]
-      return decoded;
+      return JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
     } catch (error) {
       console.error("Error decoding JWT:", error);
       return null;
@@ -42,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
+      const token = tokenStorage.getAccessToken();
       if (!token) {
         setUser(null);
         setIsLoading(false);
@@ -51,14 +48,13 @@ export const AuthProvider = ({ children }) => {
 
       const userData = parseJwt(token);
       if (!userData || userData.exp * 1000 <= Date.now()) {
-        sessionStorage.removeItem("authToken");
+        console.warn("Invalid or expired JWT token", userData);
+        tokenStorage.removeAccessToken();
         setUser(null);
         setIsLoading(false);
         return false;
       } else {
         const userId = userData.sub;
-
-        console.warn("Invalid or expired JWT token", userData);
 
         // Set basic user
         const basicUserInfo = {
@@ -96,7 +92,10 @@ export const AuthProvider = ({ children }) => {
             basicUserInfo
           );
           // Set basic user if role fetch fails
-          setUser(basicUserInfo);
+          setUser({
+            ...basicUserInfo,
+            stableRoles: {},
+          });
         }
 
         setIsLoading(false);
@@ -104,7 +103,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Token verification error:", error);
-      sessionStorage.removeItem("authToken");
+      tokenStorage.removeAccessToken();
       setUser(null);
       setIsLoading(false);
       return false;
@@ -113,8 +112,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      const token = sessionStorage.getItem("authToken");
-      sessionStorage.removeItem("authToken");
+      const token = tokenStorage.getAccessToken("authToken");
+      tokenStorage.removeAccessToken();
       setUser(null);
       setShowSessionWarning(false);
 
@@ -139,43 +138,35 @@ export const AuthProvider = ({ children }) => {
   const checkAndRefreshToken = useCallback(async () => {
     try {
       // Get the access and refresh tokens from storage
-      const token = sessionStorage.getItem("authToken");
-      const refreshToken = sessionStorage.getItem("refreshToken");
+      const accessToken = tokenStorage.getAccessToken();
+      const refreshToken = tokenStorage.getRefreshToken();
 
-      if (!token || !refreshToken) return false;
+      if (!refreshToken || !accessToken) return false;
 
       // Parse the JWT to check expiration
-      const payload = parseJwt(token);
+      const payload = parseJwt(accessToken);
       if (!payload || !payload.exp) return false;
 
-      const expiresAt = payload.exp * 1000; // Convert to milliseconds
+      const issuedAt = payload.iat * 1000;
+      const expiresAt = payload.exp * 1000;
       const currentTime = Date.now();
       const timeUntilExpiry = expiresAt - currentTime;
 
-      // If token is close to expiring (less than 10 minutes), refresh it
-      if (timeUntilExpiry > 0 && timeUntilExpiry < 10 * 60 * 1000) {
-        try {
-          // Call your refresh token API
-          const response = await authService.refreshToken(refreshToken);
+      const totalLifetime = expiresAt - issuedAt;
 
-          // Check if the response contains new tokens
-          if (response && response.isSuccess && response.value) {
-            const newAccessToken = response.value.accessToken;
-            const newRefreshToken = response.value.refreshToken;
+      if (timeUntilExpiry < totalLifetime * 0.5) {
+        setRefreshing(true);
 
-            if (newAccessToken && newRefreshToken) {
-              // Store the new tokens
-              sessionStorage.setItem("authToken", newAccessToken);
-              sessionStorage.setItem("refreshToken", newRefreshToken);
-              return true;
-            }
-          }
-        } catch (refreshError) {
-          console.error("Token refresh failed", refreshError);
+        const response = await authService.refreshToken();
+
+        if (response && response.isSuccess && response.value) {
+          setRefreshing(false);
+          return true;
         }
+        setRefreshing(false);
       }
 
-      // Return true if token is still valid
+      // Return true if accessToken is still valid
       return timeUntilExpiry > 0;
     } catch (error) {
       console.error("Token check failed", error);
@@ -198,17 +189,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       checkAndRefreshToken().then((isValid) => {
-        if (!isValid && !sessionTimeout && user) {
-          setShowSessionWarning(true);
-          const timeout = setTimeout(() => {
-            logout();
-            //Redirect to login
-          }, 5 * 60 * 1000); // 5 min warning
-          setSessionTimeout(timeout);
-          //Display message to user if Token is getting old, "5 min left of session"
+        if (!isValid && user) {
+          authService.refreshToken().catch((err) => {
+            console.error("Refresh retry failed:", err);
+            if (!tokenStorage.getRefreshToken()) {
+              logout();
+            }
+          });
         }
       });
-    }, 15 * 60 * 1000); // Check every 15 minutes
+    }, 30 * 1000);
 
     return () => {
       clearInterval(interval);
@@ -238,8 +228,8 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Store tokens
-      sessionStorage.setItem("authToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
+      tokenStorage.setAccessToken(accessToken);
+      tokenStorage.setRefreshToken(refreshToken);
 
       await verifyToken();
       return true;

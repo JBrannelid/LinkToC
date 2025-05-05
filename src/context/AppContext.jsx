@@ -16,7 +16,6 @@ export const useAppContext = () => {
 
 export const AppProvider = ({ children }) => {
   const { user } = useAuth();
-  const [roleCache, setRoleCache] = useState({});
   const [currentStable, setCurrentStable] = useState(() => {
     // Try to load from localStorage on initial render
     const savedStable = localStorage.getItem("currentStable");
@@ -48,13 +47,12 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
-  const getCurrentStableRole = useCallback(async () => {
+  const getCurrentStableRole = useCallback(() => {
     if (!currentStable || !user.stableRoles) {
       return USER_ROLES.USER; // Set to baser user if we don't know stable role och missing a stable id
     }
     const role = user.stableRoles[currentStable.id]; // Return role or fallback to base user
 
-    setRoleCache((prev) => ({ ...prev, [cacheKey]: role }));
     return role !== undefined ? role : USER_ROLES.USER; // Fallback to base user
   }, [user?.stableRoles, currentStable?.id]);
 
@@ -74,9 +72,9 @@ export const AppProvider = ({ children }) => {
 
 // User role constants. Remove when we have a contact with BE
 export const USER_ROLES = {
-  USER: 0,
+  USER: 2,
   ADMIN: 1,
-  MANAGER: 2,
+  MANAGER: 0,
 };
 
 export default AppContext;
