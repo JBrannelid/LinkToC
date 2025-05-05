@@ -11,13 +11,14 @@ const StableManagementPage = () => {
 
   return (
     <PermissionGate requiredRoles={[USER_ROLES.ADMIN, USER_ROLES.MANAGER]}>
-      <div className="flex flex-col min-h-screen bg-primary-light pb-20">
-        <ModalHeader
-          title="Hantera stall"
-          showCloseBtn={true}
-          onCloseClick={() => window.history.back()}
-        />
-
+      <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+        <div className="bg-primary-light">
+          <ModalHeader
+            title="Hantera stall"
+            showCloseBtn={true}
+            onCloseClick={() => window.history.back()}
+          />
+        </div>
         <div className="flex-1 p-4 space-y-4 overflow-y-auto">
           <StableMembersList stableId={currentStable?.id} />
           <StableRequestsList stableId={currentStable?.id} />
