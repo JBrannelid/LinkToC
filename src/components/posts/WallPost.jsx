@@ -177,7 +177,7 @@ export default function WallPost({}) {
           <>
             <p className="font-light text-sm">{wallPost.body}</p>
             {wallPost.lastEdited ? (
-              <p className="font-light text-xs">
+              <p className="font-light text-xs pt-1">
                 Edited: ({formatData(wallPost.lastEdited)})
               </p>
             ) : wallPost.postDate ? (
