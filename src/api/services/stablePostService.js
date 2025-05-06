@@ -7,6 +7,7 @@ const baseService = createBaseService(ENDPOINTS.STABLEPOST);
 const stablePostService = {
   ...baseService,
 
+  // Get all stable posts on a specific stable ID
   getStablePosts: async (stableId) => {
     const response = await axiosInstance.get(
       `${ENDPOINTS.STABLEPOSTBYID}${stableId}`
@@ -19,11 +20,8 @@ const stablePostService = {
     return [];
   },
 
+  // Create a new stable post
   create: async (data) => {
-    if (!data) {
-      throw new Error("Post data is required");
-    }
-
     const createData = {
       userIdFk: data.userIdFk,
       stableIdFk: data.stableIdFk,
@@ -33,17 +31,27 @@ const stablePostService = {
       isPinned: data.isPinned || false,
     };
 
-    return await baseService.create(createData);
+    return await axiosInstance.post(
+      `${ENDPOINTS.STABLEPOST}/create`,
+      createData
+    );
   },
 
+  // Update an existing stable post
   update: async (data) => {
     const updateData = {
       id: data.id,
       title: data.title,
       content: data.content,
-      isPinned: data.isPinned,
     };
-    return await baseService.update(updateData);
+    return await axiosInstance.put(
+      `${ENDPOINTS.STABLEPOST}/update`,
+      updateData
+    );
+  },
+  // Delete a stable post by ID
+  delete: async (id) => {
+    return await axiosInstance.delete(`${ENDPOINTS.STABLEPOST}/delete/${id}`);
   },
 };
 
