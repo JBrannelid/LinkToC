@@ -3,9 +3,14 @@ import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import CloseIcon from "../../assets/icons/CloseIcon";
 import CheckIcon from "../../assets/icons/CheckIcon";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
 const StableRequestsList = ({ stableId }) => {
   const [activeTab, setActiveTab] = useState("received");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showAcceptModal, setShowAcceptModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
   const {
     receivedRequests,
     sentRequests,
@@ -15,6 +20,32 @@ const StableRequestsList = ({ stableId }) => {
   } = useStableManagement(stableId);
 
   const requests = activeTab === "received" ? receivedRequests : sentRequests;
+
+  const handleShowRejectModal = (request) => {
+    setSelectedRequest(request);
+    setShowRejectModal(true);
+  };
+
+  const handleConfirmReject = () => {
+    if (selectedRequest) {
+      rejectRequest(selectedRequest.id);
+      setShowRejectModal(false);
+      setSelectedRequest(null);
+    }
+  };
+
+  const handleShowAcceptModal = (request) => {
+    setSelectedRequest(request);
+    setShowAcceptModal(true);
+  };
+
+  const handleConfirmAccept = () => {
+    if (selectedRequest) {
+      approveRequest(selectedRequest.id);
+      setShowAcceptModal(false);
+      setSelectedRequest(null);
+    }
+  };
 
   if (loading) {
     return <div className="text-center py-4">Laddar förfrågningar...</div>;
@@ -64,14 +95,14 @@ const StableRequestsList = ({ stableId }) => {
               <div className="flex space-x-2">
                 <Button
                   type="icon"
-                  onClick={() => approveRequest(request.id)}
+                  onClick={() => handleShowAcceptModal(request)}
                   aria-label="Godkänn förfrågan"
                 >
                   <CheckIcon strokeWidth={4} />
                 </Button>
                 <Button
                   type="icon"
-                  onClick={() => rejectRequest(request.id)}
+                  onClick={() => handleShowRejectModal(request)}
                   aria-label="Avvisa förfrågan"
                 >
                   <CloseIcon strokeWidth={4} />
@@ -88,6 +119,45 @@ const StableRequestsList = ({ stableId }) => {
           </div>
         )}
       </div>
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showRejectModal}
+        onClose={() => setShowRejectModal(false)}
+        onConfirm={handleConfirmReject}
+        loading={loading}
+        title={`Vill du ta bort inbjudan?`}
+        confirmButtonText="Ja"
+        confirmButtonType="danger"
+        cancelButtonText="Nej"
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor="bg-error-500"
+            iconColor="text-white"
+          />
+        }
+      />
+      {/* Accept Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showAcceptModal}
+        onClose={() => setShowAcceptModal(false)}
+        onConfirm={handleConfirmAccept}
+        loading={loading}
+        title={`Vill du acceptera ${
+          selectedRequest?.firstName || "denna medlem"
+        }?`}
+        confirmButtonText="Ja"
+        confirmButtonType="primary"
+        cancelButtonText="Nej"
+        icon={
+          <CheckIcon
+            size={70}
+            className="text-white"
+            backgroundColor="bg-primary"
+            strokeWidth={4}
+          />
+        }
+      />
     </div>
   );
 };
