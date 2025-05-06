@@ -7,6 +7,27 @@ const baseService = createBaseService(ENDPOINTS.STABLE);
 const stableService = {
   ...baseService,
 
+  // Fetches stables based on search term and pagination parameters.
+  searchStables: async (params) => {
+    // Build the query string from the search parameters.
+    const queryParams = new URLSearchParams({
+      searchTerm: params.searchTerm || "",
+      page: params.page || 0,
+      pageSize: params.pageSize || 10,
+    });
+
+    // Send GET request to the stables endpoint with query parameters.
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE}?${queryParams}`
+    );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
+    }
+
+    return [];
+  },
+
   createWithWallPost: async (data) => {
     if (!data || !data.name) {
       throw new Error("Stable name is required");
