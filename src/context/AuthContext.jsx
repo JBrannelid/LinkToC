@@ -1,17 +1,11 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import {createContext, useCallback, useContext, useEffect, useMemo, useState,} from "react";
 import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
 import tokenStorage from "../utils/tokenStorage.js";
 
 const AuthContext = createContext(undefined);
+
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -20,7 +14,6 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
-  const [isRefreshing, setRefreshing] = useState(false);
 
   const parseJwt = (token) => {
     try {
@@ -35,7 +28,42 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
+  
+  const refreshInterval = () => {
+    try {
+      const token = tokenStorage.getAccessToken();
+      
+      if (!token) {
+        console.warn("No access token found");
+        return null;
+      }
+      
+      const payload = parseJwt(token);
 
+      if (!payload || !payload.iat || !payload.exp) {
+        console.warn("Could not parse token timestamps");
+        return null;
+      }
+      
+      const issuedAt = payload.iat * 1000;
+      const expiresAt = payload.exp * 1000;
+      const currentTime = Date.now();
+      
+      const totalLifetime = expiresAt - issuedAt;
+      const timeUntilExpiry = expiresAt - currentTime;
+
+      if (timeUntilExpiry <= 0) {
+        console.warn("Token already expired");
+        return null;
+      }
+      
+      return Math.floor(totalLifetime * 0.95)
+    }catch (error) {
+      console.error("Error calculating refresh interval:", error);
+      return null;
+    }
+  }
+  
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
@@ -146,28 +174,13 @@ export const AuthProvider = ({ children }) => {
       // Parse the JWT to check expiration
       const payload = parseJwt(accessToken);
       if (!payload || !payload.exp) return false;
-
-      const issuedAt = payload.iat * 1000;
-      const expiresAt = payload.exp * 1000;
-      const currentTime = Date.now();
-      const timeUntilExpiry = expiresAt - currentTime;
-
-      const totalLifetime = expiresAt - issuedAt;
-
-      if (timeUntilExpiry < totalLifetime * 0.5) {
-        setRefreshing(true);
-
+      
         const response = await authService.refreshToken();
-
         if (response && response.isSuccess && response.value) {
-          setRefreshing(false);
           return true;
         }
-        setRefreshing(false);
-      }
-
-      // Return true if accessToken is still valid
-      return timeUntilExpiry > 0;
+      const currentTime = Date.now();
+      return payload.exp * 1000 > currentTime;
     } catch (error) {
       console.error("Token check failed", error);
       return false;
@@ -187,24 +200,44 @@ export const AuthProvider = ({ children }) => {
   }, [verifyToken]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      checkAndRefreshToken().then((isValid) => {
-        if (!isValid && user) {
-          authService.refreshToken().catch((err) => {
-            console.error("Refresh retry failed:", err);
-            if (!tokenStorage.getRefreshToken()) {
-              logout();
+    let intervalId = null;
+    const setupTokenRefresh = () => {
+      const refreshTime = refreshInterval();
+      
+      if (!refreshTime) {
+        console.warn("Could not calculate refresh interval, token might be invalid");
+        return null;
+      }
+      
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      
+      intervalId = setInterval (async() => {
+        try {
+          const isValid = await checkAndRefreshToken();
+          if (!isValid && user) {
+            const refreshResult = await authService.refreshToken();
+            if (refreshResult && refreshResult.isSuccess) {
+              setupTokenRefresh();
+            } else {
+              console.error("Token refresh unsuccessful");
             }
-          });
+          }
+        } catch (error) {
+          console.error("Error on token refresh interval:",  error);
         }
-      });
-    }, 30 * 1000);
-
-    return () => {
-      clearInterval(interval);
-      if (sessionTimeout) clearTimeout(sessionTimeout);
+      }, refreshTime);
     };
-  }, [checkAndRefreshToken, sessionTimeout, user, logout]);
+    
+    if(user) {
+      setupTokenRefresh(); 
+    }
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [ user, checkAndRefreshToken, refreshInterval]);
 
   const login = async (email, password) => {
     try {
@@ -243,8 +276,20 @@ export const AuthProvider = ({ children }) => {
 
   const authFetch = useCallback(
     async (url, options = {}) => {
-      const isValid = await verifyToken();
+      let isValid = await verifyToken();
+      
       if (!isValid) {
+        try {
+          const refreshResult = await authService.refreshToken();
+          if (refreshResult && refreshResult.isSuccess) {
+            isValid = await verifyToken();
+          }
+        }catch (error) {
+          console.error("Token refresh during fetch failed:", error);
+        }
+      }
+      if (!isValid) {
+        // await logout();
         throw new Error("Session expired. Please log in again.");
       }
 
