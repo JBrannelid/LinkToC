@@ -70,7 +70,7 @@ const StableMembersList = ({ stableId }) => {
         {/* Content - Display members */}
         {members.map((member) => (
           <div
-            key={member.id}
+            key={`member-${member.id}`}
             className="grid grid-cols-5 items-center bg-background rounded-full my-2"
           >
             <div className="col-span-3 pl-2">
