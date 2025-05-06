@@ -6,7 +6,6 @@ import userService from "../api/services/userService";
 export const useStableManagement = (stableId) => {
   const [members, setMembers] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
-  const [sentRequests, setSentRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
