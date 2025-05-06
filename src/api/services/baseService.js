@@ -1,11 +1,11 @@
-import axiosConfig from "../config/axiosConfig";
+import axiosInstance from "../config/axiosConfig";
 import { createError, ErrorTypes } from "../utils/errors";
 
 export default function createBaseService(endpoint) {
   return {
     // GET: /{ENDPOINTS}
     getAll: async () => {
-      const response = await axiosConfig.get(endpoint);
+      const response = await axiosInstance.get(endpoint);
 
       // Handle the specific response format
       if (response && response.isSuccess && Array.isArray(response.value)) {
@@ -22,7 +22,7 @@ export default function createBaseService(endpoint) {
         throw createError("ID is required", ErrorTypes.VALIDATION, 400);
       }
 
-      return await axiosConfig.get(`${endpoint}/${id}`);
+      return await axiosInstance.get(`${endpoint}/${id}`);
     },
 
     // POST: /{ENDPOINTS}/create
@@ -31,7 +31,7 @@ export default function createBaseService(endpoint) {
         throw createError("Data is required", ErrorTypes.VALIDATION, 400);
       }
 
-      return await axiosConfig.post(`${endpoint}/create`, data);
+      return await axiosInstance.post(`${endpoint}/create`, data);
     },
 
     // PUT: /{ENDPOINTS}/update
@@ -40,7 +40,7 @@ export default function createBaseService(endpoint) {
         throw createError("Data is required", ErrorTypes.VALIDATION, 400);
       }
 
-      return await axiosConfig.put(`${endpoint}/update`, data);
+      return await axiosInstance.put(`${endpoint}/update`, data);
     },
 
     // DELETE: {BaseURL}/{ENDPOINTS}/delete/{id}
@@ -49,7 +49,7 @@ export default function createBaseService(endpoint) {
         throw createError("ID is required", ErrorTypes.VALIDATION, 400);
       }
 
-      return await axiosConfig.delete(`${endpoint}/delete/${id}`);
+      return await axiosInstance.delete(`${endpoint}/delete/${id}`);
     },
   };
 }

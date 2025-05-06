@@ -1,6 +1,6 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
-import axiosConfig from "../config/axiosConfig.js";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.STABLE);
 
@@ -12,7 +12,7 @@ const stableService = {
       throw new Error("Stable name is required");
     }
 
-    return await axiosConfig.post(
+    return await axiosInstance.post(
       `${ENDPOINTS.STABLE}/create-with-wall-post`,
       data
     );

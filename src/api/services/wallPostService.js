@@ -1,6 +1,6 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
-import axiosConfig from "../config/axiosConfig";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.WALLPOST);
 
@@ -18,7 +18,7 @@ const wallPostService = {
       body: "",
     };
     console.log("Sending to Backend", createData);
-    return await axiosConfig.post(
+    return await axiosInstance.post(
       `${ENDPOINTS.WALLPOST}/create?stableId=${data.stableIdFk}`,
       createData
     );
@@ -28,7 +28,7 @@ const wallPostService = {
     if (!stableId) {
       throw new Error("Stable ID is required");
     }
-    return await axiosConfig.get(`/api/wallpost/${stableId}`);
+    return await axiosInstance.get(`/api/wallpost/${stableId}`);
   },
 
   update: async (data) => {
@@ -38,7 +38,7 @@ const wallPostService = {
       body: data.body,
     };
 
-    return await axiosConfig.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
+    return await axiosInstance.patch(`${ENDPOINTS.WALLPOST}/edit`, updateData);
   },
 
   replace: async (data) => {
@@ -48,7 +48,10 @@ const wallPostService = {
       body: data.body,
     };
 
-    return await axiosConfig.put(`${ENDPOINTS.WALLPOST}/replace`, replaceData);
+    return await axiosInstance.put(
+      `${ENDPOINTS.WALLPOST}/replace`,
+      replaceData
+    );
   },
 };
 
