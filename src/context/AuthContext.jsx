@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
       return Math.floor(totalLifetime * 0.95)
     }catch (error) {
       console.error("Error calculating refresh interval:", error);
-      return 5 * 60 * 1000;
+      return null;
     }
   }
   
