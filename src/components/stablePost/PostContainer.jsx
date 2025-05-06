@@ -7,7 +7,7 @@ import {
   dateFnsCompareDesc,
 } from "../../utils/calendarUtils";
 
-const PostContainer = ({ posts, user }) => {
+const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
   const groupPostsByDate = () => {
     const groups = {
       today: [],
@@ -20,7 +20,6 @@ const PostContainer = ({ posts, user }) => {
     }
 
     // Use date-fns helpers to determine the correct group (today, yesterday, older)
-    // and push each post to the corresponding array in the groups object
     posts.forEach((post) => {
       try {
         const postDate = parseISO(post.date);
@@ -62,19 +61,30 @@ const PostContainer = ({ posts, user }) => {
   return (
     <div className="py-2">
       {groupedPosts.today.length > 0 && (
-        <PostGroup title="Today" posts={groupedPosts.today} user={user} />
+        <PostGroup
+          title="Today"
+          posts={groupedPosts.today}
+          onEditPost={onEditPost}
+          onDeletePost={onDeletePost}
+        />
       )}
 
       {groupedPosts.yesterday.length > 0 && (
         <PostGroup
           title="Yesterday"
           posts={groupedPosts.yesterday}
-          user={user}
+          onEditPost={onEditPost}
+          onDeletePost={onDeletePost}
         />
       )}
 
       {groupedPosts.older.length > 0 && (
-        <PostGroup title="Older posts" posts={groupedPosts.older} user={user} />
+        <PostGroup
+          title="Older posts"
+          posts={groupedPosts.older}
+          onEditPost={onEditPost}
+          onDeletePost={onDeletePost}
+        />
       )}
     </div>
   );
