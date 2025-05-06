@@ -40,59 +40,41 @@ const stableService = {
   },
 
   // Get requests for a stable
-  /*
-  "success": true,
-  "data": {
-    "received": [
-      {
-        "id": 12,
-        "userId": 8,
-        "firstName": "Jenny",
-        "lastName": "Jennysson",
-        "email": "jenny@example.com",
-        "requestDate": "2025-04-25T14:30:00"
-      },
-    "sent": [
-      {
-        "id": 18,
-        "stableId": 3,
-        "stableName": "Ridskolan Pegasus",
-        "requestDate": "2025-04-28T11:20:00",
-        "status": "pending"
-      }
-    ]
-  }
-  */
   getStableRequests: async (stableId) => {
-    return await axiosInstance.get(`/api/stable/${stableId}/requests`); // Follow rest convention hierarchy
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE_REQUESTS}/${stableId}`
+    );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return {
+        received: response.value,
+        sent: [],
+      };
+    }
+
+    return { received: [], sent: [] };
   },
 
-  // Handle a request (approve/reject)
-  /*
-  "success": true,
-  "message": "Request approved successfully",
-  "data": {
-    "requestId": 12,
-    "userId": 8,
-    "stableId": 1,
-    "status": "approved" // approved or "reject"
-  }
- */
+  // Get invites from a stable to a user
+  getStableInvites: async (stableId) => {
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE_INVITES}/${stableId}`
+    );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
+    }
+
+    return [];
+  },
+
+  //----------------- NOT IN USE
   handleStableRequest: async (requestId, action) => {
     return await axiosInstance.put(`/api/stable/request/${requestId}`, {
-      // REST APIs for state transitions
       action: action,
     });
   },
 
-  // Remove a user from stable
-  /*
-  "success": true,
-  "message": "User removed from stable successfully",
-  "data": {
-    "userId": 8,
-    "stableId": 1
- */
   removeUserFromStable: async (stableId, userId) => {
     return await axiosInstance.delete(
       `/api/userstables/${stableId}/user/${userId}`
