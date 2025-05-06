@@ -16,6 +16,7 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
 import NotificationPage from "../pages/NotificationPage";
+import StableHorsePage from "../pages/StableHorsePage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -82,6 +83,12 @@ export const protectedRoutes = [
     path: ROUTES.STABLE_ONBOARDING,
     element: <StableOnboardingPage />,
     requiresStable: false,
+  },
+
+  {
+    path: ROUTES.STABLE_HORSES,
+    element: <StableHorsePage />,
+    requiresStable: true,
   },
 ];
 

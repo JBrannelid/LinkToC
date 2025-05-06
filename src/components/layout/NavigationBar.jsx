@@ -55,6 +55,14 @@ const NavigationBar = () => {
         </Link>
 
         <Link
+          to={buildRoute(ROUTES.STABLE_HORSES, {})}
+          className={`p-2`}
+          aria-label="Stable profil"
+        >
+          <HorseFaceIcon className="w-6 h-6" size={24} />
+        </Link>
+
+        {/* <Link
           to={buildRoute(ROUTES.HORSE_PROFILE, {
             horseId: selectedHorse?.id || 2,
           })}
@@ -66,7 +74,7 @@ const NavigationBar = () => {
           aria-label="Häst profil"
         >
           <HorseFaceIcon className="w-6 h-6" size={24} />
-        </Link>
+        </Link> */}
 
         <Link
           to={buildRoute(ROUTES.USER_PROFILE, { userId: currentUser?.id })}
