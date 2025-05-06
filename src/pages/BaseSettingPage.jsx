@@ -11,7 +11,6 @@ import { useAppContext } from "../context/AppContext";
 import UserProfileForm from "../components/forms/UserProfileForm";
 import {
   handleSwitchStable,
-  handleLogout,
   formatUserFullName,
   getProfileImageUrl,
 } from "../utils/userUtils";
