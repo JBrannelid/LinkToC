@@ -14,13 +14,14 @@ const StableRequestsList = ({ stableId }) => {
 
   const {
     receivedRequests,
-    sentRequests,
+    sentInvites,
     loading,
     approveRequest,
     rejectRequest,
   } = useStableManagement(stableId);
 
-  const requests = activeTab === "received" ? receivedRequests : sentRequests;
+  const displayItems =
+    activeTab === "received" ? receivedRequests : sentInvites;
 
   const handleShowRejectModal = (request) => {
     setSelectedRequest(request);
@@ -55,7 +56,7 @@ const StableRequestsList = ({ stableId }) => {
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md p-4">
       {/* Header */}
-      <h2 className="font-bold mb-4">Förfrågningar</h2>
+      <h2 className="font-bold mb-4">Stable requests</h2>
 
       {/* Tab navigation */}
       <div className="flex justify-center mb-4">
@@ -64,11 +65,11 @@ const StableRequestsList = ({ stableId }) => {
             <Button
               type="secondary"
               className={`tab-button-settings no-effects !rounded-full
-          ${activeTab === "received" ? "!bg-light/40" : ""}
-        `}
+                ${activeTab === "received" ? "!bg-light/40" : ""}
+              `}
               onClick={() => setActiveTab("received")}
             >
-              <p className="text-sm">Mottagna</p>
+              <p className="text-sm">Applications </p>
             </Button>
           </div>
           <div className="flex justify-center">
@@ -78,48 +79,72 @@ const StableRequestsList = ({ stableId }) => {
                 ${activeTab === "sent" ? "!bg-light/40" : ""}`}
               onClick={() => setActiveTab("sent")}
             >
-              <p className="text-sm">Skickade</p>
+              <p className="text-sm">Invitations</p>
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Requests list */}
+      {/* Requests/Invites list */}
       <div className="space-y-1">
-        {requests.map((request, index) => (
+        {displayItems.map((item, index) => (
           <div
-            key={`request-${request.id}-${index}`}
+            key={`${activeTab}-${item.id}-${index}`}
             className="flex items-center justify-between py-3 border-b border-light"
           >
-            <div>
-              <div className="font-medium">{`${request.firstName} ${request.lastName}`}</div>
-              <div className="text-sm text-gray-500">{request.email}</div>
-            </div>
-            {activeTab === "received" && (
-              <div className="flex space-x-2">
-                <Button
-                  type="icon"
-                  onClick={() => handleShowAcceptModal(request)}
-                  aria-label="Godkänn förfrågan"
-                >
-                  <CheckIcon strokeWidth={4} />
-                </Button>
-                <Button
-                  type="icon"
-                  onClick={() => handleShowRejectModal(request)}
-                  aria-label="Avvisa förfrågan"
-                >
-                  <CloseIcon strokeWidth={4} />
-                </Button>
+            {activeTab === "received" ? (
+              // Received request
+              <>
+                <div>
+                  <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
+                  <div className="text-sm text-gray-500">{item.email}</div>
+                  <div className="text-xs text-gray-400">
+                    {item.inviteDate
+                      ? new Date(item.inviteDate).toLocaleDateString()
+                      : "Datum saknas"}
+                  </div>
+                </div>
+                <div className="flex space-x-2">
+                  <Button
+                    type="icon"
+                    onClick={() => handleShowAcceptModal(item)}
+                    aria-label="Godkänn förfrågan"
+                    className="text-primary"
+                  >
+                    <CheckIcon strokeWidth={4} />
+                  </Button>
+                  <Button
+                    type="icon"
+                    onClick={() => handleShowRejectModal(item)}
+                    aria-label="Avvisa förfrågan"
+                    className="text-error-500"
+                  >
+                    <CloseIcon strokeWidth={4} />
+                  </Button>
+                </div>
+              </>
+            ) : (
+              // Sent invite display
+              <div>
+                <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
+                <div className="text-sm text-gray-500">{item.email}</div>
+                <div className="text-xs text-gray-400">
+                  {item.inviteDate
+                    ? new Date(item.inviteDate).toLocaleDateString()
+                    : "Datum saknas"}
+                </div>
               </div>
             )}
           </div>
         ))}
-        {/* Display mottagna or skickade depending on active button */}
-        {requests.length === 0 && (
+
+        {/* Display message when send och invite display is empty */}
+        {displayItems.length === 0 && (
           <div className="py-3 text-center text-gray">
-            Inga {activeTab === "received" ? "mottagna" : "skickade"}
-            förfrågningar
+            Inga{" "}
+            {activeTab === "received"
+              ? "mottagna förfrågningar"
+              : "skickade inbjudningar"}
           </div>
         )}
       </div>
