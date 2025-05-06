@@ -11,6 +11,7 @@ export const useStableManagement = (stableId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+  const [sentInvites, setSentInvites] = useState([]);
 
   const loadingState = useLoadingState(loading, operationType);
 
@@ -26,14 +27,16 @@ export const useStableManagement = (stableId) => {
       const userResponse = await userService.getUserStables(stableId);
       setMembers(Array.isArray(userResponse) ? userResponse : []);
 
-      // Fetch requests for a specifik stable
+      // Fetch join requests for a specific stable
       const requestsResponse = await stableService.getStableRequests(stableId);
-
       setReceivedRequests(requestsResponse.received || []);
-      setSentRequests(requestsResponse.sent || []);
+
+      // Fetch invites sent by the stable
+      const invitesResponse = await stableService.getStableInvites(stableId);
+      setSentInvites(Array.isArray(invitesResponse) ? invitesResponse : []);
+
       setError(null);
     } catch (error) {
-      console.error("Error fetching stable data:", error);
       setError(error.message || "Failed to load stable data");
     } finally {
       setLoading(false);
@@ -98,7 +101,7 @@ export const useStableManagement = (stableId) => {
     // Data
     members,
     receivedRequests,
-    sentRequests,
+    sentInvites,
 
     // Status
     loading,
