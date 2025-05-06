@@ -1,4 +1,3 @@
-// In hooks/useStableManagement.js
 import { useState, useCallback, useEffect } from "react";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
@@ -112,8 +111,6 @@ export const useStableManagement = (stableId) => {
 
     // Functions
     updateMemberRole,
-    removeMember,
-    approveRequest,
     rejectRequest,
     cancelInvitation,
     refreshData: fetchStableData,
