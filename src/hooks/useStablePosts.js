@@ -20,9 +20,6 @@ export function useStablePosts(stableId) {
       const response = await stablePostService.getStablePosts(stableId);
 
       setPosts(response);
-
-      console.log("Stable posts response:", response);
-
       return true;
     } catch (error) {
       setError(error.message || "Failed to retrieve stable posts");
@@ -36,6 +33,7 @@ export function useStablePosts(stableId) {
     fetchAndUpdatePosts();
   }, [fetchAndUpdatePosts]);
 
+  // Create new post
   const createPost = async (postData) => {
     setOperationType("create");
     try {
@@ -58,11 +56,19 @@ export function useStablePosts(stableId) {
     }
   };
 
+  // Update existing post
   const updatePost = async (postData) => {
     setOperationType("update");
     try {
       setLoading(true);
       setError(null);
+
+      // Required fields - Match Backend DTO
+      const updateData = {
+        id: postData.id,
+        title: postData.title,
+        content: postData.content,
+      };
 
       await stablePostService.update(postData);
       await fetchAndUpdatePosts();
@@ -74,6 +80,7 @@ export function useStablePosts(stableId) {
     }
   };
 
+  // Delete a post by ID
   const deletePost = async (postId) => {
     setOperationType("delete");
     try {
