@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../context/AppContext";
 import PenIcon from "../../assets/icons/PenIcon";
 import TrashIcon from "../../assets/icons/TrashIcon";
+import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
 const StableMembersList = ({ stableId }) => {
+  const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
+  const [selectedMember, setSelectedMember] = useState(null);
   const { members, loading, updateMemberRole, removeMember } =
     useStableManagement(stableId);
 
@@ -16,9 +20,16 @@ const StableMembersList = ({ stableId }) => {
     updateMemberRole(memberId, newRole);
   };
 
-  const handleRemoveMember = (memberId) => {
-    if (window.confirm("Are you sure you want to remove this member?")) {
-      removeMember(memberId);
+  const handleShowRemoveModal = (member) => {
+    setSelectedMember(member);
+    setShowRemoveMemberModal(true);
+  };
+
+  const handleConfirmRemove = () => {
+    if (selectedMember) {
+      removeMember(selectedMember.id);
+      setShowRemoveMemberModal(false);
+      setSelectedMember(null);
     }
   };
 
@@ -60,7 +71,7 @@ const StableMembersList = ({ stableId }) => {
             <div className="col-span-1 flex justify-center">
               <Button
                 type="icon"
-                onClick={() => handleRemoveMember(member.id)}
+                onClick={() => handleShowRemoveModal(member)}
                 aria-label="Ta bort medlem"
                 className="text-error-500"
               >
@@ -76,6 +87,22 @@ const StableMembersList = ({ stableId }) => {
           </div>
         )}
       </div>
+      <ConfirmationModal
+        isOpen={showRemoveMemberModal}
+        onClose={() => setShowRemoveMemberModal(false)}
+        onConfirm={handleConfirmRemove}
+        loading={loading}
+        title={`Vill du kicka ${selectedMember?.firstName || "denna medlem"}?`}
+        confirmButtonText="Ja"
+        confirmButtonType="danger"
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor="bg-error-500"
+            iconColor="text-white"
+          />
+        }
+      />
     </div>
   );
 };
