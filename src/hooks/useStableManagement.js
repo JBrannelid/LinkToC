@@ -29,12 +29,8 @@ export const useStableManagement = (stableId) => {
       // Fetch requests for a specifik stable
       const requestsResponse = await stableService.getStableRequests(stableId);
 
-      // Parse the response
-      const received = requestsResponse?.received || [];
-      const sent = requestsResponse?.sent || [];
-
-      setReceivedRequests(received);
-      setSentRequests(sent);
+      setReceivedRequests(requestsResponse.received || []);
+      setSentRequests(requestsResponse.sent || []);
       setError(null);
     } catch (error) {
       console.error("Error fetching stable data:", error);
