@@ -68,17 +68,17 @@ const stableService = {
     return [];
   },
 
-  //----------------- NOT IN USE
-  handleStableRequest: async (requestId, action) => {
-    return await axiosInstance.put(`/api/stable/request/${requestId}`, {
-      action: action,
-    });
+  // For rejecting an application request from a user to join the stable
+  rejectStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      `/api/refuse-stable-join-request`,
+      requestData
+    );
   },
 
-  removeUserFromStable: async (stableId, userId) => {
-    return await axiosInstance.delete(
-      `/api/userstables/${stableId}/user/${userId}`
-    );
+  // For canceling an invitation that the stable sent to a user
+  cancelStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
   },
 };
 
