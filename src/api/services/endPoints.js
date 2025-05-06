@@ -1,6 +1,8 @@
 export const ENDPOINTS = {
   EVENTS: "/api/calendar-event",
-  STABLE: "/api/stable",
+  STABLE: "/api/stable/search",
+  STABLE_REQUESTS: "/api/get-stable-join-request-by-stable",
+  STABLE_INVITES: "/api/get-stable-invite-by-stable",
   STABLEPOST: "api/stable-post",
   HORSES: "/api/horse",
   USERS: "/api/user",
