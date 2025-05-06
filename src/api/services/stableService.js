@@ -80,6 +80,14 @@ const stableService = {
   cancelStableInvite: async (inviteData) => {
     return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
   },
+
+  // Accept a stable join request
+  acceptStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      `/api/accept-stable-join-request`,
+      requestData
+    );
+  },
 };
 
 export default stableService;
