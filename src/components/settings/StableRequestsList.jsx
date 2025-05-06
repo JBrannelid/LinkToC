@@ -11,6 +11,7 @@ const StableRequestsList = ({ stableId }) => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
+
   const {
     receivedRequests,
     sentRequests,
@@ -90,7 +91,10 @@ const StableRequestsList = ({ stableId }) => {
             key={request.id}
             className="flex items-center justify-between py-3 border-b border-light"
           >
-            <div>{`${request.firstName} ${request.lastName}`}</div>
+            <div>
+              <div className="font-medium">{`${request.firstName} ${request.lastName}`}</div>
+              <div className="text-sm text-gray-500">{request.email}</div>
+            </div>
             {activeTab === "received" && (
               <div className="flex space-x-2">
                 <Button
@@ -119,7 +123,8 @@ const StableRequestsList = ({ stableId }) => {
           </div>
         )}
       </div>
-      {/* Confirmation Modal */}
+
+      {/* Confirmation modals remain the same */}
       <ConfirmationModal
         isOpen={showRejectModal}
         onClose={() => setShowRejectModal(false)}
