@@ -94,6 +94,29 @@ export const useStableManagement = (stableId) => {
     }
   };
 
+  const approveRequest = async (userId) => {
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      // Create the request data object with userId and stableId
+      const requestData = {
+        userId: userId,
+        stableId: stableId,
+      };
+
+      // Call the acceptStableJoinRequest method instead of handleStableRequest
+      await stableService.acceptStableJoinRequest(requestData);
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      console.error("Error accepting join request:", error);
+      setError(error.message || "Failed to approve request");
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchStableData();
   }, [fetchStableData]);
@@ -110,6 +133,7 @@ export const useStableManagement = (stableId) => {
     loadingState,
 
     // Functions
+    approveRequest,
     updateMemberRole,
     rejectRequest,
     cancelInvitation,
