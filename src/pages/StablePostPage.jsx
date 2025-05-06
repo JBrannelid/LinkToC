@@ -7,17 +7,22 @@ import { useStablePosts } from "../hooks/useStablePosts";
 import PostContainer from "../components/stablePost/PostContainer";
 import { useParams } from "react-router";
 import Button from "../components/ui/Button";
-import PlusIcon from "../assets/icons/PlusIcon";
-import { USER_ROLES } from "../context/AppContext";
+import AddNoteIcon from "../assets/icons/AddNoteIcon";
+import { useForm } from "react-hook-form";
+import { FormProvider, FormInput } from "../components/forms/";
 
 export default function StablePostPage() {
   const { stableId: urlStableId } = useParams();
   const { currentStable, getCurrentStableRole } = useAppContext();
   const { user } = useAuth();
   const [isCreating, setIsCreating] = useState(false);
-  const [newPost, setNewPost] = useState({
-    title: "",
-    content: "",
+
+  // useForm
+  const methods = useForm({
+    defaultValues: {
+      title: "",
+      content: "",
+    },
   });
 
   // Use stableId from context or url params
@@ -26,11 +31,10 @@ export default function StablePostPage() {
   // Get user role for current stable
   const currentRole = getCurrentStableRole();
 
-  // Check if user can create posts (admin or manager)
-  const canCreatePosts =
-    currentRole === USER_ROLES.ADMIN || currentRole === USER_ROLES.MANAGER;
+  // A user can create a post as long as they have a role in active stable
+  const canCreatePosts = currentRole !== undefined;
 
-  // Get post data and functions
+  // Get post data with error and load handling and crud functions
   const {
     posts,
     status: { loading, error },
@@ -40,30 +44,24 @@ export default function StablePostPage() {
     deletePost,
   } = useStablePosts(currentStableId);
 
-  // Handle form input changes for new post
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewPost({ ...newPost, [name]: value });
-  };
-
   // Create new post
-  const handleCreatePost = async () => {
-    if (!newPost.title || !newPost.content) return;
+  const handleCreatePost = methods.handleSubmit((data) => {
+    if (!data.title || !data.content) return;
 
-    const success = await createPost({
+    createPost({
       userIdFk: user.id,
       stableIdFk: currentStableId,
-      title: newPost.title,
-      content: newPost.content,
+      title: data.title,
+      content: data.content,
       date: new Date().toISOString(),
       isPinned: false,
+    }).then((success) => {
+      if (success) {
+        methods.reset();
+        setIsCreating(false);
+      }
     });
-
-    if (success) {
-      setNewPost({ title: "", content: "" });
-      setIsCreating(false);
-    }
-  };
+  });
 
   // Handle editing existing post
   const handleEditPost = async (postData) => {
@@ -91,60 +89,61 @@ export default function StablePostPage() {
         <ModalHeader title="Flödet" />
       </div>
       <div className="flex-1 px-6 py-2 overflow-y-auto">
-        {/* Create post form (for admins and managers) */}
+        {/* Create post  */}
         {canCreatePosts && (
-          <div className="mb-6">
-            {!isCreating ? (
-              <Button
-                type="primary"
-                className="flex items-center"
-                onClick={() => setIsCreating(true)}
-              >
-                <PlusIcon className="w-5 h-5 mr-2" />
-                Create New Post
-              </Button>
-            ) : (
+          <div className="mb-1">
+            {isCreating ? (
               <div className="bg-white p-4 rounded-lg shadow-md mb-4">
                 <h3 className="font-medium mb-3">Create New Post</h3>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    name="title"
-                    value={newPost.title}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    placeholder="Post title"
-                  />
-                  <textarea
-                    name="content"
-                    value={newPost.content}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    rows="4"
-                    placeholder="Post content"
-                  />
-                  <div className="flex justify-end space-x-2">
-                    <Button
-                      type="secondary"
-                      onClick={() => setIsCreating(false)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      type="primary"
-                      onClick={handleCreatePost}
-                      disabled={!newPost.title || !newPost.content}
-                    >
-                      Post
-                    </Button>
+                <FormProvider methods={methods} onSubmit={handleCreatePost}>
+                  <div className="space-y-3">
+                    <FormInput
+                      name="title"
+                      placeholder="Post title"
+                      validation={{
+                        required: "Title is required",
+                      }}
+                    />
+                    <FormInput
+                      name="content"
+                      type="textarea"
+                      placeholder="Post content"
+                      rows={4}
+                      validation={{
+                        required: "Content is required",
+                      }}
+                    />
+                    <div className="flex justify-end space-x-2">
+                      <Button
+                        type="secondary"
+                        onClick={() => setIsCreating(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button type="primary" htmlType="submit">
+                        Post
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                </FormProvider>
+              </div>
+            ) : (
+              <div className="flex justify-end">
+                <Button
+                  type="primary"
+                  variant="icon"
+                  className="!text-primary"
+                  onClick={() => setIsCreating(true)}
+                  aria-label="Add new post"
+                >
+                  <AddNoteIcon className="w-9 h-9" />
+                </Button>
               </div>
             )}
           </div>
         )}
 
-        {/* Posts list */}
+        {/* Call for a list of posts */}
         <PostContainer
           posts={posts}
           onEditPost={handleEditPost}
