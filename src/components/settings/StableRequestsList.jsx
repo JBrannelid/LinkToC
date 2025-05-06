@@ -18,6 +18,7 @@ const StableRequestsList = ({ stableId }) => {
     loading,
     approveRequest,
     rejectRequest,
+    cancelInvitation,
   } = useStableManagement(stableId);
 
   const displayItems =
@@ -30,7 +31,11 @@ const StableRequestsList = ({ stableId }) => {
 
   const handleConfirmReject = () => {
     if (selectedRequest) {
-      rejectRequest(selectedRequest.id);
+      if (activeTab === "sent") {
+        cancelInvitation(selectedRequest.id);
+      } else {
+        rejectRequest(selectedRequest.id);
+      }
       setShowRejectModal(false);
       setSelectedRequest(null);
     }
@@ -52,6 +57,13 @@ const StableRequestsList = ({ stableId }) => {
   if (loading) {
     return <div className="text-center py-4">Laddar förfrågningar...</div>;
   }
+
+  const getRejectModalTitle = () => {
+    if (activeTab === "sent") {
+      return "Vill du dra tillbaka inbjudan?";
+    }
+    return "Vill du ta bort förfrågan?";
+  };
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-md p-4">
@@ -124,16 +136,28 @@ const StableRequestsList = ({ stableId }) => {
                 </div>
               </>
             ) : (
-              // Sent invite display
-              <div>
-                <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
-                <div className="text-sm text-gray-500">{item.email}</div>
-                <div className="text-xs text-gray-400">
-                  {item.inviteDate
-                    ? new Date(item.inviteDate).toLocaleDateString()
-                    : "Datum saknas"}
+              // Sent invite display - now with withdraw button
+              <>
+                <div>
+                  <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
+                  <div className="text-sm text-gray-500">{item.email}</div>
+                  <div className="text-xs text-gray-400">
+                    {item.inviteDate
+                      ? new Date(item.inviteDate).toLocaleDateString()
+                      : "Datum saknas"}
+                  </div>
                 </div>
-              </div>
+                <div className="flex space-x-2">
+                  <Button
+                    type="icon"
+                    onClick={() => handleShowRejectModal(item)}
+                    aria-label="Dra tillbaka inbjudan"
+                    className="text-error-500"
+                  >
+                    <CloseIcon strokeWidth={4} />
+                  </Button>
+                </div>
+              </>
             )}
           </div>
         ))}
@@ -149,13 +173,13 @@ const StableRequestsList = ({ stableId }) => {
         )}
       </div>
 
-      {/* Confirmation modals remain the same */}
+      {/* Confirmation modals with dynamic title */}
       <ConfirmationModal
         isOpen={showRejectModal}
         onClose={() => setShowRejectModal(false)}
         onConfirm={handleConfirmReject}
         loading={loading}
-        title={`Vill du ta bort inbjudan?`}
+        title={getRejectModalTitle()}
         confirmButtonText="Ja"
         confirmButtonType="danger"
         cancelButtonText="Nej"
