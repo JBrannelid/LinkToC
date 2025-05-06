@@ -88,7 +88,7 @@ const StableRequestsList = ({ stableId }) => {
       <div className="space-y-1">
         {requests.map((request) => (
           <div
-            key={request.id}
+            key={`request-${request.id}-${index}`}
             className="flex items-center justify-between py-3 border-b border-light"
           >
             <div>
