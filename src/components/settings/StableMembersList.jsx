@@ -4,20 +4,37 @@ import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../context/AppContext";
 import PenIcon from "../../assets/icons/PenIcon";
 import TrashIcon from "../../assets/icons/TrashIcon";
+import CheckIcon from "../../assets/icons/CheckIcon";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import PermissionGate from "../../components/settings/PermissionGate";
+
+const ROLE_OPTIONS = [
+  { id: USER_ROLES.USER, label: "Medlem" },
+  { id: USER_ROLES.ADMIN, label: "Admin" },
+  { id: USER_ROLES.MANAGER, label: "Stallägare" },
+];
 
 const StableMembersList = ({ stableId }) => {
   const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
+  const [showRoleModal, setShowRoleModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [selectedRole, setSelectedRole] = useState(null);
   const { members, loading, updateMemberRole, removeMember } =
     useStableManagement(stableId);
 
-  const handleEditMember = (memberId) => {
-    const newRole = window.confirm("Make this user an admin?")
-      ? USER_ROLES.ADMIN
-      : USER_ROLES.USER;
-    updateMemberRole(memberId, newRole);
+  const handleShowEditModal = (member) => {
+    setSelectedMember(member);
+    setSelectedRole(member.role); // User existing role as default
+    setShowRoleModal(true);
+  };
+
+  const handleConfirmRoleChange = () => {
+    if (selectedMember && selectedRole !== null) {
+      updateMemberRole(selectedMember.id, selectedRole);
+      setShowRoleModal(false);
+      setSelectedMember(null);
+    }
   };
 
   const handleShowRemoveModal = (member) => {
@@ -39,7 +56,8 @@ const StableMembersList = ({ stableId }) => {
 
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-sm p-5">
-      <h2 className="mb-5 font-bold">Medlemmar</h2>
+      <h2 className="font-bold mb-1">Medlemmar</h2>
+      <p className="text-sm mb-5 ">Enbart stallägare kan sätta användarroll</p>
 
       {/* Header */}
       <div className="space-y-1">
@@ -59,14 +77,28 @@ const StableMembersList = ({ stableId }) => {
               <span>{`${member.firstName} ${member.lastName}`}</span>
             </div>
             <div className="col-span-1 flex justify-center">
-              <Button
-                type="icon"
-                onClick={() => handleEditMember(member.id)}
-                aria-label="Redigera medlem"
-                className="text-primary"
+              <PermissionGate
+                requiredRoles={[USER_ROLES.MANAGER]}
+                fallback={
+                  <Button
+                    type="icon"
+                    disabled={true}
+                    aria-label="Kan inte redigera"
+                    className="text-gray-300 cursor-not-allowed"
+                  >
+                    <PenIcon size={28} />
+                  </Button>
+                }
               >
-                <PenIcon size={28} />
-              </Button>
+                <Button
+                  type="icon"
+                  onClick={() => handleShowEditModal(member)}
+                  aria-label="Redigera medlem"
+                  className="text-primary"
+                >
+                  <PenIcon size={28} />
+                </Button>
+              </PermissionGate>
             </div>
             <div className="col-span-1 flex justify-center">
               <Button
@@ -87,6 +119,8 @@ const StableMembersList = ({ stableId }) => {
           </div>
         )}
       </div>
+
+      {/* Remove Member Modal */}
       <ConfirmationModal
         isOpen={showRemoveMemberModal}
         onClose={() => setShowRemoveMemberModal(false)}
@@ -103,6 +137,78 @@ const StableMembersList = ({ stableId }) => {
           />
         }
       />
+
+      {/* Role Selection Modal */}
+      <div
+        className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 ${
+          showRoleModal ? "block" : "hidden"
+        }`}
+      >
+        <div className="bg-white rounded-lg w-80 p-5 max-w-md">
+          <div className="text-center mb-6">
+            <div className="flex justify-center mb-4">
+              <CheckIcon
+                size={70}
+                className="text-white"
+                backgroundColor="bg-primary"
+                strokeWidth={4}
+              />
+            </div>
+            <h3 className="text-xl font-medium">
+              Välj roll för {selectedMember?.firstName || "användaren"}
+            </h3>
+          </div>
+
+          {/* Role Selection */}
+          <div className="space-y-3 mb-6">
+            {ROLE_OPTIONS.map((role) => (
+              <div
+                key={role.id}
+                className={`flex items-center p-3 rounded-lg cursor-pointer border transition-colors ${
+                  selectedRole === role.id
+                    ? "border-primary bg-primary-light"
+                    : "border-gray-200 hover:bg-light/60"
+                }`}
+                onClick={() => setSelectedRole(role.id)}
+              >
+                <div className="mr-3">
+                  <div
+                    className={`w-5 h-5 rounded-full border ${
+                      selectedRole === role.id
+                        ? "border-primary bg-primary"
+                        : "border-gray-400"
+                    }`}
+                  >
+                    {selectedRole === role.id && (
+                      <CheckIcon className="text-white w-5 h-5" />
+                    )}
+                  </div>
+                </div>
+                <span className="flex-1">{role.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex flex-col space-y-2">
+            <Button
+              type="primary"
+              className="w-full"
+              onClick={handleConfirmRoleChange}
+              disabled={selectedRole === null}
+            >
+              Spara
+            </Button>
+            <Button
+              type="secondary"
+              className="w-full"
+              onClick={() => setShowRoleModal(false)}
+            >
+              Avbryt
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
