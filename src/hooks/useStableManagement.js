@@ -43,6 +43,21 @@ export const useStableManagement = (stableId) => {
     }
   }, [stableId]);
 
+  const cancelInvitation = async (invitationId) => {
+    setLoading(true);
+    setOperationType("delete");
+
+    try {
+      await stableService.cancelStableInvite(invitationId);
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to cancel invitation");
+      setLoading(false);
+      return false;
+    }
+  };
+
   // Stable Member management functions
   const updateMemberRole = async (userId, newRole) => {
     setLoading(true);
@@ -113,6 +128,7 @@ export const useStableManagement = (stableId) => {
     removeMember,
     approveRequest,
     rejectRequest,
+    cancelInvitation,
     refreshData: fetchStableData,
   };
 };
