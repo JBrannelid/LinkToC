@@ -47,12 +47,17 @@ const BaseSettingsPage = ({
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // Fetch user data with error and load handling
-  const { userData, userLoading, userError, loadingState, fetchUserData } =
-    useUserData();
+  const {
+    userData,
+    userLoading,
+    userError,
+    loadingState,
+    fetchAndUpdateUserData,
+  } = useUserData();
 
   // Display fresh user data after update
   const handleProfileUpdateSuccess = () => {
-    fetchUserData();
+    fetchAndUpdateUserData();
     setShowUserEditProfileForm(false);
   };
 

@@ -44,6 +44,25 @@ const userService = {
 
     return await baseService.delete(userId);
   },
+
+  /*
+  Example response to ask BE
+  {
+    "success": true,
+    "message": "User role updated successfully",
+    "data": {
+      "userId": 5,
+      "stableId": 1,
+      "role": 0
+    }
+  } 
+*/
+  updateUserStableRole: async (userId, stableId, role) => {
+    return await axiosInstance.put(`/api/user/role/${userId}`, {
+      stableId,
+      role,
+    });
+  },
 };
 
 export default userService;

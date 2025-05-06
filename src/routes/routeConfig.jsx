@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
+import { USER_ROLES } from "../context/AppContext";
 import SettingsRouter from "../components/settings/SettingsRouter";
 
 // Pages components
@@ -16,6 +17,8 @@ import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
 import NotificationPage from "../pages/NotificationPage";
+import StableManagementPage from "../pages/StableManagementPage";
+import StableRequestsPage from "../pages/StableRequestsPage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -82,6 +85,17 @@ export const protectedRoutes = [
     path: ROUTES.STABLE_ONBOARDING,
     element: <StableOnboardingPage />,
     requiresStable: false,
+  },
+  {
+    path: ROUTES.MANAGE_STABLE,
+    element: <StableManagementPage />,
+    requiresStable: true,
+    requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
+  },
+  {
+    path: ROUTES.STABLE_REQUESTS,
+    element: <StableRequestsPage />,
+    requiresStable: true,
   },
 ];
 

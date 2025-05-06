@@ -3,13 +3,16 @@ import { format } from "date-fns";
 import { parseISO } from "../../utils/calendarUtils";
 import WallPostForm from "../forms/WallPostForm";
 import useWallPost from "../../hooks/useWallPost";
-import PinIcon from "../../assets/icons/PinIcon";
-import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
 import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import Button from "../ui/Button";
 import WallPostCard from "./WallPostCard";
 import { useStableData } from "../../hooks/useStableData";
+
+// Import the new PermissionGate component
+import PermissionGate from "../settings/PermissionGate";
+// Import USER_ROLES (already defined in your AppContext)
+import { USER_ROLES } from "../../context/AppContext";
 
 export default function WallPost({}) {
   const { currentStable } = useAppContext();
@@ -150,9 +153,13 @@ export default function WallPost({}) {
         isExpanded={isExpanded}
         toggleExpand={toggleExpand}
         actions={
-          <Button type="secondary" size="small" onClick={toggleForm}>
-            {isFormOpen ? "Avbryt" : wallPost?.title ? "Redigera" : "Skapa"}
-          </Button>
+          <PermissionGate
+            requiredRoles={[USER_ROLES.ADMIN, USER_ROLES.MANAGER]}
+          >
+            <Button type="secondary" size="small" onClick={toggleForm}>
+              {isFormOpen ? "Avbryt" : wallPost?.title ? "Redigera" : "Skapa"}
+            </Button>
+          </PermissionGate>
         }
         form={
           isFormOpen && (
@@ -170,7 +177,7 @@ export default function WallPost({}) {
           <>
             <p className="font-light text-sm">{wallPost.body}</p>
             {wallPost.lastEdited ? (
-              <p className="font-light text-xs">
+              <p className="font-light text-xs pt-1">
                 Edited: ({formatData(wallPost.lastEdited)})
               </p>
             ) : wallPost.postDate ? (

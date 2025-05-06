@@ -1,5 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import BaseSettingsPage, { SettingsMenuItem } from "./BaseSettingPage";
+import { ROUTES } from "../routes/routeConstants";
 import {
   handleTermsOfService,
   handleSupport,
@@ -8,13 +10,18 @@ import {
 } from "../utils/userUtils";
 
 const AdminSettingsPage = () => {
+  const navigate = useNavigate();
+
   const renderMenuItems = ({ setShowUserEditProfileForm }) => (
     <>
       <SettingsMenuItem
         label="Redigera profil"
         onClick={() => setShowUserEditProfileForm(true)}
       />
-      <SettingsMenuItem label="Hantera stall" onClick={handleManageStables} />
+      <SettingsMenuItem
+        label="Hantera stall"
+        onClick={() => handleManageStables(navigate, ROUTES)}
+      />
       <SettingsMenuItem
         label="Terms of service"
         onClick={handleTermsOfService}
