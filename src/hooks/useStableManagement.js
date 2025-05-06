@@ -43,12 +43,33 @@ export const useStableManagement = (stableId) => {
     }
   }, [stableId]);
 
-  const cancelInvitation = async (invitationId) => {
+  const rejectRequest = async (userId) => {
     setLoading(true);
-    setOperationType("delete");
+    setOperationType("update");
 
     try {
-      await stableService.cancelStableInvite(invitationId);
+      await stableService.rejectStableJoinRequest({
+        userId: userId,
+        stableId: stableId,
+      });
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to reject request");
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const cancelInvitation = async (userId) => {
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      await stableService.cancelStableInvite({
+        userId: userId,
+        stableId: stableId,
+      });
       await fetchStableData();
       return true;
     } catch (error) {
@@ -73,40 +94,6 @@ export const useStableManagement = (stableId) => {
       return false;
     }
   };
-
-  const removeMember = async (userId) => {
-    setLoading(true);
-    setOperationType("delete");
-
-    try {
-      await stableService.removeUserFromStable(stableId, userId);
-      await fetchStableData();
-      return true;
-    } catch (error) {
-      setError(error.message || "Failed to remove member");
-      setLoading(false);
-      return false;
-    }
-  };
-
-  // Request management functions
-  const handleRequest = async (requestId, action) => {
-    setLoading(true);
-    setOperationType("update");
-
-    try {
-      await stableService.handleStableRequest(requestId, action);
-      await fetchStableData();
-      return true;
-    } catch (error) {
-      setError(error.message || "Failed to process request");
-      setLoading(false);
-      return false;
-    }
-  };
-
-  const approveRequest = (requestId) => handleRequest(requestId, "approve");
-  const rejectRequest = (requestId) => handleRequest(requestId, "reject");
 
   useEffect(() => {
     fetchStableData();
