@@ -77,7 +77,6 @@ export const useStableManagement = (stableId) => {
     }
   };
 
-  // Stable Member management functions
   const updateMemberRole = async (userId, newRole) => {
     setLoading(true);
     setOperationType("update");
@@ -98,13 +97,11 @@ export const useStableManagement = (stableId) => {
     setOperationType("update");
 
     try {
-      // Create the request data object with userId and stableId
       const requestData = {
         userId: userId,
         stableId: stableId,
       };
 
-      // Call the acceptStableJoinRequest method instead of handleStableRequest
       await stableService.acceptStableJoinRequest(requestData);
       await fetchStableData();
       return true;
