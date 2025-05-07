@@ -37,18 +37,20 @@ const stablePostService = {
     );
   },
 
-  // Update an existing stable post
+  // Update an excisting stable post
   update: async (data) => {
     const updateData = {
       id: data.id,
       title: data.title,
       content: data.content,
     };
+
     return await axiosInstance.put(
       `${ENDPOINTS.STABLEPOST}/update`,
       updateData
     );
   },
+
   // Delete a stable post by ID
   delete: async (id) => {
     return await axiosInstance.delete(`${ENDPOINTS.STABLEPOST}/delete/${id}`);
