@@ -1,7 +1,7 @@
 import { createSearchConfig} from "./searchConfigBase.js";
 import {stableService} from "../../../api/index.js";
 
-const stableId = currentStable?.id;
+// const stableId = currentStable?.id;
 const stableSearchConfig = createSearchConfig({
     entityType: 'stable',
     
@@ -9,7 +9,7 @@ const stableSearchConfig = createSearchConfig({
         try {
             const params = {
                 searchTerm: query,
-                stableId: stableId,
+                // stableId: stableId,
                 page: 0,
                 pageSize: 10,
             };

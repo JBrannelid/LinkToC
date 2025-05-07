@@ -1,7 +1,7 @@
 import { createSearchConfig } from './searchConfigBase';
 import {horseService} from "../../../api/index.js";
 
-const stableId = currentStable?.id;
+// const stableId = currentStable?.id;
 const horseSearchConfig = createSearchConfig({
     entityType: 'horse',
 
@@ -11,7 +11,7 @@ const horseSearchConfig = createSearchConfig({
             // Adjust these parameters to match what your user search API expects
             const params = {
                 searchTerm: query,
-                stableId: stableId,
+                // stableId: stableId,
                 page: 0,
                 pageSize: 10
             };
