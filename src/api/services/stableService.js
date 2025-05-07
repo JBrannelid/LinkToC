@@ -1,6 +1,5 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
-import axiosConfig from "../config/axiosConfig.js";
 import axiosInstance from "../config/axiosConfig.js";
 
 const baseService = createBaseService(ENDPOINTS.STABLE);
@@ -11,7 +10,7 @@ const stableService = {
   search: async (params) => {
     try {
       const searchParams = {
-        searchTerm: params.searchTerm || '',
+        searchTerm: params.searchTerm || '', 
         page: params.page || 0,
         pageSize: params.pageSize || 10,
       };
