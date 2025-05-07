@@ -12,17 +12,20 @@ import { USER_ROLES } from "../../context/AppContext";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
-const PostItem = ({ post, onEditPost, onDeletePost }) => {
+const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
   const { user, isLoading } = useAuth();
   const { getCurrentStableRole } = useAppContext();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Check if user is admin/manager or post creator
+  // Check if user is admin or post creator
   const currentRole = getCurrentStableRole();
   const isAdmin =
     currentRole === USER_ROLES.ADMIN || currentRole === USER_ROLES.MANAGER;
   const isPostCreator = String(user?.id) === String(post.userId);
+
+  // Post acess controllers
   const canEditPost = isPostCreator || isAdmin;
+  const canPinPost = isAdmin;
 
   // Not implemented in current HiFi-Mockup
   const formatPostDate = (dateString) => {
@@ -61,6 +64,12 @@ const PostItem = ({ post, onEditPost, onDeletePost }) => {
     }
   };
 
+  const handleTogglePin = () => {
+    if (onTogglePin) {
+      onTogglePin(post);
+    }
+  };
+
   // If component is still loading auth data
   if (isLoading) {
     return (
@@ -71,7 +80,7 @@ const PostItem = ({ post, onEditPost, onDeletePost }) => {
     );
   }
 
-  // Until we have solved image handeling all post is display with a default user image
+  // Until we have solved image handling all post is display with a default user image
   const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
 
   return (
@@ -97,9 +106,21 @@ const PostItem = ({ post, onEditPost, onDeletePost }) => {
             </div>
           </div>
 
-          {post.isPinned && <PinIcon className="w-6 h-6 text-primary" />}
+          {/* Pin icon */}
+          {canPinPost && (
+            <div onClick={handleTogglePin} className="cursor-pointer">
+              <PinIcon
+                className={`w-6 h-6 ${
+                  // Opacity for not pinned icons
+                  post.isPinned ? "text-primary" : "text-primary opacity-20"
+                }`}
+              />
+            </div>
+          )}
+          {!canPinPost && post.isPinned && (
+            <PinIcon className="w-6 h-6 text-primary" />
+          )}
         </div>
-
         <h3 className="pb-4">{post.title}</h3>
         <p>{post.content}</p>
         <p className="text-sm text-grey opacity-80 pt-5">{userFullName}</p>
@@ -109,7 +130,7 @@ const PostItem = ({ post, onEditPost, onDeletePost }) => {
             <Button
               type="secondary"
               variant="icon"
-              className=" text-primary"
+              className="text-primary"
               onClick={() => onEditPost(post)}
             >
               <PenIcon className="w-25 h-25" />
@@ -117,15 +138,15 @@ const PostItem = ({ post, onEditPost, onDeletePost }) => {
             <Button
               type="danger"
               variant="icon"
-              className=" text-error-500"
+              className="text-error-500"
               onClick={() => setIsDeleting(true)}
             >
-              <TrashIcon className="w-25 h-25 " />
+              <TrashIcon className="w-25 h-25" />
             </Button>
           </div>
         )}
       </div>
-      {/* Using ConfirmationModal component instead of custom modal */}
+      {/* Reusing ConfirmationModal component */}
       <ConfirmationModal
         isOpen={isDeleting}
         onClose={() => setIsDeleting(false)}
