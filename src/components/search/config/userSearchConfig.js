@@ -1,6 +1,6 @@
 import {createSearchConfig} from "./searchConfigBase";
 import {userService} from "../../../api/index.js";
-
+const stableId = currentStable?.id;
 const userSearchConfig = createSearchConfig({
     entityType: 'user',
 
@@ -10,6 +10,7 @@ const userSearchConfig = createSearchConfig({
             // Adjust these parameters to match what your user search API expects
             const params = {
                 searchTerm: query,
+                stableId: stableId,
                 page: 0,
                 pageSize: 10
             };
