@@ -9,8 +9,9 @@ export const ListItemRenderer = ({
     actionLabel = 'Join'
 }) => {
     const primaryText = item[config?.labelField || 'name']
-    const secondaryText = item[config?.secondary];
+    const countyText = item.county || '';
     const imageUrl = item[config?.imageField || 'image'];
+    const stableType = item.type || '';
     
     const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
     
@@ -42,8 +43,11 @@ export const ListItemRenderer = ({
                 </div>
                 <div className="ml-3 flex-grow min-w-0">
                     <div className="font-medium text-base truncate">{primaryText}</div>
-                    {secondaryText && (
-                        <div className="text-sm text-gray-600 truncate">{secondaryText}</div>
+                    {countyText && (
+                        <div className="text-sm text-gray-600 truncate">{countyText}</div>
+                    )}
+                    {stableType && (
+                        <div className="text-xs text-gray-600 truncate">{stableType}</div>
                     )}
                 </div>
             </div>
