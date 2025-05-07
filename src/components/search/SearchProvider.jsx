@@ -2,6 +2,7 @@ import {useLocation} from "react-router";
 import {useCallback, useEffect, useMemo, useReducer} from "react";
 import {useLoadingState} from "../../hooks/useLoadingState.js";
 import {createErrorMessage} from "../../utils/errorUtils.js";
+import {getConfigForRoutes} from "./config/searchConfig.js";
 
 const initialState = {
     query: "",
@@ -95,32 +96,32 @@ function searchReducer(state, action) {
 
 const SearchProvider = ({children, customConfig = null}) => {
     const location = useLocation();
-    
+
     const [state, dispatch] = useReducer(searchReducer, initialState);
-    
+
     const loadingState = useLoadingState(state.loading, state.operationType);
-    
+
     const config = useMemo(() => {
-        return customConfig || getConfigForRoute(location.pathname);
+        return customConfig || getConfigForRoutes(location.pathname);
     }, [customConfig, location.pathname]);
-    
+
     useEffect(() => {
         dispatch({type: ACTIONS.RESET_ALL});
     }, [config?.entityType]);
-    
-    const performSearch = useCallback(async(searchQuery) => {
+
+    const performSearch = useCallback(async (searchQuery) => {
         if (!searchQuery.trim() || !config?.searchFn) return;
-        
+
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: 'fetch'});
-            dispatch({type: ACTIONS.SET_MESSAGE, payload:null});
-            
+            dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
+
             const response = await config.searchFn(searchQuery);
-            
+
             if (response?.success && Array.isArray(response.data)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response.data});
-                
-                if(response.data.length === 0){
+
+                if (response.data.length === 0) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
@@ -128,8 +129,8 @@ const SearchProvider = ({children, customConfig = null}) => {
                 }
             } else if (Array.isArray(response)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: reponse});
-                
-                if (response.length === 0){
+
+                if (response.length === 0) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found')
@@ -137,13 +138,13 @@ const SearchProvider = ({children, customConfig = null}) => {
                 }
             } else {
                 console.warn('Unexpected search response format: ', response);
-                dispatch({ type: ACTIONS.SET_RESULTS, payload: []});
+                dispatch({type: ACTIONS.SET_RESULTS, payload: []});
                 dispatch({
                     type: ACTIONS.SET_MESSAGE,
                     payload: createErrorMessage(config.noResultsText || 'No results found'),
                 });
             }
-        }catch(error) {
+        } catch (error) {
             console.error('Search error:', error);
             dispatch({
                 type: ACTIONS.SET_ERROR,
@@ -152,32 +153,32 @@ const SearchProvider = ({children, customConfig = null}) => {
         } finally {
             dispatch({type: ACTIONS.FINISH_LOADING});
         }
-    },[config]);
-    
+    }, [config]);
+
     const debouncedSearch = useCallback((
-        () => {
-        let timeoutId;
-        return (value) => {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => performSearch(value), 300);
-        };
-    })(),
+            () => {
+                let timeoutId;
+                return (value) => {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => performSearch(value), 300);
+                };
+            })(),
         [performSearch]);
 
     const handleInputChange = (event) => {
         const newQuery = event.target.value;
-        dispatch({ type: ACTIONS.SET_QUERY, payload: newQuery});
-        
-        if(newQuery.trim()) {
+        dispatch({type: ACTIONS.SET_QUERY, payload: newQuery});
+
+        if (newQuery.trim()) {
             debouncedSearch(newQuery);
-        }else {
+        } else {
             dispatch({type: ACTIONS.SET_RESULTS, payload: []});
             dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
         }
     };
-    
+
     const handleSelectItem = (item) => {
-        if(!item) return;
+        if (!item) return;
         dispatch({
             type: ACTIONS.TOGGLE_ITEM_SELECTION,
             payload: {
@@ -187,33 +188,32 @@ const SearchProvider = ({children, customConfig = null}) => {
             }
         });
     };
-    
+
     const setOperationType = (type) => {
         dispatch({type: ACTIONS.SET_OPERATION_TYPE, payload: type});
     };
-    
-    const handleAction= async (actionFn, operationType = 'update') => {
-        if (!actionfn) return;
-        
+
+    const handleAction = async (actionFn, operationType = 'update') => {
+        if (!actionFn) return;
+
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: operationType});
-            const result = await actionFn();
-            return result;
-        } catch(error) {
+            return await actionFn();
+        } catch (error) {
             dispatch({
                 type: ACTIONS.SET_ERROR,
                 payload: error.message || 'An error occurred'
             });
         } finally {
-            dispatch({ type: ACTIONS.FINISH_LOADING});
+            dispatch({type: ACTIONS.FINISH_LOADING});
         }
     };
-    
+
     const isItemSelected = (item) => {
         if (!item) return false;
-        
+
         const itemId = item[config?.idField || 'id'];
-        
+
         if (config?.selectionMode === 'multiple') {
             return state.selectedItems.some(
                 selectedItem => selectedItem[config?.idField || 'id'] === itemId
@@ -221,16 +221,16 @@ const SearchProvider = ({children, customConfig = null}) => {
         }
         return state.selectedItem && stateselectedItem[config?.idField || 'id'] === itemId;
     };
-    
+
     const clearSelection = () => {
-        dispatch({ type: ACTIONS.CLEAR_SELECTION})
+        dispatch({type: ACTIONS.CLEAR_SELECTION})
     };
-    
+
     const resetSearch = () => {
         dispatch({type: ACTIONS.RESET_SEARCH});
         clearSelection();
     };
-    
+
     const contextValue = {
         ...state,
         config,
@@ -244,7 +244,7 @@ const SearchProvider = ({children, customConfig = null}) => {
         resetSearch,
         selectionMode: config?.selectionMode || 'single',
     };
-    
+
     return (
         <SearchContext.Provider value={contextValue}>
             {children}
