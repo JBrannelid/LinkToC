@@ -5,7 +5,6 @@ import CloseIcon from "../../assets/icons/CloseIcon";
 import CheckIcon from "../../assets/icons/CheckIcon";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import UserStableRequestsList from "./UserStableRequestsList";
 
 const StableRequestsList = ({ stableId }) => {
   const [activeTab, setActiveTab] = useState("received");
@@ -137,7 +136,7 @@ const StableRequestsList = ({ stableId }) => {
                 </div>
               </>
             ) : (
-              // Sent invite display - now with withdraw button
+              // Sent invite display
               <>
                 <div>
                   <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
@@ -163,7 +162,7 @@ const StableRequestsList = ({ stableId }) => {
           </div>
         ))}
 
-        {/* Display message when send och invite display is empty */}
+        {/* Display message when a list is empty */}
         {displayItems.length === 0 && (
           <div className="py-3 text-center text-gray">
             Inga{" "}
@@ -174,7 +173,7 @@ const StableRequestsList = ({ stableId }) => {
         )}
       </div>
 
-      {/* Confirmation modals with dynamic title */}
+      {/* Remove Confirmation modals */}
       <ConfirmationModal
         isOpen={showRejectModal}
         onClose={() => setShowRejectModal(false)}
