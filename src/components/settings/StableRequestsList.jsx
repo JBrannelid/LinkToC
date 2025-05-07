@@ -5,6 +5,7 @@ import CloseIcon from "../../assets/icons/CloseIcon";
 import CheckIcon from "../../assets/icons/CheckIcon";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import UserStableRequestsList from "./UserStableRequestsList";
 
 const StableRequestsList = ({ stableId }) => {
   const [activeTab, setActiveTab] = useState("received");
