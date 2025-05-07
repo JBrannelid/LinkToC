@@ -1,5 +1,6 @@
 import {createSearchConfig} from "./searchConfigBase";
 import {userService} from "../../../api/index.js";
+
 const stableId = currentStable?.id;
 const userSearchConfig = createSearchConfig({
     entityType: 'user',
