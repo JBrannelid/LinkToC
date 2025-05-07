@@ -1,4 +1,3 @@
-// hooks/useUserStableRequests.js
 import { useState, useCallback, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import stableService from "../api/services/stableService";
@@ -24,7 +23,6 @@ export const useUserStableRequests = () => {
       setStableRequests(Array.isArray(response) ? response : []);
       setError(null);
     } catch (err) {
-      console.error("Error fetching user requests:", err);
       setError(err.message || "Failed to load your stable requests");
       setStableRequests([]);
     } finally {
@@ -49,7 +47,6 @@ export const useUserStableRequests = () => {
       await fetchUserRequests();
       return true;
     } catch (err) {
-      console.error("Error canceling request:", err);
       setError(err.message || "Failed to cancel request");
       setLoading(false);
       return false;
