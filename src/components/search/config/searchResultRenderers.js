@@ -16,7 +16,9 @@ export const ListItemRenderer = ({
     
     return (
         <li
-            className="flex items-center justify-between p-3 border rounded-lg mb-2"
+            className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer mb-2 bg-white ${
+                isSelected ? 'border-primary bg-primary-light' : 'border-light hover:bg-light'
+            }`}
             role="option"
             aria-selected={isSelected}
         >
