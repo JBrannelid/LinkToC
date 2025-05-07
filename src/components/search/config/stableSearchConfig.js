@@ -25,6 +25,9 @@ const stableSearchConfig = createSearchConfig({
                     message: response.message || 'Search failed'
                 });
             }
+            if (response.value && response.value.length > 0) {
+                console.log('First stable item:', response.value[0]);
+            }
             return {
                 success: response.isSuccess,
                 data: response.value || [],
@@ -38,6 +41,8 @@ const stableSearchConfig = createSearchConfig({
     idField: 'id',
     labelField: 'name',
     secondaryField: 'county',
+    tertiaryField: 'address',
+    typeField: 'type',
 
     // UI text customized for stable search
     placeholderText: 'Search for stable name...',
