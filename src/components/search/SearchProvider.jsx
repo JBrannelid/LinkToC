@@ -128,7 +128,7 @@ const SearchProvider = ({children, customConfig = null}) => {
                     });
                 }
             } else if (Array.isArray(response)) {
-                dispatch({type: ACTIONS.SET_RESULTS, payload: reponse});
+                dispatch({type: ACTIONS.SET_RESULTS, payload: response});
 
                 if (response.length === 0) {
                     dispatch({
@@ -219,7 +219,7 @@ const SearchProvider = ({children, customConfig = null}) => {
                 selectedItem => selectedItem[config?.idField || 'id'] === itemId
             );
         }
-        return state.selectedItem && stateselectedItem[config?.idField || 'id'] === itemId;
+        return state.selectedItem && state.selectedItem[config?.idField || 'id'] === itemId;
     };
 
     const clearSelection = () => {
