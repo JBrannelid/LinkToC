@@ -7,25 +7,29 @@ const baseService = createBaseService(ENDPOINTS.STABLE);
 const stableService = {
   ...baseService,
 
-  // Fetches stables based on search term and pagination
-  searchStables: async (params) => {
-    // Build the query string from the search parameters
-    const queryParams = new URLSearchParams({
-      searchTerm: params.searchTerm || "",
-      page: params.page || 0,
-      pageSize: params.pageSize || 10,
-    });
+  search: async (params) => {
+    try {
+      // Build the query string from the search parameters
+      const searchParams = {
+        searchTerm: params.searchTerm || "",
+        page: params.page || 0,
+        pageSize: params.pageSize || 10,
+      };
 
-    // Send GET request with "queryParams"
-    const response = await axiosInstance.get(
-      `${ENDPOINTS.STABLE}?${queryParams}`
-    );
-
-    if (response && response.isSuccess && Array.isArray(response.value)) {
-      return response.value;
+      const queryString = Object.entries(searchParams)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+      // Send GET request with "queryParams"
+      return await axiosInstance.get(
+        `${ENDPOINTS.STABLE}/search?${queryString}`
+      );
+    } catch (error) {
+      console.error("Error searching for stables:", error);
+      throw error;
     }
-
-    return [];
   },
 
   createWithWallPost: async (data) => {
