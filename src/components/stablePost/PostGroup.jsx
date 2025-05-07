@@ -1,7 +1,7 @@
 import React from "react";
 import PostItem from "./PostItem";
 
-const PostGroup = ({ title, posts, onEditPost, onDeletePost }) => {
+const PostGroup = ({ title, posts, onEditPost, onDeletePost, onTogglePin }) => {
   if (posts.length === 0) return null;
 
   return (
@@ -17,6 +17,7 @@ const PostGroup = ({ title, posts, onEditPost, onDeletePost }) => {
           post={post}
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
+          onTogglePin={onTogglePin}
         />
       ))}
     </>
