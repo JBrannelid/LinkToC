@@ -11,7 +11,7 @@ import StablePostForm from "../components/forms/StablePostForm";
 
 export default function StablePostPage() {
   const { stableId: urlStableId } = useParams();
-  const { currentStable, getCurrentStableRole } = useAppContext();
+  const { currentStable, getCurrentStableRole, currentUser } = useAppContext();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState(null);
 
@@ -65,11 +65,11 @@ export default function StablePostPage() {
   const handleTogglePin = async (post) => {
     try {
       const newPostData = {
-        title: post.title,
-        content: post.content,
-        userIdFk: post.userId,
-        stableIdFk: currentStableId,
-        date: post.date, // Preserve the original post date
+        title: post.title || "",
+        content: post.content || "",
+        userIdFk: currentUser?.id,
+        stableIdFk: parseInt(currentStableId),
+        date: post.date || new Date().toISOString(),
         isPinned: !post.isPinned,
       };
 

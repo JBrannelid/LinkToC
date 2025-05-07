@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
-import { parseISO } from "../../utils/calendarUtils";
+import { parseISO, dateFnsCompareDesc } from "../../utils/calendarUtils";
 import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import WallPostCard from "./WallPostCard";
@@ -18,6 +18,9 @@ export default function WallPost() {
 
   // Filter to get only pinned posts or display a empty array
   const pinnedPosts = posts ? posts.filter((post) => post.isPinned) : [];
+  const sortedPinnedPosts = [...pinnedPosts].sort((a, b) =>
+    dateFnsCompareDesc(parseISO(a.date), parseISO(b.date))
+  );
 
   const formatData = (dateString) => {
     try {
@@ -72,7 +75,7 @@ export default function WallPost() {
       <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Wall</h2>
 
       {/* Display all pinned posts */}
-      {pinnedPosts.map((post) => (
+      {sortedPinnedPosts.map((post) => (
         <div key={post.id} className="mb-4">
           <WallPostCard
             title={post.title || "Untitled post"}
