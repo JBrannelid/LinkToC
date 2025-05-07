@@ -1,7 +1,5 @@
-import React, {useState} from 'react';
-import {FormInput, FormMessage, FormProvider} from "../forms/index.js";
-import Button from "../ui/Button.jsx"
-import {createErrorMessage} from "../../utils/errorUtils.js";
+import React from 'react';
+import {FormMessage, FormProvider} from "../forms/index.js";
 import searchConfigs from "../search/config/searchConfig.js";
 import {SearchActions, SearchBar, SearchProvider, SearchResults} from "../search/index.js";
 
@@ -16,7 +14,11 @@ const JoinStableForm = ({
                             message = null
                         }) => {
     
-    const stableConfig = searchConfigs.stable;
+    const stableConfig = {
+        ...searchConfigs.stable,
+        loading: isLoading,
+        loadingState: loadingState
+    };
     
     const handleSelectAction = (selectedItem) => {
         if(onSubmit && selectedItem){
@@ -34,13 +36,21 @@ const JoinStableForm = ({
     };
 
     const displayError = error ? { type: "error", text: error } : null;
+    
+    const ariaAttributes = {
+        'aria-busy' : isLoading ? 'true' : 'false'
+    };
+    
+    if (isLoading && loadingState) {
+        ariaAttributes['aria-live'] = 'polite';
+    }
 
     return (
         <FormProvider
             methods={formMethods}
             className="w-full"
         >
-            <div aria-live="polite">
+            <div {...ariaAttributes}>
                 {/* The SearchProvider encapsulates all search functionality */}
                 <SearchProvider customConfig={stableConfig}>
                     <div className="space-y-4">
@@ -54,9 +64,16 @@ const JoinStableForm = ({
                                 inputClassName="w-full"
                                 ariaLabel="Search for stable name"
                                 autoFocus
+                                disabled={isLoading}
                             />
                         </div>
-
+                        
+                        {isLoading && loadingState && (
+                            <div className="sr-only" aria-live="polite">
+                                {loadingState.getMessage() || 'Loading...'}
+                            </div>
+                        )}
+                        
                         {/* Search results */}
                         <SearchResults
                             className="mt-4"
@@ -80,6 +97,9 @@ const JoinStableForm = ({
                                 onAction={handleSelectAction}
                                 onCancel={handleCancelSearch}
                                 actionButtonClassName="mb-2"
+                                loading={isLoading}
+                                loadingState={loadingState}
+                                disabled={isLoading}
                             />
                         </div>
                     </div>
