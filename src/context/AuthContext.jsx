@@ -76,7 +76,6 @@ export const AuthProvider = ({ children }) => {
 
       const userData = parseJwt(token);
       if (!userData || userData.exp * 1000 <= Date.now()) {
-        console.warn("Invalid or expired JWT token", userData);
         tokenStorage.removeAccessToken();
         setUser(null);
         setIsLoading(false);
