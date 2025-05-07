@@ -1,5 +1,5 @@
-import StableService from "../../../api/services/stableService.js";
 import { createSearchConfig} from "./searchConfigBase.js";
+import {stableService} from "../../../api/index.js";
 
 const stableSearchConfig = createSearchConfig({
     entityType: 'stable',
@@ -12,7 +12,7 @@ const stableSearchConfig = createSearchConfig({
                 pageSize: 10,
             };
             
-            const response = await StableService.search(params);
+            const response = await stableService.search(params);
             
             if(!response || !response?.isSuccess){
                 throw new Error(response?.message || 'Search failed');
