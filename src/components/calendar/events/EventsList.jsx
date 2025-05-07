@@ -9,7 +9,7 @@ const EventsList = ({
 }) => {
   if (!events || events.length === 0) {
     return (
-      <div className="text-center text-gray-500">
+      <div className="text-center text-gray-500 pt-10">
         <p>{noEventsMessage}</p>
       </div>
     );
