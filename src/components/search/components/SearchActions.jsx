@@ -2,7 +2,7 @@ import React from 'react';
 import {useSearch} from "../../../context/searchContext";
 import Button from '../../ui/Button'
 
-const SelectActions =({
+const SearchActions =({
     onAction,
     onCancel,
     actionButtonClassName = '',
