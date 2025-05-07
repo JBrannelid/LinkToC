@@ -9,7 +9,7 @@ const stableService = {
 
   search: async (params) => {
     try {
-      // Build the query string from the search parameters
+      // Build query-string from searchParams
       const searchParams = {
         searchTerm: params.searchTerm || "",
         page: params.page || 0,
@@ -22,13 +22,21 @@ const stableService = {
             `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
         )
         .join("&");
-      // Send GET request with "queryParams"
-      return await axiosInstance.get(
+
+      // Send GET-request
+      const response = await axiosInstance.get(
         `${ENDPOINTS.STABLE}/search?${queryString}`
       );
+
+      // Handle response and return value if the response is sucess
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
     } catch (error) {
       console.error("Error searching for stables:", error);
-      throw error;
+      return [];
     }
   },
 
