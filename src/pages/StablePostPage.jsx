@@ -61,6 +61,28 @@ export default function StablePostPage() {
     await deletePost(postId);
   };
 
+  // Handle toggling pin status
+  const handleTogglePin = async (post) => {
+    try {
+      const newPostData = {
+        title: post.title,
+        content: post.content,
+        userIdFk: post.userId,
+        stableIdFk: currentStableId,
+        date: post.date, // Preserve the original post date
+        isPinned: !post.isPinned,
+      };
+
+      // Delete the old post
+      await deletePost(post.id);
+
+      // Create new post with updated pin status
+      await createPost(newPostData);
+    } catch (error) {
+      console.error("Error toggling pin status:", error);
+    }
+  };
+
   // Display loading spinner
   if (loading) {
     return (
@@ -74,7 +96,7 @@ export default function StablePostPage() {
   return (
     <div className="bg-background flex flex-col overflow-y-hidden pb-30">
       <div>
-        <ModalHeader title="Flödet" />
+        <ModalHeader title="Board" />
       </div>
       {/* Form overlay */}
       {isFormOpen && (
@@ -83,12 +105,12 @@ export default function StablePostPage() {
           onSubmit={handleSubmitPost}
           onCancel={handleCloseForm}
           onDelete={handleDeletePost}
-          title={currentPost ? "Redigera inlägg" : "Nytt inlägg"}
+          title={currentPost ? "Edit Post" : "New Post"}
         />
       )}
 
       <div className="flex-1 px-6 py-2 overflow-y-auto">
-        {/* Create post button */}
+        {/* Create new post button */}
         {canCreatePosts && (
           <div className="mb-1">
             <div className="flex justify-end">
@@ -105,11 +127,12 @@ export default function StablePostPage() {
           </div>
         )}
 
-        {/* Post list */}
+        {/* A list containing post with edit options */}
         <PostContainer
           posts={posts}
           onEditPost={handleOpenEditForm}
           onDeletePost={handleDeletePost}
+          onTogglePin={handleTogglePin}
         />
       </div>
     </div>
