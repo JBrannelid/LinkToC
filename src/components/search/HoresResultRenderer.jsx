@@ -14,6 +14,7 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
         onSelect(item);
     };
     
+    const placeholderImage = '/src/assets/images/horsePlaceholder.jpg'
     return (
         // Card wrapper with mobile-first considerations
         <div
@@ -26,11 +27,23 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
                 {/* Content layout that works on all screen sizes */}
                 <div className="flex flex-col p-3">
                     <div className="flex items-center">
-                        {/* User/Horse image */}
-                        <div className="w-14 h-14 rounded-full overflow-hidden flex-shrink-0">
-                            {/* Image content */}
+                        {/* Horse image */}
+                        <div className="w-14 h-14 rounded-full overflow-hidden mr-3 flex-shrink-0 border border-light">
+                            {imageUrl ? (
+                                <img
+                                    src={imageUrl}
+                                    alt={`Horse named ${name}`}
+                                    className="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                            ) : (
+                                <img
+                                    src={placeholderImage}
+                                    alt="Horse placeholder"
+                                    className="w-full h-full object-cover opacity-60"
+                                />
+                            )}
                         </div>
-
                         {/* Information with proper spacing for mobile */}
                         <div className="ml-3 flex-grow min-w-0">
                             {/* Name with text truncation */}
@@ -38,6 +51,7 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
 
                             {/* Other details */}
                             {birthYear && <div className="text-sm">{birthYear} år</div>}
+                            {breed && <div className="text-sm turncate">{breed}</div>}
                             {owner && (
                                 <div className="text-xs text-gray-600 truncate">{owner}</div>
                             )}
