@@ -45,6 +45,7 @@ export function useStableData(stableId) {
 
   const loadingState = useLoadingState(loading, operationType);
 
+  // To only fetch stable with the corresponding ID, not all stables!
   const getById = useCallback(async () => {
     setOperationType("fetch");
     try {
