@@ -30,7 +30,7 @@ const SearchResults = ({
         }
     };
     useEffect(() => {
-        if(results.Ref.current && results.length > 0){
+        if(resultsRef.current && results.length > 0){
             resultsRef.current.scrollTop = 0;
         }
     }, [results]);
