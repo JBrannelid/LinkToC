@@ -1,4 +1,3 @@
-// In hooks/useStableManagement.js
 import { useState, useCallback, useEffect } from "react";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
@@ -7,10 +6,10 @@ import userService from "../api/services/userService";
 export const useStableManagement = (stableId) => {
   const [members, setMembers] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
-  const [sentRequests, setSentRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+  const [sentInvites, setSentInvites] = useState([]);
 
   const loadingState = useLoadingState(loading, operationType);
 
@@ -26,25 +25,58 @@ export const useStableManagement = (stableId) => {
       const userResponse = await userService.getUserStables(stableId);
       setMembers(Array.isArray(userResponse) ? userResponse : []);
 
-      // Fetch requests for a specifik stable
+      // Fetch join requests for a specific stable
       const requestsResponse = await stableService.getStableRequests(stableId);
+      setReceivedRequests(requestsResponse.received || []);
 
-      // Parse the response
-      const received = requestsResponse?.received || [];
-      const sent = requestsResponse?.sent || [];
+      // Fetch invites sent by the stable
+      const invitesResponse = await stableService.getStableInvites(stableId);
+      setSentInvites(Array.isArray(invitesResponse) ? invitesResponse : []);
 
-      setReceivedRequests(received);
-      setSentRequests(sent);
       setError(null);
     } catch (error) {
-      console.error("Error fetching stable data:", error);
       setError(error.message || "Failed to load stable data");
     } finally {
       setLoading(false);
     }
   }, [stableId]);
 
-  // Stable Member management functions
+  const rejectRequest = async (userId) => {
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      await stableService.rejectStableJoinRequest({
+        userId: userId,
+        stableId: stableId,
+      });
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to reject request");
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const cancelInvitation = async (userId) => {
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      await stableService.cancelStableInvite({
+        userId: userId,
+        stableId: stableId,
+      });
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to cancel invitation");
+      setLoading(false);
+      return false;
+    }
+  };
+
   const updateMemberRole = async (userId, newRole) => {
     setLoading(true);
     setOperationType("update");
@@ -60,39 +92,26 @@ export const useStableManagement = (stableId) => {
     }
   };
 
-  const removeMember = async (userId) => {
-    setLoading(true);
-    setOperationType("delete");
-
-    try {
-      await stableService.removeUserFromStable(stableId, userId);
-      await fetchStableData();
-      return true;
-    } catch (error) {
-      setError(error.message || "Failed to remove member");
-      setLoading(false);
-      return false;
-    }
-  };
-
-  // Request management functions
-  const handleRequest = async (requestId, action) => {
+  const approveRequest = async (userId) => {
     setLoading(true);
     setOperationType("update");
 
     try {
-      await stableService.handleStableRequest(requestId, action);
+      const requestData = {
+        userId: userId,
+        stableId: stableId,
+      };
+
+      await stableService.acceptStableJoinRequest(requestData);
       await fetchStableData();
       return true;
     } catch (error) {
-      setError(error.message || "Failed to process request");
+      console.error("Error accepting join request:", error);
+      setError(error.message || "Failed to approve request");
       setLoading(false);
       return false;
     }
   };
-
-  const approveRequest = (requestId) => handleRequest(requestId, "approve");
-  const rejectRequest = (requestId) => handleRequest(requestId, "reject");
 
   useEffect(() => {
     fetchStableData();
@@ -102,7 +121,7 @@ export const useStableManagement = (stableId) => {
     // Data
     members,
     receivedRequests,
-    sentRequests,
+    sentInvites,
 
     // Status
     loading,
@@ -110,10 +129,10 @@ export const useStableManagement = (stableId) => {
     loadingState,
 
     // Functions
-    updateMemberRole,
-    removeMember,
     approveRequest,
+    updateMemberRole,
     rejectRequest,
+    cancelInvitation,
     refreshData: fetchStableData,
   };
 };

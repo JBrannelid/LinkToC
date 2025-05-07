@@ -7,7 +7,6 @@ import { useStableData } from "../../hooks/useStableData";
 import { useAppContext } from "../../context/AppContext";
 import StableName from "../layout/StableName";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { useLoadingState } from "../../hooks/useLoadingState";
 
 function CalendarDisplay() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -125,18 +124,6 @@ function CalendarDisplay() {
           <div className="text-center py-2 flex items-center justify-center">
             <LoadingSpinner size="small" className="text-gray" />
             <span>{calendarLoadingState.getMessage()}</span>
-          </div>
-        )}
-
-        {calendarStatus.error && (
-          <div className="text-center py-2 text-error-500">
-            {calendarStatus.error}
-          </div>
-        )}
-
-        {stableStatus.error && (
-          <div className="text-center py-2 text-error-500">
-            {stableStatus.error}
           </div>
         )}
 

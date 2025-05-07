@@ -1,24 +1,32 @@
-import React from "react";
-import { getProfileImageUrl, formatUserFullName } from "../../utils/userUtils";
+import React, { useState } from "react";
+import { getProfileImageUrl } from "../../utils/userUtils";
 import { useAuth } from "../../context/AuthContext";
+import { useAppContext } from "../../context/AppContext";
 import PinIcon from "../../assets/icons/PinIcon";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { format, parseISO } from "../../utils/calendarUtils";
+import Button from "../ui/Button";
+import PenIcon from "../../assets/icons/PenIcon";
+import TrashIcon from "../../assets/icons/TrashIcon";
+import { USER_ROLES } from "../../context/AppContext";
+import ConfirmationModal from "../ui/ConfirmationModal";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
-const PostItem = ({ post }) => {
+const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
   const { user, isLoading } = useAuth();
+  const { getCurrentStableRole } = useAppContext();
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  // If component is still loading auth data
-  if (isLoading) {
-    return (
-      <div className="flex justify-center p-4">
-        <LoadingSpinner size="small" className="text-gray" />
-        <p className="ml-2">Laddar...</p>
-      </div>
-    );
-  }
+  // Check if user is admin or post creator
+  const currentRole = getCurrentStableRole();
+  const isAdmin =
+    currentRole === USER_ROLES.ADMIN || currentRole === USER_ROLES.MANAGER;
+  const isPostCreator = String(user?.id) === String(post.userId);
 
-  // Will we display post date to the user?
+  // Post acess controllers
+  const canEditPost = isPostCreator || isAdmin;
+  const canPinPost = isAdmin;
+
   // Not implemented in current HiFi-Mockup
   const formatPostDate = (dateString) => {
     try {
@@ -28,6 +36,7 @@ const PostItem = ({ post }) => {
     }
   };
 
+  // Format post time with a helper utils function
   const formatPostTime = (dateString) => {
     try {
       return format(parseISO(dateString), "HH:mm");
@@ -48,7 +57,30 @@ const PostItem = ({ post }) => {
   const userFullName =
     `${displayUser.firstName} ${displayUser.lastName}`.trim() || "Unknown User";
 
-  // Until we have solved image handeling all post is display with a default user image
+  const handleDeletePost = () => {
+    if (onDeletePost) {
+      onDeletePost(post.id);
+      setIsDeleting(false);
+    }
+  };
+
+  const handleTogglePin = () => {
+    if (onTogglePin) {
+      onTogglePin(post);
+    }
+  };
+
+  // If component is still loading auth data
+  if (isLoading) {
+    return (
+      <div className="flex justify-center p-4">
+        <LoadingSpinner size="small" className="text-gray" />
+        <p className="ml-2">Laddar...</p>
+      </div>
+    );
+  }
+
+  // Until we have solved image handling all post is display with a default user image
   const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
 
   return (
@@ -61,44 +93,83 @@ const PostItem = ({ post }) => {
           kl {formatPostTime(post.date)}
         </p>
       </div>
+      {/* Post content */}
       <div className="bg-white w-full rounded-lg px-3 py-4 mb-4 shadow-lg">
         <div className="flex justify-between pb-4">
-          <div className="w-10 h-10 border-1 border-primary rounded-full overflow-hidden mr-4">
-            <img
-              src={profileImageUrl}
-              alt={`Profile image of ${userFullName}`}
-              className="w-full h-full object-cover"
-            />
+          <div className="flex items-center">
+            <div className="w-10 h-10 border-1 border-primary rounded-full overflow-hidden mr-4">
+              <img
+                src={profileImageUrl}
+                alt={`Profile image of ${userFullName}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
-          {post.isPinned && <PinIcon className="w-6 h-6 text-primary" />}
+
+          {/* Pin icon */}
+          {canPinPost && (
+            <div onClick={handleTogglePin} className="cursor-pointer">
+              <PinIcon
+                className={`w-6 h-6 ${
+                  // Opacity for not pinned icons
+                  post.isPinned ? "text-primary" : "text-primary opacity-20"
+                }`}
+              />
+            </div>
+          )}
+          {!canPinPost && post.isPinned && (
+            <PinIcon className="w-6 h-6 text-primary" />
+          )}
         </div>
         <h3 className="pb-4">{post.title}</h3>
         <p>{post.content}</p>
         <p className="text-sm text-grey opacity-80 pt-5">{userFullName}</p>
+        {/* Edit/Delete buttons - Display for admins and creators */}
+        {canEditPost && (
+          <div className="flex justify-end">
+            <Button
+              type="secondary"
+              variant="icon"
+              className="text-primary"
+              onClick={() => onEditPost(post)}
+            >
+              <PenIcon className="w-25 h-25" />
+            </Button>
+            <Button
+              type="danger"
+              variant="icon"
+              className="text-error-500"
+              onClick={() => setIsDeleting(true)}
+            >
+              <TrashIcon className="w-25 h-25" />
+            </Button>
+          </div>
+        )}
       </div>
+      {/* Reusing ConfirmationModal component */}
+      <ConfirmationModal
+        isOpen={isDeleting}
+        onClose={() => setIsDeleting(false)}
+        onConfirm={handleDeletePost}
+        title="Delete Post"
+        confirmButtonText="Delete"
+        cancelButtonText="Cancel"
+        confirmButtonType="danger"
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor="bg-error-500"
+            iconColor="text-white"
+          />
+        }
+      >
+        <p className="text-small">
+          Are you sure you want to delete this post? This action cannot be
+          undone.
+        </p>
+      </ConfirmationModal>
     </div>
   );
 };
 
 export default PostItem;
-
-// Ask BE för a specific endpoint where we could fetch relevent data such as
-/*{
-    "isSuccess": true,
-    "statusCode": 200,
-    "value": {
-      "id": 1,
-      "title": "Important: New stable rules",
-      "content": "Please make sure to clean up after your horse and follow the new scheduling system for arena time.",
-      "date": "2025-05-02T00:00:00",
-      "isPinned": true
-      "posterFirstName": "Test",
-      "posterLastName": "Testsson",
-      }
-    },
-    "message": null
-  }
-}*/
-// A prepare endpoint i stableService: `${ENDPOINTS.STABLEPOST}${stableId}`
-
-// I creacte, skicka med userID och stableFK

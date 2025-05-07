@@ -14,11 +14,13 @@ const FormInput = ({
   isPasswordMasked = false,
   autoComplete,
   inputClassName = "",
+  rows = 3,
   ...rest
 }) => {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext();
 
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
@@ -46,23 +48,39 @@ const FormInput = ({
           {label}
         </label>
       )}
-      <input
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        className={`form-input w-full px-3 py-2 border rounded-md 
+      {type === "textarea" ? (
+        // Render textarea
+        <textarea
+          id={name}
+          placeholder={placeholder}
+          rows={rows}
+          className={`form-input w-full px-3 py-2 border rounded-md 
+            ${errors[name] ? "border-error-500" : "border-primary-light"} 
+            focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
+            transition-colors duration-200 ${inputClassName}`}
+          {...register(name, validation)}
+          {...rest}
+        />
+      ) : (
+        // Render regular input
+        <input
+          id={name}
+          type={type}
+          placeholder={placeholder}
+          className={`form-input w-full px-3 py-2 border rounded-md 
     ${errors[name] ? "border-error-500" : "border-primary-light"} 
     focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
     transition-colors duration-200 ${inputClassName}`}
-        {...register(name, validation)}
-        onFocus={
-          type === "password" && isPasswordMasked
-            ? handlePasswordFocus
-            : undefined
-        }
-        autoComplete={autoComplete}
-        {...rest}
-      />
+          {...register(name, validation)}
+          onFocus={
+            type === "password" && isPasswordMasked
+              ? handlePasswordFocus
+              : undefined
+          }
+          autoComplete={autoComplete}
+          {...rest}
+        />
+      )}
       {errors[name] && (
         <p className="mt-1 text-sm text-error-600">{errors[name].message}</p>
       )}

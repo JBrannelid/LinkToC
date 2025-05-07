@@ -7,11 +7,40 @@ const baseService = createBaseService(ENDPOINTS.STABLE);
 const stableService = {
   ...baseService,
 
-  createWithWallPost: async (data) => {
-    if (!data || !data.name) {
-      throw new Error("Stable name is required");
-    }
+  search: async (params) => {
+    try {
+      // Build query-string from searchParams
+      const searchParams = {
+        searchTerm: params.searchTerm || "",
+        page: params.page || 0,
+        pageSize: params.pageSize || 10,
+      };
 
+      const queryString = Object.entries(searchParams)
+        .map(
+          ([key, value]) =>
+            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+        )
+        .join("&");
+
+      // Send GET-request
+      const response = await axiosInstance.get(
+        `${ENDPOINTS.STABLE}/search?${queryString}`
+      );
+
+      // Handle response and return value if the response is sucess
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error searching for stables:", error);
+      return [];
+    }
+  },
+
+  createWithWallPost: async (data) => {
     return await axiosInstance.post(
       `${ENDPOINTS.STABLE}/create-with-wall-post`,
       data
@@ -19,63 +48,108 @@ const stableService = {
   },
 
   // Get requests for a stable
-  /*
-  "success": true,
-  "data": {
-    "received": [
-      {
-        "id": 12,
-        "userId": 8,
-        "firstName": "Jenny",
-        "lastName": "Jennysson",
-        "email": "jenny@example.com",
-        "requestDate": "2025-04-25T14:30:00"
-      },
-    "sent": [
-      {
-        "id": 18,
-        "stableId": 3,
-        "stableName": "Ridskolan Pegasus",
-        "requestDate": "2025-04-28T11:20:00",
-        "status": "pending"
-      }
-    ]
-  }
-  */
   getStableRequests: async (stableId) => {
-    return await axiosInstance.get(`/api/stable/${stableId}/requests`); // Follow rest convention hierarchy
-  },
-
-  // Handle a request (approve/reject)
-  /*
-  "success": true,
-  "message": "Request approved successfully",
-  "data": {
-    "requestId": 12,
-    "userId": 8,
-    "stableId": 1,
-    "status": "approved" // approved or "reject"
-  }
- */
-  handleStableRequest: async (requestId, action) => {
-    return await axiosInstance.put(`/api/stable/request/${requestId}`, {
-      // REST APIs for state transitions
-      action: action,
-    });
-  },
-
-  // Remove a user from stable
-  /*
-  "success": true,
-  "message": "User removed from stable successfully",
-  "data": {
-    "userId": 8,
-    "stableId": 1
- */
-  removeUserFromStable: async (stableId, userId) => {
-    return await axiosInstance.delete(
-      `/api/userstables/${stableId}/user/${userId}`
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE_REQUESTS}/${stableId}`
     );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return {
+        received: response.value,
+        sent: [],
+      };
+    }
+
+    return { received: [], sent: [] };
+  },
+
+  // Get invites from a stable to a user
+  getStableInvites: async (stableId) => {
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE_INVITES}/${stableId}`
+    );
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
+    }
+
+    return [];
+  },
+
+  // Awaiting backend implementation to recives stable invites by user id
+  // getStableInvitesByUserId: async (userId) => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       `/api/get-stable-invites-by-user/${userId}`
+  //     );
+
+  //     if (response && response.isSuccess && Array.isArray(response.value)) {
+  //       return response.value;
+  //     }
+
+  //     return [];
+  //   } catch (error) {
+  //     console.error("Error fetching user stable invites:", error);
+  //     throw error;
+  //   }
+  // },
+
+  // For rejecting an application request from a user to join the stable
+  rejectStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      `/api/refuse-stable-join-request`,
+      requestData
+    );
+  },
+
+  // For canceling an invitation that the stable sent to a user
+  cancelStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
+  },
+
+  // Accept a stable join request
+  acceptStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      `/api/accept-stable-join-request`,
+      requestData
+    );
+  },
+
+  // GET all join request ask by the User
+  getUserStableRequests: async (userId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/get-stable-join-requests-by-user/${userId}`
+      );
+
+      // The API returns data in the 'value' property
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching user stable requests:", error);
+      throw error;
+    }
+  },
+
+  // Cancel a ongoing join request
+  cancelStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      `/api/refuse-stable-join-request`,
+      requestData
+    );
+  },
+
+  // Accept an invitation from a stable
+  acceptStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/accept-stable-invite`, inviteData);
+  },
+
+  // Denied an invitation from a stable
+  refuseStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
   },
 };
 
