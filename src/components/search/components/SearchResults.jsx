@@ -49,25 +49,41 @@ const SearchResults = ({
             );
         }
         if (error) {
+            const errorMessage = typeof error === 'string'
+                ? { type: 'error', text: error }
+                : (error.text ? error : { type: 'error', text: 'An error occurred during search' });
+
             return (
                 <FormMessage
-                    message={{
-                        type: 'error',
-                        text: error
-                    }}
+                    message={errorMessage}
                     />
+                
             );
         }
         if (message){
-            return <FormMessage message={message} />
-        }
-        if(results.length === 0 && query){
             return (
-                <div className="p-4 text-center text-gray">
-                    <p>{config?.noResultsText || 'No results found'}</p>
+                <div role="alert">
+                    <FormMessage message={message} />
+                    {message.type === 'error' && message.text.includes("Can't find") && (
+                        <div className="mt-3 text-sm">
+                            <p>Suggestions:</p>
+                            <ul className="list-disc pl-5 mt-1">
+                                <li>Check for spelling errors</li>
+                                <li>Try using fewer or different keywords</li>
+                                <li>Try searching for part of the name</li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
             );
         }
+        // if(results.length === 0 && query.trim().length >= 3 && !loading){
+        //     return (
+        //         <div className="p-4 text-center text-gray">
+        //             <p>{config?.noResultsText || 'No results found'}</p>
+        //         </div>
+        //     );
+        // }
         
         const {layout = 'list', resultItemRenderer, columns = 1} = config || {};
         

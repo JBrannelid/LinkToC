@@ -1,9 +1,9 @@
 import {useLocation} from "react-router";
 import {useCallback, useEffect, useMemo, useReducer} from "react";
 import {useLoadingState} from "../../hooks/useLoadingState.js";
-import {createErrorMessage} from "../../utils/errorUtils.js";
 import {getConfigForRoutes} from "./config/searchConfig.js";
 import {SearchContext} from "../../context/searchContext.js";
+import {getErrorMessage, createErrorMessage} from "../../utils/errorUtils.js";
 
 const initialState = {
     query: "",
@@ -46,12 +46,13 @@ function searchReducer(state, action) {
         case ACTIONS.FINISH_LOADING:
             return {...state, loading: false}
         case ACTIONS.SET_ERROR:
-            return {...state, error: action.payload, loading: false};
+            return {...state, error: typeof action.payload === 'string' ? createErrorMessage(action.payload) : getErrorMessage(action.payload), loading: false};
         case ACTIONS.SET_MESSAGE:
             return {...state, message: action.payload};
         case ACTIONS.SELECT_ITEM:
             return {...state, selectedItem: action.payload};
         case ACTIONS.TOGGLE_ITEM_SELECTION:
+            
             const {item, idField, selectionMode} = action.payload;
             const itemId = item[idField || 'id'];
 
@@ -116,9 +117,9 @@ const SearchProvider = ({children, customConfig = null}) => {
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: 'fetch'});
             dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
-
+            
             const response = await config.searchFn(searchQuery);
-
+            
             if (response?.success && Array.isArray(response.data)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response.data});
 
@@ -127,6 +128,8 @@ const SearchProvider = ({children, customConfig = null}) => {
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
                     });
+                }else {
+                    dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             } else if (Array.isArray(response)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response});
@@ -136,6 +139,8 @@ const SearchProvider = ({children, customConfig = null}) => {
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found')
                     });
+                }else {
+                    dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             } else {
                 console.warn('Unexpected search response format: ', response);
@@ -145,13 +150,20 @@ const SearchProvider = ({children, customConfig = null}) => {
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
                     });
+                }else {
+                    dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             }
         } catch (error) {
-            console.error('Search error:', error);
+            console.error('Search error details:', {
+                error,
+                message: error.message,
+                stack: error.stack,
+                config: config
+            });
             dispatch({
                 type: ACTIONS.SET_ERROR,
-                payload: error.message || config.errorText || 'An error occured during search',
+                payload: error
             });
         } finally {
             dispatch({type: ACTIONS.FINISH_LOADING});
@@ -170,13 +182,16 @@ const SearchProvider = ({children, customConfig = null}) => {
 
     const handleInputChange = (event) => {
         const newQuery = event.target.value;
+        if(state.error){
+            dispatch({type: ACTIONS.SET_ERROR, payload: null})
+        }
         dispatch({type: ACTIONS.SET_QUERY, payload: newQuery});
-
+        dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
         if (newQuery.trim()) {
             debouncedSearch(newQuery);
         } else {
             dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-            dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
+            
         }
     };
 
@@ -249,7 +264,15 @@ const SearchProvider = ({children, customConfig = null}) => {
     };
 
     return (
-        <SearchContext.Provider value={contextValue}>
+        <SearchContext.Provider value={{...contextValue,
+        error: typeof state.error === 'string' ? createErrorMessage(state.error) : state.error,
+        }}
+        >
+            {state.error && (
+                <div className="sr-only" role="alert" aria-live="assertive">
+                    {typeof state.error === 'object' ? state.error.text : state.error}
+                </div>
+            )}
             {children}
         </SearchContext.Provider>
     );
