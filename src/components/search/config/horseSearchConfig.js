@@ -1,13 +1,35 @@
 import { creatSearchConfig } from './searchConfigBase';
+import {horseService} from "../../../api/index.js";
 
 const horseSearchConfig = creatSearchConfig({
     entityType: 'horse',
-    
+
     searchFn: async (query) => {
-        try{
-            //Add actual function here for ApiResponse based on structure
+        try {
+            // Match API parameters expected by the backend
+            // Adjust these parameters to match what your user search API expects
+            const params = {
+                searchTerm: query,
+                page: 0,
+                pageSize: 10
+            };
+
+            
+            const response = await horseService.search(params);
+            
+            if (!response || !response.isSuccess) {
+                throw new Error(response?.message || 'Search failed');
+            }
+
+            
+            return {
+                success: response.isSuccess,
+                data: response.data || [],
+                message: response.message || 'Search completed'
+            };
         } catch (error) {
-            //Add error function here
+            console.error('Horse search error:', error);
+            throw error;
         }
     },
     
