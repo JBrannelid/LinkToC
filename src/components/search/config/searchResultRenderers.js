@@ -10,6 +10,9 @@ export const ListItemRenderer = ({
 }) => {
     const primaryText = item[config?.labelField || 'name']
     const secondaryText = item[config?.secondary];
+    const imageUrl = item[config?.imageField || 'image'];
+    
+    const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
     
     return (
         <li
@@ -19,8 +22,22 @@ export const ListItemRenderer = ({
         >
             <div className="flex items-center flex-grow">
                 {/* Placeholder circle (could be an icon or image) */}
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0"></div>
-
+                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-light">
+                    {imageUrl ? (
+                        <img
+                            src={imageUrl}
+                            alt={`${primaryText}`}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                        />
+                    ) : (
+                        <img
+                            src={placeholderImage}
+                            alt="Stable placeholder"
+                            className="w-full h-full object-cover opacity-60"
+                        />
+                    )}
+                </div>
                 <div className="ml-3 flex-grow min-w-0">
                     <div className="font-medium text-base truncate">{primaryText}</div>
                     {secondaryText && (
