@@ -1,5 +1,6 @@
 import { createSearchConfig} from "./searchConfigBase.js";
 import {stableService} from "../../../api/index.js";
+import {createErrorMessage, getErrorMessage} from "../../../utils/errorUtils.js";
 
 // const stableId = currentStable?.id;
 const stableSearchConfig = createSearchConfig({
@@ -16,12 +17,17 @@ const stableSearchConfig = createSearchConfig({
             
             const response = await stableService.search(params);
             
+            if(!response) {
+                throw createErrorMessage('No response from server. Please try again.');
+            }
             if(!response || !response?.isSuccess){
-                throw new Error(response?.message || 'Search failed');
+                throw getErrorMessage(response.error || {
+                    message: response.message || 'Search failed'
+                });
             }
             return {
                 success: response.isSuccess,
-                data: response.data || [],
+                data: response.value || [],
                 message: response.message || 'Search completed'
             };
         } catch (error) {
