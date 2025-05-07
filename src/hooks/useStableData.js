@@ -17,7 +17,7 @@ export function useStableData(stableId) {
       setError(null);
 
       // Search with empty parameters to get all stables
-      const response = await stableService.searchStables({
+      const response = await stableService.search({
         searchTerm: "",
         page: 0,
         pageSize: 100,
