@@ -1,6 +1,6 @@
 import { createSearchConfig} from "./searchConfigBase.js";
 import {stableService} from "../../../api/index.js";
-import * as currentStable from "date-fns/locale";
+
 const stableId = currentStable?.id;
 const stableSearchConfig = createSearchConfig({
     entityType: 'stable',
