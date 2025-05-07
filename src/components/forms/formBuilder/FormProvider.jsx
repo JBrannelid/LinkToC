@@ -7,6 +7,7 @@ const FormProvider = ({
   onSubmit,
   children,
   className = "",
+    ariaLabel = "Form",
 }) => {
   const { handleSubmit } = methods;
 
