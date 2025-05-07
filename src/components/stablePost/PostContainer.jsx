@@ -7,7 +7,7 @@ import {
   dateFnsCompareDesc,
 } from "../../utils/calendarUtils";
 
-const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
+const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
   const groupPostsByDate = () => {
     const groups = {
       today: [],
@@ -57,7 +57,6 @@ const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
       </div>
     );
   }
-
   return (
     <div className="py-2">
       {groupedPosts.today.length > 0 && (
@@ -66,6 +65,7 @@ const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
           posts={groupedPosts.today}
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
+          onTogglePin={onTogglePin}
         />
       )}
 
@@ -75,6 +75,7 @@ const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
           posts={groupedPosts.yesterday}
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
+          onTogglePin={onTogglePin}
         />
       )}
 
@@ -84,6 +85,7 @@ const PostContainer = ({ posts, onEditPost, onDeletePost }) => {
           posts={groupedPosts.older}
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
+          onTogglePin={onTogglePin}
         />
       )}
     </div>
