@@ -2,6 +2,7 @@ import createBaseService from "./baseService.js";
 import { ENDPOINTS } from "./endpoints.js";
 import axiosConfig from "../config/axiosConfig.js";
 import tokenStorage from "../../utils/tokenStorage.js";
+import axiosInstance from "../config/axiosConfig.js";
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 
@@ -13,7 +14,7 @@ const authService  = {
             throw new Error("Email and password are required");
         }
         try {
-            return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
+            return await axiosInstance.post(`${ENDPOINTS.AUTH}/login`, loginData);
         }catch(error) {
             if(error.response) {
                 const errorMessage = error.response.data?.message || "Authentication failed. Please check your credentials.";
@@ -32,7 +33,7 @@ const authService  = {
     if (!registerData) {
       throw new Error("Registration data is required");
     }
-    return await axiosConfig.post(`${ENDPOINTS.AUTH}/register`, registerData);
+    return await axiosInstance.post(`${ENDPOINTS.AUTH}/register`, registerData);
   },
 
   // RefreshToken: POST /api/auth/refreshToken
@@ -43,7 +44,7 @@ const authService  = {
         throw new Error("No token available");
       }
 
-      const response = await axiosConfig.post(
+      const response = await axiosInstance.post(
         `${ENDPOINTS.AUTH}/refresh-token`,
         { refreshToken: refreshToken }
       );
@@ -68,7 +69,7 @@ const authService  = {
       const refreshToken = tokenStorage.getRefreshToken();
       if (!refreshToken) return true;
 
-      const result = await axiosConfig.post(
+      const result = await axiosInstance.post(
         `${ENDPOINTS.AUTH}/revoke-token`,
         { refreshToken },
         {
@@ -99,7 +100,7 @@ const authService  = {
       throw new Error("Passwords must match");
     }
 
-    return await axiosConfig.post(`/api/reset-password`, {
+    return await axiosInstance.post(`/api/reset-password`, {
       token: resetData.token,
       newPassword: resetData.newPassword,
       confirmPassword: resetData.confirmPassword,
@@ -110,7 +111,7 @@ const authService  = {
     if (!email) {
       throw new Error("Email is required");
     }
-    return await axiosConfig.post(`/api/password-reset-email/send`, { email });
+    return await axiosInstance.post(`/api/password-reset-email/send`, { email });
   },
 };
 
