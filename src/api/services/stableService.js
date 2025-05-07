@@ -7,16 +7,16 @@ const baseService = createBaseService(ENDPOINTS.STABLE);
 const stableService = {
   ...baseService,
 
-  // Fetches stables based on search term and pagination parameters.
+  // Fetches stables based on search term and pagination
   searchStables: async (params) => {
-    // Build the query string from the search parameters.
+    // Build the query string from the search parameters
     const queryParams = new URLSearchParams({
       searchTerm: params.searchTerm || "",
       page: params.page || 0,
       pageSize: params.pageSize || 10,
     });
 
-    // Send GET request to the stables endpoint with query parameters.
+    // Send GET request with "queryParams"
     const response = await axiosInstance.get(
       `${ENDPOINTS.STABLE}?${queryParams}`
     );
@@ -29,10 +29,6 @@ const stableService = {
   },
 
   createWithWallPost: async (data) => {
-    if (!data || !data.name) {
-      throw new Error("Stable name is required");
-    }
-
     return await axiosInstance.post(
       `${ENDPOINTS.STABLE}/create-with-wall-post`,
       data
@@ -85,6 +81,37 @@ const stableService = {
   acceptStableJoinRequest: async (requestData) => {
     return await axiosInstance.post(
       `/api/accept-stable-join-request`,
+      requestData
+    );
+  },
+
+  // GET all join request ask by the User
+  getUserStableRequests: async (userId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/get-stable-join-requests-by-user/${userId}`
+      );
+
+      // The API returns data in the 'value' property
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching user stable requests:", error);
+      throw error;
+    }
+  },
+
+  // Cancel a ongoing join request
+  cancelStableJoinRequest: async (requestData) => {
+    if (!requestData.userId || !requestData.stableId) {
+      throw new Error("Both user ID and stable ID are required");
+    }
+
+    return await axiosInstance.post(
+      `/api/refuse-stable-join-request`,
       requestData
     );
   },
