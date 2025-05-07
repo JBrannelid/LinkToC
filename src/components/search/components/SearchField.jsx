@@ -4,7 +4,7 @@ import SearchProvider from "../SearchProvider";
 import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
 import SearchActions from "./SearchActions";
-import FormMessages, {FormMessage} from "../../forms/index";
+import {FormMessage} from "../../forms/index";
 
 const SearchField = forwardRef(({
                                     name,
