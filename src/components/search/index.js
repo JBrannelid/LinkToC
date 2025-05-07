@@ -7,4 +7,4 @@ import SearchField from "./components/SearchField.jsx";
 
 export {SearchBar,SearchResults,SearchActions,SearchField,SearchProvider};
 
-export default SearchFunction;
+
