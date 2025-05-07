@@ -1,6 +1,7 @@
 import createBaseService from "../services/baseService";
 import { ENDPOINTS } from "./endpoints";
 import axiosConfig from "../config/axiosConfig.js";
+import axiosInstance from "../config/axiosConfig.js";
 
 const baseService = createBaseService(ENDPOINTS.STABLE);
 
@@ -18,7 +19,7 @@ const stableService = {
       const queryString = Object.entries(searchParams)
           .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
           .join('&');
-      return await axiosConfig.get(`${ENDPOINTS.STABLE}/search?${queryString}`);
+      return await axiosInstance.get(`${ENDPOINTS.STABLE}/search?${queryString}`);
     } catch (error) {
       console.error("Error searching for stables:", error);
       throw error;
@@ -29,7 +30,7 @@ const stableService = {
       throw new Error("Stable name is required");
     }
 
-    return await axiosConfig.post(`${ENDPOINTS.STABLE}/create-with-wall-post`, data);
+    return await axiosInstance.post(`${ENDPOINTS.STABLE}/create-with-wall-post`, data);
   },
 };
 
