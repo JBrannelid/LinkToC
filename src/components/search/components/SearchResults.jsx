@@ -1,8 +1,8 @@
-import React, {useRef, useEffect} from 'react';
-import {useSearch} from "../../../context/searchContext";
-import {FormMessage} from "../../forms/index";
-import LoadingSpinner from "../../ui/LoadingSpinner";
-import {ListItemRenderer} from "../config/searchResultRenderers.js";
+import {ListItemRenderer} from "../SearchResultRenderers.jsx";
+import {useEffect, useRef} from "react";
+import {useSearch} from "../../../context/searchContext.js";
+import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
+import {FormMessage} from "../../forms/index.js";
 
 const SearchResults = ({
                           className = '',
@@ -43,7 +43,7 @@ const SearchResults = ({
         if (loading) {
             return(
                 <div className="p-4 text-center text-gray flex flex-col items-center">
-                    <LoadingSpinner size=medium className="text-primary mb-2"/>
+                    <LoadingSpinner size="medium" className="text-primary mb-2"/>
                     <p>{loadingState?.getMessage() || config?.loadingText || 'Searching...'}</p>
                 </div>
             );
