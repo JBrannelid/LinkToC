@@ -3,6 +3,7 @@ import {useCallback, useEffect, useMemo, useReducer} from "react";
 import {useLoadingState} from "../../hooks/useLoadingState.js";
 import {createErrorMessage} from "../../utils/errorUtils.js";
 import {getConfigForRoutes} from "./config/searchConfig.js";
+import {SearchContext} from "../../context/searchContext.js";
 
 const initialState = {
     query: "",
@@ -110,7 +111,7 @@ const SearchProvider = ({children, customConfig = null}) => {
     }, [config?.entityType]);
 
     const performSearch = useCallback(async (searchQuery) => {
-        if (!searchQuery.trim() || !config?.searchFn) return;
+        if (!searchQuery.trim() || searchQuery.trim().length < 3 || !config?.searchFn) return;
 
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: 'fetch'});
@@ -121,7 +122,7 @@ const SearchProvider = ({children, customConfig = null}) => {
             if (response?.success && Array.isArray(response.data)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response.data});
 
-                if (response.data.length === 0) {
+                if (response.data.length === 0 && searchQuery.trim().length >=3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
@@ -130,7 +131,7 @@ const SearchProvider = ({children, customConfig = null}) => {
             } else if (Array.isArray(response)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response});
 
-                if (response.length === 0) {
+                if (response.length === 0 && searchQuery.trim().length >= 3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found')
@@ -139,10 +140,12 @@ const SearchProvider = ({children, customConfig = null}) => {
             } else {
                 console.warn('Unexpected search response format: ', response);
                 dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-                dispatch({
-                    type: ACTIONS.SET_MESSAGE,
-                    payload: createErrorMessage(config.noResultsText || 'No results found'),
-                });
+                if(searchQuery.trim().length < 3) {
+                    dispatch({
+                        type: ACTIONS.SET_MESSAGE,
+                        payload: createErrorMessage(config.noResultsText || 'No results found'),
+                    });
+                }
             }
         } catch (error) {
             console.error('Search error:', error);
@@ -160,7 +163,7 @@ const SearchProvider = ({children, customConfig = null}) => {
                 let timeoutId;
                 return (value) => {
                     clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => performSearch(value), 300);
+                    timeoutId = setTimeout(() => performSearch(value), 1000);
                 };
             })(),
         [performSearch]);
