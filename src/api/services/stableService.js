@@ -76,6 +76,24 @@ const stableService = {
     return [];
   },
 
+  // Awaiting backend implementation to recives stable invites by user id
+  // getStableInvitesByUserId: async (userId) => {
+  //   try {
+  //     const response = await axiosInstance.get(
+  //       `/api/get-stable-invites-by-user/${userId}`
+  //     );
+
+  //     if (response && response.isSuccess && Array.isArray(response.value)) {
+  //       return response.value;
+  //     }
+
+  //     return [];
+  //   } catch (error) {
+  //     console.error("Error fetching user stable invites:", error);
+  //     throw error;
+  //   }
+  // },
+
   // For rejecting an application request from a user to join the stable
   rejectStableJoinRequest: async (requestData) => {
     return await axiosInstance.post(
@@ -118,14 +136,20 @@ const stableService = {
 
   // Cancel a ongoing join request
   cancelStableJoinRequest: async (requestData) => {
-    if (!requestData.userId || !requestData.stableId) {
-      throw new Error("Both user ID and stable ID are required");
-    }
-
     return await axiosInstance.post(
       `/api/refuse-stable-join-request`,
       requestData
     );
+  },
+
+  // Accept an invitation from a stable
+  acceptStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/accept-stable-invite`, inviteData);
+  },
+
+  // Denied an invitation from a stable
+  refuseStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
   },
 };
 
