@@ -1,5 +1,5 @@
 import React, {createElement} from 'react';
-import Button from "../../ui/Button.jsx";
+import Button from "../ui/Button.jsx";
 
 export const ListItemRenderer = ({
     item,
