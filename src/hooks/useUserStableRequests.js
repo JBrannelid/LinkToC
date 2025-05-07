@@ -13,7 +13,7 @@ export const useUserStableRequests = () => {
 
   const loadingState = useLoadingState(loading, operationType);
 
-  const fetchUserRequests = useCallback(async () => {
+  const fetchUserData = useCallback(async () => {
     if (!user?.id) return;
 
     setLoading(true);
@@ -22,19 +22,20 @@ export const useUserStableRequests = () => {
     try {
       // Fetch requests sent by the user
       const response = await stableService.getUserStableRequests(user.id);
-      setStableRequests(Array.isArray(response) ? response : []);
+      setSentRequests(Array.isArray(response) ? response : []);
 
       // Fetch invites received by the user
-      const receivedResponse = await stableService.getStableInvitesByUserId(
-        user.id
-      );
-      setReceivedInvites(
-        Array.isArray(receivedResponse) ? receivedResponse : []
-      );
+      // const receivedResponse = await stableService.getStableInvitesByUserId(
+      //   user.id
+      // );
+      // setReceivedInvites(
+      //   Array.isArray(receivedResponse) ? receivedResponse : []
+      // );
+      setReceivedInvites([]); // Should we implement this function?  Empty array for now
 
       setError(null);
-    } catch (err) {
-      setError(err.message || "Failed to load your stable requests");
+    } catch (error) {
+      setError(error.message || "Failed to load your stable requests");
       setSentRequests([]);
       setReceivedInvites([]);
     } finally {
@@ -56,7 +57,7 @@ export const useUserStableRequests = () => {
         stableId: stableId,
       });
 
-      await fetchUserRequests();
+      await fetchUserData();
       return true;
     } catch (error) {
       setError(error.message || "Failed to cancel request");
@@ -112,8 +113,8 @@ export const useUserStableRequests = () => {
   };
 
   useEffect(() => {
-    fetchUserRequests();
-  }, [fetchUserRequests]);
+    fetchUserData();
+  }, [fetchUserData]);
 
   return {
     sentRequests,
