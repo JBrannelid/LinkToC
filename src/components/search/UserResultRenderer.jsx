@@ -1,7 +1,7 @@
 import React from 'react'
 import Card from '../ui/card/index.js'
 
-const UserResultRenderer = (item, isSelected, onSelect, config) => {
+const UserResultRenderer = ({item, isSelected, onSelect, config}) => {
     const firstName = item[config?.labelField || 'firstName'] || '';
     const lastName = item[config?.secondaryField || 'lastName'] || '';
     const fullName = `${firstName} ${lastName}`.trim() || 'Unnamed user';
@@ -64,3 +64,5 @@ const UserResultRenderer = (item, isSelected, onSelect, config) => {
         </div>
     );
 };
+
+export default UserResultRenderer;
