@@ -41,12 +41,12 @@ export function useStablePosts(stableId) {
       setError(null);
 
       // Send postData with stable id to stablePostService
-      const postWithDetails = {
+      const postWithStableId = {
         ...postData,
         stableIdFk: stableId,
       };
 
-      await stablePostService.create(postWithDetails);
+      await stablePostService.create(postWithStableId);
       await fetchAndUpdatePosts();
       return true;
     } catch (error) {
@@ -70,7 +70,7 @@ export function useStablePosts(stableId) {
         content: postData.content,
       };
 
-      await stablePostService.update(postData);
+      await stablePostService.update(updateData);
       await fetchAndUpdatePosts();
       return true;
     } catch (error) {
