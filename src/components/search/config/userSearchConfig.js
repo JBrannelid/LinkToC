@@ -1,13 +1,34 @@
 import {createSearchConfig} from "./searchConfigBase";
+import {userService} from "../../../api/index.js";
 
 const userSearchConfig = createSearchConfig({
     entityType: 'user',
 
     searchFn: async (query) => {
-        try{
-            //Add actual function here for ApiResponse based on structure
+        try {
+            // Match API parameters expected by the backend
+            // Adjust these parameters to match what your user search API expects
+            const params = {
+                searchTerm: query,
+                page: 0,
+                pageSize: 10
+            };
+            
+            const response = await userService.searchUsers(params);
+
+            
+            if (!response || !response.isSuccess) {
+                throw new Error(response?.message || 'Search failed');
+            }
+            
+            return {
+                success: response.isSuccess,
+                data: response.data || [],
+                message: response.message || 'Search completed'
+            };
         } catch (error) {
-            //Add error function here
+            console.error('User search error:', error);
+            throw error;
         }
     },
     
