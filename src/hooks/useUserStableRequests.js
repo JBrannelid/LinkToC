@@ -4,7 +4,8 @@ import stableService from "../api/services/stableService";
 import { useLoadingState } from "./useLoadingState";
 
 export const useUserStableRequests = () => {
-  const [stableRequests, setStableRequests] = useState([]);
+  const [sentRequests, setSentRequests] = useState([]);
+  const [receivedInvites, setReceivedInvites] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
@@ -19,12 +20,23 @@ export const useUserStableRequests = () => {
     setOperationType("fetch");
 
     try {
+      // Fetch requests sent by the user
       const response = await stableService.getUserStableRequests(user.id);
       setStableRequests(Array.isArray(response) ? response : []);
+
+      // Fetch invites received by the user
+      const receivedResponse = await stableService.getStableInvitesByUserId(
+        user.id
+      );
+      setReceivedInvites(
+        Array.isArray(receivedResponse) ? receivedResponse : []
+      );
+
       setError(null);
     } catch (err) {
       setError(err.message || "Failed to load your stable requests");
-      setStableRequests([]);
+      setSentRequests([]);
+      setReceivedInvites([]);
     } finally {
       setLoading(false);
     }
@@ -46,8 +58,54 @@ export const useUserStableRequests = () => {
 
       await fetchUserRequests();
       return true;
-    } catch (err) {
-      setError(err.message || "Failed to cancel request");
+    } catch (error) {
+      setError(error.message || "Failed to cancel request");
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const acceptInvite = async (stableId) => {
+    if (!user?.id || !stableId) {
+      return false;
+    }
+
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      await stableService.acceptStableInvite({
+        userId: user.id,
+        stableId: stableId,
+      });
+
+      await fetchUserData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to accept invite");
+      setLoading(false);
+      return false;
+    }
+  };
+
+  const rejectInvite = async (stableId) => {
+    if (!user?.id || !stableId) {
+      return false;
+    }
+
+    setLoading(true);
+    setOperationType("update");
+
+    try {
+      await stableService.refuseStableInvite({
+        userId: user.id,
+        stableId: stableId,
+      });
+
+      await fetchUserData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to reject invite");
       setLoading(false);
       return false;
     }
@@ -58,12 +116,15 @@ export const useUserStableRequests = () => {
   }, [fetchUserRequests]);
 
   return {
-    stableRequests,
+    sentRequests,
+    receivedInvites,
     loading,
     error,
     loadingState,
     cancelRequest,
-    refreshData: fetchUserRequests,
+    acceptInvite,
+    rejectInvite,
+    refreshData: fetchUserData,
   };
 };
 
