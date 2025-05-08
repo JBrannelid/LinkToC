@@ -34,7 +34,7 @@ function App() {
         </header>
       )}
 
-      <main className="flex-auto">
+      <main className="flex-1/2">
         <Outlet />
       </main>
 
