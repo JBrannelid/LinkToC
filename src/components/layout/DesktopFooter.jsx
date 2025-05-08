@@ -7,7 +7,7 @@ function DesktopFooter() {
   const currentYear = format(new Date(), "yyyy");
 
   return (
-    <div className="bg-white border-t border-light py-5 w-full">
+    <div className=" w-full bg-white shadow-md py-6">
       <div className=" mx-auto px-10">
         <div className="flex flex-row justify-between items-center">
           <div className="flex items-center">
