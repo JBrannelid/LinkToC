@@ -18,7 +18,7 @@ const CalendarHeader = ({
     <header className="flex items-center justify-between px-4 mb-1">
       <div className="flex items-center space-x-2">
         {/* Display current month */}
-        <h2 className="weight-normal height-tight">
+        <h2 className="weight-normal height-tight md:text-2xl md:font-normal">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
         </h2>
         {/* Year dropdown */}
@@ -26,7 +26,7 @@ const CalendarHeader = ({
           id="year"
           value={firstDayCurrentMonth.getFullYear()}
           onChange={(e) => changeYear(Number(e.target.value))}
-          className="weight-normal height-tight font-heading"
+          className="weight-normal height-tight font-heading md:text-2xl"
         >
           {years.map((year) => (
             <option key={year} value={year}>
@@ -38,20 +38,20 @@ const CalendarHeader = ({
       <div className="flex space-x-1">
         {/* Change to previous month */}
         <button type="button" onClick={previousMonth} className="text-primary">
-          <ChevronLeft className="w-6 h-6" />
+          <ChevronLeft className="w-6 h-6 md:w-10 md:h-10" />
         </button>
 
         {/* Return to today */}
         <button
           type="button"
           onClick={goToToday}
-          className="text-sm weight-normal height-tight"
+          className="text-sm weight-normal height-tight md:text-lg md:font-normal"
         >
-          Till idag
+          Today
         </button>
         {/* Change to next month */}
         <button type="button" onClick={nextMonth} className="text-primary">
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-6 h-6 md:w-10 md:h-10" />
         </button>
       </div>
     </header>
