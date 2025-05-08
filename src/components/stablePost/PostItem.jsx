@@ -84,12 +84,12 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
   const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
 
   return (
-    <div className="bg-background pb-2">
+    <div className="bg-background pb-2 md:w-9/10">
       <div className="flex justify-between">
-        <p className="text-sm text-grey opacity-80">
+        <p className="text-sm text-grey opacity-80 md:text-lg">
           {/* {formatPostDate(post.date)} */}
         </p>
-        <p className="text-xs text-grey opacity-80">
+        <p className="text-xs text-grey opacity-80 md:text-lg">
           kl {formatPostTime(post.date)}
         </p>
       </div>
@@ -97,7 +97,7 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
       <div className="bg-white w-full rounded-lg px-3 py-4 mb-4 shadow-lg">
         <div className="flex justify-between pb-4">
           <div className="flex items-center">
-            <div className="w-10 h-10 border-1 border-primary rounded-full overflow-hidden mr-4">
+            <div className="w-10 h-10  md:w-15 md:h-15 lg:w-20 lg:h-20 border-1 border-primary rounded-full overflow-hidden mr-4">
               <img
                 src={profileImageUrl}
                 alt={`Profile image of ${userFullName}`}
