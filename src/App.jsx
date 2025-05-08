@@ -34,17 +34,17 @@ function App() {
         </header>
       )}
 
-      <main className="flex-1">
+      <main className="flex-auto">
         <Outlet />
       </main>
 
       {/* hidden on lg screens */}
       {showFooterNav && (
-        <footer className="lg:hidden">
+        <footer className="lg:hidden mt-auto">
           <NavigationFooter />
         </footer>
       )}
-      <footer className="hidden lg:block">
+      <footer className="hidden lg:block mt-auto">
         <DesktopFooter />
       </footer>
     </div>
