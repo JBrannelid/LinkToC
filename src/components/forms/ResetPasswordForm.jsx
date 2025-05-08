@@ -6,7 +6,7 @@ import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
 import authService from "../../api/services/authService";
 import { Shield, ArrowLeft } from "lucide-react";
-import { ROUTES } from "../../routes/routeConstants";
+import { ROUTES } from "../../routes/index.jsx";
 import {
   getErrorMessage,
   createSuccessMessage,
@@ -120,8 +120,9 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
   return (
     <FormProvider
       methods={methods}
-      onSubmit={methods.handleSubmit(onSubmit)}
-      footer={{ showFooter: false }}
+      onSubmit={onSubmit}
+      className="reset-password-form"
+      ariaLabel="Reset Password Form"
     >
       <div className="mt-4">
         <FormInput
@@ -157,7 +158,8 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
 
       <div className="mt-5 grid grid-cols-1">
         <Button
-          type="submit"
+          type="primary"
+          htmlType="submit"
           className="w-9/10"
           disabled={loading || !token}
           aria-busy={loading}
