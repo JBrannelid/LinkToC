@@ -1,5 +1,5 @@
 import {useLocation} from "react-router";
-import {useCallback, useEffect, useMemo, useReducer} from "react";
+import {useCallback, useEffect, useMemo, useReducer, useState} from "react";
 import {useLoadingState} from "../../hooks/useLoadingState.js";
 import {getConfigForRoutes} from "./config/searchConfig.js";
 import {SearchContext} from "../../context/searchContext.js";
@@ -24,6 +24,7 @@ const ACTIONS = {
     SET_ERROR: 'SET_ERROR',
     SET_MESSAGE: 'SET_MESSAGE',
     SELECT_ITEM: 'SELECT_ITEM',
+    SET_SELECTED_ITEM: 'SET_SELECTED_ITEM',
     TOGGLE_ITEM_SELECTION: 'TOGGLE_ITEM_SELECTION',
     CLEAR_SELECTION: 'CLEAR_SELECTION',
     RESET_SEARCH: 'RESET_SEARCH',
@@ -51,6 +52,8 @@ function searchReducer(state, action) {
             return {...state, message: action.payload};
         case ACTIONS.SELECT_ITEM:
             return {...state, selectedItem: action.payload};
+            case ACTIONS.SET_SELECTED_ITEM:
+                return {...state, selectedItem: action.payload};
         case ACTIONS.TOGGLE_ITEM_SELECTION:
             
             const {item, idField, selectionMode} = action.payload;
@@ -103,6 +106,8 @@ const SearchProvider = ({children, customConfig = null}) => {
 
     const loadingState = useLoadingState(state.loading, state.operationType);
 
+    const [isTyping, setIsTyping] = useState(false);
+
     const config = useMemo(() => {
         return customConfig || getConfigForRoutes(location.pathname);
     }, [customConfig, location.pathname]);
@@ -122,7 +127,12 @@ const SearchProvider = ({children, customConfig = null}) => {
             
             if (response?.success && Array.isArray(response.data)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response.data});
-
+                if (response.data.length > 0) {
+                    dispatch({
+                        type: ACTIONS.SET_SELECTED_ITEM,
+                        payload: response.data[0]
+                    });
+                }
                 if (response.data.length === 0 && searchQuery.trim().length >=3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
@@ -133,6 +143,13 @@ const SearchProvider = ({children, customConfig = null}) => {
                 }
             } else if (Array.isArray(response)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response});
+                
+                if (response.length > 0) {
+                    dispatch({
+                        type: ACTIONS.SET_SELECTED_ITEM,
+                        payload: response[0]
+                    });
+                }
 
                 if (response.length === 0 && searchQuery.trim().length >= 3) {
                     dispatch({
@@ -145,7 +162,7 @@ const SearchProvider = ({children, customConfig = null}) => {
             } else {
                 console.warn('Unexpected search response format: ', response);
                 dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-                if(searchQuery.trim().length < 3) {
+                if(searchQuery.trim().length >= 3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
@@ -175,7 +192,8 @@ const SearchProvider = ({children, customConfig = null}) => {
                 let timeoutId;
                 return (value) => {
                     clearTimeout(timeoutId);
-                    timeoutId = setTimeout(() => performSearch(value), 1000);
+                    setIsTyping(true);
+                    timeoutId = setTimeout(() => { setIsTyping(false); performSearch(value);} , 1000);
                 };
             })(),
         [performSearch]);
@@ -188,12 +206,28 @@ const SearchProvider = ({children, customConfig = null}) => {
         dispatch({type: ACTIONS.SET_QUERY, payload: newQuery});
         dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
         if (newQuery.trim()) {
+            setIsTyping(true);
             debouncedSearch(newQuery);
         } else {
+            setIsTyping(false);
             dispatch({type: ACTIONS.SET_RESULTS, payload: []});
             
         }
     };
+    const setSelectedItem = (item) => {
+        if(!item) return;
+        dispatch({
+            type: ACTIONS.SET_SELECTED_ITEM,
+            payload: item
+        });
+    };
+    const handleItemFocus = (item) => {
+        if(!item)return;
+        dispatch({
+            type: ACTIONS.SET_SELECTED_ITEM || ACTIONS.SELECT_ITEM,
+            payload: item
+        });
+    }
 
     const handleSelectItem = (item) => {
         if (!item) return;
@@ -210,7 +244,7 @@ const SearchProvider = ({children, customConfig = null}) => {
     const setOperationType = (type) => {
         dispatch({type: ACTIONS.SET_OPERATION_TYPE, payload: type});
     };
-
+   
     const handleAction = async (actionFn, operationType = 'update') => {
         if (!actionFn) return;
 
@@ -226,7 +260,24 @@ const SearchProvider = ({children, customConfig = null}) => {
             dispatch({type: ACTIONS.FINISH_LOADING});
         }
     };
-
+    const executeActionForSelectedItem = useCallback(() => {
+        if (state.selectionMode === 'multiple' && state.selectedItems.length > 0) {
+            // For multiple selection mode
+            return handleAction(() => {
+                if (onAction) {
+                    onAction(state.selectedItems);
+                }
+            }, 'update');
+        } else if (state.selectedItem) {
+            // For single selection mode  
+            return handleAction(() => {
+                if (onAction) {
+                    onAction(state.selectedItem);
+                }
+            }, 'update');
+        }
+        return Promise.resolve();
+    }, [state.selectionMode, state.selectedItem, state.selectedItems, handleAction]);
     const isItemSelected = (item) => {
         if (!item) return false;
 
@@ -253,13 +304,17 @@ const SearchProvider = ({children, customConfig = null}) => {
         ...state,
         config,
         loadingState,
+        isTyping,
+        handleItemFocus,
         handleInputChange,
         handleSelectItem,
+        setSelectedItem,
         handleAction,
         setOperationType,
         isItemSelected,
         clearSelection,
         resetSearch,
+        executeActionForSelectedItem,
         selectionMode: config?.selectionMode || 'single',
     };
 
