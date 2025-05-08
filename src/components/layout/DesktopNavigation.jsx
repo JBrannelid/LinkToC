@@ -87,7 +87,7 @@ const DesktopNavigation = () => {
             </Link>
           </nav>
         </div>
-        <div className="flex items-center space-x-6">
+        <div className="flex items-center space-x-10">
           <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
             <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
           </Link>
