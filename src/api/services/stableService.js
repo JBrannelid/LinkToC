@@ -17,15 +17,15 @@ const stableService = {
       };
 
       const queryString = Object.entries(searchParams)
-        .map(
-          ([key, value]) =>
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
-        )
-        .join("&");
+          .map(
+              ([key, value]) =>
+                  `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+          )
+          .join("&");
 
       // Send GET-request
       const response = await axiosInstance.get(
-        `${ENDPOINTS.STABLE}/search?${queryString}`
+          `${ENDPOINTS.STABLE}/search?${queryString}`
       );
 
       // Handle response and return value if the response is sucess
@@ -42,15 +42,15 @@ const stableService = {
 
   createWithWallPost: async (data) => {
     return await axiosInstance.post(
-      `${ENDPOINTS.STABLE}/create-with-wall-post`,
-      data
+        `${ENDPOINTS.STABLE}/create-with-wall-post`,
+        data
     );
   },
 
   // Get requests for a stable
   getStableRequests: async (stableId) => {
     const response = await axiosInstance.get(
-      `${ENDPOINTS.STABLE_REQUESTS}/${stableId}`
+        `${ENDPOINTS.STABLE_REQUESTS}/${stableId}`
     );
 
     if (response && response.isSuccess && Array.isArray(response.value)) {
@@ -66,7 +66,7 @@ const stableService = {
   // Get invites from a stable to a user
   getStableInvites: async (stableId) => {
     const response = await axiosInstance.get(
-      `${ENDPOINTS.STABLE_INVITES}/${stableId}`
+        `${ENDPOINTS.STABLE_INVITES}/${stableId}`
     );
 
     if (response && response.isSuccess && Array.isArray(response.value)) {
@@ -97,8 +97,8 @@ const stableService = {
   // For rejecting an application request from a user to join the stable
   rejectStableJoinRequest: async (requestData) => {
     return await axiosInstance.post(
-      `/api/refuse-stable-join-request`,
-      requestData
+        `/api/refuse-stable-join-request`,
+        requestData
     );
   },
 
@@ -110,8 +110,8 @@ const stableService = {
   // Accept a stable join request
   acceptStableJoinRequest: async (requestData) => {
     return await axiosInstance.post(
-      `/api/accept-stable-join-request`,
-      requestData
+        `/api/accept-stable-join-request`,
+        requestData
     );
   },
 
@@ -119,7 +119,7 @@ const stableService = {
   getUserStableRequests: async (userId) => {
     try {
       const response = await axiosInstance.get(
-        `/api/get-stable-join-requests-by-user/${userId}`
+          `/api/get-stable-join-requests-by-user/${userId}`
       );
 
       // The API returns data in the 'value' property
@@ -127,7 +127,29 @@ const stableService = {
         return response.value;
       }
 
-    return await axiosConfig.post(`${ENDPOINTS.STABLE}/create-with-wall-post`, data);
+      return [];
+    } catch (error) {
+      console.error("Error fetching user stable requests:", error);
+      throw error;
+    }
+  },
+
+  // Cancel a ongoing join request
+  cancelStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+        `/api/refuse-stable-join-request`,
+        requestData
+    );
+  },
+
+  // Accept an invitation from a stable
+  acceptStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/accept-stable-invite`, inviteData);
+  },
+
+  // Denied an invitation from a stable
+  refuseStableInvite: async (inviteData) => {
+    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
   },
 };
 
