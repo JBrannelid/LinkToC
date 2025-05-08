@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 import { useAppContext } from "./context/AppContext";
 import HeaderContainer from "./components/layout/HeaderContainer";
 import DesktopNavigation from "./components/layout/DesktopNavigation";
+import DesktopFooter from "./components/layout/DesktopFooter";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -23,10 +24,15 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Only visible on lg screens */}
-      <DesktopNavigation />
-
+      <header>
+        <DesktopNavigation />
+      </header>
       {/* Hide header on lg screens */}
-      {showHeader && <HeaderContainer className="lg:hidden" />}
+      {showHeader && (
+        <header className="lg:hidden">
+          <HeaderContainer />
+        </header>
+      )}
 
       <main className="flex-1">
         <Outlet />
@@ -38,6 +44,9 @@ function App() {
           <NavigationFooter />
         </footer>
       )}
+      <footer>
+        <DesktopFooter />
+      </footer>
     </div>
   );
 }
