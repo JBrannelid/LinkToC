@@ -92,9 +92,8 @@ export default function StablePostPage() {
       </div>
     );
   }
-
   return (
-    <div className="bg-background flex flex-col overflow-y-hidden pb-30">
+    <div className="bg-background flex flex-col overflow-y-hidden pb-30 relative min-h-screen">
       <div>
         <ModalHeader title="Board" />
       </div>
@@ -108,25 +107,7 @@ export default function StablePostPage() {
           title={currentPost ? "Edit Post" : "New Post"}
         />
       )}
-
       <div className="flex-1 px-6 py-2 overflow-y-auto">
-        {/* Create new post button */}
-        {canCreatePosts && (
-          <div className="mb-1">
-            <div className="flex justify-end">
-              <Button
-                type="primary"
-                variant="icon"
-                className="!text-primary"
-                onClick={handleOpenCreateForm}
-                aria-label="Add new post"
-              >
-                <AddNoteIcon className="w-9 h-9" />
-              </Button>
-            </div>
-          </div>
-        )}
-
         {/* A list containing post with edit options */}
         <PostContainer
           posts={posts}
@@ -135,6 +116,21 @@ export default function StablePostPage() {
           onTogglePin={handleTogglePin}
         />
       </div>
+
+      {/* Create new post button fixed to view port */}
+      {canCreatePosts && (
+        <div className="fixed bottom-20 left-81 z-50">
+          <Button
+            type="primary"
+            variant="icon"
+            className="!text-primary"
+            onClick={handleOpenCreateForm}
+            aria-label="Add new post"
+          >
+            <AddNoteIcon className="w-11 h-11" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
