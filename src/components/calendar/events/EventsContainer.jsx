@@ -32,7 +32,7 @@ const EventsContainer = ({
   // Display mobileview
   if (viewMode === "mobile") {
     return (
-      <div className="md:hidden mb-10">
+      <div className="md:hidden mb-10 md:mb-0">
         <MobileEventsView
           selectedDay={selectedDay}
           events={sortedEvents}
@@ -52,7 +52,7 @@ const EventsContainer = ({
 
   // Fallback to DesktopEventsView
   return (
-    <div className="mb-12">
+    <div>
       <DesktopEventsView
         selectedDay={selectedDay}
         events={sortedEvents}
