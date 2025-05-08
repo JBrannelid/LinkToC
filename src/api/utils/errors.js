@@ -5,6 +5,7 @@ export const ErrorTypes = {
   SERVER: "server",
   AUTH: "auth",
   UNKNOWN: "unknown",
+  NOT_FOUND: "Not Found",
 };
 
 // Standardized error object
@@ -28,8 +29,11 @@ export function handleAxiosError(error) {
       exception = ErrorTypes.SERVER;
     } else if (status === 400) {
       exception = ErrorTypes.VALIDATION;
+    } else if (status === 404) {
+      exception = ErrorTypes.NOT_FOUND;
     }
-    return createError(data?.message || "An error occored", exception, status);
+
+    return createError(data?.message || "An error occurred", exception, status);
   }
 
   // The request was made but no response was received (network error)
