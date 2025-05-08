@@ -8,7 +8,8 @@ const SearchResults = ({
                           className = '',
                           maxHeight = '20rem',
                           showWhenEmpty = false,
-                          onItemSelect
+                          onItemSelect,
+    onItemFocus = null
                       }) => {
     const {
         results,
@@ -17,9 +18,11 @@ const SearchResults = ({
         message,
         config,
         handleSelectItem,
+        handleItemFocus : contextHandleItemFocus ,
         isItemSelected,
         query,
-        loadingState
+        loadingState,
+        isTyping
     } = useSearch();
 
     const resultsRef = useRef(null);
@@ -27,6 +30,16 @@ const SearchResults = ({
         handleSelectItem(item);
         if(onItemSelect) {
             onItemSelect(item);
+        }
+    };
+    const handleItemFocus = (item) => {
+        if(onItemFocus) {
+            onItemFocus(item);
+        }
+        if(contextHandleItemFocus) {
+            contextHandleItemFocus(item);
+        } else {
+            handleSelectItem(item);
         }
     };
     useEffect(() => {
@@ -60,6 +73,22 @@ const SearchResults = ({
                 
             );
         }
+        if (query.trim().length > 0 && query.trim().length < 3 && !isTyping) {
+            return (
+                <div className="p-4 text-center text-gray-500 ">
+                    <p className="text-sm">
+                        Please enter at least 3 characters to start searching
+                    </p>
+                </div>
+            );
+        }
+        if(results.length === 0 && query.trim().length >= 3 && !isTyping){
+            return (
+                <div className="p-4 text-center text-gray">
+                    <p>{config?.noResultsText || 'No results found'}</p>
+                </div>
+            );
+        }
         if (message){
             return (
                 <div role="alert">
@@ -77,13 +106,9 @@ const SearchResults = ({
                 </div>
             );
         }
-        // if(results.length === 0 && query.trim().length >= 3 && !loading){
-        //     return (
-        //         <div className="p-4 text-center text-gray">
-        //             <p>{config?.noResultsText || 'No results found'}</p>
-        //         </div>
-        //     );
-        // }
+        if (!query && !showWhenEmpty && results.length === 0) {
+            return null;
+        }
         
         const {layout = 'list', resultItemRenderer, columns = 1} = config || {};
         
@@ -105,9 +130,11 @@ const SearchResults = ({
                             key={itemId || index}
                             item={item}
                             isSelected={isSelected}
-                            onSelectItem={handleItemClick}
+                            onSelect={handleItemClick}
+                            onFocus={handleItemFocus}
                             config={config}
                             index={index}
+                            data-index={index}
                             />
                     );
                 })}
@@ -122,7 +149,6 @@ const SearchResults = ({
                         const itemId = item[config?.idField || 'id'];
                         const isSelected = isItemSelected(item);
 
-                        // Use the custom renderer if provided or fall back to default list item
                         const ItemRenderer = resultItemRenderer || ListItemRenderer;
 
                         return (
@@ -131,8 +157,10 @@ const SearchResults = ({
                                 item={item}
                                 isSelected={isSelected}
                                 onSelect={handleItemClick}
+                                onFocus={handleItemFocus}
                                 config={config}
                                 index={index}
+                                data-index={index}
                             />
                         );
                     })}
@@ -143,6 +171,7 @@ const SearchResults = ({
     return (
         <div
         ref={resultsRef}
+        id="search-results"
         className={`overflow-y-auto ${className}`}
         style={{maxHeight}}
         aria-live="polite">
