@@ -47,9 +47,9 @@ const Button = ({
 
   // Size overrides for icon variant
   const iconSizeStyles = {
-    small: "w-10 h-10",
-    medium: "p-2 w-15 h-15",
-    large: "p-3 w-20 h-20",
+    small: "p-1 w-8 h-8",
+    medium: "p-2 w-10 h-10",
+    large: "p-3 w-12 h-12",
   };
 
   // Font weight
