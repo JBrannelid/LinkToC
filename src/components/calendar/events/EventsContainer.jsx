@@ -14,6 +14,7 @@ const EventsContainer = ({
   onAddEvent,
   onClose,
   isOpen,
+  onBackToWall,
   viewMode = "mobile",
 }) => {
   // Sort events by start time and remeber events with react useMemo()
@@ -63,6 +64,7 @@ const EventsContainer = ({
         onUpdateEvent={onUpdateEvent}
         onDeleteEvent={onDeleteEvent}
         onAddEvent={onAddEvent}
+        onBackToWall={onBackToWall}
       />
     </div>
   );
