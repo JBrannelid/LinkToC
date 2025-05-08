@@ -45,9 +45,6 @@ const ForgotPasswordPage = () => {
           {success ? (
             <AuthFormContainer title="Epost skickad!">
               <div className="bg-green-50 p-5 rounded-md">
-                <h2 className="text-xl font-bold text-primary">
-                  E-post skickad!
-                </h2>
                 <p className="mt-5">
                   Instruktioner för att återställa ditt lösenord har skickats
                   till din e-post. Kontrollera din inkorg (och skräppost) för

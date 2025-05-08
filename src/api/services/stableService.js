@@ -127,29 +127,7 @@ const stableService = {
         return response.value;
       }
 
-      return [];
-    } catch (error) {
-      console.error("Error fetching user stable requests:", error);
-      throw error;
-    }
-  },
-
-  // Cancel a ongoing join request
-  cancelStableJoinRequest: async (requestData) => {
-    return await axiosInstance.post(
-      `/api/refuse-stable-join-request`,
-      requestData
-    );
-  },
-
-  // Accept an invitation from a stable
-  acceptStableInvite: async (inviteData) => {
-    return await axiosInstance.post(`/api/accept-stable-invite`, inviteData);
-  },
-
-  // Denied an invitation from a stable
-  refuseStableInvite: async (inviteData) => {
-    return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
+    return await axiosConfig.post(`${ENDPOINTS.STABLE}/create-with-wall-post`, data);
   },
 };
 
