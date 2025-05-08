@@ -18,7 +18,14 @@ const userService = {
       `${ENDPOINTS.EXTRACT_USER_ROLES}${userId}`
     );
 
-    // Just return the value array directly
+    return response.value;
+  },
+
+  getUsersByStableId: async (stableId) => {
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.EXTRACT_USER_ROLES}/stableId/${stableId}`
+    );
+
     return response.value;
   },
 
