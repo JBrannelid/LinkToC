@@ -134,7 +134,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-svh pb-20 sm:pb-0 mt-10 sm:mt-15 md:mt-20 px-1 sm:px-2 md:px-5 lg:px-25">
+    <div className="pb-20 sm:p-0.5 mt-10 sm:mt-15 md:mt-20 px-1 sm:px-2 md:px-5 lg:px-25">
       {/* Stable Title */}
       <h1 className="text-center mb-5 md:pb-10">
         <StableName currentStableId={currentStable.id} />
