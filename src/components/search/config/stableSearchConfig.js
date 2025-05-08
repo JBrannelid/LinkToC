@@ -1,6 +1,5 @@
-import { createSearchConfig} from "./searchConfigBase.js";
+import {createSearchConfig} from "./searchConfigBase.js";
 import {stableService} from "../../../api/index.js";
-import {createErrorMessage, getErrorMessage} from "../../../utils/errorUtils.js";
 
 // const stableId = currentStable?.id;
 const stableSearchConfig = createSearchConfig({
@@ -14,11 +13,11 @@ const stableSearchConfig = createSearchConfig({
                 page: 0,
                 pageSize: 10,
             };
-            
+
 
             const response = await stableService.search(params);
-            
-            if(!response) {
+
+            if (!response) {
                 throw new Error('No response from server. Please try again.');
             }
 
@@ -67,7 +66,7 @@ const stableSearchConfig = createSearchConfig({
 
         } catch (error) {
             console.error('Stable search error:', error);
-            
+
             return {
                 success: false,
                 data: [],

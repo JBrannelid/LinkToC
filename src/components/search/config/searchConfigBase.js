@@ -1,22 +1,22 @@
 const baseSearchConfig = {
     entityType: 'generic',
-    
+
     searchFn: null,
-    
+
     idField: 'id',
     labelField: 'name',
     secondaryField: 'description',
     imageField: 'image',
-    
+
     placeHolderText: 'Search for...',
     actionButton: 'Select',
     cancelButton: 'Cancel',
-    noResultsText:'No results found. Try another search term.',
+    noResultsText: 'No results found. Try another search term.',
     errorText: 'An error occurred while searching. Please try again.',
     loadingText: 'Searching...',
-    
+
     selectionMode: 'single',
-    
+
     searchParams: {
         page: 0,
         pageSize: 10,

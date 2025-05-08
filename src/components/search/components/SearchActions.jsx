@@ -1,14 +1,14 @@
-import React, {useImperativeHandle, useRef} from 'react';
+import React, {useRef} from 'react';
 import {useSearch} from "../../../context/searchContext";
 import Button from '../../ui/Button'
 
-const SearchActions =({
-    onAction,
-    onCancel,
-    actionButtonClassName = '',
-    cancelButtonClassName = '',
-    actionsContainerClassName = ''
-}) => {
+const SearchActions = ({
+                           onAction,
+                           onCancel,
+                           actionButtonClassName = '',
+                           cancelButtonClassName = '',
+                           actionsContainerClassName = ''
+                       }) => {
     const {
         config,
         selectedItem,
@@ -17,25 +17,25 @@ const SearchActions =({
         loadingState,
         selectionMode
     } = useSearch();
-    
+
     const isActionEnabled = selectionMode === 'multiple' ? selectedItems.length > 0 : selectedItem !== null;
-    
+
     const handleActionClick = () => {
-        if(onAction){
-            if(selectionMode === 'multiple'){
+        if (onAction) {
+            if (selectionMode === 'multiple') {
                 onAction(selectedItems);
-            }else{
+            } else {
                 onAction(selectedItem);
             }
         }
     };
     const handleCancelClick = () => {
-        if(onCancel){
+        if (onCancel) {
             onCancel();
         }
     };
     const actionButtonRef = useRef(null);
-    
+
     return (
         <div className={`space-y-3 ${actionsContainerClassName}`}>
             {/* Primary action button (Join, Select, etc.) */}

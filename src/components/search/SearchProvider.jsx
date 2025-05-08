@@ -3,7 +3,7 @@ import {useCallback, useEffect, useMemo, useReducer, useState} from "react";
 import {useLoadingState} from "../../hooks/useLoadingState.js";
 import {getConfigForRoutes} from "./config/searchConfig.js";
 import {SearchContext} from "../../context/searchContext.js";
-import {getErrorMessage, createErrorMessage} from "../../utils/errorUtils.js";
+import {createErrorMessage, getErrorMessage} from "../../utils/errorUtils.js";
 
 const initialState = {
     query: "",
@@ -47,15 +47,19 @@ function searchReducer(state, action) {
         case ACTIONS.FINISH_LOADING:
             return {...state, loading: false}
         case ACTIONS.SET_ERROR:
-            return {...state, error: typeof action.payload === 'string' ? createErrorMessage(action.payload) : getErrorMessage(action.payload), loading: false};
+            return {
+                ...state,
+                error: typeof action.payload === 'string' ? createErrorMessage(action.payload) : getErrorMessage(action.payload),
+                loading: false
+            };
         case ACTIONS.SET_MESSAGE:
             return {...state, message: action.payload};
         case ACTIONS.SELECT_ITEM:
             return {...state, selectedItem: action.payload};
-            case ACTIONS.SET_SELECTED_ITEM:
-                return {...state, selectedItem: action.payload};
+        case ACTIONS.SET_SELECTED_ITEM:
+            return {...state, selectedItem: action.payload};
         case ACTIONS.TOGGLE_ITEM_SELECTION:
-            
+
             const {item, idField, selectionMode} = action.payload;
             const itemId = item[idField || 'id'];
 
@@ -122,9 +126,9 @@ const SearchProvider = ({children, customConfig = null}) => {
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: 'fetch'});
             dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
-            
+
             const response = await config.searchFn(searchQuery);
-            
+
             if (response?.success && Array.isArray(response.data)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response.data});
                 if (response.data.length > 0) {
@@ -133,17 +137,17 @@ const SearchProvider = ({children, customConfig = null}) => {
                         payload: response.data[0]
                     });
                 }
-                if (response.data.length === 0 && searchQuery.trim().length >=3) {
+                if (response.data.length === 0 && searchQuery.trim().length >= 3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
                     });
-                }else {
+                } else {
                     dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             } else if (Array.isArray(response)) {
                 dispatch({type: ACTIONS.SET_RESULTS, payload: response});
-                
+
                 if (response.length > 0) {
                     dispatch({
                         type: ACTIONS.SET_SELECTED_ITEM,
@@ -156,18 +160,18 @@ const SearchProvider = ({children, customConfig = null}) => {
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found')
                     });
-                }else {
+                } else {
                     dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             } else {
                 console.warn('Unexpected search response format: ', response);
                 dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-                if(searchQuery.trim().length >= 3) {
+                if (searchQuery.trim().length >= 3) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
                     });
-                }else {
+                } else {
                     dispatch({type: ACTIONS.SET_MESSAGE, payload: null});
                 }
             }
@@ -193,14 +197,17 @@ const SearchProvider = ({children, customConfig = null}) => {
                 return (value) => {
                     clearTimeout(timeoutId);
                     setIsTyping(true);
-                    timeoutId = setTimeout(() => { setIsTyping(false); performSearch(value);} , 1000);
+                    timeoutId = setTimeout(() => {
+                        setIsTyping(false);
+                        performSearch(value);
+                    }, 1000);
                 };
             })(),
         [performSearch]);
 
     const handleInputChange = (event) => {
         const newQuery = event.target.value;
-        if(state.error){
+        if (state.error) {
             dispatch({type: ACTIONS.SET_ERROR, payload: null})
         }
         dispatch({type: ACTIONS.SET_QUERY, payload: newQuery});
@@ -211,18 +218,18 @@ const SearchProvider = ({children, customConfig = null}) => {
         } else {
             setIsTyping(false);
             dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-            
+
         }
     };
     const setSelectedItem = (item) => {
-        if(!item) return;
+        if (!item) return;
         dispatch({
             type: ACTIONS.SET_SELECTED_ITEM,
             payload: item
         });
     };
     const handleItemFocus = (item) => {
-        if(!item)return;
+        if (!item) return;
         dispatch({
             type: ACTIONS.SET_SELECTED_ITEM || ACTIONS.SELECT_ITEM,
             payload: item
@@ -244,7 +251,7 @@ const SearchProvider = ({children, customConfig = null}) => {
     const setOperationType = (type) => {
         dispatch({type: ACTIONS.SET_OPERATION_TYPE, payload: type});
     };
-   
+
     const handleAction = async (actionFn, operationType = 'update') => {
         if (!actionFn) return;
 
@@ -319,8 +326,9 @@ const SearchProvider = ({children, customConfig = null}) => {
     };
 
     return (
-        <SearchContext.Provider value={{...contextValue,
-        error: typeof state.error === 'string' ? createErrorMessage(state.error) : state.error,
+        <SearchContext.Provider value={{
+            ...contextValue,
+            error: typeof state.error === 'string' ? createErrorMessage(state.error) : state.error,
         }}
         >
             {state.error && (

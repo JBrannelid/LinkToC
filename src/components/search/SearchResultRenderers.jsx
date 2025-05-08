@@ -1,26 +1,26 @@
-import React, {createElement, useState} from 'react';
+import React, {createElement} from 'react';
 import Button from "../ui/Button.jsx";
 
 export const ListItemRenderer = ({
-    item,
-    isSelected,
-    onSelect,
-    onFocus,
-    config,
-    actionLabel = 'Join',
-    index,
-    ...props
-}) => {
+                                     item,
+                                     isSelected,
+                                     onSelect,
+                                     onFocus,
+                                     config,
+                                     actionLabel = 'Join',
+                                     index,
+                                     ...props
+                                 }) => {
     const primaryText = item[config?.labelField || 'name']
     const countyText = item.county || '';
     const imageUrl = item[config?.imageField || 'image'];
     const stableType = item.type || '';
     const handleFocus = () => {
-        if(onFocus){
+        if (onFocus) {
             onFocus(item);
         }
     };
-    
+
     const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
     const handleKeyDown = (event) => {
         switch (event.key) {
@@ -108,7 +108,7 @@ export const ListItemRenderer = ({
             </div>
 
             <Button
-                type={isSelected ?'primary' : 'secondary'}
+                type={isSelected ? 'primary' : 'secondary'}
                 size="small"
                 className={`ml-2 whitespace-nowrap transition-colors duration-200 
                     ${!isSelected && 'group-hover:bg-primary group-hover:text-white group-hover:border-primary'}`}
@@ -123,18 +123,18 @@ export const ListItemRenderer = ({
 };
 
 export const GridRenderer = ({
-    items,
-    itemRenderer,
-    onSelect,
-    config,
-    columns = 1
-}) => {
+                                 items,
+                                 itemRenderer,
+                                 onSelect,
+                                 config,
+                                 columns = 1
+                             }) => {
     const gridClassName = `grid gap-4 ${
         columns === 1 ? '' :
             columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3'
     }`;
-    
-    return(
+
+    return (
         <div className={gridClassName}>
             {items.map((item, index) => (
                 createElement(itemRenderer, {
@@ -144,7 +144,7 @@ export const GridRenderer = ({
                     config,
                 })
             ))}
-            
+
         </div>
     );
 };
