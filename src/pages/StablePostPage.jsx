@@ -133,7 +133,7 @@ export default function StablePostPage() {
           </div>
         </div>
         {/* Right sidebar - visible on md display*/}
-        <div className="hidden md:flex md:flex-col md:w-1/4 p-4 space-y-5 mt-13">
+        <div className="hidden md:flex md:flex-col md:w-1/4 p-4 space-y-5 mt-18">
           <div className="bg-white rounded-xl shadow-md p-4">
             <h3 className="font-medium text-md mb-3">Stable Info</h3>
             <p className="text-sm lg:text-md mb-2">
@@ -175,7 +175,7 @@ export default function StablePostPage() {
           <Button
             type="primary"
             variant="icon"
-            size="small"
+            size="medium"
             className="text-primary "
             onClick={handleOpenCreateForm}
             aria-label="Add new post"
