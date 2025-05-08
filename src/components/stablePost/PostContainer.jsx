@@ -50,13 +50,6 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
   // Group posts into 'today', 'yesterday', and 'older' categories
   const groupedPosts = groupPostsByDate();
 
-  if (!posts || posts.length === 0) {
-    return (
-      <div className="text-center py-6">
-        <p className="text-gray-500">There are no posts available</p>
-      </div>
-    );
-  }
   return (
     <div className="py-2">
       {groupedPosts.today.length > 0 && (
