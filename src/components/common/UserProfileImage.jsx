@@ -2,27 +2,17 @@ import React from "react";
 
 const UserProfileImage = ({
   user,
-  size = "mini",
+  size = "small",
   className = "",
   customContent,
 }) => {
   // STEP 1: Set up the size of the avatar circle based on the size prop
-  let sizeClass = "h-10 w-10";
-
-  if (size === "mini") {
-    sizeClass = "h-4 w-4";
-  } else if (size === "tiny") {
-    sizeClass = "h-6 w-6";
-  } else if (size === "small") {
-    sizeClass = "h-8 w-8";
-  } else if (size === "large") {
-    sizeClass = "h-12 w-12";
-  }
+  let sizeClass = "h-4 w-4";
 
   // STEP 2: Determine font size for the initials
   let fontSizeClass = "text-sm";
 
-  if (size === "mini" || size === "tiny") {
+  if (size === "small") {
     fontSizeClass = "text-mini";
   }
 
@@ -89,7 +79,7 @@ const UserProfileImage = ({
           className={`${sizeClass} rounded-full object-cover`}
         />
       ) : (
-        <span className={`${fontSizeClass} font-semibold`}>
+        <span className={`${fontSizeClass} lg:text-sm font-semibold`}>
           {customContent || getInitials()}
         </span>
       )}
