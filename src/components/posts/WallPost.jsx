@@ -72,7 +72,9 @@ export default function WallPost() {
 
   return (
     <div className="px-2 md:px-0 w-full md:max-w-full">
-      <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Wall</h2>
+      <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
+        Important notes
+      </h2>
 
       {/* Display all pinned posts */}
       {sortedPinnedPosts.map((post) => (
