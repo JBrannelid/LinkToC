@@ -11,7 +11,6 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { startOfToday } from "../utils/calendarUtils";
 import * as calendarUtils from "../utils/calendarUtils";
 import EventForm from "../components/forms/EventForm";
-import Button from "../components/ui/Button";
 
 export default function HomePage() {
   const [selectedDay, setSelectedDay] = useState(startOfToday());
@@ -187,10 +186,8 @@ export default function HomePage() {
                 onAddEvent={handleOpenEventForm}
                 isOpen={true}
                 viewMode="desktop"
+                onBackToWall={handleBackToWall}
               />
-              <Button type="secondary" onClick={handleBackToWall}>
-                <p>← Back to wall</p>
-              </Button>
             </div>
           )}
         </Calendar>
