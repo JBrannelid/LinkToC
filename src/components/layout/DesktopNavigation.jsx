@@ -60,7 +60,7 @@ const DesktopNavigation = () => {
                   : "text-black hover:text-primary"
               }`}
             >
-              Board
+              Feed
             </Link>
             <Link
               to={buildRoute(ROUTES.HORSE_PROFILE, {
