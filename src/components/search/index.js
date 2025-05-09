@@ -5,6 +5,6 @@ import SearchResults from "./components/SearchResults.jsx";
 import SearchField from "./components/SearchField.jsx";
 
 
-export {SearchBar,SearchResults,SearchActions,SearchField,SearchProvider};
+export {SearchBar, SearchResults, SearchActions, SearchField, SearchProvider};
 
 
