@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../../routes/index.jsx";
 import WelcomeScreen from "./WelcomeScreen.jsx";
@@ -39,7 +39,7 @@ const StableOnboardingContainer = () => {
         
     };
 
-    const handleStableJoinSuccess = async (data) => {
+    const handleStableJoinSuccess = useCallback (async (data) => {
         if (data.action === 'join' && data.stableId) {
             try {
                 const stableName = typeof data.stableName === 'object'
@@ -56,7 +56,7 @@ const StableOnboardingContainer = () => {
                 console.error("Error updating stable state:", error);
             }
         }
-    };
+    }, [handleJoinStable, navigate]);
 
    
     const handleGoToCreateStable = () => navigateToStep("create");
