@@ -51,8 +51,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      email: "",
-      phoneNumber: "",
+      // email: "",
+      // phoneNumber: "",
       current_password: "",
       new_password: "",
       confirm_password: "",
@@ -206,6 +206,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     label="Email"
                     name="email"
                     labelPosition="above"
+                    readOnly={true} // Change to false when BE allow us to edit
+                    inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
                     validation={{
                       required: "Email krävs",
                       pattern: {
@@ -222,6 +224,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     label="Telefonnummer"
                     name="phoneNumber"
                     labelPosition="above"
+                    readOnly={true} // Change to false when BE allow us to edit
+                    inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
                     validation={{
                       pattern: {
                         value:

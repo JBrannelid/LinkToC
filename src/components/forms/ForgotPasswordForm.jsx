@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Send, AlertCircle } from "lucide-react";
+import {Send, AlertCircle, ArrowLeft} from "lucide-react";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
@@ -12,12 +12,15 @@ import {
   createErrorMessage,
 } from "../../utils/errorUtils.js";
 import Button from "../ui/Button.jsx";
+import {ROUTES} from "../../routes/index.jsx";
+import {useNavigate} from "react-router";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [lastSubmitTime, setLastSubmitTime] = useState(0);
   const [cooldownRemaining, setCooldownRemaining] = useState(0);
+  const navigate = useNavigate();
 
   const methods = useForm({
     defaultValues: {
@@ -31,6 +34,9 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
       setParentLoading(loading);
     }
   }, [loading, setParentLoading]);
+  const handleGoBack = () => {
+    navigate(ROUTES.LOGIN);
+  };
 
   // Effect to handle cooldown timer
   useEffect(() => {
@@ -123,7 +129,8 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
     <FormProvider
       methods={methods}
       onSubmit={handleSubmit}
-      footer={{ showFooter: false }}
+      className="forgot-password-form"
+      ariaLabel="Forgot Password Form"
     >
       <div className="mt-4">
         <FormInput
@@ -153,7 +160,8 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
 
       <div className="mt-5">
         <Button
-          type="submit"
+          type="primary"
+          htmlType="submit"
           disabled={loading || cooldownRemaining > 0}
           aria-busy={loading}
         >
@@ -163,6 +171,14 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
               ? `Vänta ${cooldownRemaining} sekunder...`
               : "Skicka återställningslänk"}
           </span>
+        </Button>
+        <Button
+            type="secondary"
+            onClick={handleGoBack}
+            className="mt-5 flex items-center text-primary hover:underline"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Tillbaka till inloggning
         </Button>
         <p className="text-xs pt-5 text-error-500">
           <span>OBS: </span>Kontrollera din skräppostmapp

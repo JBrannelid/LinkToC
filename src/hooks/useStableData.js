@@ -17,8 +17,13 @@ export function useStableData(stableId) {
       setLoading(true);
       setError(null);
 
-      // Get all stables
-      const response = await stableService.getAll();
+      // Search with empty parameters to get all stables
+      const response = await stableService.search({
+        searchTerm: "",
+        page: 0,
+        pageSize: 100,
+      });
+
       const stableList = Array.isArray(response) ? response : [];
       setStables(stableList);
 

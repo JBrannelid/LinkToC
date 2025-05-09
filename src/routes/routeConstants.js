@@ -13,6 +13,8 @@ export const ROUTES = {
   STABLE_ONBOARDING: "/stable-onboarding",
   NOTIFICATIONS: "/notifications",
   STABLE_HORSES: "/stable-horses",
+  MANAGE_STABLE: "/manage-stable",
+  STABLE_REQUESTS: "/stable-requests",
 };
 
 // Dynamic routes with params

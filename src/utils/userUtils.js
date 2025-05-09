@@ -1,5 +1,9 @@
-export const handleManageStables = () => {
-  console.log("Manage Stables clicked");
+export const handleManageStables = (navigate, ROUTES) => {
+  navigate(ROUTES.MANAGE_STABLE);
+};
+
+export const handleStableRequests = (navigate, ROUTES) => {
+  navigate(ROUTES.STABLE_REQUESTS);
 };
 
 export const handleTermsOfService = () => {

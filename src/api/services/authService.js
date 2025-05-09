@@ -1,38 +1,43 @@
 import createBaseService from "./baseService.js";
 import { ENDPOINTS } from "./endpoints.js";
-import axiosConfig from "../config/axiosConfig.js";
+import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage.js";
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 
-const authService  = {
-    ...baseService,
-    // Login: POST /api/auth/login
-    login: async (loginData) => {
-        if (!loginData || !loginData.email || !loginData.password) {
-            throw new Error("Email and password are required");
-        }
-        try {
-            return await axiosConfig.post(`${ENDPOINTS.AUTH}/login`, loginData);
-        }catch(error) {
-            if(error.response) {
-                const errorMessage = error.response.data?.message || "Authentication failed. Please check your credentials.";
-                throw new Error(errorMessage);
-            } else if(error.request) {
-                throw new Error("No response from authentication server. Please try again later.");
-            } else {
-                throw new Error(`Error setting up authentication request: ${error.message}`);
-            }
-        }
-        
-    },
+const authService = {
+  ...baseService,
+  // Login: POST /api/auth/login
+  login: async (loginData) => {
+    if (!loginData || !loginData.email || !loginData.password) {
+      throw new Error("Email and password are required");
+    }
+    try {
+      return await axiosInstance.post(`${ENDPOINTS.AUTH}/login`, loginData);
+    } catch (error) {
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message ||
+          "Authentication failed. Please check your credentials.";
+        throw new Error(errorMessage);
+      } else if (error.request) {
+        throw new Error(
+          "No response from authentication server. Please try again later."
+        );
+      } else {
+        throw new Error(
+          `Error setting up authentication request: ${error.message}`
+        );
+      }
+    }
+  },
 
   // Register: POST /api/auth/register
   register: async (registerData) => {
     if (!registerData) {
       throw new Error("Registration data is required");
     }
-    return await axiosConfig.post(`${ENDPOINTS.AUTH}/register`, registerData);
+    return await axiosInstance.post(`${ENDPOINTS.AUTH}/register`, registerData);
   },
 
   // RefreshToken: POST /api/auth/refreshToken
@@ -43,7 +48,7 @@ const authService  = {
         throw new Error("No token available");
       }
 
-      const response = await axiosConfig.post(
+      const response = await axiosInstance.post(
         `${ENDPOINTS.AUTH}/refresh-token`,
         { refreshToken: refreshToken }
       );
@@ -68,7 +73,7 @@ const authService  = {
       const refreshToken = tokenStorage.getRefreshToken();
       if (!refreshToken) return true;
 
-      const result = await axiosConfig.post(
+      const result = await axiosInstance.post(
         `${ENDPOINTS.AUTH}/revoke-token`,
         { refreshToken },
         {
@@ -86,13 +91,6 @@ const authService  = {
     }
   },
 
-  validateResetToken: async (validateData) => {
-    if (!validateData || !validateData.email || !validateData.resetCode) {
-      throw new Error("Email and reset code are required");
-    }
-    return await axiosConfig.post(`/api/validate-reset-code`, validateData);
-  },
-
   resetPassword: async (resetData) => {
     if (
       !resetData ||
@@ -106,7 +104,7 @@ const authService  = {
       throw new Error("Passwords must match");
     }
 
-    return await axiosConfig.post(`/api/reset-password`, {
+    return await axiosInstance.post(`/api/reset-password`, {
       token: resetData.token,
       newPassword: resetData.newPassword,
       confirmPassword: resetData.confirmPassword,
@@ -117,7 +115,9 @@ const authService  = {
     if (!email) {
       throw new Error("Email is required");
     }
-    return await axiosConfig.post(`/api/password-reset-email/send`, { email });
+    return await axiosInstance.post(`/api/password-reset-email/send`, {
+      email,
+    });
   },
 };
 

@@ -141,7 +141,6 @@ export const useHorseProfile = (horseId) => {
     getHorseData,
     updateHorse,
     deleteHorse,
-    loadingState,
   };
 };
 
