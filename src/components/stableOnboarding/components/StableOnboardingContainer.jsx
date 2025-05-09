@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useCallback, useEffect} from 'react';
 import { useNavigate } from "react-router";
 import { ROUTES } from "../../../routes/index.jsx";
 import WelcomeScreen from "./WelcomeScreen.jsx";
@@ -19,7 +19,6 @@ const StableOnboardingContainer = () => {
         formMethods,
         navigateToStep,
         handleCreateStable,
-        handleSearchStable,
         handleJoinStable
     } = useStableOnboarding();
 
@@ -39,19 +38,25 @@ const StableOnboardingContainer = () => {
         }
         
     };
-    
-    const handleStableJoinSuccess = async (data) => {
-        if (data.action === 'join' && data.stableId) {
-            const result = await handleJoinStable(data.stableId, data.stableName);
 
-            if (result.success) {
+    const handleStableJoinSuccess = useCallback (async (data) => {
+        if (data.action === 'join' && data.stableId) {
+            try {
+                const stableName = typeof data.stableName === 'object'
+                    ? data.stableName.name
+                    : data.stableName;
                 
-                navigate(ROUTES.HOME);
+                const result = await handleJoinStable(data.stableId, stableName);
+
+                if (result.success) {
+                    sessionStorage.removeItem('isFirstLogin');
+                    navigate(ROUTES.HOME);
+                }
+            } catch (error) {
+                console.error("Error updating stable state:", error);
             }
-        } else {
-            return await handleSearchStable(data);
         }
-    };
+    }, [handleJoinStable, navigate]);
 
    
     const handleGoToCreateStable = () => navigateToStep("create");
@@ -90,7 +95,7 @@ const StableOnboardingContainer = () => {
                     <OnboardingLayout title="Join Stable" showImage={false}>
                         <JoinStableForm
                             formMethods={formMethods}
-                            onSubmit={handleGoToJoinStable}
+                            onSubmit={handleStableJoinSuccess}
                             onCancel={handleGoBack}
                             isLoading={loading}
                             loadingState={loadingState}

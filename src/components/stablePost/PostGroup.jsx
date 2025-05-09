@@ -8,7 +8,7 @@ const PostGroup = ({ title, posts, onEditPost, onDeletePost, onTogglePin }) => {
     <>
       {/* Display Header "Today/Yesterday/Older post" */}
       <div className="flex justify-between">
-        <h2 className="text-xl">{title}</h2>
+        <h2 className="text-xl md:text-2xl">{title}</h2>
       </div>
       {/* Loop through posts and render a PostItem for each post */}
       {posts.map((post, index) => (

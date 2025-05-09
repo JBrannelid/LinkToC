@@ -13,7 +13,7 @@ export default function Header() {
     location.pathname.includes("/stable-requests");
 
   return (
-    <div className="relative py-5">
+    <div className="relative py-5 lg:hidden">
       {/* Left side */}
       <Link
         to={ROUTES.SETTINGS} // Open settings

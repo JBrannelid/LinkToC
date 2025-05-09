@@ -14,6 +14,8 @@ import {
   endOfWeek,
   isYesterday,
   startOfYesterday,
+  subWeeks,
+  isWithinInterval,
   parseISO as dateFnsParseISO,
   compareDesc as dateFnsCompareDesc,
 } from "date-fns";
@@ -55,6 +57,16 @@ export const formatDateForInput = (dateString) => {
 // Format time to 24/h
 export function formatTimeOnly(dateString) {
   return format(parseISO(dateString), "HH:mm");
+}
+
+// Last week date check
+export function isLastWeek(date) {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const sevenDaysAgo = new Date(todayStart);
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  return date >= sevenDaysAgo && date < todayStart;
 }
 
 // Format month and year

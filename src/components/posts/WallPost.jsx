@@ -47,10 +47,12 @@ export default function WallPost() {
   if (loading && !pinnedPosts.length) {
     return (
       <div className="px-2 md:px-0 w-full md:max-w-[58%]">
-        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Väggen</h2>
+        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
+          Important notes
+        </h2>
         <div className="flex items-center justify-center p-4">
           <LoadingSpinner size="medium" className="text-gray" />
-          <span className="ml-2">Laddar...</span>
+          <span className="ml-2">Loading...</span>
         </div>
       </div>
     );
@@ -59,8 +61,10 @@ export default function WallPost() {
   // !pinnedPosts - Display a message
   if (pinnedPosts.length === 0) {
     return (
-      <div className="px-2 md:px-0 w-full md:max-w-[58%]">
-        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Wall</h2>
+      <div className="px-2 md:px-0 w-full md:max-w-full">
+        <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">
+          Important notes
+        </h2>
         <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
           <div className="p-4">
             <p className="text-center text-gray-500">No pinned message</p>
@@ -71,8 +75,10 @@ export default function WallPost() {
   }
 
   return (
-    <div className="px-2 md:px-0 w-full md:max-w-[58%]">
-      <h2 className="text-xl md:text-2xl mb-2 md:mb-3 font-medium">Wall</h2>
+    <div className="px-2 md:px-0 w-full md:max-w-full">
+      <h2 className="text-sm md:text-lg mb-2 md:mb-3 font-medium">
+        Important notes
+      </h2>
 
       {/* Display all pinned posts */}
       {sortedPinnedPosts.map((post) => (

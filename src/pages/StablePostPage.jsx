@@ -8,6 +8,7 @@ import { useParams } from "react-router";
 import Button from "../components/ui/Button";
 import AddNoteIcon from "../assets/icons/AddNoteIcon";
 import StablePostForm from "../components/forms/StablePostForm";
+import { USER_ROLES } from "../context/AppContext";
 
 export default function StablePostPage() {
   const { stableId: urlStableId } = useParams();
@@ -86,19 +87,104 @@ export default function StablePostPage() {
   // Display loading spinner
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <LoadingSpinner size="medium" className="text-gray" />
-        <p className="ml-2">{loadingState.getMessage()}</p>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 h-screen">
+        <LoadingSpinner size="medium" className="text-gray mb-3" />
+        <p className="text-gray-600 text-center animate-pulse">
+          {loadingState.getMessage()}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="bg-background flex flex-col overflow-y-hidden pb-30">
-      <div>
-        <ModalHeader title="Board" />
+    <div className="bg-background min-h-screen flex flex-col pb-10">
+      <div className="border-b-1 border-light flex justify-center">
+        <ModalHeader
+          title="Board"
+          className="max-w-6xl mx-auto flex items-center"
+        />
       </div>
-      {/* Form overlay */}
+
+      {/* Main content area */}
+      <div className="flex max-w-4xl mx-auto w-full">
+        {/* Main posts feed */}
+        <div className="flex-1 p-4 md:px-6 lg:w-2/4 mt-8">
+          <div className="space-y-4">
+            <PostContainer
+              posts={posts}
+              onEditPost={handleOpenEditForm}
+              onDeletePost={handleDeletePost}
+              onTogglePin={handleTogglePin}
+              className="bg-white rounded-xl shadow-md"
+            />
+            {posts && posts.length === 0 && (
+              <div className="bg-white rounded-xl shadow-sm p-6 text-center">
+                <p className="mb-2">No posts yet</p>
+                {canCreatePosts && (
+                  <button
+                    onClick={handleOpenCreateForm}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    Create the first post
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+        {/* Right sidebar - visible on md display*/}
+        <div className="hidden md:flex md:flex-col md:w-1/4 p-4 space-y-5 mt-22">
+          <div className="bg-white rounded-xl shadow-md p-4">
+            <h3 className="font-medium text-md mb-3">Stable Info</h3>
+            <p className="text-sm lg:text-md mb-2">
+              {currentStable?.name || "Your Stable"}
+            </p>
+            <p className="text-xs lg:text-sm">
+              Din roll: {""}
+              {currentRole === USER_ROLES.USER
+                ? "Medlem"
+                : currentRole === USER_ROLES.ADMIN
+                ? "Admin"
+                : currentRole === USER_ROLES.MANAGER
+                ? "Stallägare"
+                : "Medlem"}
+            </p>
+          </div>
+          <div className="bg-white rounded-xl shadow-md p-4">
+            <h3 className="font-medium text-md mb-3">Quick Stats</h3>
+            <p className="text-xs lg:text-sm">
+              Total posts: {posts?.length || 0}
+            </p>
+            <p className="text-xs lg:text-sm">
+              Pinned: {posts?.filter((p) => p.isPinned).length || 0}
+            </p>
+          </div>
+          {/* Create new post button - on medium screens */}
+          {canCreatePosts && (
+            <Button type="primary" onClick={handleOpenCreateForm}>
+              <span className="mr-5">New post</span>
+              <AddNoteIcon className="w-6 h-6" />
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* Create new post button - on sm screen */}
+      {canCreatePosts && (
+        <div className="md:hidden fixed bottom-20 right-1 z-40">
+          <Button
+            type="primary"
+            variant="icon"
+            size="medium"
+            className="text-primary "
+            onClick={handleOpenCreateForm}
+            aria-label="Add new post"
+          >
+            <AddNoteIcon />
+          </Button>
+        </div>
+      )}
+      {/* Form modal */}
       {isFormOpen && (
         <StablePostForm
           post={currentPost}
@@ -108,33 +194,6 @@ export default function StablePostPage() {
           title={currentPost ? "Edit Post" : "New Post"}
         />
       )}
-
-      <div className="flex-1 px-6 py-2 overflow-y-auto">
-        {/* Create new post button */}
-        {canCreatePosts && (
-          <div className="mb-1">
-            <div className="flex justify-end">
-              <Button
-                type="primary"
-                variant="icon"
-                className="!text-primary"
-                onClick={handleOpenCreateForm}
-                aria-label="Add new post"
-              >
-                <AddNoteIcon className="w-9 h-9" />
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* A list containing post with edit options */}
-        <PostContainer
-          posts={posts}
-          onEditPost={handleOpenEditForm}
-          onDeletePost={handleDeletePost}
-          onTogglePin={handleTogglePin}
-        />
-      </div>
     </div>
   );
 }

@@ -15,10 +15,17 @@ const userService = {
 
     // The axios interceptor will handle the response formatting and error handling
     const response = await axiosInstance.get(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}${userId}`
+      `${ENDPOINTS.EXTRACT_USER_ROLES}user/${userId}`
     );
 
-    // Just return the value array directly
+    return response.value;
+  },
+
+  getUsersByStableId: async (stableId) => {
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stableId/${stableId}`
+    );
+
     return response.value;
   },
 

@@ -18,11 +18,11 @@ const WallPostCard = ({
       >
         <PinIcon className="w-6 h-6 text-primary" />
 
-        <p className="flex-1 pl-1">{title}</p>
+        <p className="flex-1 pl-1 xl:text-xl md:text-lg">{title}</p>
 
         <div className="text-primary">
           <ChevronDownIcon
-            className={`w-5 h-5 transition-transform ${
+            className={`w-5 h-5 transition-transform md:w-5.5 md:h-5.5 lg:w-6 lg:h-6 ${
               isExpanded ? "rotate-180" : ""
             }`}
           />

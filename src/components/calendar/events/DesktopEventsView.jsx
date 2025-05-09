@@ -2,6 +2,7 @@ import React from "react";
 import EventsHeader from "./EventsHeader";
 import EventsList from "./EventsList";
 import AddEventButton from "./AddEventButton";
+import Button from "../../ui/Button";
 
 const DesktopEventsView = ({
   selectedDay,
@@ -13,6 +14,7 @@ const DesktopEventsView = ({
   onUpdateEvent,
   onDeleteEvent,
   onAddEvent,
+  onBackToWall,
 }) => {
   const dayName = format(selectedDay, "EEEE", { locale }).toUpperCase();
   const formattedDate = formatFullDayDate(selectedDay, locale);
@@ -36,7 +38,22 @@ const DesktopEventsView = ({
         />
       </div>
 
-      <AddEventButton onClick={onAddEvent} />
+      {/* Row with both buttons */}
+      <div className="mt-10 flex justify-between items-center">
+        {/* Only show Back button if onBackToWall function is provided */}
+        {onBackToWall && (
+          <Button
+            type="secondary"
+            onClick={onBackToWall}
+            className="flex-shrink-0"
+          >
+            <p>← Back to wall</p>
+          </Button>
+        )}
+        <div className={onBackToWall ? "ml-auto" : ""}>
+          <AddEventButton onClick={onAddEvent} />
+        </div>
+      </div>
     </section>
   );
 };

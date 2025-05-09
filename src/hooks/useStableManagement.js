@@ -21,9 +21,20 @@ export const useStableManagement = (stableId) => {
     setOperationType("fetch");
 
     try {
-      // Fetch members from existing endpoint
-      const userResponse = await userService.getUserStables(stableId);
-      setMembers(Array.isArray(userResponse) ? userResponse : []);
+      // Fetch members for a specific stable
+      const membersResponse = await userService.getUsersByStableId(stableId);
+
+      // Format response to match expected format
+      const formattedMembers = Array.isArray(membersResponse)
+        ? membersResponse.map((member) => ({
+            id: member.userId,
+            firstName: member.firstName,
+            lastName: member.lastName,
+            role: member.role,
+          }))
+        : [];
+
+      setMembers(formattedMembers);
 
       // Fetch join requests for a specific stable
       const requestsResponse = await stableService.getStableRequests(stableId);
