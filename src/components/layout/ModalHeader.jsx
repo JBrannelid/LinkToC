@@ -12,7 +12,7 @@ const ModalHeader = ({
 
   // Close btn
   showCloseBtn = false,
-  closeBtn = <CloseIcon strokeWidth={4} />,
+  closeBtn = <CloseIcon size={30} strokeWidth={2} />,
   CloseAriaLabel = "Close module",
   onCloseClick,
 

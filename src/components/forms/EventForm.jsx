@@ -91,106 +91,108 @@ const EventForm = ({
   };
 
   return (
-    <div className="flex flex-col fixed inset-0 z-30 bg-background">
-      <ModalHeader
-        title={title}
-        showCloseBtn={true}
-        onCloseClick={onCancel}
-        className="bg-primary-light"
-        render="left"
-      />
-
-      <div className="h-5" />
-
-      <FormProvider
-        methods={methods}
-        onSubmit={handleSubmit}
-        footer={{ showFooter: false }}
-        className="flex flex-col flex-1"
-      >
-        <div className="bg-white rounded-2xl border border-primary py-4 px-6">
-          <div className="flex flex-col items-start gap-2">
-            {/* Date */}
-            <div>
-              <span>{formattedDate}</span>
-            </div>
-
-            {/* Start */}
-            <div>
-              <TimePicker
-                name="startTime"
-                label="Start"
-                validation={{ required: "Starttid krävs" }}
-              />
-            </div>
-
-            {/* End */}
-            <div>
-              <TimePicker
-                name="endTime"
-                label="Slut&nbsp;"
-                validation={{ required: "Sluttid krävs" }}
-              />
-            </div>
-          </div>
-        </div>
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+      <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+        <ModalHeader
+          title={title}
+          showCloseBtn={true}
+          onCloseClick={onCancel}
+          className="bg-primary-light"
+          render="left"
+        />
 
         <div className="h-5" />
 
-        <div className="bg-white p-3 rounded-lg">
-          <FormInput
-            name="title"
-            placeholder="Skriv in aktivitetens namn..."
-            validation={{
-              required: "Titel krävs",
-              maxLength: {
-                value: 50,
-                message: "Max 50 tecken",
-              },
-            }}
-          />
-        </div>
+        <FormProvider
+          methods={methods}
+          onSubmit={handleSubmit}
+          footer={{ showFooter: false }}
+          className="flex flex-col flex-1"
+        >
+          <div className="bg-white rounded-2xl border border-primary py-4 px-6">
+            <div className="flex flex-col items-start gap-2">
+              {/* Date */}
+              <div>
+                <span>{formattedDate}</span>
+              </div>
 
-        <div className="flex-1 px-4 py-6">
-          <Button
-            type="submit"
-            className="w-9/10 mx-auto bg-primary"
-            // Explicitly calling handleSubmit because htmlType="submit" doesn't work with React Hook Form.
-            onClick={(e) => {
-              e.preventDefault();
-              methods.handleSubmit(handleSubmit)();
-            }}
-          >
-            {event ? "Uppdatera" : "Lägg till"}
-          </Button>
+              {/* Start */}
+              <div>
+                <TimePicker
+                  name="startTime"
+                  label="Start"
+                  validation={{ required: "Starttid krävs" }}
+                />
+              </div>
 
-          {event && (
+              {/* End */}
+              <div>
+                <TimePicker
+                  name="endTime"
+                  label="Slut&nbsp;"
+                  validation={{ required: "Sluttid krävs" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="h-5" />
+
+          <div className="bg-white p-3 rounded-lg">
+            <FormInput
+              name="title"
+              placeholder="Skriv in aktivitetens namn..."
+              validation={{
+                required: "Titel krävs",
+                maxLength: {
+                  value: 50,
+                  message: "Max 50 tecken",
+                },
+              }}
+            />
+          </div>
+
+          <div className="flex-1 px-4 py-6">
             <Button
-              type="danger"
-              className="w-9/10 mx-auto mt-2"
+              type="submit"
+              className="w-9/10 mx-auto bg-primary"
+              // Explicitly calling handleSubmit because htmlType="submit" doesn't work with React Hook Form.
               onClick={(e) => {
                 e.preventDefault();
-                handleDelete();
+                methods.handleSubmit(handleSubmit)();
               }}
             >
-              Ta bort
+              {event ? "Uppdatera" : "Lägg till"}
             </Button>
-          )}
 
-          {stables.length > 0 && (
-            <select
-              {...methods.register("stableId")}
-              className="w-full p-2 border border-gray-300 rounded-md mb-6"
-            >
-              {stables.map(({ id, name }) => (
-                <option key={id} value={id}>
-                  {name}
-                </option>
-              ))}
-            </select>
-          )}
-        </div>
-      </FormProvider>
+            {event && (
+              <Button
+                type="danger"
+                className="w-9/10 mx-auto mt-2"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDelete();
+                }}
+              >
+                Ta bort
+              </Button>
+            )}
+
+            {stables.length > 0 && (
+              <select
+                {...methods.register("stableId")}
+                className="w-full p-2 border border-gray-300 rounded-md mb-6"
+              >
+                {stables.map(({ id, name }) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            )}
+          </div>
+        </FormProvider>
+      </div>
     </div>
   );
 };

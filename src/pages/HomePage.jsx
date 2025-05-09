@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "../components/calendar/calendar";
 import { sv } from "date-fns/locale";
 import WallPost from "../components/posts/WallPost";
@@ -18,6 +18,7 @@ export default function HomePage() {
   const [currentDayEvents, setCurrentDayEvents] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { currentStable, currentUser } = useAppContext();
   const currentUserId = currentUser.id;
 
@@ -37,7 +38,15 @@ export default function HomePage() {
     updateEvent,
     deleteEvent,
     getEventsForDay,
+    fetchAndUpdateEvents,
   } = useCalendarEvents(stableId || currentStable.id);
+
+  // Effect to keep currentDayEvents in sync with events array
+  useEffect(() => {
+    if (!selectedDay) return;
+    const dayEvents = getEventsForDay(selectedDay);
+    setCurrentDayEvents(dayEvents);
+  }, [events, selectedDay, getEventsForDay, refreshKey]);
 
   // Form control functions
   const handleOpenEventForm = () => {
@@ -60,6 +69,14 @@ export default function HomePage() {
     }
   };
 
+  // Helper function to refresh data after CRUD operations
+  const refreshEventsData = async () => {
+    await fetchAndUpdateEvents();
+    const freshEvents = getEventsForDay(selectedDay);
+    setCurrentDayEvents(freshEvents);
+    setRefreshKey((prev) => prev + 1);
+  };
+
   // Event CRUD handlers
   const handleCreateEvent = async (eventData) => {
     const success = await createEvent({
@@ -68,8 +85,10 @@ export default function HomePage() {
       userIdFk: currentUserId,
     });
 
-    if (success) handleCloseEventForm();
-    else console.error("Could not create event");
+    if (success) {
+      handleCloseEventForm();
+      await refreshEventsData();
+    } else console.error("Could not create event");
   };
 
   const handleUpdateEvent = async (eventData) => {
@@ -80,8 +99,10 @@ export default function HomePage() {
       userIdFk: currentUserId,
     });
 
-    if (success) handleCloseEventForm();
-    else console.error("Could not update event");
+    if (success) {
+      handleCloseEventForm();
+      await refreshEventsData();
+    } else console.error("Could not update event");
   };
 
   const handleDeleteEvent = async (eventId) => {
@@ -99,12 +120,15 @@ export default function HomePage() {
       )
     ) {
       await deleteEvent(eventId);
+      await refreshEventsData();
     }
   };
 
   // Handle day selection
   const handleSelectDay = (day) => {
     setSelectedDay(day);
+    const dayEvents = getEventsForDay(day);
+    setCurrentDayEvents(dayEvents);
   };
 
   // Handle day with events is selected (for lg layout)
@@ -156,6 +180,7 @@ export default function HomePage() {
       {/* Calendar Section */}
       <section className="grid grid-cols-1">
         <Calendar
+          key={refreshKey} // Force full remount on refresh
           stableId={stableId || currentStable.id}
           events={events}
           users={users}
@@ -172,7 +197,7 @@ export default function HomePage() {
           {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
             <div>
-              <h1 className=" text-center pt-12 mb-10">
+              <h1 className="text-center pt-12 mb-10">
                 <StableName currentStableId={currentStable.id} />
               </h1>
               <WallPost />
@@ -180,6 +205,7 @@ export default function HomePage() {
           ) : (
             <div>
               <EventsContainer
+                key={refreshKey}
                 selectedDay={selectedDay}
                 events={currentDayEvents}
                 format={calendarUtils.format}

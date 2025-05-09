@@ -100,7 +100,7 @@ export default function StablePostPage() {
     <div className="bg-background min-h-screen flex flex-col pb-10">
       <div className="border-b-1 border-light flex justify-center">
         <ModalHeader
-          title="Board"
+          title="Feed"
           className="max-w-6xl mx-auto flex items-center"
         />
       </div>

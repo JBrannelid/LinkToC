@@ -38,7 +38,9 @@ const DesktopNavigation = () => {
     <div className=" w-full bg-white shadow-md py-2">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
-          <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
+          <Link to={ROUTES.HOME}>
+            <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
+          </Link>
           <nav className="flex items-center space-x-8">
             <Link
               to={ROUTES.HOME}
@@ -60,7 +62,7 @@ const DesktopNavigation = () => {
                   : "text-black hover:text-primary"
               }`}
             >
-              Board
+              Feed
             </Link>
             <Link
               to={buildRoute(ROUTES.HORSE_PROFILE, {

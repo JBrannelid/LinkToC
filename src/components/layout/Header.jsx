@@ -29,15 +29,12 @@ export default function Header() {
       {/* Right side */}
       {showBackButton ? (
         <Button
-          type="icon"
           onClick={() => window.history.back()} // Go back
-          aria-label="Gå tillbaka"
-          className="absolute right-0 top-3 border-0 text-primary"
+          type="icon"
+          className="text-primary"
+          aria-label="Close"
         >
-          <CloseIcon
-            strokeWidth={4}
-            className="w-6 h-6 md:w-8 md:h-8 text-primary"
-          />
+          <CloseIcon size={30} strokeWidth={2} className="text-primary" />
         </Button>
       ) : (
         <Link

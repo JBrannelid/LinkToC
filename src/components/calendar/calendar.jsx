@@ -41,9 +41,7 @@ const Calendar = ({
     const events = getEventsForDay?.(day) || [];
     setCurrentDayEvents(events);
 
-    if (events.length > 0) {
-      onDayWithEventsSelected?.(day, events);
-    }
+    onDayWithEventsSelected?.(day, events);
 
     if (openEvents) {
       setIsEventPanelOpen(true);
