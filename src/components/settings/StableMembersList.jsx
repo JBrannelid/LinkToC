@@ -29,13 +29,18 @@ const StableMembersList = ({ stableId }) => {
     setSelectedMember(null);
   };
 
-  const handleConfirmRoleChange = () => {
+  const handleConfirmRoleChange = async () => {
     if (
       selectedMember &&
       selectedRole !== null &&
       selectedRole !== selectedMember.role
     ) {
-      updateMemberRole(selectedMember.id, selectedRole);
+      const success = await updateMemberRole(selectedMember.id, selectedRole);
+      if (success) {
+        console.log("Role updated successfully");
+      } else {
+        console.error("Failed to update role");
+      }
       handleCloseModal();
     }
   };

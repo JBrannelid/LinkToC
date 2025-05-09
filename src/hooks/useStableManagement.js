@@ -93,7 +93,7 @@ export const useStableManagement = (stableId) => {
     setOperationType("update");
 
     try {
-      await userService.updateUserStableRole(userId, stableId, newRole);
+      await userService.updateUserStableRole(userStableId, newRole);
       await fetchStableData();
       return true;
     } catch (error) {
