@@ -27,16 +27,44 @@ const stableService = {
       const response = await axiosInstance.get(
         `${ENDPOINTS.STABLE}/search?${queryString}`
       );
-
       // Handle response and return value if the response is sucess
       if (response && response.isSuccess && Array.isArray(response.value)) {
-        return response.value;
+        return {
+          success: true,
+          data: response.value,
+          message: "Search completed successfully",
+        };
+      }
+      if (response && Array.isArray(response)) {
+        return {
+          success: true,
+          data: response,
+          message: "Search completed",
+        };
+      }
+      if (response && response.value) {
+        return {
+          success: true,
+          data: Array.isArray(response.value)
+            ? response.value
+            : [response.value],
+          message: "Search completed with partial results",
+        };
       }
 
-      return [];
+      return {
+        success: false,
+        data: [],
+        message: "No results found",
+      };
     } catch (error) {
       console.error("Error searching for stables:", error);
-      return [];
+      return {
+        success: false,
+        data: [],
+        message: error.message || "Search failed",
+        error: error,
+      };
     }
   },
 
@@ -150,6 +178,13 @@ const stableService = {
   // Denied an invitation from a stable
   refuseStableInvite: async (inviteData) => {
     return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
+  },
+  // Create Join Request
+  createStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post(
+      "/api/create-stable-join-request",
+      requestData
+    );
   },
 };
 

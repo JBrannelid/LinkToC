@@ -1,5 +1,5 @@
-import React, {forwardRef, useCallback, useEffect} from "react";
-import { useFormContext} from 'react-hook-form' 
+import React, {forwardRef, useEffect} from "react";
+import {useFormContext} from 'react-hook-form'
 import SearchProvider from "../SearchProvider";
 import SearchBar from "./SearchBar";
 import SearchResults from "./SearchResults";
@@ -30,19 +30,19 @@ const SearchField = forwardRef(({
         formState: {errors},
         trigger
     } = useFormContext();
-    
+
     const handleSelectItem = (item) => {
         if (!item && item.id) {
             setValue(name, item.id, {shouldValidate: true});
             trigger(name);
         }
-        if(onSelectItem) {
+        if (onSelectItem) {
             onSelectItem(item);
         }
     };
-    
+
     const handleSearchAction = (selectedItem) => {
-        if(selectedItem && selectedItem.id) {
+        if (selectedItem && selectedItem.id) {
             setValue(name, selectedItem.id, {shouldValidate: true});
             trigger(name);
         }
@@ -50,24 +50,24 @@ const SearchField = forwardRef(({
             onSearch(selectedItem);
         }
     };
-    
+
     const handleCancel = () => {
-        if(onCancel) {
+        if (onCancel) {
             onCancel();
         }
     };
-    
+
     useEffect(() => {
         register(name, validation);
     }, [register, name, validation]);
-    
+
     const showError = errors[name] || formError;
 
     const displayMessage = formError ||
-        (errors[name] ? { type: "error", text: errors[name].message || errorMessage } : null) ||
+        (errors[name] ? {type: "error", text: errors[name].message || errorMessage} : null) ||
         (message && message.text ? message : null);
-    
-    return(
+
+    return (
         <SearchProvider customConfig={customConfig}>
             <div className={`form-control ${containerClassName}`}>
                 {/* Label */}
@@ -115,7 +115,7 @@ const SearchField = forwardRef(({
 
                 {/* Error message */}
                 {showMessage && displayMessage && (
-                    <FormMessage message={displayMessage} />
+                    <FormMessage message={displayMessage}/>
                 )}
             </div>
         </SearchProvider>

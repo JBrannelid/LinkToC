@@ -1,41 +1,56 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FormMessage, FormProvider} from "../forms/index.js";
 import searchConfigs from "../search/config/searchConfig.js";
 import {SearchActions, SearchBar, SearchProvider, SearchResults} from "../search/index.js";
+import {useStableJoinRequest} from "../../hooks/useStableJoinRequest.js";
 
 
 const JoinStableForm = ({
                             formMethods,
                             onSubmit,
                             onCancel,
-                            isLoading = false,
-                            loadingState = null,
-                            error = null,
-                            message = null
+                            isLoading: externalLoading = false,
+                            loadingState: externalLoadingState = null,
+                            error: externalError = null,
+                            message: externalMessage = null
                         }) => {
+    const {
+        sendJoinRequest,
+        loading: hookLoading,
+        error: hookError,
+        message: hookMessage,
+        loadingState: hookLoadingState,
+    } = useStableJoinRequest();
+    const isLoading = hookLoading || externalLoading;
+    const loadingState = hookLoading ? hookLoadingState : externalLoadingState;
+    const error = hookError || externalError;
+    const message = hookMessage || externalMessage;
     
     const stableConfig = {
         ...searchConfigs.stable,
         loading: isLoading,
         loadingState: loadingState
     };
-    
-    const handleSelectAction = (selectedItem) => {
-        if(onSubmit && selectedItem){
-            onSubmit({
-                stableId: selectedItem.id,
-                stableName: selectedItem,
-                action: 'join'
-            });
+
+    const handleJoinStable = useCallback(async (data) => {
+        
+        const result = await sendJoinRequest(data);
+
+        if (result.success && onSubmit) {
+            
+            setTimeout(() => {
+                onSubmit(data);
+            }, 1500);
         }
-    };
+    },[sendJoinRequest, onSubmit]);
+    
     const handleCancelSearch = () => {
         if (onCancel) {
             onCancel();
         }
     };
 
-    const displayError = error ? { type: "error", text: error } : null;
+    const displayError = typeof error === 'string' ? { type: "error", text: error } : error;
     
     const ariaAttributes = {
         'aria-busy' : isLoading ? 'true' : 'false'
@@ -79,6 +94,7 @@ const JoinStableForm = ({
                             className="mt-4"
                             maxHeight="40vh"
                             showWhenEmpty={false}
+                            onItemSelect={handleJoinStable}
                         />
 
                         {/* Error message display */}
@@ -86,17 +102,15 @@ const JoinStableForm = ({
                             <FormMessage message={displayError} />
                         )}
 
-                        {/* Custom message if provided */}
+                        {/* Success message display */}
                         {message && message.text && !displayError && (
                             <FormMessage message={message} />
                         )}
 
-                        {/* Action buttons */}
+                        {/* Action button */}
                         <div className="mt-6">
                             <SearchActions
-                                onAction={handleSelectAction}
                                 onCancel={handleCancelSearch}
-                                actionButtonClassName="mb-2"
                                 loading={isLoading}
                                 loadingState={loadingState}
                                 disabled={isLoading}
@@ -109,4 +123,4 @@ const JoinStableForm = ({
     );
 };
 
-export default JoinStableForm;
+export default React.memo(JoinStableForm);
