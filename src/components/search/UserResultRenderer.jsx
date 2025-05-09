@@ -12,9 +12,9 @@ const UserResultRenderer = ({item, isSelected, onSelect, config}) => {
     const handleClick = () => {
         onSelect(item);
     };
-    
+
     const placeholderImage = 'src/src/assets/images/userPlaceholder.jpg'
-    
+
     return (
         <div
             className={`cursor-pointer transition-all duration-200 min-h-[72px] ${
