@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useAppContext } from "../context/AppContext";
-import { stableService } from "../api";
+import {stableService, userService} from "../api";
 import { getErrorMessage } from "../utils/errorUtils";
 import { useLoadingState } from "./useLoadingState";
 import { useForm } from "react-hook-form";
@@ -40,7 +40,7 @@ export const useStableOnboarding = () => {
                     return;
                 }
                 
-                const userStables = await stableService.getUserStables();
+                const userStables = await userService.getUserStables(user.id);
                 setIsFirstLogin(userStables.length === 0);
             } catch (error) {
                 console.error("Error checking first login status:", error);
@@ -157,14 +157,11 @@ export const useStableOnboarding = () => {
         error,
         message,
         loadingState,
-
         
         formMethods,
-
         
         navigateToStep,
         handleCreateStable,
-        handleSearchStable,
         handleJoinStable,
 
         
