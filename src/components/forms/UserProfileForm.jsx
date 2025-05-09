@@ -135,181 +135,183 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
   return (
-    <div className="flex flex-col h-screen fixed inset-0 bg-background z-20">
-      <ModalHeader
-        title="Redigera profil"
-        showCloseBtn={true}
-        onCloseClick={onClose}
-        className="bg-primary-light"
-      />
-
-      <div className="flex-1 overflow-y-auto p-4 pb-30">
-        <FormProvider {...methods}>
-          <div>
-            {/* Profile Image */}
-            <div className="bg-white rounded-lg p-2 mb-4 gap-10 flex items-center border-light border-2 shadow-md">
-              <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
-                <img
-                  src={profileImageUrl}
-                  alt={`Profile image of ${userFullName}`}
-                  className="w-full h-full object-cover"
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+      <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+        <ModalHeader
+          title="Redigera profil"
+          showCloseBtn={true}
+          onCloseClick={onClose}
+          className="bg-primary-light"
+        />
+        <div className="flex-1 overflow-y-auto p-4 pb-20 md:pb-5">
+          <FormProvider {...methods}>
+            <div>
+              {/* Profile Image */}
+              <div className="bg-white rounded-lg p-2 mb-4 gap-10 flex items-center border-light border-2 shadow-md">
+                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
+                  <img
+                    src={profileImageUrl}
+                    alt={`Profile image of ${userFullName}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <Button
+                  type="secondary"
+                  onClick={() => triggerFileUpload(fileInputRef)}
+                  className="text-sm pl-5"
+                >
+                  Ladda upp bild
+                </Button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(event) =>
+                    handleImageUpload(event, setProfileImage)
+                  }
+                  accept="image/*"
+                  className="hidden"
                 />
               </div>
-              <Button
-                type="secondary"
-                onClick={() => triggerFileUpload(fileInputRef)}
-                className="text-sm pl-5"
-              >
-                Ladda upp bild
-              </Button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={(event) => handleImageUpload(event, setProfileImage)}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
 
-            {/* Personal Info Section */}
-            <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="font-bold">Personuppgifter</h2>
-                <Button type="icon" aria-label="Redigera personuppgifter">
-                  <PenIcon className="w-7 h-7 text-primary" />
-                </Button>
-              </div>
-              <div className="space-y-5">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    {/* Firstname field */}
-                    <FormInput
-                      label="Förnamn"
-                      name="firstName"
-                      labelPosition="above"
-                      validation={{ required: "Förnamn krävs" }}
-                    />
-                  </div>
-                  <div>
-                    {/* Lastname field */}
-                    <FormInput
-                      label="Efternamn"
-                      name="lastName"
-                      labelPosition="above"
-                      validation={{ required: "Efternamn krävs" }}
-                    />
-                  </div>
-                </div>
-                {/* Email field */}
-                <div className="space-y-2">
-                  <FormInput
-                    label="Email"
-                    name="email"
-                    labelPosition="above"
-                    readOnly={true} // Change to false when BE allow us to edit
-                    inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
-                    validation={{
-                      required: "Email krävs",
-                      pattern: {
-                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: "Ogiltig email adress",
-                      },
-                    }}
-                  />
-                </div>
-
-                {/* Phone number field */}
-                <div className="space-y-2">
-                  <FormInput
-                    label="Telefonnummer"
-                    name="phoneNumber"
-                    labelPosition="above"
-                    readOnly={true} // Change to false when BE allow us to edit
-                    inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
-                    validation={{
-                      pattern: {
-                        value:
-                          /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
-                        message: "Ogiltigt telefonnummer format",
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Password Section */}
-            <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-              <h2 className="font-bold">Lösenord</h2>
-              {!showPasswordForm ? (
-                <div className="mt-5 flex justify-center py-1 p-2">
-                  <div className="w-full px-5 py-3 border rounded-full border-gray/40 bg-light/50">
-                    <p className="p-0">••••••••••</p>
-                  </div>
-                  <Button
-                    type="icon"
-                    aria-label="Redigera lösenord"
-                    onClick={() => setShowPasswordForm(!showPasswordForm)}
-                  >
+              {/* Personal Info Section */}
+              <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-bold">Personuppgifter</h2>
+                  <Button type="icon" aria-label="Redigera personuppgifter">
                     <PenIcon className="w-7 h-7 text-primary" />
                   </Button>
                 </div>
-              ) : (
-                <PasswordChangeForm
-                  onCancel={() => setShowPasswordForm(false)}
-                  user={userData || user}
-                  onSuccess={() => {
-                    setShowPasswordForm(false);
-                    setMessage(createSuccessMessage("Lösenord uppdaterat"));
-                  }}
-                />
-              )}
-            </div>
+                <div className="space-y-5">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      {/* Firstname field */}
+                      <FormInput
+                        label="Förnamn"
+                        name="firstName"
+                        labelPosition="above"
+                        validation={{ required: "Förnamn krävs" }}
+                      />
+                    </div>
+                    <div>
+                      {/* Lastname field */}
+                      <FormInput
+                        label="Efternamn"
+                        name="lastName"
+                        labelPosition="above"
+                        validation={{ required: "Efternamn krävs" }}
+                      />
+                    </div>
+                  </div>
+                  {/* Email field */}
+                  <div className="space-y-2">
+                    <FormInput
+                      label="Email"
+                      name="email"
+                      labelPosition="above"
+                      readOnly={true} // Change to false when BE allow us to edit
+                      inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
+                      validation={{
+                        required: "Email krävs",
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Ogiltig email adress",
+                        },
+                      }}
+                    />
+                  </div>
 
-            <FormMessage message={message} />
+                  {/* Phone number field */}
+                  <div className="space-y-2">
+                    <FormInput
+                      label="Telefonnummer"
+                      name="phoneNumber"
+                      labelPosition="above"
+                      readOnly={true} // Change to false when BE allow us to edit
+                      inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
+                      validation={{
+                        pattern: {
+                          value:
+                            /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
+                          message: "Ogiltigt telefonnummer format",
+                        },
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-center">
-              <div className=" w-9/10">
-                <Button
-                  type="primary"
-                  onClick={methods.handleSubmit(onSubmit)}
-                  loading={submitting}
-                  disabled={submitting}
-                  className="w-full mb-3"
-                >
-                  Spara ändringar
-                </Button>
+              {/* Password Section */}
+              <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
+                <h2 className="font-bold">Lösenord</h2>
+                {!showPasswordForm ? (
+                  <div className="mt-5 flex justify-center py-1 p-2">
+                    <div className="w-full px-5 py-3 border rounded-full border-gray/40 bg-light/50">
+                      <p className="p-0">••••••••••</p>
+                    </div>
+                    <Button
+                      type="icon"
+                      aria-label="Redigera lösenord"
+                      onClick={() => setShowPasswordForm(!showPasswordForm)}
+                    >
+                      <PenIcon className="w-7 h-7 text-primary" />
+                    </Button>
+                  </div>
+                ) : (
+                  <PasswordChangeForm
+                    onCancel={() => setShowPasswordForm(false)}
+                    user={userData || user}
+                    onSuccess={() => {
+                      setShowPasswordForm(false);
+                      setMessage(createSuccessMessage("Lösenord uppdaterat"));
+                    }}
+                  />
+                )}
+              </div>
 
-                <Button
-                  type="danger"
-                  onClick={() => setShowDeleteConfirm(true)}
-                  disabled={submitting}
-                  className="w-full"
-                >
-                  Radera konto
-                </Button>
+              <FormMessage message={message} />
+
+              {/* Action Buttons */}
+              <div className="flex justify-center">
+                <div className=" w-9/10 sm:w-8/10">
+                  <Button
+                    type="primary"
+                    onClick={methods.handleSubmit(onSubmit)}
+                    loading={submitting}
+                    disabled={submitting}
+                    className="w-full mb-5"
+                  >
+                    Spara ändringar
+                  </Button>
+
+                  <Button
+                    type="danger"
+                    onClick={() => setShowDeleteConfirm(true)}
+                    disabled={submitting}
+                    className="w-full"
+                  >
+                    Radera konto
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </FormProvider>
+          </FormProvider>
+        </div>
+        {/* Delete modual */}
+        <ConfirmationModal
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDelete}
+          loading={submitting}
+          title="Vill du radera kontot?"
+          icon={
+            <HandRaisedIcon
+              size={70}
+              backgroundColor="bg-error-500"
+              iconColor="text-white"
+            />
+          }
+        />
       </div>
-
-      {/* Delete modual */}
-      <ConfirmationModal
-        isOpen={showDeleteConfirm}
-        onClose={() => setShowDeleteConfirm(false)}
-        onConfirm={handleDelete}
-        loading={submitting}
-        title="Vill du radera kontot?"
-        icon={
-          <HandRaisedIcon
-            size={70}
-            backgroundColor="bg-error-500"
-            iconColor="text-white"
-          />
-        }
-      />
     </div>
   );
 };
