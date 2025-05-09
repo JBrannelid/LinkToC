@@ -20,8 +20,6 @@ const JoinStableForm = ({
         error: hookError,
         message: hookMessage,
         loadingState: hookLoadingState,
-        isThrottled,
-        throttleTimeRemaining
     } = useStableJoinRequest();
     const isLoading = hookLoading || externalLoading;
     const loadingState = hookLoading ? hookLoadingState : externalLoadingState;
@@ -35,26 +33,16 @@ const JoinStableForm = ({
     };
 
     const handleJoinStable = useCallback(async (data) => {
-        console.log("Sending join request for stable:", data);
         
-        if(isThrottled) {
-            console.log(`Request throttled. Please wait ${throttleTimeRemaining} seconds`);
-            return;
-        }
         const result = await sendJoinRequest(data);
 
         if (result.success && onSubmit) {
-            console.log("Join request API call successful, updating app state...");
             
             setTimeout(() => {
                 onSubmit(data);
             }, 1500);
-        }else if (result.throttled) {
-            console.log(`Request throttled. Please wait ${result.timeRemaining} seconds`);
-        } else if (result.alreadyRequested) {
-            console.log("Already requested to join this stable");
         }
-    },[sendJoinRequest, onSubmit, isThrottled, throttleTimeRemaining]);
+    },[sendJoinRequest, onSubmit]);
     
     const handleCancelSearch = () => {
         if (onCancel) {
