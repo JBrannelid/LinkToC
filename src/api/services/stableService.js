@@ -27,7 +27,6 @@ const stableService = {
       const response = await axiosInstance.get(
           `${ENDPOINTS.STABLE}/search?${queryString}`
       );
-      console.log('Raw stable search response:', response);
       // Handle response and return value if the response is sucess
       if (response && response.isSuccess && Array.isArray(response.value)) {
         return {
@@ -177,6 +176,10 @@ const stableService = {
   // Denied an invitation from a stable
   refuseStableInvite: async (inviteData) => {
     return await axiosInstance.post(`/api/refuse-stable-invite`, inviteData);
+  },
+  // Create Join Request
+  createStableJoinRequest: async (requestData) => {
+    return await axiosInstance.post("/api/create-stable-join-request", requestData);
   },
 };
 
