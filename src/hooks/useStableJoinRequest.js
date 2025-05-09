@@ -35,7 +35,7 @@ export function useStableJoinRequest() {
             
             const response = await stableService.createStableJoinRequest(requestData);
             
-            if(response && (response.isSuccess || responsesuccess)) {
+            if(response && (response.isSuccess || response.success)) {
                 const successMsg = `You request to join ${data.stableName?.name || 'stable'} has been sent!`;
                 setMessage(createSuccessMessage(successMsg));
                 return {

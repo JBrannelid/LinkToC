@@ -7,6 +7,7 @@ export const ListItemRenderer = ({
                                      onSelect,
                                      onFocus,
                                      config,
+    onJoinStable,
                                      actionLabel = 'Join',
                                      index,
     onAction,
@@ -21,9 +22,14 @@ export const ListItemRenderer = ({
             onFocus(item);
         }
     };
-    const handleActionClick = () => {
-        if (onAction) {
-            onAction(item);
+    const handleJoinClick = (e) => {
+        e.stopPropagation();
+        if (onJoinStable) {
+            onJoinStable({
+                stableId: item.id,
+                stableName: item,
+                action: 'join'
+            });
         }
     };
     const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
@@ -58,7 +64,7 @@ export const ListItemRenderer = ({
             case 'Enter':
                 // Select this item and trigger its action
                 event.preventDefault();
-                onSelect(item);
+                handleJoinClick(event);
 
                 // After selecting, find and click the primary action button
                 setTimeout(() => {
@@ -117,7 +123,7 @@ export const ListItemRenderer = ({
                 size="small"
                 className={`ml-2 whitespace-nowrap transition-colors duration-200 
                     ${!isSelected && 'group-hover:bg-primary group-hover:text-white group-hover:border-primary'}`}
-                onClick={handleActionClick}
+                onClick={handleJoinClick}
                 aria-pressed={isSelected}
                 data-action-button={isSelected ? 'primary' : 'secondary'}
             >
