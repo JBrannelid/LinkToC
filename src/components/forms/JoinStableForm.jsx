@@ -8,34 +8,42 @@ import {useStableJoinRequest} from "../../hooks/useStableJoinRequest.js";
 const JoinStableForm = ({
                             formMethods,
                             onSubmit,
-                            onCancel
-                            // isLoading = false,
-                            // loadingState = null,
-                            // error = null,
-                            // message = null
+                            onCancel,
+                            isLoading: externalLoading = false,
+                            loadingState: externalLoadingState = null,
+                            error: externalError = null,
+                            message: externalMessage = null
                         }) => {
     const {
         sendJoinRequest,
-        loading: joinLoading,
-        error: joinError,
-        message: joinMessage,
-        loadingState: joinLoadingState
+        loading: hookLoading,
+        error: hookError,
+        message: hookMessage,
+        loadingState: hookLoadingState
     } = useStableJoinRequest();
-    const isLoading = joinLoading;
-    const loadingState = joinLoadingState;
-    const error = joinError;
-    const message = joinMessage;
+    const isLoading = hookLoading || externalLoading;
+    const loadingState = hookLoading ? hookLoadingState : externalLoadingState;
+    const error = hookError || externalError;
+    const message = hookMessage || externalMessage;
     
     const stableConfig = {
         ...searchConfigs.stable,
         loading: isLoading,
         loadingState: loadingState
     };
-    
+
     const handleJoinStable = async (data) => {
+        console.log("Sending join request for stable:", data);
+
         const result = await sendJoinRequest(data);
-        if(result.success && onSubmit) {
-            onSubmit(result.data);
+
+        if (result.success && onSubmit) {
+            console.log("Join request API call successful, updating app state...");
+            
+            setTimeout(() => {
+ 
+                onSubmit(data);
+            }, 1500);
         }
     };
     
@@ -45,7 +53,7 @@ const JoinStableForm = ({
         }
     };
 
-    const displayError = error ? { type: "error", text: error } : null;
+    const displayError = typeof error === 'string' ? { type: "error", text: error } : error;
     
     const ariaAttributes = {
         'aria-busy' : isLoading ? 'true' : 'false'
@@ -106,7 +114,6 @@ const JoinStableForm = ({
                         <div className="mt-6">
                             <SearchActions
                                 onCancel={handleCancelSearch}
-                                actionButtonClassName="mb-2"
                                 loading={isLoading}
                                 loadingState={loadingState}
                                 disabled={isLoading}
