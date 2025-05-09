@@ -19,7 +19,6 @@ const StableOnboardingContainer = () => {
         formMethods,
         navigateToStep,
         handleCreateStable,
-        handleSearchStable,
         handleJoinStable
     } = useStableOnboarding();
 
@@ -41,8 +40,6 @@ const StableOnboardingContainer = () => {
     };
 
     const handleStableJoinSuccess = async (data) => {
-        console.log("Join request successful, data:", data);
-
         if (data.action === 'join' && data.stableId) {
             try {
                 const stableName = typeof data.stableName === 'object'
