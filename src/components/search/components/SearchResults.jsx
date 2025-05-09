@@ -1,5 +1,5 @@
+import React, {useEffect, useRef, useCallback} from "react";
 import {ListItemRenderer} from "../SearchResultRenderers.jsx";
-import {useEffect, useRef} from "react";
 import {useSearch} from "../../../context/searchContext.js";
 import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
 import {FormMessage} from "../../forms/index.js";
@@ -26,13 +26,15 @@ const SearchResults = ({
     } = useSearch();
 
     const resultsRef = useRef(null);
-    const handleItemClick = (item) => {
+    
+    const handleItemClick = useCallback((item) => {
         handleSelectItem(item);
         if (onItemSelect) {
             onItemSelect(item);
         }
-    };
-    const handleItemFocus = (item) => {
+    },[handleSelectItem,onItemSelect]);
+    
+    const handleItemFocus = useCallback( (item) => {
         if (onItemFocus) {
             onItemFocus(item);
         }
@@ -41,7 +43,8 @@ const SearchResults = ({
         } else {
             handleSelectItem(item);
         }
-    };
+    },[handleSelectItem,contextHandleItemFocus,onItemFocus]);
+    
     useEffect(() => {
         if (resultsRef.current && results.length > 0) {
             resultsRef.current.scrollTop = 0;
@@ -67,10 +70,7 @@ const SearchResults = ({
                 : (error.text ? error : {type: 'error', text: 'An error occurred during search'});
 
             return (
-                <FormMessage
-                    message={errorMessage}
-                />
-
+                <FormMessage message={errorMessage}/>
             );
         }
         if (query.trim().length > 0 && query.trim().length < 3 && !isTyping) {
