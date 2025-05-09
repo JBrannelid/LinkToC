@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
-import stableService from "../api/index";
+import stableService from "../api/services/stableService.js";
 import {useLoadingState} from "./useLoadingState.js";
 import {createErrorMessage, createSuccessMessage} from "../utils/errorUtils.js";
 
@@ -12,6 +12,7 @@ export function useStableJoinRequest() {
     const {user} = useAuth();
     
     const loadingState = useLoadingState(loading, operationType);
+    
     
     const sendJoinRequest = async (data) => {
         if(!user || !user.id) {
@@ -32,9 +33,9 @@ export function useStableJoinRequest() {
                 userId: user.id,
                 stableId: data.stableId
             };
-            
+            console.log("Sending join request with data:", requestData);
             const response = await stableService.createStableJoinRequest(requestData);
-            
+            console.log("Join request response:", response);
             if(response && (response.isSuccess || response.success)) {
                 const successMsg = `You request to join ${data.stableName?.name || 'stable'} has been sent!`;
                 setMessage(createSuccessMessage(successMsg));
