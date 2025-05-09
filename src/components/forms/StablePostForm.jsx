@@ -84,7 +84,7 @@ const StablePostForm = ({
           render="left"
         />
         {/* Main content container */}
-        <div className="flex flex-col flex-1 px-4 pt-4 pb-20 relative">
+        <div className="flex flex-col flex-1 px-4 pt-4 pb-6 md:pb-4">
           <FormProvider
             methods={methods}
             onSubmit={handleSubmit}
@@ -121,7 +121,7 @@ const StablePostForm = ({
             </div>
 
             {/* Image upload button */}
-            <div className="mt-4 flex justify-end">
+            <div className="mt-4 mb-6 flex justify-end">
               <Button
                 type="secondary"
                 className="w-6/10 h-8 md:w-4/10"
@@ -138,15 +138,27 @@ const StablePostForm = ({
               />
             </div>
 
-            {/* Action buttons - pinned to bottom */}
-            <div className="absolute bottom-20 md:bottom-2 left-8 md:left-30 right-0 p-4 bg-background  ">
-              <Button
-                type="primary"
-                className="w-9/10 md:w-7/10"
-                onClick={methods.handleSubmit(handleSubmit)}
-              >
-                {post ? "Update" : "Post"}
-              </Button>
+            {/* Action buttons */}
+            <div className="w-full flex justify-center mt-auto">
+              <div className="flex flex-col gap-3 w-full max-w-md">
+                <Button
+                  type="primary"
+                  className="w-full"
+                  onClick={methods.handleSubmit(handleSubmit)}
+                >
+                  {post ? "Update" : "Post"}
+                </Button>
+
+                {post && (
+                  <Button
+                    type="danger"
+                    className="w-full"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </div>
             </div>
           </FormProvider>
         </div>
