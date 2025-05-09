@@ -27,7 +27,8 @@ export const useStableManagement = (stableId) => {
       // Format response to match expected format
       const formattedMembers = Array.isArray(membersResponse)
         ? membersResponse.map((member) => ({
-            id: member.userId,
+            id: member.userStableId,
+            userId: member.userId,
             firstName: member.firstName,
             lastName: member.lastName,
             role: member.role,
@@ -93,7 +94,7 @@ export const useStableManagement = (stableId) => {
     setOperationType("update");
 
     try {
-      await userService.updateUserStableRole(userStableId, newRole);
+      await userService.updateUserStableRole(userId, newRole);
       await fetchStableData();
       return true;
     } catch (error) {
