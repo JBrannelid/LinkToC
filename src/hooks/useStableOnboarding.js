@@ -125,35 +125,6 @@ export const useStableOnboarding = () => {
             setLoading(false);
         }
     }, [changeStable]);
-
-    const handleSearchStable = useCallback(async (searchQuery) => {
-        if (!searchQuery.trim()) {
-            setError(getErrorMessage({
-                type: "validation",
-                message: "Sökfältet får inte vara tomt"
-            }).text);
-            return { success: false };
-        }
-
-        setLoading(true);
-        setOperationType("fetch");
-        setError(null);
-
-        try {
-            // This would be replaced with the actual search implementation
-            // For now just simulating an unimplemented feature
-            setError(getErrorMessage({
-                type: "server",
-                message: "search function is not yet implemented"
-            }).text);
-            return { success: false, error: "Not implemented" };
-        } catch (err) {
-            setError(getErrorMessage(err).text);
-            return { success: false, error: getErrorMessage(err).text };
-        } finally {
-            setLoading(false);
-        }
-    }, []);
     
     const handleJoinStable = useCallback(async (stableId, stableName) => {
         if (!stableId) {
