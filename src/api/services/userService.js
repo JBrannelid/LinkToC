@@ -23,7 +23,7 @@ const userService = {
 
   getUsersByStableId: async (stableId) => {
     const response = await axiosInstance.get(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}stableId/${stableId}`
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stable/${stableId}`
     );
 
     return response.value;
@@ -52,23 +52,14 @@ const userService = {
     return await baseService.delete(userId);
   },
 
-  /*
-  Example response to ask BE
-  {
-    "success": true,
-    "message": "User role updated successfully",
-    "data": {
-      "userId": 5,
-      "stableId": 1,
-      "role": 0
-    }
-  } 
-*/
-  updateUserStableRole: async (userId, stableId, role) => {
-    return await axiosInstance.put(`/api/user/role/${userId}`, {
-      stableId,
-      role,
-    });
+  updateUserStableRole: async (userStableId, role) => {
+    console.log(
+      `Updating role for userStableId: ${userStableId} to role: ${role}`
+    );
+
+    return await axiosInstance.put(
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?userStableRole=${role}`
+    );
   },
 };
 
