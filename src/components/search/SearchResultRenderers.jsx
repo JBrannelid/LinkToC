@@ -9,6 +9,7 @@ export const ListItemRenderer = ({
                                      config,
                                      actionLabel = 'Join',
                                      index,
+    onAction,
                                      ...props
                                  }) => {
     const primaryText = item[config?.labelField || 'name']
@@ -20,7 +21,11 @@ export const ListItemRenderer = ({
             onFocus(item);
         }
     };
-
+    const handleActionClick = () => {
+        if (onAction) {
+            onAction(item);
+        }
+    };
     const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
     const handleKeyDown = (event) => {
         switch (event.key) {
@@ -112,7 +117,7 @@ export const ListItemRenderer = ({
                 size="small"
                 className={`ml-2 whitespace-nowrap transition-colors duration-200 
                     ${!isSelected && 'group-hover:bg-primary group-hover:text-white group-hover:border-primary'}`}
-                onClick={() => onSelect(item)}
+                onClick={handleActionClick}
                 aria-pressed={isSelected}
                 data-action-button={isSelected ? 'primary' : 'secondary'}
             >
