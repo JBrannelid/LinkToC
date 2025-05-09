@@ -2,17 +2,29 @@ import React from 'react';
 import {FormMessage, FormProvider} from "../forms/index.js";
 import searchConfigs from "../search/config/searchConfig.js";
 import {SearchActions, SearchBar, SearchProvider, SearchResults} from "../search/index.js";
+import {useStableJoinRequest} from "../../hooks/useStableJoinRequest.js";
 
 
 const JoinStableForm = ({
                             formMethods,
                             onSubmit,
-                            onCancel,
-                            isLoading = false,
-                            loadingState = null,
-                            error = null,
-                            message = null
+                            onCancel
+                            // isLoading = false,
+                            // loadingState = null,
+                            // error = null,
+                            // message = null
                         }) => {
+    const {
+        sendJoinRequest,
+        loading: joinLoading,
+        error: joinError,
+        message: joinMessage,
+        loadingState: joinLoadingState
+    } = useStableJoinRequest();
+    const isLoading = joinLoading;
+    const loadingState = joinLoadingState;
+    const error = joinError;
+    const message = joinMessage;
     
     const stableConfig = {
         ...searchConfigs.stable,
@@ -20,15 +32,13 @@ const JoinStableForm = ({
         loadingState: loadingState
     };
     
-    const handleSelectAction = (selectedItem) => {
-        if(onSubmit && selectedItem){
-            onSubmit({
-                stableId: selectedItem.id,
-                stableName: selectedItem,
-                action: 'join'
-            });
+    const handleJoinStable = async (data) => {
+        const result = await sendJoinRequest(data);
+        if(result.success && onSubmit) {
+            onSubmit(result.data);
         }
     };
+    
     const handleCancelSearch = () => {
         if (onCancel) {
             onCancel();
@@ -79,6 +89,7 @@ const JoinStableForm = ({
                             className="mt-4"
                             maxHeight="40vh"
                             showWhenEmpty={false}
+                            onItemSelect={handleJoinStable}
                         />
 
                         {/* Error message display */}
@@ -86,15 +97,14 @@ const JoinStableForm = ({
                             <FormMessage message={displayError} />
                         )}
 
-                        {/* Custom message if provided */}
+                        {/* Success message display */}
                         {message && message.text && !displayError && (
                             <FormMessage message={message} />
                         )}
 
-                        {/* Action buttons */}
+                        {/* Action button */}
                         <div className="mt-6">
                             <SearchActions
-                                onAction={handleSelectAction}
                                 onCancel={handleCancelSearch}
                                 actionButtonClassName="mb-2"
                                 loading={isLoading}
