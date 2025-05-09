@@ -2,213 +2,232 @@ import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../context/AppContext";
-import PenIcon from "../../assets/icons/PenIcon";
-import TrashIcon from "../../assets/icons/TrashIcon";
 import CheckIcon from "../../assets/icons/CheckIcon";
-import ConfirmationModal from "../../components/ui/ConfirmationModal";
-import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import PermissionGate from "../../components/settings/PermissionGate";
 
 const ROLE_OPTIONS = [
-  { id: USER_ROLES.USER, label: "Medlem" },
+  { id: USER_ROLES.USER, label: "Member" },
   { id: USER_ROLES.ADMIN, label: "Admin" },
-  { id: USER_ROLES.MANAGER, label: "Stallägare" },
+  { id: USER_ROLES.MANAGER, label: "Owner" },
 ];
 
 const StableMembersList = ({ stableId }) => {
-  const [showRemoveMemberModal, setShowRemoveMemberModal] = useState(false);
-  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showActionModal, setShowActionModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const { members, loading, updateMemberRole, removeMember } =
     useStableManagement(stableId);
 
-  const handleShowEditModal = (member) => {
+  const handleClickMember = (member) => {
     setSelectedMember(member);
-    setSelectedRole(member.role); // User existing role as default
-    setShowRoleModal(true);
+    setSelectedRole(member.role);
+    setShowActionModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowActionModal(false);
+    setSelectedMember(null);
   };
 
   const handleConfirmRoleChange = () => {
-    if (selectedMember && selectedRole !== null) {
+    if (
+      selectedMember &&
+      selectedRole !== null &&
+      selectedRole !== selectedMember.role
+    ) {
       updateMemberRole(selectedMember.id, selectedRole);
-      setShowRoleModal(false);
-      setSelectedMember(null);
+      handleCloseModal();
     }
   };
 
-  const handleShowRemoveModal = (member) => {
-    setSelectedMember(member);
-    setShowRemoveMemberModal(true);
-  };
-
-  const handleConfirmRemove = () => {
+  const handleRemoveMember = () => {
     if (selectedMember) {
       removeMember(selectedMember.id);
-      setShowRemoveMemberModal(false);
-      setSelectedMember(null);
+      handleCloseModal();
     }
+  };
+
+  const getRoleName = (roleId) => {
+    const role = ROLE_OPTIONS.find((r) => r.id === roleId);
+    return role ? role.label : "Member";
+  };
+
+  // Group members by role
+  const groupedMembers = {
+    [USER_ROLES.MANAGER]: members.filter((m) => m.role === USER_ROLES.MANAGER),
+    [USER_ROLES.ADMIN]: members.filter((m) => m.role === USER_ROLES.ADMIN),
+    [USER_ROLES.USER]: members.filter((m) => m.role === USER_ROLES.USER),
   };
 
   if (loading) {
-    return <div className="text-center py-4">Laddar medlemmar...</div>;
+    return <div className="text-center py-4">Loading members...</div>;
   }
 
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm p-5">
-      <h2 className="font-bold mb-1">Medlemmar</h2>
-      <p className="text-sm mb-5 ">Enbart stallägare kan sätta användarroll</p>
+    <div className="bg-white rounded-lg shadow-sm p-4">
+      <h2 className="font-bold mb-1 text-lg">Members</h2>
+      <p className="text-sm mb-4 pt-1 text-gray">
+        Only stable owners can edit a member
+      </p>
 
-      {/* Header */}
-      <div className="space-y-1">
-        <div className="grid grid-cols-5 py-1 px-1 text-sm text-gray">
-          <div className="col-span-3">Namn</div>
-          <div className="col-span-1 text-center">Roll</div>
-          <div className="col-span-1 text-center">Kicka</div>
-        </div>
-
-        {/* Content - Display members */}
-        {members.map((member) => (
-          <div
-            key={`member-${member.id}`}
-            className="grid grid-cols-5 items-center bg-background rounded-full my-2"
-          >
-            <div className="col-span-3 pl-2">
-              <span>{`${member.firstName} ${member.lastName}`}</span>
+      {/* List container with scroll */}
+      <div className="max-h-80 overflow-y-auto pr-1">
+        {/* Managers */}
+        {groupedMembers[USER_ROLES.MANAGER].length > 0 && (
+          <div className="mb-3">
+            <div className="text-xs text-gray border-b pb-1 mb-2">
+              Stable Owners
             </div>
-            <div className="col-span-1 flex justify-center">
+            {groupedMembers[USER_ROLES.MANAGER].map((member) => (
               <PermissionGate
+                key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
-                fallback={
-                  <Button
-                    type="icon"
-                    disabled={true}
-                    aria-label="Kan inte redigera"
-                    className="text-gray-300 cursor-not-allowed"
-                  >
-                    <PenIcon size={28} />
-                  </Button>
-                }
               >
-                <Button
-                  type="icon"
-                  onClick={() => handleShowEditModal(member)}
-                  aria-label="Redigera medlem"
-                  className="text-primary"
+                <div
+                  className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  onClick={() => handleClickMember(member)}
                 >
-                  <PenIcon size={28} />
-                </Button>
+                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
+                </div>
               </PermissionGate>
-            </div>
-            <div className="col-span-1 flex justify-center">
-              <Button
-                type="icon"
-                onClick={() => handleShowRemoveModal(member)}
-                aria-label="Ta bort medlem"
-                className="text-error-500"
-              >
-                <TrashIcon size={25} />
-              </Button>
-            </div>
+            ))}
           </div>
-        ))}
+        )}
 
-        {members.length === 0 && (
-          <div className="py-3 text-center">
-            <p className="text-warning-400"> Inga medlemmar i stallet</p>
+        {/* Admins */}
+        {groupedMembers[USER_ROLES.ADMIN].length > 0 && (
+          <div className="mb-3">
+            <PermissionGate requiredRoles={[USER_ROLES.MANAGER]}>
+              <div className="text-xs text-gray border-b pb-1 mb-2">
+                Administrators
+              </div>
+            </PermissionGate>
+            {groupedMembers[USER_ROLES.ADMIN].map((member) => (
+              <PermissionGate
+                key={`member-${member.id}`}
+                requiredRoles={[USER_ROLES.MANAGER]}
+              >
+                <div
+                  className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  onClick={() => handleClickMember(member)}
+                >
+                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
+                  <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
+                    {getRoleName(member.role)}
+                  </span>
+                </div>
+              </PermissionGate>
+            ))}
+          </div>
+        )}
+        {/* Regular Members */}
+        {groupedMembers[USER_ROLES.USER].length > 0 && (
+          <div className="mb-3">
+            <PermissionGate requiredRoles={[USER_ROLES.MANAGER]}>
+              <div className="text-xs text-gray border-b pb-1 mb-2">
+                Members
+              </div>
+            </PermissionGate>
+            {groupedMembers[USER_ROLES.USER].map((member) => (
+              <PermissionGate
+                key={`member-${member.id}`}
+                requiredRoles={[USER_ROLES.MANAGER]}
+              >
+                <div
+                  className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  onClick={() => handleClickMember(member)}
+                >
+                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
+                  <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
+                    {getRoleName(member.role)}
+                  </span>
+                </div>
+              </PermissionGate>
+            ))}
           </div>
         )}
       </div>
 
-      {/* Remove Member Modal */}
-      <ConfirmationModal
-        isOpen={showRemoveMemberModal}
-        onClose={() => setShowRemoveMemberModal(false)}
-        onConfirm={handleConfirmRemove}
-        loading={loading}
-        title={`Vill du kicka ${selectedMember?.firstName || "denna medlem"}?`}
-        confirmButtonText="Ja"
-        confirmButtonType="danger"
-        icon={
-          <HandRaisedIcon
-            size={70}
-            backgroundColor="bg-error-500"
-            iconColor="text-white"
-          />
-        }
-      />
-
-      {/* Role Selection Modal */}
-      <div
-        className={`fixed inset-0 bg-black/50 flex items-center justify-center z-50 ${
-          showRoleModal ? "block" : "hidden"
-        }`}
-      >
-        <div className="bg-white rounded-lg w-80 p-5 max-w-md">
-          <div className="text-center mb-6">
-            <div className="flex justify-center mb-4">
-              <CheckIcon
-                size={70}
-                className="text-white"
-                backgroundColor="bg-primary"
-                strokeWidth={4}
-              />
-            </div>
-            <h3 className="text-xl font-medium">
-              Välj roll för {selectedMember?.firstName || "användaren"}
+      {/* Member Action Modal */}
+      {showActionModal && selectedMember && (
+        <div className="fixed inset-0 bg-gray/30 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-11/12 p-4">
+            <h3 className="mb-2">
+              Manage member{" "}
+              <span className="text-sm font-semibold text-primary">
+                {selectedMember.firstName} {selectedMember.lastName}
+              </span>
             </h3>
-          </div>
 
-          {/* Role Selection */}
-          <div className="space-y-3 mb-6">
-            {ROLE_OPTIONS.map((role) => (
-              <div
-                key={role.id}
-                className={`flex items-center p-3 rounded-lg cursor-pointer border transition-colors ${
-                  selectedRole === role.id
-                    ? "border-primary bg-primary-light"
-                    : "border-gray-200 hover:bg-light/60"
-                }`}
-                onClick={() => setSelectedRole(role.id)}
-              >
-                <div className="mr-3">
+            {/* Options layout */}
+            <div className="border-t py-3 mb-2">
+              <div className="grid grid-cols-4 gap-1 mb-3">
+                {ROLE_OPTIONS.map((role) => (
+                  <div key={role.id} className="text-center">
+                    <div className="text-sm mb-2">{role.label}</div>
+                    <div
+                      className={`w-5 h-5 mx-auto rounded-full border flex items-center justify-center cursor-pointer ${
+                        selectedRole === role.id
+                          ? "border-primary bg-primary"
+                          : "border-gray"
+                      }`}
+                      onClick={() => setSelectedRole(role.id)}
+                    >
+                      {selectedRole === role.id && (
+                        <CheckIcon className="text-white w-4 h-4" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {/* Remove option */}
+                <div className="text-center">
+                  <div className="text-sm mb-2 text-error-500">Remove</div>
                   <div
-                    className={`w-5 h-5 rounded-full border ${
-                      selectedRole === role.id
-                        ? "border-primary bg-primary"
-                        : "border-gray-400"
+                    className={`w-5 h-5 mx-auto rounded-full border flex items-center justify-center cursor-pointer ${
+                      selectedRole === "remove"
+                        ? "border-error-500 bg-error-500"
+                        : "border-gray"
                     }`}
+                    onClick={() => setSelectedRole("remove")}
                   >
-                    {selectedRole === role.id && (
-                      <CheckIcon className="text-white w-5 h-5" />
+                    {selectedRole === "remove" && (
+                      <CheckIcon className="text-white w-4 h-4" />
                     )}
                   </div>
                 </div>
-                <span className="flex-1">{role.label}</span>
               </div>
-            ))}
-          </div>
+            </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-col space-y-2">
-            <Button
-              type="primary"
-              className="w-full"
-              onClick={handleConfirmRoleChange}
-              disabled={selectedRole === null}
-            >
-              Spara
-            </Button>
-            <Button
-              type="secondary"
-              className="w-full"
-              onClick={() => setShowRoleModal(false)}
-            >
-              Avbryt
-            </Button>
+            {/* Action Buttons Cancel/Save*/}
+            <div className="grid grid-cols-2 gap-3">
+              <Button type="secondary" onClick={handleCloseModal}>
+                Cancel
+              </Button>
+
+              <Button
+                type="primary"
+                onClick={() => {
+                  if (selectedRole === "remove") {
+                    handleRemoveMember();
+                  } else if (
+                    selectedRole !== null &&
+                    selectedRole !== selectedMember.role
+                  ) {
+                    handleConfirmRoleChange();
+                  }
+                }}
+                disabled={
+                  selectedRole === null ||
+                  (selectedRole !== "remove" &&
+                    selectedRole === selectedMember.role)
+                }
+              >
+                Save
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

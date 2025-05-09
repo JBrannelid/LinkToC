@@ -22,7 +22,7 @@ export default function StableName() {
   if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (
-    <span className="cursor-pointer font-normal text-2xl font-heading">
+    <span className="text-lg md:text-xl xl:text-2xl font-heading">
       {currentStable.name || "Inget stall kopplat"}
     </span>
   );

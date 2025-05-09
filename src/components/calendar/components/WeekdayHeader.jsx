@@ -8,7 +8,7 @@ const WeekdayHeader = () => {
       {weekdayTitles.map((day, index) => (
         <p
           key={index}
-          className="py-2 flex items-center justify-center text-sm font-medium"
+          className="py-1 flex items-center justify-center text-sm lg:text-lg font-normal"
         >
           {day}
         </p>
