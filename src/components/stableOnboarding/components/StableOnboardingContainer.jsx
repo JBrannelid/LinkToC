@@ -39,17 +39,25 @@ const StableOnboardingContainer = () => {
         }
         
     };
-    
-    const handleStableJoinSuccess = async (data) => {
-        if (data.action === 'join' && data.stableId) {
-            const result = await handleJoinStable(data.stableId, data.stableName);
 
-            if (result.success) {
+    const handleStableJoinSuccess = async (data) => {
+        console.log("Join request successful, data:", data);
+
+        if (data.action === 'join' && data.stableId) {
+            try {
+                const stableName = typeof data.stableName === 'object'
+                    ? data.stableName.name
+                    : data.stableName;
                 
-                navigate(ROUTES.HOME);
+                const result = await handleJoinStable(data.stableId, stableName);
+
+                if (result.success) {
+                    sessionStorage.removeItem('isFirstLogin');
+                    navigate(ROUTES.HOME);
+                }
+            } catch (error) {
+                console.error("Error updating stable state:", error);
             }
-        } else {
-            return await handleSearchStable(data);
         }
     };
 
@@ -90,7 +98,7 @@ const StableOnboardingContainer = () => {
                     <OnboardingLayout title="Join Stable" showImage={false}>
                         <JoinStableForm
                             formMethods={formMethods}
-                            onSubmit={handleGoToJoinStable}
+                            onSubmit={handleStableJoinSuccess}
                             onCancel={handleGoBack}
                             isLoading={loading}
                             loadingState={loadingState}
