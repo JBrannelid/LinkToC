@@ -133,9 +133,9 @@ export default function HomePage() {
   }
 
   return (
-    <div className="pb-20 sm:p-0.5 mt-10 sm:mt-15 md:mt-20 px-1 sm:px-2 md:px-5 lg:px-25">
+    <div className="mt-5 md:mt-10 pb-20 md:pb-10 lg:max-w-[1440px] sm:px-1 xl:px-16 lg:px-14">
       {/* Stable Title */}
-      <h1 className="text-center mb-5 md:pb-10">
+      <h1 className="text-center mb-5 md:hidden lg:hidden">
         <StableName currentStableId={currentStable.id} />
       </h1>
 
@@ -171,7 +171,12 @@ export default function HomePage() {
         >
           {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
-            <WallPost />
+            <div>
+              <h1 className=" text-center pt-12 mb-10">
+                <StableName currentStableId={currentStable.id} />
+              </h1>
+              <WallPost />
+            </div>
           ) : (
             <div>
               <EventsContainer

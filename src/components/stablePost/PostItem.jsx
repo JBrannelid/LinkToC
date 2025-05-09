@@ -86,26 +86,23 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
   return (
     <div className="bg-background pb-2 md:w-9/10">
       <div className="flex justify-between">
-        <p className="text-sm text-grey opacity-80 md:text-lg">
+        <p className="text-sm text-grey opacity-80 md:text-sm">
           {/* {formatPostDate(post.date)} */}
         </p>
-        <p className="text-xs text-grey opacity-80 md:text-lg">
+        <p className="text-xs text-grey opacity-80 md:text-sm">
           kl {formatPostTime(post.date)}
         </p>
       </div>
       {/* Post content */}
-      <div className="bg-white w-full rounded-lg px-3 py-4 mb-4 shadow-lg">
+      <div className="bg-white w-full rounded-lg px-6 py-2 pt-3 mb-2 shadow-lg">
         <div className="flex justify-between pb-4">
-          <div className="flex items-center">
-            <div className="w-10 h-10  md:w-15 md:h-15 lg:w-20 lg:h-20 border-1 border-primary rounded-full overflow-hidden mr-4">
-              <img
-                src={profileImageUrl}
-                alt={`Profile image of ${userFullName}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
+          <div className="w-10 h-10  md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden ">
+            <img
+              src={profileImageUrl}
+              alt={`Profile image of ${userFullName}`}
+              className="w-full h-full object-cover"
+            />
           </div>
-
           {/* Pin icon */}
           {canPinPost && (
             <div onClick={handleTogglePin} className="cursor-pointer">
@@ -122,7 +119,7 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
           )}
         </div>
         <h3 className="pb-4">{post.title}</h3>
-        <p>{post.content}</p>
+        <p className="max-w-9/10">{post.content}</p>
         <p className="text-sm text-grey opacity-80 pt-5">{userFullName}</p>
         {/* Edit/Delete buttons - Display for admins and creators */}
         {canEditPost && (

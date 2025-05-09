@@ -35,7 +35,7 @@ const DesktopNavigation = () => {
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
   return (
-    <div className=" w-full bg-white shadow-md py-4">
+    <div className=" w-full bg-white shadow-md py-2">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
           <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
@@ -89,12 +89,12 @@ const DesktopNavigation = () => {
         </div>
         <div className="flex items-center space-x-10">
           <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
-            <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+            <NotificationIcon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
           </Link>
           <Link to={ROUTES.SETTINGS} className="text-primary">
             <SettingIcon
               strokeWidth={9}
-              className="w-6 h-6 md:w-8 md:h-8 text-primary"
+              className="w-6 h-6 md:w-7 md:h-7 text-primary"
             />
           </Link>
           {/* Display user image */}

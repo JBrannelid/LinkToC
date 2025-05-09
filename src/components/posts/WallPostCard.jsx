@@ -18,7 +18,7 @@ const WallPostCard = ({
       >
         <PinIcon className="w-6 h-6 text-primary" />
 
-        <p className="flex-1 pl-1 xl:text-2xl lg:text-xl md:text-lg">{title}</p>
+        <p className="flex-1 pl-1 xl:text-xl md:text-lg">{title}</p>
 
         <div className="text-primary">
           <ChevronDownIcon

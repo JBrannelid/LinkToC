@@ -2,7 +2,7 @@ import React from "react";
 import PostGroup from "./PostGroup";
 import {
   isToday,
-  isYesterday,
+  isLastWeek,
   parseISO,
   dateFnsCompareDesc,
 } from "../../utils/calendarUtils";
@@ -11,7 +11,7 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
   const groupPostsByDate = () => {
     const groups = {
       today: [],
-      yesterday: [],
+      lastWeek: [],
       older: [],
     };
 
@@ -26,8 +26,8 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
 
         if (isToday(postDate)) {
           groups.today.push(post);
-        } else if (isYesterday(postDate)) {
-          groups.yesterday.push(post);
+        } else if (isLastWeek(postDate)) {
+          groups.lastWeek.push(post);
         } else {
           groups.older.push(post);
         }
@@ -41,7 +41,7 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
     const sortByDate = (a, b) =>
       dateFnsCompareDesc(parseISO(a.date), parseISO(b.date));
     groups.today.sort(sortByDate);
-    groups.yesterday.sort(sortByDate);
+    groups.lastWeek.sort(sortByDate);
     groups.older.sort(sortByDate);
 
     return groups;
@@ -62,10 +62,10 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
         />
       )}
 
-      {groupedPosts.yesterday.length > 0 && (
+      {groupedPosts.lastWeek.length > 0 && (
         <PostGroup
-          title="Yesterday"
-          posts={groupedPosts.yesterday}
+          title="Last week"
+          posts={groupedPosts.lastWeek}
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
           onTogglePin={onTogglePin}

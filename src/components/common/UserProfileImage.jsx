@@ -79,7 +79,7 @@ const UserProfileImage = ({
           className={`${sizeClass} rounded-full object-cover`}
         />
       ) : (
-        <span className={`${fontSizeClass} lg:text-sm font-semibold`}>
+        <span className={`${fontSizeClass} lg:text-[8px] font-normal`}>
           {customContent || getInitials()}
         </span>
       )}

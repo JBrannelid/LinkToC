@@ -29,7 +29,7 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
             <UserProfileImage
               user={user}
               size="small"
-              className="border border-background md:h-4.2 md:w-4.2 lg:h-5 lg:w-5 xl:h-7 xl:w-7 "
+              className="border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5"
             />
           </div>
         ))}
@@ -38,7 +38,7 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
           <UserProfileImage
             user={{ id: "counter" }}
             size="small"
-            className="border border-background md:h-4.2 md:w-4.2 lg:h-5 lg:w-5 xl:h-7 xl:w-7"
+            className="border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5"
             customContent={`+${remainingUsersCount}`}
           />
         )}

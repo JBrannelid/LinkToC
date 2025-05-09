@@ -16,7 +16,7 @@ const CalendarGrid = ({
       <WeekdayHeader />
 
       {/* Calendar Days Box-Grid */}
-      <div className="grid grid-cols-7 text-center bg-white md:h-auto md:pl-2 md:pr-2 sm:pl-3 sm:pr-3 pl-1 pr-1 md:rounded-b-lg rounded-b-sm shadow-md">
+      <div className="grid grid-cols-7 text-center bg-white md:h-auto px-2 md:pl-4 md:pr-4 md:pb-6 rounded-b-lg shadow-md">
         {days.map((day, dayIdx) => {
           const hasEvents = dayHasEvents(day);
           const dayUsers = hasEvents ? findUsersWithEventsOnDay(day) : [];
