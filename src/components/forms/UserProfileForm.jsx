@@ -136,7 +136,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
-      <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+      <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-white shadow-md rounded flex flex-col relative">
         <ModalHeader
           title="Redigera profil"
           showCloseBtn={true}
@@ -147,7 +147,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
           <FormProvider {...methods}>
             <div>
               {/* Profile Image */}
-              <div className="bg-white rounded-lg p-2 mb-4 gap-10 flex items-center border-light border-2 shadow-md">
+              <div className="bg-white rounded-lg p-2 mb-4 flex items-center justify-between border-light border-2 shadow-md">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                   <img
                     src={profileImageUrl}
@@ -155,50 +155,52 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <Button
-                  type="secondary"
-                  onClick={() => triggerFileUpload(fileInputRef)}
-                  className="text-sm pl-5"
-                >
-                  Ladda upp bild
-                </Button>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={(event) =>
-                    handleImageUpload(event, setProfileImage)
-                  }
-                  accept="image/*"
-                  className="hidden"
-                />
+                <div>
+                  <Button
+                    type="secondary"
+                    onClick={() => triggerFileUpload(fileInputRef)}
+                    className="text-sm"
+                  >
+                    Choose image
+                  </Button>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={(event) =>
+                      handleImageUpload(event, setProfileImage)
+                    }
+                    accept="image/*"
+                    className="hidden"
+                  />
+                </div>
               </div>
 
               {/* Personal Info Section */}
               <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="font-bold">Personuppgifter</h2>
-                  <Button type="icon" aria-label="Redigera personuppgifter">
+                <div className="flex justify-between items-center mb-5">
+                  <h2 className="font-bold">Personal Information</h2>
+                  {/* <Button type="icon" aria-label="Edit personal information">
                     <PenIcon className="w-7 h-7 text-primary" />
-                  </Button>
+                  </Button> */}
                 </div>
                 <div className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       {/* Firstname field */}
                       <FormInput
-                        label="Förnamn"
+                        label="First name"
                         name="firstName"
                         labelPosition="above"
-                        validation={{ required: "Förnamn krävs" }}
+                        validation={{ required: "First name is required" }}
                       />
                     </div>
                     <div>
                       {/* Lastname field */}
                       <FormInput
-                        label="Efternamn"
+                        label="Last name"
                         name="lastName"
                         labelPosition="above"
-                        validation={{ required: "Efternamn krävs" }}
+                        validation={{ required: "Last name is required" }}
                       />
                     </div>
                   </div>
@@ -211,7 +213,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       readOnly={true} // Change to false when BE allow us to edit
                       inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
                       validation={{
-                        required: "Email krävs",
+                        required: "Email is required",
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "Ogiltig email adress",
@@ -223,7 +225,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                   {/* Phone number field */}
                   <div className="space-y-2">
                     <FormInput
-                      label="Telefonnummer"
+                      label="Phone number"
                       name="phoneNumber"
                       labelPosition="above"
                       readOnly={true} // Change to false when BE allow us to edit
@@ -241,22 +243,21 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
               </div>
 
               {/* Password Section */}
-              <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
-                <h2 className="font-bold">Lösenord</h2>
-                {!showPasswordForm ? (
-                  <div className="mt-5 flex justify-center py-1 p-2">
-                    <div className="w-full px-5 py-3 border rounded-full border-gray/40 bg-light/50">
-                      <p className="p-0">••••••••••</p>
-                    </div>
+              <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md flex flex-col">
+                <div className="flex justify-between items-center w-full">
+                  <h2 className="font-bold">Update password</h2>
+                  {!showPasswordForm && (
                     <Button
                       type="icon"
-                      aria-label="Redigera lösenord"
+                      aria-label="Update password fields"
                       onClick={() => setShowPasswordForm(!showPasswordForm)}
                     >
                       <PenIcon className="w-7 h-7 text-primary" />
                     </Button>
-                  </div>
-                ) : (
+                  )}
+                </div>
+
+                {showPasswordForm && (
                   <PasswordChangeForm
                     onCancel={() => setShowPasswordForm(false)}
                     user={userData || user}
@@ -280,7 +281,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     disabled={submitting}
                     className="w-full mb-5"
                   >
-                    Spara ändringar
+                    Save Changes
                   </Button>
 
                   <Button
@@ -289,7 +290,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     disabled={submitting}
                     className="w-full"
                   >
-                    Radera konto
+                    Delete Account
                   </Button>
                 </div>
               </div>
@@ -302,7 +303,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
           onClose={() => setShowDeleteConfirm(false)}
           onConfirm={handleDelete}
           loading={submitting}
-          title="Vill du radera kontot?"
+          title="Do you want to delete the account?"
           icon={
             <HandRaisedIcon
               size={70}
