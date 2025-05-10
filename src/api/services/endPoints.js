@@ -12,4 +12,5 @@ export const ENDPOINTS = {
   STABLEPOSTBYID: "/api/stable-post-by-stable-id/",
   EXTRACT_USER_ROLES: "/api/user-stables/",
   DELETE_USER_FROM_STABLE: "/api/userstables",
+  CHANGE_PASSWORD: "/api/change-password",
 };
