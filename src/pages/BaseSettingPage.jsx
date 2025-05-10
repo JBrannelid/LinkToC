@@ -31,7 +31,7 @@ export const SettingsMenuItem = ({ label, onClick, icon }) => (
 
 // Base settings page that both user and admin pages will extend
 const BaseSettingsPage = ({
-  title = "Inställningar",
+  title = "Settings",
   renderMenuItems,
   renderAdditionalContent: renderAdminInfo,
   showProfileEdit = true,
@@ -111,7 +111,7 @@ const BaseSettingsPage = ({
           <div className="flex-1">
             <h3 className="text-lg font-medium">{userFullName}</h3>
             <p className="text-grey">
-              {displayUser?.email || "Ingen mailadress registrerad"}
+              {displayUser?.email || "No email address registered"}
             </p>
           </div>
           {showProfileEdit && (
@@ -119,7 +119,7 @@ const BaseSettingsPage = ({
               onClick={() => setShowUserEditProfileForm(true)}
               className="p-2 text-primary"
               type="icon"
-              aria-label="Redigera användarprofil"
+              aria-label="Edit user profile"
             >
               <PenIcon className="w-9 h-9" />
             </Button>
@@ -153,7 +153,7 @@ const BaseSettingsPage = ({
               className="w-9/10"
               onClick={() => handleSwitchStable(navigate, ROUTES)}
             >
-              Byt stall
+              Change stable
             </Button>
 
             <Button
@@ -162,7 +162,7 @@ const BaseSettingsPage = ({
               onClick={handleShowLogoutModal}
               loading={loading}
             >
-              Logga ut
+              Log out
             </Button>
           </div>
         </div>
@@ -171,8 +171,8 @@ const BaseSettingsPage = ({
           onClose={() => setShowLogoutConfirm(false)}
           onConfirm={handleLogoutConfirmed}
           loading={loading}
-          title="Vill du logga ut?"
-          confirmButtonText="Logga ut"
+          title="Do you want to log out?"
+          confirmButtonText="Log out"
           confirmButtonType="danger"
           icon={
             <LogoutIcon
