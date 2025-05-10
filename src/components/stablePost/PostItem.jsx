@@ -89,7 +89,7 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
           </p>
         </div>
         {/* Post content */}
-        <div className="bg-white w-full rounded-lg px-6 py-2 pt-3 mb-2 shadow-lg">
+        <div className="bg-white w-full rounded-lg px-6 py-2 pt-3 mb-2 shadow-lg md:hidden">
           <div className="flex justify-between pb-4">
             <div className="w-10 h-10 md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden">
               <img
