@@ -15,9 +15,9 @@ const StableRequestsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
-      <div className="bg-primary-light">
+      <div className="bg-primary-light lg:hidden">
         <ModalHeader
-          title="Stallförfrågningar"
+          title="Stable requests"
           showCloseBtn={false}
           onCloseClick={() => window.history.back()}
         />

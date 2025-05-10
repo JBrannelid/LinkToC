@@ -59,7 +59,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.STABLE_POST,
     element: <StablePostPage />,
-    requiresStable: false,
+    requiresStable: true,
   },
   {
     path: ROUTES.HORSE_PROFILE,
@@ -79,7 +79,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.SETTINGS,
     element: <SettingsRouter />,
-    requiresStable: true,
+    requiresStable: false,
   },
   {
     path: ROUTES.STABLE_ONBOARDING,
@@ -95,7 +95,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.STABLE_REQUESTS,
     element: <StableRequestsPage />,
-    requiresStable: true,
+    requiresStable: false,
   },
 ];
 

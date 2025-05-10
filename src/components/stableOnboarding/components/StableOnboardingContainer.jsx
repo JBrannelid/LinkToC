@@ -40,25 +40,28 @@ const StableOnboardingContainer = () => {
 
   const handleStableJoinSuccess = useCallback(
     async (data) => {
-      if (data.action === "join" && data.stableId) {
+      // Handle join request (not immediate join)
+      if (data.action === "request" && data.requestSent) {
         try {
-          const stableName =
-            typeof data.stableName === "object"
-              ? data.stableName.name
-              : data.stableName;
+          // Clear first login flag
+          sessionStorage.removeItem("isFirstLogin");
 
-          const result = await handleJoinStable(data.stableId, stableName);
-
-          if (result.success) {
-            sessionStorage.removeItem("isFirstLogin");
-            navigate(ROUTES.HOME);
-          }
+          // Navigate to stable selection page with success message
+          navigate(ROUTES.SELECT_STABLE, {
+            state: {
+              message:
+                "Your request to join the stable has been sent. Please wait for approval.",
+              type: "success",
+              // Only display success message if source is 'onboarding'. Stable selection will handle their own messages
+              source: "/stable-onboarding",
+            },
+          });
         } catch (error) {
-          console.error("Error updating stable state:", error);
+          console.error("Error handling join request:", error);
         }
       }
     },
-    [handleJoinStable, navigate]
+    [navigate]
   );
 
   const handleGoToCreateStable = () => navigateToStep("create");

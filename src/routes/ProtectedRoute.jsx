@@ -10,7 +10,7 @@ const ProtectedRoute = ({
   requiresStable = false,
   requiredRoles = [],
 }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const { currentStable } = useAppContext();
   const { hasRole } = useRBAC();
   const location = useLocation();
@@ -39,6 +39,23 @@ const ProtectedRoute = ({
     return (
       <Navigate to={ROUTES.SELECT_STABLE} state={{ from: location }} replace />
     );
+  }
+
+  if (requiresStable) {
+    // explicit check for undefined (user with a stable role 0, such as a stable manager)
+    const hasStableAccess =
+      currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
+
+    if (!hasStableAccess) {
+      console.warn("Access denied - no valid stable membership");
+      return (
+        <Navigate
+          to={ROUTES.SELECT_STABLE}
+          state={{ from: location }}
+          replace
+        />
+      );
+    }
   }
 
   return children;

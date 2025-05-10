@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useUserStables } from "../hooks/useUserStables";
@@ -11,6 +11,8 @@ import ModalHeader from "../components/layout/ModalHeader";
 import StableIcon from "../assets/icons/StableIcon";
 import { CreateStableForm, JoinStableForm } from "../components/forms";
 import { useStableOnboarding } from "../hooks/useStableOnboarding";
+import { createSuccessMessage } from "../utils/errorUtils";
+import FormMessage from "../components/forms/formBuilder/FormMessage";
 
 const StableSelectionPage = () => {
   const { changeStable } = useAppContext();
@@ -23,9 +25,11 @@ const StableSelectionPage = () => {
     loadingState: stablesLoadingState,
   } = useUserStables();
 
-  // Add state to control showing buttons at bottom
-  const [showExploreSection, setShowExploreSection] = useState(false);
   const [currentView, setCurrentView] = useState(null);
+  const [pageMessage, setPageMessage] = useState(null);
+
+  // Ref for scrolling
+  const exploreButtonsRef = useRef(null);
 
   //Deconstruct onboarding hook
   const {
@@ -35,24 +39,28 @@ const StableSelectionPage = () => {
     loadingState,
     formMethods,
     handleCreateStable,
-    handleJoinStable,
   } = useStableOnboarding();
 
-  // Ref for scrolling
-  const exploreButtonsRef = useRef(null);
+  // Add useEffect to handle messages from navigation
+  useEffect(() => {
+    if (location.state?.message) {
+      setPageMessage(createSuccessMessage(location.state.message));
+
+      // Clear the message after 5 seconds
+      const timer = setTimeout(() => {
+        setPageMessage(null);
+      }, 5000);
+
+      // Clear location state to prevent message from showing again on refresh
+      navigate(location.pathname, { replace: true, state: {} });
+
+      return () => clearTimeout(timer);
+    }
+  }, [location, navigate]);
 
   const handleSelectStable = (stable) => {
     changeStable(stable.id, stable.name);
     navigate(ROUTES.HOME);
-  };
-
-  // Scroll to bottom when the user clicks on "explore new ones"
-  const handleExploreNewOnes = () => {
-    setShowExploreSection(true);
-    setCurrentView(null);
-    setTimeout(() => {
-      exploreButtonsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
   };
 
   // Handle successful stable creation
@@ -64,36 +72,13 @@ const StableSelectionPage = () => {
     }
   };
 
-  // Handle successful stable join
-  const handleStableJoinSuccess = useCallback(
-    async (data) => {
-      if (data.action === "join" && data.stableId) {
-        try {
-          const stableName =
-            typeof data.stableName === "object"
-              ? data.stableName.name
-              : data.stableName;
-
-          const result = await handleJoinStable(data.stableId, stableName);
-          if (result.success) {
-            sessionStorage.removeItem("isFirstLogin");
-            navigate(ROUTES.HOME);
-          }
-        } catch (error) {
-          console.error("Error updating stable state:", error);
-        }
-      }
-    },
-    [handleJoinStable, navigate]
-  );
-
   const handleCancel = () => {
     setCurrentView(null);
   };
 
   if (stablesLoading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+      <div className=" bg-background flex flex-col items-center justify-center">
         <LoadingSpinner size="large" className="text-primary mb-4" />
         <p className="text-gray-600">{stablesLoadingState.getMessage()}</p>
       </div>
@@ -106,30 +91,36 @@ const StableSelectionPage = () => {
       : "Unknown User";
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-auto">
+    <div className="flex flex-col bg-background pb-20 lg:pb-0 overflow-y-auto">
       {/* Header */}
-      <div className="bg-primary-light lg:bg-background">
+      <div className="bg-primary-light lg:bg-background lg:hidden">
         <ModalHeader title="Select Stable" showCloseBtn={false} />
       </div>
 
-      <div className="px-4 py-6 md:py-12 md:px-8 lg:px-16 max-w-6xl mx-auto">
+      <div className="px-4 py-4 mx-auto md:pt-10 lg:pt-15">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-4">
           <h2 className="text-xl md:text-2xl mb-2">Welcome {userFullName}!</h2>
-          <p className="text-gray">
-            Choose a stable to work with today, or{" "}
+          <p className="text-gray pt-5">
+            Choose a stable to work with today, explore new ones, or{" "}
             <span
               className="text-primary cursor-pointer hover:underline font-semibold"
-              onClick={handleExploreNewOnes}
+              onClick={() => navigate(ROUTES.STABLE_REQUESTS)}
             >
-              explore new ones
+              check your pending requests
             </span>
           </p>
         </div>
 
+        {pageMessage && (
+          <div className="mb-6 max-w-md mx-auto">
+            <FormMessage message={pageMessage} />
+          </div>
+        )}
+
         {/* Stables grid from card grid container */}
         {stables.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 md:mb-20 mt-10">
             {stables.map((stable) => (
               <Card.Container
                 key={stable.id}
@@ -191,75 +182,66 @@ const StableSelectionPage = () => {
             <h3 className="text-xl font-semibold mb-2">
               You don't have any stables yet
             </h3>
-            <p className=" mb-6">
+            <p className=" md:mb-6">
               Create a new stable or wait for an invitation
             </p>
-            <Button
-              type="primary"
-              onClick={() => setCurrentView("create")}
-              className="px-8"
-            >
-              Create new stable
-            </Button>
           </div>
         )}
 
-        {/* Add buttom section at the bottom of the pages*/}
-        {showExploreSection && (
-          <div ref={exploreButtonsRef} className="mt-16 max-w-md mx-auto">
-            {/* Show buttons if no form is selected */}
-            {currentView === null && (
-              <div>
-                <h3 className="text-xl font-semibold text-center mb-6">
-                  Explore new stables
-                </h3>
-                <div className="space-y-3">
-                  <Button
-                    type="primary"
-                    className="w-full"
-                    onClick={() => setCurrentView("create")}
-                  >
-                    New stable
-                  </Button>
+        {/* Action buttom  */}
+        <div
+          ref={exploreButtonsRef}
+          className="mt-10 md:mt-0 max-w-md mx-auto "
+        >
+          {/* Show buttons if no form is selected */}
+          {currentView === null && (
+            <div>
+              <h3 className="text-lg text-center mb-6">Explore new stables</h3>
+              <div className="space-y-3 flex flex-col justify-center  items-center">
+                <Button
+                  type="primary"
+                  className="w-9/10"
+                  onClick={() => setCurrentView("create")}
+                >
+                  New stable
+                </Button>
 
-                  <Button
-                    type="secondary"
-                    className="w-full"
-                    onClick={() => setCurrentView("join")}
-                  >
-                    Search for existing stable
-                  </Button>
-                </div>
+                <Button
+                  type="secondary"
+                  className="w-9/10"
+                  onClick={() => setCurrentView("join")}
+                >
+                  Search for existing stable
+                </Button>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Show Create Form */}
-            {currentView === "create" && (
-              <CreateStableForm
-                formMethods={formMethods}
-                onSubmit={handleStableCreationSuccess}
-                onCancel={handleCancel}
-                isLoading={loading}
-                loadingState={loadingState}
-                error={onboardingError}
-                message={message}
-              />
-            )}
+          {/* Show Create Form */}
+          {currentView === "create" && (
+            <CreateStableForm
+              formMethods={formMethods}
+              onSubmit={handleStableCreationSuccess}
+              onCancel={handleCancel}
+              isLoading={loading}
+              loadingState={loadingState}
+              error={onboardingError}
+              message={message}
+            />
+          )}
 
-            {/* Show Join Form */}
-            {currentView === "join" && (
-              <JoinStableForm
-                formMethods={formMethods}
-                onSubmit={handleStableJoinSuccess}
-                onCancel={handleCancel}
-                isLoading={loading}
-                loadingState={loadingState}
-                error={onboardingError}
-                message={message}
-              />
-            )}
-          </div>
-        )}
+          {/* Show Join Form */}
+          {currentView === "join" && (
+            <JoinStableForm
+              formMethods={formMethods}
+              onCancel={handleCancel}
+              isLoading={loading}
+              loadingState={loadingState}
+              error={onboardingError}
+              message={message}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
