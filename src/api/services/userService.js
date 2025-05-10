@@ -58,7 +58,7 @@ const userService = {
     );
 
     return await axiosInstance.put(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?userStableRole=${role}`
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?UpdateStableUserRole=${role}`
     );
   },
 };
