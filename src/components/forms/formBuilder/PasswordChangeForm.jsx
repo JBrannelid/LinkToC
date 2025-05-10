@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
+import { useNavigate } from "react-router";
 import Button from "../../ui/Button";
 import FormInput from "../formBuilder/FormInput";
 import { useAuth } from "../../../context/AuthContext";
+import authService from "../../../api/services/authService";
+import {
+  getErrorMessage,
+  createSuccessMessage,
+} from "../../../utils/errorUtils";
+import { ROUTES } from "../../../routes/routeConstants";
+import ModalHeader from "../../layout/ModalHeader";
 
-const PasswordChangeForm = ({ onCancel }) => {
-  const [step, setStep] = useState(1); // 1 = original, 2 = new password
+const PasswordChangeForm = ({ onCancel, onSuccess }) => {
+  const [step, setStep] = useState(1); // 1 = verify current, 2 = new password
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const navigate = useNavigate();
   const {
     formState: { errors },
     watch,
@@ -15,128 +26,212 @@ const PasswordChangeForm = ({ onCancel }) => {
   } = useFormContext();
 
   const newPassword = watch("new_password");
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
-  const verifyCurrentPassword = (data) => {
-    // Ask BE how we will procced with password changes.
-    // Send a API response to verifiy password here
+  const verifyCurrentPassword = async (data) => {
+    setLoading(true);
+    setMessage({ type: "", text: "" });
 
-    // Go to step-2 if response 200 sucesse
-    setStep(2);
+    try {
+      const result = await authService.login({
+        email: user.email,
+        password: data.current_password,
+      });
+
+      if (result) {
+        setStep(2);
+      }
+    } catch (error) {
+      setMessage(
+        getErrorMessage(error, {
+          defaultMessage: "Incorrect password. Please try again.",
+        })
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePasswordChange = async (data) => {
+    setLoading(true);
+    setMessage({ type: "", text: "" });
+
+    try {
+      const result = await authService.changePassword({
+        userId: user.id,
+        newPassword: data.new_password,
+        confirmPassword: data.confirm_password,
+      });
+
+      if (result?.isSuccess) {
+        setMessage(
+          createSuccessMessage(
+            "Password updated successfully. Logging you out for security..."
+          )
+        );
+
+        setTimeout(async () => {
+          await logout();
+          navigate(ROUTES.LOGIN);
+        }, 1500);
+      }
+    } catch (error) {
+      setMessage(
+        getErrorMessage(error, {
+          defaultMessage: "Unable to update password. Please try again.",
+        })
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
     reset();
     setStep(1);
+    setMessage({ type: "", text: "" });
     onCancel();
   };
+
   return (
-    <div className="bg-white rounded-lg p-4 border border-primary-light">
-      <h3 className="font-semibold mb-4">Ändra lösenord</h3>
-      <form id="password-change-form" onSubmit={(e) => e.preventDefault()}>
-        {/* The key is making a visible field first, then hiding it with CSS */}
-        <div className="sr-only">
-          <label htmlFor="username">Email</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            autoComplete="username"
-            defaultValue={user?.email || ""}
-            {...register("username")}
-            readOnly
-          />
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+      <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+        <ModalHeader
+          title="Change Password"
+          showCloseBtn={true}
+          onCloseClick={resetForm}
+          className="bg-primary-light"
+        />
+
+        <div className="p-6">
+          <form id="password-change-form" onSubmit={(e) => e.preventDefault()}>
+            {step === 1 && (
+              <>
+                <div className="mb-4">
+                  <FormInput
+                    name="current_password"
+                    label="Current Password"
+                    type="password"
+                    labelPosition="above"
+                    autoComplete="current-password"
+                    showPasswordToggle={true}
+                    validation={{
+                      required: "Please enter your current password",
+                    }}
+                  />
+                </div>
+
+                {message.text && (
+                  <div
+                    className={`mb-4 p-3 rounded ${
+                      message.type === "success"
+                        ? "bg-primary-light text-primary"
+                        : "bg-red-50 text-error-600"
+                    }`}
+                  >
+                    <p>Oops! That’s not quite the magic word.</p>
+                  </div>
+                )}
+                <p className="text-sm mb-4">
+                  For your security, please verify your current password to
+                  continue.
+                </p>
+
+                <div className="flex justify-between">
+                  <Button
+                    type="secondary"
+                    onClick={resetForm}
+                    disabled={loading}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={handleSubmit(verifyCurrentPassword)}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    Continue
+                  </Button>
+                </div>
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <p className="text-sm mb-4">
+                  Create a strong password with at least 8 characters.
+                </p>
+
+                <div className="mb-4">
+                  <FormInput
+                    name="new_password"
+                    label="New Password"
+                    type="password"
+                    labelPosition="above"
+                    autoComplete="new-password"
+                    showPasswordToggle={true}
+                    validation={{
+                      required: "Please enter your new password",
+                      minLength: {
+                        value: 8,
+                        message:
+                          "Needs 8+ chars, 1 big letter & 1 special sign",
+                      },
+                    }}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <FormInput
+                    name="confirm_password"
+                    label="Confirm New Password"
+                    type="password"
+                    labelPosition="above"
+                    autoComplete="new-password"
+                    showPasswordToggle={true}
+                    validation={{
+                      required: "Please confirm your new password",
+                      validate: (value) =>
+                        value === newPassword || "Passwords do not match",
+                    }}
+                  />
+                </div>
+
+                {message.text && (
+                  <div
+                    className={`mb-4 p-3 rounded ${
+                      message.type === "success"
+                        ? "bg-primary-light text-primary"
+                        : "bg-red-50 text-error-600"
+                    }`}
+                  >
+                    {message.text}
+                  </div>
+                )}
+
+                <div className="flex justify-between">
+                  <Button
+                    type="secondary"
+                    onClick={() => setStep(1)}
+                    disabled={loading}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    type="primary"
+                    onClick={handleSubmit(handlePasswordChange)}
+                    loading={loading}
+                    disabled={loading}
+                  >
+                    Update Password
+                  </Button>
+                </div>
+              </>
+            )}
+          </form>
         </div>
-        {step === 1 && (
-          <>
-            <p className="text-sm mb-4">
-              För att ändra ditt lösenord, vänligen ange ditt nuvarande lösenord
-              först.
-            </p>
-
-            <div className="mb-4">
-              <FormInput
-                name="current_password"
-                label="Nuvarande lösenord"
-                type="password"
-                labelPosition="above"
-                autoComplete="current-password"
-                validation={{
-                  required: "Vänligen ange ditt nuvarande lösenord",
-                }}
-              />
-            </div>
-
-            <div className="flex justify-between">
-              <Button type="secondary" onClick={resetForm}>
-                Avbryt
-              </Button>
-              <Button
-                type="primary"
-                onClick={handleSubmit(verifyCurrentPassword)}
-              >
-                Fortsätt
-              </Button>
-            </div>
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <p className="text-sm mb-4">
-              Ange och bekräfta ditt nya lösenord. Det måste vara minst 6 tecken
-              långt.
-            </p>
-
-            <div className="mb-4">
-              <FormInput
-                name="new_password"
-                label="Nytt lösenord"
-                type="password"
-                labelPosition="above"
-                autoComplete="new-password"
-                validation={{
-                  required: "Vänligen ange ditt nya lösenord",
-                  minLength: {
-                    value: 6,
-                    message: "Lösenordet måste vara minst 6 tecken långt",
-                  },
-                }}
-              />
-            </div>
-
-            <div className="mb-4">
-              <FormInput
-                name="confirm_password"
-                label="Bekräfta nytt lösenord"
-                type="password"
-                labelPosition="above"
-                autoComplete="new-password"
-                validation={{
-                  required: "Vänligen bekräfta ditt nya lösenord",
-                  validate: (value) =>
-                    value === newPassword || "Lösenorden matchar inte",
-                }}
-              />
-            </div>
-
-            <div className="flex justify-between">
-              <Button type="secondary" onClick={() => setStep(1)}>
-                Tillbaka
-              </Button>
-              <Button
-                type="primary"
-                onClick={handleSubmit((data) => {
-                  // Send a API call with new password to BE
-                  resetForm();
-                })}
-              >
-                Uppdatera lösenord
-              </Button>
-            </div>
-          </>
-        )}
-      </form>
+      </div>
     </div>
   );
 };
