@@ -5,6 +5,7 @@ import WelcomeScreen from "./WelcomeScreen.jsx";
 import { useStableOnboarding } from "../../../hooks/useStableOnboarding";
 import { CreateStableForm, JoinStableForm } from "../../forms/index.js";
 import OnboardingLayout from "../OnboardingLayout.jsx";
+import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
 
 const StableOnboardingContainer = () => {
     const navigate = useNavigate();
@@ -64,6 +65,20 @@ const StableOnboardingContainer = () => {
     const handleGoBack = () => navigateToStep("welcome");
 
     const renderCurrentStep = () => {
+        if (loading) {
+            return (
+                <OnboardingLayout title="Setting up your account" showImage={false}>
+                    <div className="flex flex-col items-center justify-center p-6">
+                        <div className="mb-4">
+                            <LoadingSpinner size="medium" />
+                        </div>
+                        <p className="text-center text-gray-600">
+                            {loadingState.getMessage() || "Setting up your new account..."}
+                        </p>
+                    </div>
+                </OnboardingLayout>
+            );
+        }
         switch (currentStep) {
             case "welcome":
                 return (

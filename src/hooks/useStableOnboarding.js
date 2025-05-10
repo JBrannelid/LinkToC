@@ -87,7 +87,7 @@ export const useStableOnboarding = () => {
                 stableBoxes: parseInt(formData.stableBoxes, 10) || 0
             };
             
-            const response = await stableService.createWithWallPost(stableData);
+            const response = await stableService.createStable(stableData);
 
             if (response && response.isSuccess) {
 

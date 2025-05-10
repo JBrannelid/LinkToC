@@ -24,6 +24,9 @@ axiosInstance.interceptors.response.use(
     console.error(
       `[API Error] ${formattedError.type}: ${formattedError.message}`
     );
+    if(formattedError.details) {
+        console.error('Error details:', formattedError.details);
+    }
     return Promise.reject(formattedError);
   }
 );

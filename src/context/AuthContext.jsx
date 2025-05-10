@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
       const token = tokenStorage.getAccessToken();
       if (!token) {
         setUser(null);
+        sessionStorage.removeItem('currentUser');
         setIsLoading(false);
         return false;
       }
@@ -78,6 +79,7 @@ export const AuthProvider = ({ children }) => {
       if (!userData || userData.exp * 1000 <= Date.now()) {
         tokenStorage.removeAccessToken();
         setUser(null);
+        sessionStorage.removeItem('currentUser');
         setIsLoading(false);
         return false;
       } else {
@@ -93,12 +95,13 @@ export const AuthProvider = ({ children }) => {
           userName: userData.userName,
           token: token,
         };
-
+        sessionStorage.setItem('currentUser', JSON.stringify(basicUserInfo));
+        
         // Fetch user-stable roles from the API
         try {
           // Get user base on a specifik stable Id
           const userStablesResponse = await userService.getUserStables(userId);
-
+          console.log('User stables response:', userStablesResponse);
           // Extract stable roles from the response
           const stableRoles = Array.isArray(userStablesResponse)
             ? userStablesResponse.reduce((rolesByStableId, stableRole) => {
@@ -106,7 +109,14 @@ export const AuthProvider = ({ children }) => {
                 return rolesByStableId;
               }, {})
             : {};
-
+          const userWithRoles = {
+            ...basicUserInfo,
+            stableRoles: stableRoles,
+            isNewUser: Object.keys(stableRoles).length === 0
+          };
+          
+          setUser(userWithRoles);
+          sessionStorage.setItem('currentUser', JSON.stringify(userWithRoles));
           // Set complete user info with roles
           setUser({
             ...basicUserInfo,
@@ -132,6 +142,7 @@ export const AuthProvider = ({ children }) => {
       console.error("Token verification error:", error);
       tokenStorage.removeAccessToken();
       setUser(null);
+      sessionStorage.removeItem('currentUser');
       setIsLoading(false);
       return false;
     }
