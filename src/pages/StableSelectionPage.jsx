@@ -120,7 +120,7 @@ const StableSelectionPage = () => {
 
         {/* Stables grid from card grid container */}
         {stables.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 md:mb-20 mt-10">
             {stables.map((stable) => (
               <Card.Container
                 key={stable.id}
