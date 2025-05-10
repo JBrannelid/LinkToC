@@ -93,7 +93,7 @@ const StableSelectionPage = () => {
 
   if (stablesLoading) {
     return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+      <div className=" bg-background flex flex-col items-center justify-center">
         <LoadingSpinner size="large" className="text-primary mb-4" />
         <p className="text-gray-600">{stablesLoadingState.getMessage()}</p>
       </div>
@@ -106,13 +106,13 @@ const StableSelectionPage = () => {
       : "Unknown User";
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-auto">
+    <div className="flex flex-col bg-background pb-20 lg:md-10 overflow-y-auto">
       {/* Header */}
       <div className="bg-primary-light lg:bg-background">
         <ModalHeader title="Select Stable" showCloseBtn={false} />
       </div>
 
-      <div className="px-4 py-6 md:py-12 md:px-8 lg:px-16 max-w-6xl mx-auto">
+      <div className="px-4 py-4 mx-auto">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-xl md:text-2xl mb-2">Welcome {userFullName}!</h2>
@@ -204,19 +204,19 @@ const StableSelectionPage = () => {
           </div>
         )}
 
-        {/* Add buttom section at the bottom of the pages*/}
+        {/* Add buttom section */}
         {showExploreSection && (
-          <div ref={exploreButtonsRef} className="mt-16 max-w-md mx-auto">
+          <div ref={exploreButtonsRef} className="mt-10 max-w-md mx-auto ">
             {/* Show buttons if no form is selected */}
             {currentView === null && (
               <div>
-                <h3 className="text-xl font-semibold text-center mb-6">
+                <h3 className="text-xl text-center mb-6">
                   Explore new stables
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-3 flex flex-col justify-center  items-center">
                   <Button
                     type="primary"
-                    className="w-full"
+                    className="w-9/10"
                     onClick={() => setCurrentView("create")}
                   >
                     New stable
@@ -224,7 +224,7 @@ const StableSelectionPage = () => {
 
                   <Button
                     type="secondary"
-                    className="w-full"
+                    className="w-9/10"
                     onClick={() => setCurrentView("join")}
                   >
                     Search for existing stable
