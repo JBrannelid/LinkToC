@@ -98,6 +98,23 @@ export function useStablePosts(stableId) {
     }
   };
 
+  // Toggle pin status of a post
+  const togglePinStatus = async (postId) => {
+    setOperationType("update");
+    try {
+      setLoading(true);
+      setError(null);
+
+      await stablePostService.togglePin(postId);
+      await fetchAndUpdatePosts();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to toggle pin status");
+      setLoading(false);
+      return false;
+    }
+  };
+
   const loadingState = useLoadingState(loading, operationType);
 
   return {
@@ -107,6 +124,7 @@ export function useStablePosts(stableId) {
     createPost,
     updatePost,
     deletePost,
+    togglePinStatus,
     fetchAndUpdatePosts,
   };
 }

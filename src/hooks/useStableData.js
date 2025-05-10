@@ -4,9 +4,36 @@ import { useLoadingState } from "./useLoadingState";
 
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
+  const [currentStableData, setCurrentStableData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+
+  // Fetch single stable by ID
+  const fetchStableById = useCallback(async () => {
+    if (!stableId) {
+      setLoading(false);
+      return;
+    }
+
+    setOperationType("fetch");
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await stableService.getById(stableId);
+      if (response?.value) {
+        setCurrentStableData(response.value);
+      }
+
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to retrieve stable data");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [stableId]);
 
   // Use useCallback to unvoid rerendering fetch data from DB
   const fetchAndUpdateStables = useCallback(async () => {
@@ -36,8 +63,14 @@ export function useStableData(stableId) {
   }, []);
 
   useEffect(() => {
-    fetchAndUpdateStables();
-  }, [fetchAndUpdateStables]);
+    if (stableId) {
+      // Fetch single stable when stableId is provided
+      fetchStableById();
+    } else {
+      // Fetch all stables when no stableId is provided
+      fetchAndUpdateStables();
+    }
+  }, [fetchAndUpdateStables, fetchStableById, stableId]);
 
   // Use useCallback to unvoid rerendering fetch data from DB
   const getStableById = useCallback(
@@ -51,11 +84,13 @@ export function useStableData(stableId) {
 
   return {
     stables,
+    currentStableData,
     stableId,
     status: { loading, error },
     loadingState,
     fetchAndUpdateStables,
     getStableById,
+    fetchStableById,
   };
 }
 

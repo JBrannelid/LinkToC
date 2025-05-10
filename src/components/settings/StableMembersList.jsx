@@ -15,7 +15,7 @@ const StableMembersList = ({ stableId }) => {
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
-  const { members, loading, updateMemberRole, removeMember } =
+  const { members, loading, updateMemberRole, removeUserFromStable } =
     useStableManagement(stableId);
 
   const handleClickMember = (member) => {
@@ -47,7 +47,7 @@ const StableMembersList = ({ stableId }) => {
 
   const handleRemoveMember = () => {
     if (selectedMember) {
-      removeMember(selectedMember.id);
+      removeUserFromStable(selectedMember.id);
       handleCloseModal();
     }
   };
