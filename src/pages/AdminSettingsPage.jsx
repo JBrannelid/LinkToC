@@ -15,22 +15,19 @@ const AdminSettingsPage = () => {
   const renderMenuItems = ({ setShowUserEditProfileForm }) => (
     <>
       <SettingsMenuItem
-        label="Redigera profil"
+        label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
       />
       <SettingsMenuItem
-        label="Hantera stall"
+        label="Manage Stables"
         onClick={() => handleManageStables(navigate, ROUTES)}
       />
       <SettingsMenuItem
-        label="Terms of service"
+        label="Terms of Service"
         onClick={handleTermsOfService}
       />
       <SettingsMenuItem label="Support" onClick={handleSupport} />
-      <SettingsMenuItem
-        label="Cookie inställningar"
-        onClick={handleCookieSettings}
-      />
+      <SettingsMenuItem label="Privacy Policy" onClick={handleCookieSettings} />
     </>
   );
 
@@ -38,14 +35,14 @@ const AdminSettingsPage = () => {
   const renderAdminInfo = ({ currentStable }) => (
     <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg border border-primary">
       <h3 className="text-primary text-sm">
-        Du är admin för {currentStable?.name}.
+        You are the admin of {currentStable?.name}.
       </h3>
     </div>
   );
 
   return (
     <BaseSettingsPage
-      title="Inställningar"
+      title="Settings"
       renderMenuItems={renderMenuItems}
       renderAdditionalContent={renderAdminInfo}
     />
