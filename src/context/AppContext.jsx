@@ -27,10 +27,19 @@ export const AppProvider = ({ children }) => {
 
   // Update the current stable
   const changeStable = (id, name = "") => {
+    // Validate if the user has access to the stable
+    if (!user?.stableRoles?.[id]) {
+      console.error(`User does not have access to stable ${id}`);
+      // Always reset the stable if the user doesn't have access
+      localStorage.removeItem("currentStable");
+      setCurrentStable(null);
+      return false;
+    }
+
     const stableData = { id, name };
     setCurrentStable(stableData);
-
     localStorage.setItem("currentStable", JSON.stringify(stableData));
+    return true;
   };
 
   // Load saved stable on initial mount
