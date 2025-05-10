@@ -29,6 +29,7 @@ export default function StablePostPage() {
     createPost,
     updatePost,
     deletePost,
+    togglePinStatus,
   } = useStablePosts(currentStableId);
 
   // Form control functions
