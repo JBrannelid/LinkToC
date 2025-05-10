@@ -69,7 +69,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.USER_PROFILE,
     element: <UserProfilePage />,
-    requiresStable: true,
+    requiresStable: false,
   },
   {
     path: ROUTES.NOTIFICATIONS,
@@ -79,7 +79,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.SETTINGS,
     element: <SettingsRouter />,
-    requiresStable: true,
+    requiresStable: false,
   },
   {
     path: ROUTES.STABLE_ONBOARDING,
@@ -95,7 +95,7 @@ export const protectedRoutes = [
   {
     path: ROUTES.STABLE_REQUESTS,
     element: <StableRequestsPage />,
-    requiresStable: true,
+    requiresStable: false,
   },
 ];
 
