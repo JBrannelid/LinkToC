@@ -1,5 +1,5 @@
 import createBaseService from "./baseService.js";
-import { ENDPOINTS } from "./endpoints.js";
+import { ENDPOINTS } from "./endPoints.js";
 import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage.js";
 
@@ -117,6 +117,23 @@ const authService = {
     }
     return await axiosInstance.post(`/api/password-reset-email/send`, {
       email,
+    });
+  },
+
+  changePassword: async (changeData) => {
+    if (
+      !changeData ||
+      !changeData.userId ||
+      !changeData.newPassword ||
+      !changeData.confirmPassword
+    ) {
+      throw new Error("User ID and passwords are required");
+    }
+
+    return await axiosInstance.post(ENDPOINTS.CHANGE_PASSWORD, {
+      userId: changeData.userId,
+      newPassword: changeData.newPassword,
+      confirmPassword: changeData.confirmPassword,
     });
   },
 };
