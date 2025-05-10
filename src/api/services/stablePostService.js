@@ -55,6 +55,13 @@ const stablePostService = {
   delete: async (id) => {
     return await axiosInstance.delete(`${ENDPOINTS.STABLEPOST}/delete/${id}`);
   },
+
+  // Pin toggler (true/false) by a stable post
+  togglePin: async (postId) => {
+    return await axiosInstance.patch(
+      `${ENDPOINTS.STABLEPOST}/is-pinned/change/${postId}`
+    );
+  },
 };
 
 export default stablePostService;
