@@ -62,9 +62,11 @@ const RegistrationPage = () => {
         throw new Error(response?.message || "Registration failed");
       }
     } catch (error) {
-      setServerError(getErrorMessage(error, {
-        defaultMessage: "Registration failed. Please try again."
-      }).text);
+      console.error("Registration error details:", error);
+      const errorMessage = getErrorMessage(error, {
+        defaultMessage: "Registration failed. Please try again later." 
+      });
+      setServerError(errorMessage.text);
     } finally {
       setIsSubmitting(false);
     }

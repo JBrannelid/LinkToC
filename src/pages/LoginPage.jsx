@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 import Button from "../components/ui/Button";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import { useLoadingState } from "../hooks/useLoadingState";
 import FacebookIcon from "../assets/icons/FacebookIcon";
 import LinkedinIcon from "../assets/icons/LinkedinIcon";

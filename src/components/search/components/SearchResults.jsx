@@ -4,6 +4,9 @@ import {useSearch} from "../../../context/searchContext.js";
 import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
 import {FormMessage} from "../../forms/index.js";
 
+const MemoizedListItem = React.memo(ListItemRenderer, (prev, next) => {
+    return prev.isSelected === next.isSelected && prev.item[prev.config?.idField || 'id'] === next.item[next.config?.idField || 'id'];
+});
 const SearchResults = ({
                            className = '',
                            maxHeight = '20rem',
@@ -54,62 +57,11 @@ const SearchResults = ({
     if (!query && !showWhenEmpty && results.length === 0) {
         return null;
     }
+    const ItemRenderer = config?.resultItemRenderer ? React.memo(config.resultItemRenderer) : MemoizedListItem;
 
-    const renderResults = () => {
-        if (loading) {
-            return (
-                <div className="p-4 text-center text-gray flex flex-col items-center">
-                    <LoadingSpinner size="medium" className="text-primary mb-2"/>
-                    <p>{loadingState?.getMessage() || config?.loadingText || 'Searching...'}</p>
-                </div>
-            );
-        }
-        if (error) {
-            const errorMessage = typeof error === 'string'
-                ? {type: 'error', text: error}
-                : (error.text ? error : {type: 'error', text: 'An error occurred during search'});
-
-            return (
-                <FormMessage message={errorMessage}/>
-            );
-        }
-        if (query.trim().length > 0 && query.trim().length < 3 && !isTyping) {
-            return (
-                <div className="p-4 text-center text-gray-500 ">
-                    <p className="text-sm">
-                        Please enter at least 3 characters to start searching
-                    </p>
-                </div>
-            );
-        }
-        if (results.length === 0 && query.trim().length >= 3 && !isTyping) {
-            return (
-                <div className="p-4 text-center text-gray">
-                    <p>{config?.noResultsText || 'No results found'}</p>
-                </div>
-            );
-        }
-        if (message) {
-            return (
-                <div role="alert">
-                    <FormMessage message={message}/>
-                    {message.type === 'error' && message.text.includes("Can't find") && (
-                        <div className="mt-3 text-sm">
-                            <p>Suggestions:</p>
-                            <ul className="list-disc pl-5 mt-1">
-                                <li>Check for spelling errors</li>
-                                <li>Try using fewer or different keywords</li>
-                                <li>Try searching for part of the name</li>
-                            </ul>
-                        </div>
-                    )}
-                </div>
-            );
-        }
-        if (!query && !showWhenEmpty && results.length === 0) {
-            return null;
-        }
-
+    const renderResultItems = () => {
+        if(results.length === 0) return null;
+        
         const {layout = 'list', resultItemRenderer, columns = 1} = config || {};
 
         if (layout === 'grid') {
@@ -119,26 +71,21 @@ const SearchResults = ({
                     className={gridClass}
                     role="listbox"
                     aria-label={`Search results for ${config?.entityType || 'items'}`}>
-                    {results.map((item, index) => {
-                        const itemId = item[config?.idField || 'id'];
-                        const isSelected = isItemSelected(item);
+                    {results.map((item, index) => (
 
-                        const ItemRenderer = resultItemRenderer || ListItemRenderer;
-
-                        return (
                             <ItemRenderer
-                                key={itemId || index}
+                                key={item[config?.idField || 'id'] || index}
                                 item={item}
-                                isSelected={isSelected}
+                                isSelected={isItemSelected(item)}
                                 onSelect={handleItemClick}
                                 onFocus={handleItemFocus}
                                 onJoinStable={onItemSelect}
                                 config={config}
                                 index={index}
                                 data-index={index}
-                            />
-                        );
-                    })}
+                            />                       
+                        
+                        ))}
                 </div>
             );
         } else {
@@ -146,17 +93,12 @@ const SearchResults = ({
                 <ul className="space-y-2"
                     role="listbox"
                     aria-label={`Search results for ${config?.entityType || 'items'}`}>
-                    {results.map((item, index) => {
-                        const itemId = item[config?.idField || 'id'];
-                        const isSelected = isItemSelected(item);
+                    {results.map((item, index) => (
 
-                        const ItemRenderer = resultItemRenderer || ListItemRenderer;
-
-                        return (
                             <ItemRenderer
-                                key={itemId || index}
+                                key={item[config?.idField || 'id'] || index}
                                 item={item}
-                                isSelected={isSelected}
+                                isSelected={isItemSelected(item)}
                                 onSelect={handleItemClick}
                                 onFocus={handleItemFocus}
                                 onJoinStable={onItemSelect}
@@ -164,8 +106,7 @@ const SearchResults = ({
                                 index={index}
                                 data-index={index}
                             />
-                        );
-                    })}
+                        ))}
                 </ul>
             );
         }
@@ -177,7 +118,53 @@ const SearchResults = ({
             className={`overflow-y-auto ${className}`}
             style={{maxHeight}}
             aria-live="polite">
-            {renderResults()}
+            {loading && (
+                <div className="p-4 flex flex-col items-center justify-center h-full">
+                    <LoadingSpinner size="medium" className="text-primary mb-2" />
+                    <p className="text-center text-gray-500">
+                        {loadingState?.getMessage() || config?.loadingText || 'Searching...'}
+                    </p>
+                </div>
+            )}
+            {!loading && error && (
+                <div className="h-full flex items-center justify-center">
+                    <FormMessage
+                        message={typeof error === 'string'
+                            ? { type: 'error', text: error }
+                            : (error.text ? error : { type: 'error', text: 'An error occurred during search' })}
+                    />
+                </div>
+            )}
+            {!loading && !error && results.length === 0 && query.trim().length > 0 && !isTyping && (
+                <div className="p-4 h-full flex items-center justify-center">
+                    <div className="text-center">
+                        <p className="text-gray-600">{config?.noResultsText || 'No results found'}</p>
+                    </div>
+                </div>
+            )}
+            {!loading && !error && message && (
+                <div role="alert" className="h-full flex items-center justify-center">
+                    <div>
+                        <FormMessage message={message} />
+                        {message.type === 'error' && message.text.includes("Can't find") && (
+                            <div className="mt-3 text-sm">
+                                <p>Suggestions:</p>
+                                <ul className="list-disc pl-5 mt-1">
+                                    <li>Check for spelling errors</li>
+                                    <li>Try using fewer or different keywords</li>
+                                    <li>Try searching for part of the name</li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {!loading && !error && !message && results.length > 0 && (
+                <div className="transition-opacity duration-200">
+                    {renderResultItems()}
+                </div>
+            )}
         </div>
     );
 };

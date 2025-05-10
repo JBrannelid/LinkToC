@@ -10,7 +10,6 @@ const initialState = {
     results: [],
     loading: false,
     error: null,
-    selectedItems: [],
     selectedItem: null,
     message: null,
     operationType: 'fetch'
@@ -60,27 +59,18 @@ function searchReducer(state, action) {
             return {...state, selectedItem: action.payload};
         case ACTIONS.TOGGLE_ITEM_SELECTION:
 
-            const {item, idField, selectionMode} = action.payload;
-            const itemId = item[idField || 'id'];
+            const {item, idField = 'id'} = action.payload;
+            const itemId = item[idField];
 
-            if (selectionMode === 'multiple') {
-                const isSelected = state.selectedItems.some(
-                    selectedItem => selectedItem[idField || 'id'] === itemId
-                );
-
-                return {
-                    ...state,
-                    selectedItems: isSelected
-                        ? state.selectedItems.filter(selectedItem => selectedItem[idField || 'id'] !== itemId)
-                        : [...state.selectedItems, item]
-                };
-            } else {
-
-                return {...state, selectedItem: item};
-            }
+            const isAlreadySelected = state.selectedItem &&
+                state.selectedItem[idField] === itemId;
+            return {
+                ...state,
+                selectedItem: isAlreadySelected ? null : item
+            };
 
         case ACTIONS.CLEAR_SELECTION:
-            return {...state, selectedItem: null, selectedItems: []};
+            return {...state, selectedItem: null};
         case ACTIONS.RESET_SEARCH:
             return {
                 ...state,
@@ -121,7 +111,7 @@ const SearchProvider = ({children, customConfig = null}) => {
     }, [config?.entityType]);
 
     const performSearch = useCallback(async (searchQuery) => {
-        if (!searchQuery.trim() || searchQuery.trim().length < 3 || !config?.searchFn) return;
+        if (!searchQuery.trim() || !config?.searchFn) return;
 
         try {
             dispatch({type: ACTIONS.START_LOADING, payload: 'fetch'});
@@ -137,7 +127,7 @@ const SearchProvider = ({children, customConfig = null}) => {
                         payload: response.data[0]
                     });
                 }
-                if (response.data.length === 0 && searchQuery.trim().length >= 3) {
+                if (response.data.length === 0 && searchQuery.trim().length > 0) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
@@ -155,7 +145,7 @@ const SearchProvider = ({children, customConfig = null}) => {
                     });
                 }
 
-                if (response.length === 0 && searchQuery.trim().length >= 3) {
+                if (response.length === 0 && searchQuery.trim().length > 0) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found')
@@ -166,7 +156,7 @@ const SearchProvider = ({children, customConfig = null}) => {
             } else {
                 console.warn('Unexpected search response format: ', response);
                 dispatch({type: ACTIONS.SET_RESULTS, payload: []});
-                if (searchQuery.trim().length >= 3) {
+                if (searchQuery.trim().length > 0) {
                     dispatch({
                         type: ACTIONS.SET_MESSAGE,
                         payload: createErrorMessage(config.noResultsText || 'No results found'),
@@ -243,7 +233,6 @@ const SearchProvider = ({children, customConfig = null}) => {
             payload: {
                 item,
                 idField: config?.idField || 'id',
-                selectionMode: config?.selectionMode || 'single',
             }
         });
     };
@@ -268,15 +257,8 @@ const SearchProvider = ({children, customConfig = null}) => {
         }
     };
     const executeActionForSelectedItem = useCallback(() => {
-        if (state.selectionMode === 'multiple' && state.selectedItems.length > 0) {
-            // For multiple selection mode
-            return handleAction(() => {
-                if (onAction) {
-                    onAction(state.selectedItems);
-                }
-            }, 'update');
-        } else if (state.selectedItem) {
-            // For single selection mode  
+        if (state.selectedItem) {
+            
             return handleAction(() => {
                 if (onAction) {
                     onAction(state.selectedItem);
@@ -284,17 +266,12 @@ const SearchProvider = ({children, customConfig = null}) => {
             }, 'update');
         }
         return Promise.resolve();
-    }, [state.selectionMode, state.selectedItem, state.selectedItems, handleAction]);
+    }, [state.selectedItem, handleAction]);
     const isItemSelected = (item) => {
         if (!item) return false;
 
         const itemId = item[config?.idField || 'id'];
-
-        if (config?.selectionMode === 'multiple') {
-            return state.selectedItems.some(
-                selectedItem => selectedItem[config?.idField || 'id'] === itemId
-            );
-        }
+        
         return state.selectedItem && state.selectedItem[config?.idField || 'id'] === itemId;
     };
 
