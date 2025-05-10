@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useUserStables } from "../hooks/useUserStables";
@@ -25,10 +25,11 @@ const StableSelectionPage = () => {
     loadingState: stablesLoadingState,
   } = useUserStables();
 
-  // Add state to control showing buttons at bottom
-  const [showExploreSection, setShowExploreSection] = useState(false);
   const [currentView, setCurrentView] = useState(null);
   const [pageMessage, setPageMessage] = useState(null);
+
+  // Ref for scrolling
+  const exploreButtonsRef = useRef(null);
 
   //Deconstruct onboarding hook
   const {
@@ -57,21 +58,9 @@ const StableSelectionPage = () => {
     }
   }, [location, navigate]);
 
-  // Ref for scrolling
-  const exploreButtonsRef = useRef(null);
-
   const handleSelectStable = (stable) => {
     changeStable(stable.id, stable.name);
     navigate(ROUTES.HOME);
-  };
-
-  // Scroll to bottom when the user clicks on "explore new ones"
-  const handleExploreNewOnes = () => {
-    setShowExploreSection(true);
-    setCurrentView(null);
-    setTimeout(() => {
-      exploreButtonsRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
   };
 
   // Handle successful stable creation
@@ -104,21 +93,21 @@ const StableSelectionPage = () => {
   return (
     <div className="flex flex-col bg-background pb-20 lg:pb-0 overflow-y-auto">
       {/* Header */}
-      <div className="bg-primary-light lg:bg-background">
+      <div className="bg-primary-light lg:bg-background lg:hidden">
         <ModalHeader title="Select Stable" showCloseBtn={false} />
       </div>
 
-      <div className="px-4 py-4 mx-auto">
+      <div className="px-4 py-4 mx-auto md:pt-10 lg:pt-15">
         {/* Header */}
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-4">
           <h2 className="text-xl md:text-2xl mb-2">Welcome {userFullName}!</h2>
-          <p className="text-gray">
-            Choose a stable to work with today, or{" "}
+          <p className="text-gray pt-5">
+            Choose a stable to work with today, explore new ones, or{" "}
             <span
               className="text-primary cursor-pointer hover:underline font-semibold"
-              onClick={handleExploreNewOnes}
+              onClick={() => navigate(ROUTES.STABLE_REQUESTS)}
             >
-              explore new ones
+              check your pending requests
             </span>
           </p>
         </div>
@@ -193,67 +182,66 @@ const StableSelectionPage = () => {
             <h3 className="text-xl font-semibold mb-2">
               You don't have any stables yet
             </h3>
-            <p className=" mb-6">
+            <p className=" md:mb-6">
               Create a new stable or wait for an invitation
             </p>
           </div>
         )}
 
-        {/* Add buttom section */}
-        {showExploreSection && (
-          <div ref={exploreButtonsRef} className="mt-10 max-w-md mx-auto ">
-            {/* Show buttons if no form is selected */}
-            {currentView === null && (
-              <div>
-                <h3 className="text-xl text-center mb-6">
-                  Explore new stables
-                </h3>
-                <div className="space-y-3 flex flex-col justify-center  items-center">
-                  <Button
-                    type="primary"
-                    className="w-9/10"
-                    onClick={() => setCurrentView("create")}
-                  >
-                    New stable
-                  </Button>
+        {/* Action buttom  */}
+        <div
+          ref={exploreButtonsRef}
+          className="mt-10 md:mt-0 max-w-md mx-auto "
+        >
+          {/* Show buttons if no form is selected */}
+          {currentView === null && (
+            <div>
+              <h3 className="text-lg text-center mb-6">Explore new stables</h3>
+              <div className="space-y-3 flex flex-col justify-center  items-center">
+                <Button
+                  type="primary"
+                  className="w-9/10"
+                  onClick={() => setCurrentView("create")}
+                >
+                  New stable
+                </Button>
 
-                  <Button
-                    type="secondary"
-                    className="w-9/10"
-                    onClick={() => setCurrentView("join")}
-                  >
-                    Search for existing stable
-                  </Button>
-                </div>
+                <Button
+                  type="secondary"
+                  className="w-9/10"
+                  onClick={() => setCurrentView("join")}
+                >
+                  Search for existing stable
+                </Button>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* Show Create Form */}
-            {currentView === "create" && (
-              <CreateStableForm
-                formMethods={formMethods}
-                onSubmit={handleStableCreationSuccess}
-                onCancel={handleCancel}
-                isLoading={loading}
-                loadingState={loadingState}
-                error={onboardingError}
-                message={message}
-              />
-            )}
+          {/* Show Create Form */}
+          {currentView === "create" && (
+            <CreateStableForm
+              formMethods={formMethods}
+              onSubmit={handleStableCreationSuccess}
+              onCancel={handleCancel}
+              isLoading={loading}
+              loadingState={loadingState}
+              error={onboardingError}
+              message={message}
+            />
+          )}
 
-            {/* Show Join Form */}
-            {currentView === "join" && (
-              <JoinStableForm
-                formMethods={formMethods}
-                onCancel={handleCancel}
-                isLoading={loading}
-                loadingState={loadingState}
-                error={onboardingError}
-                message={message}
-              />
-            )}
-          </div>
-        )}
+          {/* Show Join Form */}
+          {currentView === "join" && (
+            <JoinStableForm
+              formMethods={formMethods}
+              onCancel={handleCancel}
+              isLoading={loading}
+              loadingState={loadingState}
+              error={onboardingError}
+              message={message}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
