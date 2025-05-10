@@ -7,62 +7,43 @@ const baseService = createBaseService(ENDPOINTS.USERS);
 const userService = {
   ...baseService,
 
-  // Example response:  { "stableIdFk": 1, "role": 0 }
   getUserStables: async (userId) => {
-    if (!userId) {
-      throw new Error("User ID is required");
-    }
-
     try {
-      // The axios interceptor will handle the response formatting and error handling
       const response = await axiosInstance.get(
         `/api/user-stables/user/${userId}`
       );
-      console.log("User roles response:", response);
-
       return response.value || [];
     } catch (error) {
+      // Handel expected 404 error when user has no stables yet
       if (
+        error.statusCode === 404 ||
+        (error.message && error.message.includes("User has no stables yet")) ||
         (error.message &&
-          error.message.includes("not connected to any stables")) ||
-        error.status === 404
+          error.message.includes("not connected to any stables"))
       ) {
-        console.log("User has no stables yet - returning empty array");
-        return []; // Return empty array instead of throwing an error
+        console.info(
+          `User has no stable roles yet - this is normal for new users`
+        );
+        return []; // Return empty array
       }
+      // Logga endast oväntade fel
       console.error("Error fetching user stables:", error);
       throw error;
     }
   },
 
   getById: async (id) => {
-    if (!id) {
-      throw new Error("User ID is required");
-    }
-
     return await baseService.getById(id);
   },
 
   update: async (userData) => {
-    if (!userData || !userData.id) {
-      throw new Error("User ID is required for update");
-    }
-
     return await baseService.update(userData);
   },
   delete: async (userId) => {
-    if (!userId) {
-      throw new Error("User ID is required for deletion");
-    }
-
     return await baseService.delete(userId);
   },
 
   updateUserStableRole: async (userStableId, role) => {
-    console.log(
-      `Updating role for userStableId: ${userStableId} to role: ${role}`
-    );
-
     return await axiosInstance.put(
       `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?UpdateStableUserRole=${role}`
     );
