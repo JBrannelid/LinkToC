@@ -27,10 +27,11 @@ export const AppProvider = ({ children }) => {
 
   // Update the current stable
   const changeStable = (id, name = "") => {
-    // Validate if the user has access to the stable
-    if (!user?.stableRoles?.[id]) {
-      console.error(`User does not have access to stable ${id}`);
-      // Always reset the stable if the user doesn't have access
+    // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
+    if (user?.stableRoles?.[id] === undefined) {
+      console.error(
+        `SÄKERHETSFEL: Användare försöker sätta stall ${id} utan medlemskap!`
+      );
       localStorage.removeItem("currentStable");
       setCurrentStable(null);
       return false;
@@ -47,22 +48,31 @@ export const AppProvider = ({ children }) => {
     const savedStable = localStorage.getItem("currentStable");
     if (savedStable) {
       try {
-        setCurrentStable(JSON.parse(savedStable));
+        const parsed = JSON.parse(savedStable);
+        // explicit check for undefined (user with a stable role 0, such as a stable manager)
+        if (user?.stableRoles && user.stableRoles[parsed.id] === undefined) {
+          console.warn(
+            "Användare har inte access till sparat stall, rensar..."
+          );
+          localStorage.removeItem("currentStable");
+          setCurrentStable(null);
+        }
       } catch (error) {
         console.error("Error parsing saved stable:", error);
-        // Reset to null
+        localStorage.removeItem("currentStable");
         setCurrentStable(null);
       }
     }
-  }, []);
+  }, [user?.stableRoles]);
 
   const getCurrentStableRole = useCallback(() => {
     if (!currentStable || !user.stableRoles) {
-      return USER_ROLES.USER; // Set to baser user if we don't know stable role och missing a stable id
+      return USER_ROLES.USER;
     }
-    const role = user.stableRoles[currentStable.id]; // Return role or fallback to base user
+    const role = user.stableRoles[currentStable.id];
 
-    return role !== undefined ? role : USER_ROLES.USER; // Fallback to base user
+    // explicit check for undefined (user with a stable role 0, such as a stable manager)
+    return role !== undefined ? role : USER_ROLES.USER;
   }, [user?.stableRoles, currentStable?.id]);
 
   const contextValue = {
