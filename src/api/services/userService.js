@@ -61,6 +61,12 @@ const userService = {
       `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?UpdateStableUserRole=${role}`
     );
   },
+
+  removeUserFromStable: async (userStableId) => {
+    return await axiosInstance.delete(
+      `${ENDPOINTS.DELETE_USER_FROM_STABLE}/${userStableId}`
+    );
+  },
 };
 
 export default userService;
