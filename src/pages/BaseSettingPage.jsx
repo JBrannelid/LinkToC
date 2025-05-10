@@ -92,13 +92,13 @@ const BaseSettingsPage = ({
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden ">
+    <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">
       {/* Header */}
       <div className="bg-primary-light lg:bg-background border-b-1 border-light ">
         <ModalHeader title={title} />
       </div>
 
-      <div className="flex-1 px-4 py-6 space-y-4">
+      <div className="flex-1 px-4 py-6 space-y-4 md:px-50 xl:px-100">
         {/* User profile section */}
         <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg">
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">

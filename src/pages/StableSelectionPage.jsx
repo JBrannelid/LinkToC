@@ -106,7 +106,7 @@ const StableSelectionPage = () => {
       : "Unknown User";
 
   return (
-    <div className="flex flex-col bg-background pb-20 lg:md-10 overflow-y-auto">
+    <div className="flex flex-col bg-background pb-20 lg:pb-0 overflow-y-auto">
       {/* Header */}
       <div className="bg-primary-light lg:bg-background">
         <ModalHeader title="Select Stable" showCloseBtn={false} />
