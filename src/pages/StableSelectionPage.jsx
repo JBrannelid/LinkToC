@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useUserStables } from "../hooks/useUserStables";
@@ -11,6 +11,8 @@ import ModalHeader from "../components/layout/ModalHeader";
 import StableIcon from "../assets/icons/StableIcon";
 import { CreateStableForm, JoinStableForm } from "../components/forms";
 import { useStableOnboarding } from "../hooks/useStableOnboarding";
+import { createSuccessMessage } from "../utils/errorUtils";
+import FormMessage from "../components/forms/formBuilder/FormMessage";
 
 const StableSelectionPage = () => {
   const { changeStable } = useAppContext();
@@ -26,6 +28,7 @@ const StableSelectionPage = () => {
   // Add state to control showing buttons at bottom
   const [showExploreSection, setShowExploreSection] = useState(false);
   const [currentView, setCurrentView] = useState(null);
+  const [pageMessage, setPageMessage] = useState(null);
 
   //Deconstruct onboarding hook
   const {
@@ -35,8 +38,24 @@ const StableSelectionPage = () => {
     loadingState,
     formMethods,
     handleCreateStable,
-    handleJoinStable,
   } = useStableOnboarding();
+
+  // Add useEffect to handle messages from navigation
+  useEffect(() => {
+    if (location.state?.message) {
+      setPageMessage(createSuccessMessage(location.state.message));
+
+      // Clear the message after 5 seconds
+      const timer = setTimeout(() => {
+        setPageMessage(null);
+      }, 5000);
+
+      // Clear location state to prevent message from showing again on refresh
+      navigate(location.pathname, { replace: true, state: {} });
+
+      return () => clearTimeout(timer);
+    }
+  }, [location, navigate]);
 
   // Ref for scrolling
   const exploreButtonsRef = useRef(null);
@@ -63,29 +82,6 @@ const StableSelectionPage = () => {
       navigate(ROUTES.HOME);
     }
   };
-
-  // Handle successful stable join
-  const handleStableJoinSuccess = useCallback(
-    async (data) => {
-      if (data.action === "join" && data.stableId) {
-        try {
-          const stableName =
-            typeof data.stableName === "object"
-              ? data.stableName.name
-              : data.stableName;
-
-          const result = await handleJoinStable(data.stableId, stableName);
-          if (result.success) {
-            sessionStorage.removeItem("isFirstLogin");
-            navigate(ROUTES.HOME);
-          }
-        } catch (error) {
-          console.error("Error updating stable state:", error);
-        }
-      }
-    },
-    [handleJoinStable, navigate]
-  );
 
   const handleCancel = () => {
     setCurrentView(null);
@@ -126,6 +122,12 @@ const StableSelectionPage = () => {
             </span>
           </p>
         </div>
+
+        {pageMessage && (
+          <div className="mb-6 max-w-md mx-auto">
+            <FormMessage message={pageMessage} />
+          </div>
+        )}
 
         {/* Stables grid from card grid container */}
         {stables.length > 0 ? (
@@ -194,13 +196,6 @@ const StableSelectionPage = () => {
             <p className=" mb-6">
               Create a new stable or wait for an invitation
             </p>
-            <Button
-              type="primary"
-              onClick={() => setCurrentView("create")}
-              className="px-8"
-            >
-              Create new stable
-            </Button>
           </div>
         )}
 
@@ -250,7 +245,6 @@ const StableSelectionPage = () => {
             {currentView === "join" && (
               <JoinStableForm
                 formMethods={formMethods}
-                onSubmit={handleStableJoinSuccess}
                 onCancel={handleCancel}
                 isLoading={loading}
                 loadingState={loadingState}
