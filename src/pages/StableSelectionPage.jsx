@@ -51,12 +51,12 @@ const StableSelectionPage = () => {
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-xl md:text-2xl mb-2">Welcome {userFullName}!</h2>
           <p className="text-gray">
-            Select which stable you want to work with today, or{" "}
+            Choose a stable to work with today, or{" "}
             <span
               className="text-primary cursor-pointer hover:underline font-semibold"
               onClick={handleCreateStable}
             >
-              create a new one
+              explore new ones
             </span>
           </p>
         </div>
