@@ -105,9 +105,13 @@ export const AuthProvider = ({ children }) => {
 
         // Fetch user-stable roles from the API
         try {
+          // Get user data from the API
+          const userDataResponse = await userService.getById(userId);
+          const fullUserData = userDataResponse?.value || {};
+
           // Get user base on a specifik stable Id
           const userStablesResponse = await userService.getUserStables(userId);
-          console.log("User stables response:", userStablesResponse);
+
           // Extract stable roles from the response
           const stableRoles = Array.isArray(userStablesResponse)
             ? userStablesResponse.reduce((rolesByStableId, stableRole) => {
@@ -123,9 +127,14 @@ export const AuthProvider = ({ children }) => {
 
           setUser(userWithRoles);
           sessionStorage.setItem("currentUser", JSON.stringify(userWithRoles));
+
           // Set complete user info with roles
           setUser({
             ...basicUserInfo,
+            firstName: fullUserData.firstName || userData.firstName,
+            lastName: fullUserData.lastName || userData.lastName,
+            email: fullUserData.email || userData.email,
+            phoneNumber: fullUserData.phoneNumber || userData.phoneNumber,
             stableRoles: stableRoles,
           });
         } catch (rolesError) {
