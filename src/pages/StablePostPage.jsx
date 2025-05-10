@@ -65,20 +65,7 @@ export default function StablePostPage() {
   // Handle toggling pin status
   const handleTogglePin = async (post) => {
     try {
-      const newPostData = {
-        title: post.title || "",
-        content: post.content || "",
-        userIdFk: currentUser?.id,
-        stableIdFk: parseInt(currentStableId),
-        date: post.date || new Date().toISOString(),
-        isPinned: !post.isPinned,
-      };
-
-      // Delete the old post
-      await deletePost(post.id);
-
-      // Create new post with updated pin status
-      await createPost(newPostData);
+      await togglePinStatus(post.id);
     } catch (error) {
       console.error("Error toggling pin status:", error);
     }
