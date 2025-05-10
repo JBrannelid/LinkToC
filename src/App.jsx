@@ -1,14 +1,12 @@
 import { Outlet, useLocation } from "react-router";
 import NavigationFooter from "./components/layout/NavigationFooter";
 import { useAuth } from "./context/AuthContext";
-import { useAppContext } from "./context/AppContext";
 import HeaderContainer from "./components/layout/HeaderContainer";
 import DesktopNavigation from "./components/layout/DesktopNavigation";
 import DesktopFooter from "./components/layout/DesktopFooter";
 
 function App() {
   const { isAuthenticated } = useAuth();
-  const { currentStable } = useAppContext();
   const location = useLocation();
 
   const headerHiddenRoutes = ["/login", "/register"];
@@ -17,8 +15,8 @@ function App() {
   const footerHiddenRoutes = ["/stable-onboarding"];
   const shouldHideFooter = footerHiddenRoutes.includes(location.pathname);
 
-  // Show nav only if authenticated, has stable, and not on login/register pages
-  const showHeader = isAuthenticated && currentStable?.id && !shouldHideHeader;
+  // Show nav only if authenticated and not on login/register pages
+  const showHeader = isAuthenticated && !shouldHideHeader;
   const showFooterNav = isAuthenticated && !shouldHideFooter;
 
   return (
