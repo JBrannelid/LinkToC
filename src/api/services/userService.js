@@ -13,21 +13,24 @@ const userService = {
       throw new Error("User ID is required");
     }
 
-    try{
-      // The axios interceptor will handle the response formatting and error handling     
+    try {
+      // The axios interceptor will handle the response formatting and error handling
       const response = await axiosInstance.get(
-          `${ENDPOINTS.EXTRACT_USER_ROLES}${userId}`
+        `/api/user-stables/user/${userId}`
       );
-      console.log('User roles response:', response);
-      
+      console.log("User roles response:", response);
+
       return response.value || [];
     } catch (error) {
-      if (error.message && error.message.includes('not connected to any stables') ||
-          error.status === 404) {
-        console.log('User has no stables yet - returning empty array');
+      if (
+        (error.message &&
+          error.message.includes("not connected to any stables")) ||
+        error.status === 404
+      ) {
+        console.log("User has no stables yet - returning empty array");
         return []; // Return empty array instead of throwing an error
       }
-      console.error('Error fetching user stables:', error);
+      console.error("Error fetching user stables:", error);
       throw error;
     }
   },
