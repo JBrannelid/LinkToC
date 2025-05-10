@@ -24,9 +24,11 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Only visible on lg screens */}
-      <header className="hidden lg:block">
-        <DesktopNavigation />
-      </header>
+      {showHeader && (
+        <header className="hidden lg:block">
+          <DesktopNavigation />
+        </header>
+      )}
       {/* Hide header on lg screens */}
       {showHeader && (
         <header className="lg:hidden">

@@ -34,9 +34,14 @@ const LoginForm = () => {
     setServerError("");
 
     try {
-      await login(data.email, data.password);
+      const result = await login(data.email, data.password);
 
-      navigate(ROUTES.SELECT_STABLE);
+      // Check if user has a previously selected stable
+      if (result.hasStable) {
+        navigate(ROUTES.HOME);
+      } else {
+        navigate(ROUTES.SELECT_STABLE);
+      }
     } catch (error) {
       setServerError(error.message || "Fel e-postadress eller lösenord");
     } finally {
