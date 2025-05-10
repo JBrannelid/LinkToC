@@ -125,6 +125,21 @@ export const useStableManagement = (stableId) => {
     }
   };
 
+  const removeUserFromStable = async (userStableId) => {
+    setLoading(true);
+    setOperationType("delete");
+
+    try {
+      await userService.removeUserFromStable(userStableId);
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to remove member");
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchStableData();
   }, [fetchStableData]);
@@ -145,6 +160,7 @@ export const useStableManagement = (stableId) => {
     updateMemberRole,
     rejectRequest,
     cancelInvitation,
+    removeUserFromStable,
     refreshData: fetchStableData,
   };
 };
