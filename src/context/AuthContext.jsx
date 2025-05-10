@@ -138,11 +138,6 @@ export const AuthProvider = ({ children }) => {
             stableRoles: stableRoles,
           });
         } catch (rolesError) {
-          console.error(
-            "Failed to fetch user-stable roles:",
-            rolesError,
-            basicUserInfo
-          );
           // Set basic user if role fetch fails
           setUser({
             ...basicUserInfo,
