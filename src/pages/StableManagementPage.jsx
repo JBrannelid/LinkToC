@@ -15,7 +15,7 @@ const StableManagementPage = () => {
       <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
         <div className="bg-primary-light">
           <ModalHeader
-            title="Hantera stall"
+            title="Manage Stables"
             showCloseBtn={false}
             onCloseClick={() => window.history.back()}
           />
