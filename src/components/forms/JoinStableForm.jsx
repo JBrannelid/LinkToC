@@ -52,6 +52,7 @@ const JoinStableForm = ({
     if (!selectedStable) return;
 
     const result = await sendJoinRequest(selectedStable);
+    console.log("Join request result:", result);
 
     if (result.success) {
       setShowConfirmModal(false);
