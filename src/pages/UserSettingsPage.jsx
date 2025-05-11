@@ -15,11 +15,11 @@ const UserSettingsPage = () => {
   const renderMenuItems = ({ setShowUserEditProfileForm }) => (
     <>
       <SettingsMenuItem
-        label="Redigera profil"
+        label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
       />
       <SettingsMenuItem
-        label="Stallförfrågningar"
+        label="Stable Requests"
         onClick={() => handleStableRequests(navigate, ROUTES)}
       />
       <SettingsMenuItem
@@ -27,15 +27,12 @@ const UserSettingsPage = () => {
         onClick={handleTermsOfService}
       />
       <SettingsMenuItem label="Support" onClick={handleSupport} />
-      <SettingsMenuItem
-        label="Cookie inställningar"
-        onClick={handleCookieSettings}
-      />
+      <SettingsMenuItem label="Privacy Policy" onClick={handleCookieSettings} />
     </>
   );
 
   return (
-    <BaseSettingsPage title="Inställningar" renderMenuItems={renderMenuItems} />
+    <BaseSettingsPage title="Settings" renderMenuItems={renderMenuItems} />
   );
 };
 
