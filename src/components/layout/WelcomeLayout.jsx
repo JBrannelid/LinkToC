@@ -19,9 +19,9 @@ const WelcomeLayout = ({ children }) => {
         {/* Right side - Image section */}
         <div className="lg:col-span-2 relative">
           <img
-            src="/src/assets/images/LoginBackgroundImage.jpg"
+            src="/src/assets/images/BgLoginDesktop.jpg"
             alt="Horses grazing in a field"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="absolute w-full h-full object-cover object-[20%]"
           />
         </div>
         {/* Empty space */}
