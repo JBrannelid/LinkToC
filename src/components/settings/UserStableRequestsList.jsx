@@ -47,7 +47,7 @@ const UserStableRequestsList = () => {
     <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
       <header>
         <h2 className="font-bold mb-4 text-lg md:text-xl">
-          Your pending stable requests
+          Your pending stable applications
         </h2>
       </header>
 
