@@ -21,7 +21,7 @@ const LoginPage = () => {
         </div>
 
         {/* Login Section for mobile */}
-        <section className="flex-1 px-6 py-8 bg-white">
+        <section className="flex-1 px-6 py-8 bg-background">
           <LoginForm />
         </section>
       </div>
