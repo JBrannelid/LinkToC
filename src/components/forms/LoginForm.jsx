@@ -130,7 +130,7 @@ const LoginForm = () => {
           <Button
             type="primary"
             htmlType="submit"
-            className="w-9/10"
+            className="w-9/10 hover:scale-101 transition-transform duration-300"
             loading={isSubmitting}
             disabled={isSubmitting}
           >
@@ -139,7 +139,7 @@ const LoginForm = () => {
 
           <Button
             type="secondary"
-            className="w-9/10"
+            className="w-9/10 hover:scale-101 transition-transform duration-300"
             onClick={handleRegisterClick}
             disabled={isSubmitting}
           >
@@ -150,7 +150,7 @@ const LoginForm = () => {
         {/* Sign in with social media */}
         <div className="my-7 flex items-center">
           <hr className="flex-1 border-gray" />
-          <span className="px-4 text-sm text-gray-500">sign in with</span>
+          <span className="px-4 text-sm text-gray">sign in with</span>
           <hr className="flex-1 border-gray" />
         </div>
 
@@ -158,7 +158,7 @@ const LoginForm = () => {
           <Button
             variant="icon"
             size="medium"
-            className="bg-gray text-white"
+            className="hover:transform hover:scale-105 transition-transform duration-300"
             aria-label="Sign in with Google"
           >
             <GoogleIcon className="w-5 h-5 text-primary" />
@@ -167,7 +167,7 @@ const LoginForm = () => {
           <Button
             variant="icon"
             size="medium"
-            className="bg-primary"
+            className="hover:transform hover:scale-105 transition-transform duration-300"
             aria-label="Sign in with Facebook"
           >
             <FacebookIcon className="w-10 h-10 text-primary" />
@@ -176,7 +176,7 @@ const LoginForm = () => {
           <Button
             variant="icon"
             size="medium"
-            className="bg-primary"
+            className="hover:transform hover:scale-105 transition-transform duration-300"
             aria-label="Sign in with LinkedIn"
           >
             <LinkedinIcon className="w-6 h-6 text-primary" />
