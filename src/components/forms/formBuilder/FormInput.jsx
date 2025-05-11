@@ -5,6 +5,7 @@ import { Eye, EyeOff } from "lucide-react";
 // A form input component that integrates with React Hook Form
 const FormInput = ({
   name,
+  id,
   label,
   type = "text",
   placeholder,
@@ -43,6 +44,9 @@ const FormInput = ({
   const inputType = type === "password" && showPassword ? "text" : type;
   const shouldShowToggle = type === "password" && showPasswordToggle;
 
+  // Use custom id if provided, otherwise use name
+  const inputId = id || name;
+
   return (
     <div
       className={`form-control ${className} ${
@@ -51,7 +55,7 @@ const FormInput = ({
     >
       {label && (
         <label
-          htmlFor={name}
+          htmlFor={inputId}
           className={`form-label ${
             labelPosition === "above" ? "mb-1" : "mr-2"
           } text-sm font-medium`}
@@ -63,7 +67,7 @@ const FormInput = ({
         {type === "textarea" ? (
           // Render textarea
           <textarea
-            id={name}
+            id={inputId}
             placeholder={placeholder}
             rows={rows}
             className={`form-input w-full px-3 py-2 border rounded-md 
@@ -77,7 +81,7 @@ const FormInput = ({
           // Render regular input
           <>
             <input
-              id={name}
+              id={inputId}
               type={inputType}
               placeholder={placeholder}
               className={`form-input w-full px-3 py-2 border rounded-md 
