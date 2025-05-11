@@ -40,7 +40,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
       console.error("No token found in URL");
       setMessage(
         createErrorMessage(
-          "Ingen återställningskod hittades. Kontrollera länken i ditt epost"
+          "No reset code found. Please check the link in your email"
         )
       );
     }
@@ -60,14 +60,16 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
     if (!token) {
       setMessage(
         createErrorMessage(
-          "Ingen återställningskod tillgänglig. Begär en ny återställningslänk."
+          "No reset code available. Please request a new reset link."
         )
       );
       return;
     }
 
     if (data.password !== data.confirmPassword) {
-      setMessage(createErrorMessage("Lösenorden matchar inte. Försök igen."));
+      setMessage(
+        createErrorMessage("Passwords don't match. Please try again.")
+      );
       return;
     }
 
@@ -89,7 +91,7 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
       if (response && response.isSuccess) {
         setMessage(
           createSuccessMessage(
-            "Ditt lösenord har återställts. Du kommer att omdirigeras till inloggningssidan."
+            "Your password has been reset. You will be redirected to the login page."
           )
         );
 
@@ -101,15 +103,14 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
         console.error("API returned unsuccessful response:", response);
         setMessage(
           createErrorMessage(
-            response?.message || "Något gick fel. Vänligen försök igen."
+            response?.message || "Something went wrong. Please try again."
           )
         );
       }
     } catch (error) {
       setMessage(
         getErrorMessage(error, {
-          defaultMessage:
-            "Misslyckades att återställa lösenordet. Försök igen senare.",
+          defaultMessage: "Failed to reset password. Please try again later.",
         })
       );
     } finally {
@@ -121,21 +122,21 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
     <FormProvider
       methods={methods}
       onSubmit={onSubmit}
-      className="reset-password-form"
+      className="w-full"
       ariaLabel="Reset Password Form"
     >
       <div className="mt-4">
         <FormInput
           name="password"
-          label="Nytt lösenord"
           type="password"
-          placeholder="Ange nytt lösenord"
-          labelPosition="above"
+          placeholder="Enter new password"
+          showPasswordToggle={true}
+          inputClassName="w-full px-3 py-4 border !bg-white !border-gray rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary"
           validation={{
-            required: "Lösenord krävs",
+            required: "Password is required",
             minLength: {
               value: 8,
-              message: "Lösenordet måste vara minst 8 tecken",
+              message: "Password must be at least 8 characters",
             },
           }}
         />
@@ -144,19 +145,19 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
       <div className="mt-4">
         <FormInput
           name="confirmPassword"
-          label="Bekräfta lösenord"
           type="password"
-          placeholder="Bekräfta ditt nya lösenord"
-          labelPosition="above"
+          placeholder="Confirm your new password"
+          showPasswordToggle={true}
+          inputClassName="w-full px-3 py-4 border !bg-white !border-gray rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary"
           validation={{
-            required: "Vänligen bekräfta ditt lösenord",
+            required: "Please confirm your password",
           }}
         />
       </div>
 
-      <FormMessage message={message} />
+      <FormMessage message={message} className="mt-4" />
 
-      <div className="mt-5 grid grid-cols-1">
+      <div className="mt-6 flex flex-col items-center gap-4">
         <Button
           type="primary"
           htmlType="submit"
@@ -164,16 +165,26 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
           disabled={loading || !token}
           aria-busy={loading}
         >
-          <Shield className="h-5 w-5 mr-2" />
-          <span>Återställ lösenord</span>
+          <span>Reset Password</span>
         </Button>
-      </div>
 
-      <div className="mt-4 text-center">
-        <Button type="button" onClick={handleBackToLogin} className="w-9/10">
-          <ArrowLeft className="h-4 w-4 mr-1" />
-          <span>Tillbaka till inloggning</span>
+        <Button
+          type="secondary"
+          onClick={handleBackToLogin}
+          className="w-9/10 lg:hidden"
+        >
+          <span>Back to Login</span>
         </Button>
+        <div className="hidden lg:flex lg:justify-center lg:items-center lg:gap-2 lg:mt-2 w-full">
+          <span className="text-sm text-gray items-center">Go back to</span>
+          <button
+            type="button"
+            className="text-sm font-semibold text-primary hover:underline focus:outline-none"
+            onClick={handleBackToLogin}
+          >
+            Sign in
+          </button>
+        </div>
       </div>
     </FormProvider>
   );
