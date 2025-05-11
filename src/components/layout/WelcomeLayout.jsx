@@ -8,10 +8,10 @@ const WelcomeLayout = ({ children }) => {
       <div className="lg:hidden relative">{children}</div>
 
       {/* Desktop - Split screen */}
-      <div className="hidden lg:grid lg:grid-cols-6 lg:min-h-screen">
-        <div className="lg:col-span-3 bg-gray-100 flex flex-col justify-center items-center px-8 py-12">
-          <div className="w-full max-w-md">
-            <h1 className="absolute top-10 left-15 text-3xl ">Equilog</h1>
+      <div className="hidden lg:grid lg:grid-cols-8 lg:min-h-screen">
+        <div className="lg:col-span-5 bg-gray-100 flex flex-col justify-center items-center px-8 py-12">
+          <div className="w-full max-w-md mt-20">
+            <h1 className="absolute top-10 left-15 text-3xl">Equilog</h1>
             {children}
           </div>
         </div>
