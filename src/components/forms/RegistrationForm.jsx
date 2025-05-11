@@ -222,7 +222,16 @@ const RegistrationForm = () => {
           >
             {isSubmitting ? loadingState.getMessage() : "Create account"}
           </Button>
-          <div className="flex items-center gap-1 mt-4">
+          <Button
+            type="secondary"
+            className="w-9/10 lg:hidden"
+            onClick={() => navigate(ROUTES.LOGIN)}
+            disabled={isSubmitting}
+          >
+            Back to login
+          </Button>
+          {/* Lg screen - Hide button and display a go back text */}
+          <div className="hidden lg:flex lg:items-center lg:gap-1 lg:mt-4">
             <span className="text-sm text-gray">Already have an account,</span>
             <button
               type="button"
