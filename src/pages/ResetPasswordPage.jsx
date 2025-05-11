@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import ResetPasswordForm from "../components/forms/ResetPasswordForm";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import AuthFormContainer from "../components/forms/formBuilder/AuthFormContainer";
 import WelcomeLayout from "../components/layout/WelcomeLayout";
 
 const ResetPasswordPage = () => {
