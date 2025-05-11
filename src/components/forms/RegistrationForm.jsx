@@ -222,7 +222,7 @@ const RegistrationForm = () => {
           >
             {isSubmitting ? loadingState.getMessage() : "Create account"}
           </Button>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 mt-4">
             <span className="text-sm text-gray">Already have an account,</span>
             <button
               type="button"

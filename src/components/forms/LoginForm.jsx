@@ -90,7 +90,7 @@ const LoginForm = () => {
           }}
           inputClassName={`w-full px-3 py-4 border ${
             methods.formState.errors.email ? "border-error-400" : "border-gray"
-          } rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
+          } rounded-md !border-gray focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
           disabled={isSubmitting}
           className="mb-2"
         />
@@ -110,14 +110,14 @@ const LoginForm = () => {
             methods.formState.errors.password
               ? "border-error-400"
               : "border-gray"
-          } rounded-md focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
+          } rounded-md !border-gray focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
           disabled={isSubmitting}
         />
 
         <div className="flex justify-end mb-10">
           <button
             type="button"
-            className="text-sm text-primary hover:underline focus:outline-none"
+            className="text-sm text-primary hover:underline focus:outline-none mt-4"
             onClick={handleForgotPassword}
             disabled={isSubmitting}
           >
