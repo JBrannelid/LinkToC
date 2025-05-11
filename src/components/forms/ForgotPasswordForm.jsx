@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {Send, AlertCircle, ArrowLeft} from "lucide-react";
+import { Send, AlertCircle, ArrowLeft } from "lucide-react";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
@@ -12,8 +12,8 @@ import {
   createErrorMessage,
 } from "../../utils/errorUtils.js";
 import Button from "../ui/Button.jsx";
-import {ROUTES} from "../../routes/index.jsx";
-import {useNavigate} from "react-router";
+import { ROUTES } from "../../routes/index.jsx";
+import { useNavigate } from "react-router";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,7 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
       setCooldownRemaining(remainingSeconds);
       setMessage(
         createWarningMessage(
-          `Vänligen vänta ${remainingSeconds} sekunder innan du försöker igen.`
+          `Please wait ${remainingSeconds} seconds before trying again.`
         )
       );
       return;
@@ -92,13 +92,13 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
         ) {
           setMessage(
             createWarningMessage(
-              "Återställningsbegäran har skapats, men det uppstod ett problem med att skicka e-post. Om du inte får e-post inom några minuter, kontrollera din skräppostmapp eller kontakta support."
+              "Reset request created, but there was an issue sending the email. If you don't receive an email in a few minutes, check your spam folder or contact support."
             )
           );
         } else {
           setMessage(
             createSuccessMessage(
-              "Återställningslänk har skickats till din e-post. Kontrollera din inkorg (inklusive skräppostmappen)"
+              "Reset link has been sent to your email. Check your inbox (including spam folder)"
             )
           );
         }
@@ -109,15 +109,14 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
         console.error("API returned unsuccessful response:", response);
         setMessage(
           createErrorMessage(
-            response?.message || "Något gick fel. Vänligen försök igen."
+            response?.message || "Something went wrong. Please try again."
           )
         );
       }
     } catch (error) {
       setMessage(
         getErrorMessage(error, {
-          defaultMessage:
-            "Misslyckades att bearbeta begäran. Försök igen senare",
+          defaultMessage: "Failed to process request. Please try again later",
         })
       );
     } finally {
@@ -140,10 +139,10 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
           placeholder="exempel@email.com"
           labelPosition="above"
           validation={{
-            required: "Vänligen ange en giltig e-postadress",
+            required: "Please enter a valid email address",
             pattern: {
               value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-.]+$/i,
-              message: "Vänligen använd ett giltigt e-postformat",
+              message: "Please use a valid email format",
             },
           }}
         />
@@ -168,20 +167,20 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
           <Send className="h-5 w-5 mr-2" />
           <span>
             {cooldownRemaining > 0
-              ? `Vänta ${cooldownRemaining} sekunder...`
-              : "Skicka återställningslänk"}
+              ? `Wait ${cooldownRemaining} seconds...`
+              : "Send reset link"}
           </span>
         </Button>
         <Button
-            type="secondary"
-            onClick={handleGoBack}
-            className="mt-5 flex items-center text-primary hover:underline"
+          type="secondary"
+          onClick={handleGoBack}
+          className="mt-5 flex items-center text-primary hover:underline"
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
-          Tillbaka till inloggning
+          Back to login
         </Button>
         <p className="text-xs pt-5 text-error-500">
-          <span>OBS: </span>Kontrollera din skräppostmapp
+          <span>NOTE: </span>Check your spam folder
         </p>
       </div>
     </FormProvider>
