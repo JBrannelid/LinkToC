@@ -69,95 +69,96 @@ const StableMembersList = ({ stableId }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4">
-      <h2 className="font-bold mb-1 text-lg">Members</h2>
-      <p className="text-sm mb-4 pt-1 text-gray">
-        Only stable owners can edit a member
-      </p>
+    <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
+      <header>
+        <h2 className="font-bold mb-1 text-lg md:text-xl">Members</h2>
+        <p className="text-sm mb-4 pt-1 text-gray">
+          Only stable owners can edit a member
+        </p>
+      </header>
 
       {/* List container with scroll */}
-      <div className="max-h-80 overflow-y-auto pr-1">
+      <div className="max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto pr-1 space-y-1">
         {/* Managers */}
         {groupedMembers[USER_ROLES.MANAGER].length > 0 && (
-          <div className="mb-3">
-            <div className="text-xs text-gray border-b pb-1 mb-2">
+          <section className="mb-3">
+            <h3 className="text-xs text-gray border-b pb-1 mb-2">
               Stable Owners
-            </div>
+            </h3>
             {groupedMembers[USER_ROLES.MANAGER].map((member) => (
               <PermissionGate
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <div
+                <article
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
-                </div>
+                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                </article>
               </PermissionGate>
             ))}
-          </div>
+          </section>
         )}
 
         {/* Admins */}
         {groupedMembers[USER_ROLES.ADMIN].length > 0 && (
-          <div className="mb-3">
+          <section className="mb-3">
             <PermissionGate requiredRoles={[USER_ROLES.MANAGER]}>
-              <div className="text-xs text-gray border-b pb-1 mb-2">
+              <h3 className="text-xs text-gray border-b pb-1 mb-2">
                 Administrators
-              </div>
+              </h3>
             </PermissionGate>
             {groupedMembers[USER_ROLES.ADMIN].map((member) => (
               <PermissionGate
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <div
+                <article
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
+                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>
-                </div>
+                </article>
               </PermissionGate>
             ))}
-          </div>
+          </section>
         )}
+
         {/* Regular Members */}
         {groupedMembers[USER_ROLES.USER].length > 0 && (
-          <div className="mb-3">
+          <section className="mb-3">
             <PermissionGate requiredRoles={[USER_ROLES.MANAGER]}>
-              <div className="text-xs text-gray border-b pb-1 mb-2">
-                Members
-              </div>
+              <h3 className="text-xs text-gray border-b pb-1 mb-2">Members</h3>
             </PermissionGate>
             {groupedMembers[USER_ROLES.USER].map((member) => (
               <PermissionGate
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <div
+                <article
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <div className="text-sm">{`${member.firstName} ${member.lastName}`}</div>
+                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>
-                </div>
+                </article>
               </PermissionGate>
             ))}
-          </div>
+          </section>
         )}
       </div>
 
       {/* Member Action Modal */}
       {showActionModal && selectedMember && (
         <div className="fixed inset-0 bg-gray/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-11/12 p-4">
-            <h3 className="mb-2">
+          <div className="bg-white rounded-lg w-11/12 max-w-md p-4">
+            <h3 className="mb-2 text-lg">
               Manage member{" "}
               <span className="text-sm font-semibold text-primary">
                 {selectedMember.firstName} {selectedMember.lastName}
@@ -166,10 +167,10 @@ const StableMembersList = ({ stableId }) => {
 
             {/* Options layout */}
             <div className="border-t py-3 mb-2">
-              <div className="grid grid-cols-4 gap-1 mb-3">
+              <fieldset className="grid grid-cols-4 gap-1 mb-3">
                 {ROLE_OPTIONS.map((role) => (
                   <div key={role.id} className="text-center">
-                    <div className="text-sm mb-2">{role.label}</div>
+                    <label className="text-sm mb-2 block">{role.label}</label>
                     <div
                       className={`w-5 h-5 mx-auto rounded-full border flex items-center justify-center cursor-pointer ${
                         selectedRole === role.id
@@ -177,6 +178,9 @@ const StableMembersList = ({ stableId }) => {
                           : "border-gray"
                       }`}
                       onClick={() => setSelectedRole(role.id)}
+                      role="radio"
+                      aria-checked={selectedRole === role.id}
+                      tabIndex={0}
                     >
                       {selectedRole === role.id && (
                         <CheckIcon className="text-white w-4 h-4" />
@@ -186,7 +190,9 @@ const StableMembersList = ({ stableId }) => {
                 ))}
                 {/* Remove option */}
                 <div className="text-center">
-                  <div className="text-sm mb-2 text-error-500">Remove</div>
+                  <label className="text-sm mb-2 text-error-500 block">
+                    Remove
+                  </label>
                   <div
                     className={`w-5 h-5 mx-auto rounded-full border flex items-center justify-center cursor-pointer ${
                       selectedRole === "remove"
@@ -194,13 +200,16 @@ const StableMembersList = ({ stableId }) => {
                         : "border-gray"
                     }`}
                     onClick={() => setSelectedRole("remove")}
+                    role="radio"
+                    aria-checked={selectedRole === "remove"}
+                    tabIndex={0}
                   >
                     {selectedRole === "remove" && (
                       <CheckIcon className="text-white w-4 h-4" />
                     )}
                   </div>
                 </div>
-              </div>
+              </fieldset>
             </div>
 
             {/* Action Buttons Cancel/Save*/}
@@ -233,7 +242,7 @@ const StableMembersList = ({ stableId }) => {
           </div>
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
