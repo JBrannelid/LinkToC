@@ -9,7 +9,7 @@ const LoginPage = () => {
         {/* Header - fixed img size */}
         <div className="relative w-full h-[200px] sm:h-[300px] md:h-[350px]">
           <img
-            src="/src/assets/images/LoginBackgroundImage.jpg"
+            src="/src/assets/images/BgLoginMobile.jpg"
             alt="Horses grazing in a meadow"
             className="absolute inset-0 w-full h-full object-cover"
           />
