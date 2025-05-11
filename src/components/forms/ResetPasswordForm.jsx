@@ -5,7 +5,6 @@ import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
 import authService from "../../api/services/authService";
-import { Shield, ArrowLeft } from "lucide-react";
 import { ROUTES } from "../../routes/index.jsx";
 import {
   getErrorMessage,
