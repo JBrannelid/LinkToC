@@ -1,5 +1,3 @@
-// File: src/components/notifications/NotificationDropdown.jsx
-
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router";
 import { ROUTES } from "../../routes/routeConstants";
@@ -10,20 +8,19 @@ import { getNotificationTypeStyles } from "../../utils/notificationUtils";
 
 const NotificationCard = ({ notification }) => {
   const { type, title, message, timestamp } = notification;
-  const { iconElement, borderColor } = getNotificationTypeStyles(type);
+  const { iconElement } = getNotificationTypeStyles(type);
 
+  // Return notification card with mock json data
   return (
-    <div
-      className={`bg-white rounded-lg shadow-sm mb-3 p-4 border-l-4 ${borderColor}`}
-    >
+    <div className={`bg-white rounded-lg shadow-sm mb-3 p-2 `}>
       <div className="flex">
         <div className="mr-3">{iconElement}</div>
         <div className="flex-1">
           <div className="flex justify-between items-start">
-            <h3 className="font-medium">{title}</h3>
+            <h3 className="font-medium text-black">{title}</h3>
             <span className="text-xs text-gray ml-2">{timestamp}</span>
           </div>
-          <p className="text-sm mt-1">{message}</p>
+          <p className="text-sm mt-1 text-black">{message}</p>
         </div>
       </div>
     </div>
@@ -36,7 +33,7 @@ const NotificationDropdown = () => {
   const { notifications } = mockNotificationsData;
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking outside with event listener
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -56,11 +53,8 @@ const NotificationDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  // Handle View All navigation
   const handleViewAll = () => {
-    // This will navigate to the notifications page
     setIsOpen(false);
-    // The Link component will handle the navigation
   };
 
   return (
