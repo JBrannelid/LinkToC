@@ -157,9 +157,9 @@ const StableOnboardingContainer = () => {
 
   return (
     <>
-      {/* Mobile layout - keep existing functionality */}
+      {/* Mobile layout */}
       <div
-        className="lg:hidden container mx-auto px-4 py-8"
+        className="lg:hidden container mx-auto py-2 max-h-screen"
         role="main"
         aria-live="polite"
       >
