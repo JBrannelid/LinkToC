@@ -12,7 +12,7 @@ function App() {
   const headerHiddenRoutes = ["/login", "/register"];
   const shouldHideHeader = headerHiddenRoutes.includes(location.pathname);
 
-  const footerHiddenRoutes = ["/stable-onboarding"];
+  const footerHiddenRoutes = ["/login", "/register", "/stable-onboarding"];
   const shouldHideFooter = footerHiddenRoutes.includes(location.pathname);
 
   // Show nav only if authenticated and not on login/register pages
@@ -44,9 +44,11 @@ function App() {
           <NavigationFooter />
         </footer>
       )}
-      <footer className="hidden lg:block mt-auto">
-        <DesktopFooter />
-      </footer>
+      {showFooterNav && (
+        <footer className="hidden lg:block mt-auto">
+          <DesktopFooter />
+        </footer>
+      )}
     </div>
   );
 }
