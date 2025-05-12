@@ -1,12 +1,14 @@
-import React, {useEffect, useRef, useCallback} from "react";
-import {ListItemRenderer} from "../SearchResultRenderers.jsx";
-import {useSearch} from "../../../context/searchContext.js";
-import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
-import {FormMessage} from "../../forms/index.js";
+import React, { useRef, useEffect, useCallback } from 'react';
+import { useSearch } from '../../../context/searchContext.js';
+import { ListItemRenderer } from '../SearchResultRenderers';
+import LoadingSpinner from '../../ui/LoadingSpinner';
+import { FormMessage } from '../../forms/index';
 
 const MemoizedListItem = React.memo(ListItemRenderer, (prev, next) => {
-    return prev.isSelected === next.isSelected && prev.item[prev.config?.idField || 'id'] === next.item[next.config?.idField || 'id'];
+    return prev.isSelected === next.isSelected &&
+        prev.item[prev.config?.idField || 'id'] === next.item[next.config?.idField || 'id'];
 });
+
 const SearchResults = ({
                            className = '',
                            maxHeight = '20rem',
@@ -15,109 +17,139 @@ const SearchResults = ({
                            onItemFocus = null
                        }) => {
     const {
+        // State from search context
         results,
         loading,
         error,
         message,
         config,
-        handleSelectItem,
-        handleItemFocus: contextHandleItemFocus,
-        isItemSelected,
         query,
         loadingState,
-        isTyping
+
+        // Handlers from search context
+        handleSelectItem,
+        handleItemFocus: contextHandleItemFocus,
+        isItemSelected
     } = useSearch();
 
     const resultsRef = useRef(null);
-    
-    const handleItemClick = useCallback((item) => {
-        handleSelectItem(item);
-        if (onItemSelect) {
-            onItemSelect(item);
-        }
-    },[handleSelectItem,onItemSelect]);
-    
-    const handleItemFocus = useCallback( (item) => {
-        if (onItemFocus) {
-            onItemFocus(item);
-        }
-        if (contextHandleItemFocus) {
-            contextHandleItemFocus(item);
-        } else {
-            handleSelectItem(item);
-        }
-    },[handleSelectItem,contextHandleItemFocus,onItemFocus]);
-    
+
+    // Scroll to top when results change
     useEffect(() => {
         if (resultsRef.current && results.length > 0) {
             resultsRef.current.scrollTop = 0;
         }
     }, [results]);
 
-    if (!query && !showWhenEmpty && results.length === 0) {
-        return null;
+    // Handle item click - propagate to parent if needed
+    const handleItemClick = useCallback((item) => {
+        // Set selection in context
+        handleSelectItem(item);
+
+        // Notify parent if callback provided
+        if (onItemSelect) {
+            onItemSelect(item);
+        }
+    }, [handleSelectItem, onItemSelect]);
+
+    // Handle item focus events
+    const handleItemFocus = useCallback((item) => {
+        // Notify parent if callback provided
+        if (onItemFocus) {
+            onItemFocus(item);
+        }
+
+        // Use context handler if available
+        if (contextHandleItemFocus) {
+            contextHandleItemFocus(item);
+        } else {
+            // Default to selection handler
+            handleSelectItem(item);
+        }
+    }, [handleSelectItem, contextHandleItemFocus, onItemFocus]);
+
+    // Show empty state prompt when no search has been performed
+    if (!query.trim() && results.length === 0 && !error && !message && !showWhenEmpty) {
+        return (
+            <div className={`p-4 text-center text-gray-500 ${className}`}>
+                {config?.emptySearchPrompt || "Enter a search term to begin"}
+            </div>
+        );
     }
-    const ItemRenderer = config?.resultItemRenderer ? React.memo(config.resultItemRenderer) : MemoizedListItem;
 
+    // Get the appropriate renderer component
+    const ItemRenderer = config?.resultItemRenderer
+        ? React.memo(config.resultItemRenderer)
+        : MemoizedListItem;
+
+    // Render search results based on layout configuration
     const renderResultItems = () => {
-        if(results.length === 0) return null;
-        
-        const {layout = 'list', resultItemRenderer, columns = 1} = config || {};
+        if (results.length === 0) return null;
 
+        const { layout = 'list', columns = 1 } = config || {};
+
+        // Grid layout
         if (layout === 'grid') {
-            const gridClass = columns === 2 ? 'grid grid-cols-1 sm:grid-cols-2 gap3' : 'grid grid-cols-1 gap-3';
+            const gridClass = columns === 2
+                ? 'grid grid-cols-1 sm:grid-cols-2 gap-3'
+                : 'grid grid-cols-1 gap-3';
+
             return (
                 <div
                     className={gridClass}
                     role="listbox"
-                    aria-label={`Search results for ${config?.entityType || 'items'}`}>
+                    aria-label={`Search results for ${config?.entityType || 'items'}`}
+                >
                     {results.map((item, index) => (
-
-                            <ItemRenderer
-                                key={item[config?.idField || 'id'] || index}
-                                item={item}
-                                isSelected={isItemSelected(item)}
-                                onSelect={handleItemClick}
-                                onFocus={handleItemFocus}
-                                onJoinStable={onItemSelect}
-                                config={config}
-                                index={index}
-                                data-index={index}
-                            />                       
-                        
-                        ))}
+                        <ItemRenderer
+                            key={item[config?.idField || 'id'] || index}
+                            item={item}
+                            isSelected={isItemSelected(item)}
+                            onSelect={handleItemClick}
+                            onFocus={handleItemFocus}
+                            onJoinStable={onItemSelect}
+                            config={config}
+                            index={index}
+                            data-index={index}
+                        />
+                    ))}
                 </div>
             );
-        } else {
-            return (
-                <ul className="space-y-2"
-                    role="listbox"
-                    aria-label={`Search results for ${config?.entityType || 'items'}`}>
-                    {results.map((item, index) => (
-
-                            <ItemRenderer
-                                key={item[config?.idField || 'id'] || index}
-                                item={item}
-                                isSelected={isItemSelected(item)}
-                                onSelect={handleItemClick}
-                                onFocus={handleItemFocus}
-                                onJoinStable={onItemSelect}
-                                config={config}
-                                index={index}
-                                data-index={index}
-                            />
-                        ))}
-                </ul>
-            );
         }
+
+        // Default list layout
+        return (
+            <ul
+                className="space-y-2"
+                role="listbox"
+                aria-label={`Search results for ${config?.entityType || 'items'}`}
+            >
+                {results.map((item, index) => (
+                    <ItemRenderer
+                        key={item[config?.idField || 'id'] || index}
+                        item={item}
+                        isSelected={isItemSelected(item)}
+                        onSelect={handleItemClick}
+                        onFocus={handleItemFocus}
+                        onJoinStable={onItemSelect}
+                        config={config}
+                        index={index}
+                        data-index={index}
+                    />
+                ))}
+            </ul>
+        );
     };
+
     return (
         <div
             ref={resultsRef}
             id="search-results"
             className={`overflow-y-auto ${className}`}
-            style={{maxHeight}}
-            aria-live="polite">
+            style={{ maxHeight }}
+            aria-live="polite"
+        >
+            {/* Loading state */}
             {loading && (
                 <div className="p-4 flex flex-col items-center justify-center h-full">
                     <LoadingSpinner size="medium" className="text-primary mb-2" />
@@ -126,6 +158,8 @@ const SearchResults = ({
                     </p>
                 </div>
             )}
+
+            {/* Error state */}
             {!loading && error && (
                 <div className="h-full flex items-center justify-center">
                     <FormMessage
@@ -135,13 +169,8 @@ const SearchResults = ({
                     />
                 </div>
             )}
-            {!loading && !error && results.length === 0 && query.trim().length > 0 && !isTyping && (
-                <div className="p-4 h-full flex items-center justify-center">
-                    <div className="text-center">
-                        <p className="text-gray-600">{config?.noResultsText || 'No results found'}</p>
-                    </div>
-                </div>
-            )}
+
+            {/* Empty results / No matches message */}
             {!loading && !error && message && (
                 <div role="alert" className="h-full flex items-center justify-center">
                     <div>
@@ -160,6 +189,7 @@ const SearchResults = ({
                 </div>
             )}
 
+            {/* Results display */}
             {!loading && !error && !message && results.length > 0 && (
                 <div className="transition-opacity duration-200">
                     {renderResultItems()}
