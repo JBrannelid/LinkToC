@@ -47,7 +47,7 @@ const ListUserStablePage = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
       {/* Header */}
-      <div className="bg-primary-light">
+      <div className="bg-primary-light lg:bg-background">
         <ModalHeader />
       </div>
 
