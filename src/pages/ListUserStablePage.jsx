@@ -73,7 +73,7 @@ const ListUserStablePage = () => {
         </div>
 
         {/* Profile Btn */}
-        <div className="mb-6 flex justify-center">
+        <div className="mb-6 flex justify-center lg:hidden ">
           <Button
             type="secondary"
             className="w-full max-w-sm"
