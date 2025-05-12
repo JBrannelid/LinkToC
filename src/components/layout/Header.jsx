@@ -51,7 +51,7 @@ export default function Header() {
           <div className="relative">
             <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
             {unreadCount > 0 && (
-              <span className="absolute -top-2 -right-2 w-4 h-4 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 w-4 h-4 md:w-5 md:h-5 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
