@@ -15,7 +15,7 @@ const MemberCard = ({ member, onClick }) => {
     <Card.Container className="cursor-pointer" onClick={onClick}>
       <div className="p-2 flex flex-col">
         <div className="flex justify-center">
-          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-28 lg:rounded-none">
+          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-30 lg:rounded-none">
             <img
               src={profileImageUrl}
               alt={`Profile picture of ${fullName}`}
