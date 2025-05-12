@@ -1,6 +1,6 @@
 import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints";
 
 const baseService = createBaseService(ENDPOINTS.USERS);
 
@@ -28,6 +28,18 @@ const userService = {
       }
       // Logga endast oväntade fel
       console.error("Error fetching user stables:", error);
+      throw error;
+    }
+  },
+
+  getUsersByStableId: async (stableId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/user-stables/stable/${stableId}`
+      );
+      return response.value || [];
+    } catch (error) {
+      console.error("Error fetching stable members:", error);
       throw error;
     }
   },
