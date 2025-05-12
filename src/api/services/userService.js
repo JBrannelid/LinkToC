@@ -1,74 +1,69 @@
 import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints";
 
 const baseService = createBaseService(ENDPOINTS.USERS);
 
 const userService = {
   ...baseService,
 
-  // Example response:  { "stableIdFk": 1, "role": 0 }
   getUserStables: async (userId) => {
-    if (!userId) {
-      throw new Error("User ID is required");
+    try {
+      const response = await axiosInstance.get(
+        `/api/user-stables/user/${userId}`
+      );
+      return response.value || [];
+    } catch (error) {
+      // Handel expected 404 error when user has no stables yet
+      if (
+        error.statusCode === 404 ||
+        (error.message && error.message.includes("User has no stables yet")) ||
+        (error.message &&
+          error.message.includes("not connected to any stables"))
+      ) {
+        console.info(
+          `User has no stable roles yet - this is normal for new users`
+        );
+        return [];
+      }
+
+      throw error;
     }
-
-    // The axios interceptor will handle the response formatting and error handling
-    const response = await axiosInstance.get(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}user/${userId}`
-    );
-
-    return response.value;
   },
 
   getUsersByStableId: async (stableId) => {
-    const response = await axiosInstance.get(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}stableId/${stableId}`
-    );
-
-    return response.value;
+    try {
+      const response = await axiosInstance.get(
+        `/api/user-stables/stable/${stableId}`
+      );
+      return response.value || [];
+    } catch (error) {
+      console.error("Error fetching stable members:", error);
+      throw error;
+    }
   },
 
   getById: async (id) => {
-    if (!id) {
-      throw new Error("User ID is required");
-    }
-
     return await baseService.getById(id);
   },
 
   update: async (userData) => {
-    if (!userData || !userData.id) {
-      throw new Error("User ID is required for update");
-    }
-
     return await baseService.update(userData);
   },
   delete: async (userId) => {
-    if (!userId) {
-      throw new Error("User ID is required for deletion");
-    }
-
     return await baseService.delete(userId);
   },
 
-  /*
-  Example response to ask BE
-  {
-    "success": true,
-    "message": "User role updated successfully",
-    "data": {
-      "userId": 5,
-      "stableId": 1,
-      "role": 0
-    }
-  } 
-*/
-  updateUserStableRole: async (userId, stableId, role) => {
-    return await axiosInstance.put(`/api/user/role/${userId}`, {
-      stableId,
-      role,
-    });
+  updateUserStableRole: async (userStableId, role) => {
+    return await axiosInstance.put(
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?userStableRole=${role}`
+    );
+  },
+
+  removeUserFromStable: async (userStableId) => {
+    return await axiosInstance.delete(
+      `${ENDPOINTS.DELETE_USER_FROM_STABLE}/${userStableId}`
+    );
   },
 };
 

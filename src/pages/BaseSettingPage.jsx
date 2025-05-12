@@ -31,7 +31,7 @@ export const SettingsMenuItem = ({ label, onClick, icon }) => (
 
 // Base settings page that both user and admin pages will extend
 const BaseSettingsPage = ({
-  title = "Inställningar",
+  title = "Settings",
   renderMenuItems,
   renderAdditionalContent: renderAdminInfo,
   showProfileEdit = true,
@@ -92,13 +92,13 @@ const BaseSettingsPage = ({
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+    <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">
       {/* Header */}
-      <div className="bg-primary-light">
+      <div className="bg-primary-light lg:bg-background border-b-1 border-light ">
         <ModalHeader title={title} />
       </div>
 
-      <div className="flex-1 px-4 py-6 space-y-4">
+      <div className="flex-1 px-4 py-6 space-y-4 md:px-50 xl:px-100">
         {/* User profile section */}
         <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg">
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
@@ -111,7 +111,7 @@ const BaseSettingsPage = ({
           <div className="flex-1">
             <h3 className="text-lg font-medium">{userFullName}</h3>
             <p className="text-grey">
-              {displayUser?.email || "Ingen mailadress registrerad"}
+              {displayUser?.email || "No email address registered"}
             </p>
           </div>
           {showProfileEdit && (
@@ -119,7 +119,7 @@ const BaseSettingsPage = ({
               onClick={() => setShowUserEditProfileForm(true)}
               className="p-2 text-primary"
               type="icon"
-              aria-label="Redigera användarprofil"
+              aria-label="Edit user profile"
             >
               <PenIcon className="w-9 h-9" />
             </Button>
@@ -153,7 +153,7 @@ const BaseSettingsPage = ({
               className="w-9/10"
               onClick={() => handleSwitchStable(navigate, ROUTES)}
             >
-              Byt stall
+              Change stable
             </Button>
 
             <Button
@@ -162,7 +162,7 @@ const BaseSettingsPage = ({
               onClick={handleShowLogoutModal}
               loading={loading}
             >
-              Logga ut
+              Log out
             </Button>
           </div>
         </div>
@@ -171,8 +171,8 @@ const BaseSettingsPage = ({
           onClose={() => setShowLogoutConfirm(false)}
           onConfirm={handleLogoutConfirmed}
           loading={loading}
-          title="Vill du logga ut?"
-          confirmButtonText="Logga ut"
+          title="Do you want to log out?"
+          confirmButtonText="Log out"
           confirmButtonType="danger"
           icon={
             <LogoutIcon

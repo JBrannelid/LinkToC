@@ -15,21 +15,23 @@ const StableRequestsPage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
-      <div className="bg-primary-light">
+      <div className="bg-primary-light lg:hidden">
         <ModalHeader
-          title="Stallförfrågningar"
+          title="Stable requests"
           showCloseBtn={false}
           onCloseClick={() => window.history.back()}
         />
       </div>
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
-        {isAdmin ? (
-          // Admin view
-          <StableRequestsList stableId={currentStable?.id} />
-        ) : (
-          // User view
-          <UserStableRequestsList />
-        )}
+      <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {isAdmin ? (
+            // Admin view
+            <StableRequestsList stableId={currentStable?.id} />
+          ) : (
+            // User view
+            <UserStableRequestsList />
+          )}
+        </div>
       </div>
     </div>
   );

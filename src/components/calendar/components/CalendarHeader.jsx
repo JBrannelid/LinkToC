@@ -45,7 +45,7 @@ const CalendarHeader = ({
         <button
           type="button"
           onClick={goToToday}
-          className="text-sm md:text-lg lg:text-xl font-normal font-heading"
+          className="text-sm lg:text-lg font-normal font-heading"
         >
           Today
         </button>

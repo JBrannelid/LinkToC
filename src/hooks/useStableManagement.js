@@ -23,11 +23,13 @@ export const useStableManagement = (stableId) => {
     try {
       // Fetch members for a specific stable
       const membersResponse = await userService.getUsersByStableId(stableId);
+      console.log("Raw members response:", membersResponse);
 
       // Format response to match expected format
       const formattedMembers = Array.isArray(membersResponse)
         ? membersResponse.map((member) => ({
-            id: member.userId,
+            id: member.userStableId,
+            userId: member.userId,
             firstName: member.firstName,
             lastName: member.lastName,
             role: member.role,
@@ -93,7 +95,7 @@ export const useStableManagement = (stableId) => {
     setOperationType("update");
 
     try {
-      await userService.updateUserStableRole(userId, stableId, newRole);
+      await userService.updateUserStableRole(userId, newRole);
       await fetchStableData();
       return true;
     } catch (error) {
@@ -124,6 +126,21 @@ export const useStableManagement = (stableId) => {
     }
   };
 
+  const removeUserFromStable = async (userStableId) => {
+    setLoading(true);
+    setOperationType("delete");
+
+    try {
+      await userService.removeUserFromStable(userStableId);
+      await fetchStableData();
+      return true;
+    } catch (error) {
+      setError(error.message || "Failed to remove member");
+      setLoading(false);
+      return false;
+    }
+  };
+
   useEffect(() => {
     fetchStableData();
   }, [fetchStableData]);
@@ -144,6 +161,7 @@ export const useStableManagement = (stableId) => {
     updateMemberRole,
     rejectRequest,
     cancelInvitation,
+    removeUserFromStable,
     refreshData: fetchStableData,
   };
 };

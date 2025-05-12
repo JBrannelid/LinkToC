@@ -74,81 +74,94 @@ const StablePostForm = ({
   };
 
   return (
-    <div className="fixed inset-0 z-30 bg-background shadow-md flex flex-col">
-      <ModalHeader
-        title={title}
-        showCloseBtn={true}
-        onCloseClick={onCancel}
-        className="bg-primary-light"
-        render="left"
-      />
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+      <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+        <ModalHeader
+          title={title}
+          showCloseBtn={true}
+          onCloseClick={onCancel}
+          className="bg-primary-light"
+          render="left"
+        />
+        {/* Main content container */}
+        <div className="flex flex-col flex-1 px-4 pt-4 pb-6 md:pb-4">
+          <FormProvider
+            methods={methods}
+            onSubmit={handleSubmit}
+            footer={{ showFooter: false }}
+            className="flex flex-col flex-1"
+          >
+            {/* Form fields */}
+            <div className="bg-white rounded-t-lg border-b border-primary-light">
+              {/* Title input */}
+              <FormInput
+                name="title"
+                placeholder="Title..."
+                inputClassName="h-12 border-none !rounded-b-0 font-semibold"
+                validation={{
+                  required: "Title is required",
+                  maxLength: {
+                    value: 100,
+                    message: "Maximum 100 characters",
+                  },
+                }}
+              />
+            </div>
+            {/* Textarea input */}
+            <div className="bg-white rounded-b-lg flex-grow">
+              <FormInput
+                name="content"
+                type="textarea"
+                placeholder="Description..."
+                inputClassName="border-none !rounded-t-0 h-full"
+                rows={7}
+                validation={{ required: "Content is required" }}
+                className="h-full"
+              />
+            </div>
 
-      {/* Main content container */}
-      <div className="flex flex-col flex-1 px-4 pt-4 pb-20 relative">
-        <FormProvider
-          methods={methods}
-          onSubmit={handleSubmit}
-          footer={{ showFooter: false }}
-          className="flex flex-col flex-1"
-        >
-          {/* Form fields */}
-          <div className="bg-white rounded-t-lg border-b border-primary-light">
-            {/* Title input */}
-            <FormInput
-              name="title"
-              placeholder="Title..."
-              inputClassName="h-12 border-none !rounded-b-0 font-semibold"
-              validation={{
-                required: "Title is required",
-                maxLength: {
-                  value: 100,
-                  message: "Maximum 100 characters",
-                },
-              }}
-            />
-          </div>
-          {/* Textarea input */}
-          <div className="bg-white rounded-b-lg flex-grow">
-            <FormInput
-              name="content"
-              type="textarea"
-              placeholder="Description..."
-              inputClassName="border-none !rounded-t-0 h-full"
-              rows={7}
-              validation={{ required: "Content is required" }}
-              className="h-full"
-            />
-          </div>
+            {/* Image upload button */}
+            <div className="mt-4 mb-6 flex justify-end">
+              <Button
+                type="secondary"
+                className="w-6/10 h-8 md:w-4/10"
+                onClick={triggerImageUpload}
+              >
+                Upload image
+              </Button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageUpload}
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
 
-          {/* Image upload button */}
-          <div className="mt-4 flex justify-end">
-            <Button
-              type="secondary"
-              className="w-6/10 h-8"
-              onClick={triggerImageUpload}
-            >
-              Upload image
-            </Button>
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageUpload}
-              accept="image/*"
-              className="hidden"
-            />
-          </div>
+            {/* Action buttons */}
+            <div className="w-full flex justify-center mt-auto">
+              <div className="flex flex-col gap-3 w-full max-w-md">
+                <Button
+                  type="primary"
+                  className="w-full"
+                  onClick={methods.handleSubmit(handleSubmit)}
+                >
+                  {post ? "Update" : "Post"}
+                </Button>
 
-          {/* Action buttons - pinned to bottom */}
-          <div className="absolute bottom-20 left-8 right-0 p-4 bg-background">
-            <Button
-              type="primary"
-              className="w-9/10"
-              onClick={methods.handleSubmit(handleSubmit)}
-            >
-              {post ? "Update" : "Post"}
-            </Button>
-          </div>
-        </FormProvider>
+                {post && (
+                  <Button
+                    type="danger"
+                    className="w-full"
+                    onClick={handleDelete}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </div>
+            </div>
+          </FormProvider>
+        </div>
       </div>
     </div>
   );

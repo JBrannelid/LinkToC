@@ -21,9 +21,21 @@ axiosInstance.interceptors.response.use(
   // Error (status >= 400): Format the error into a standardized JSON object
   (error) => {
     const formattedError = handleAxiosError(error);
-    console.error(
-      `[API Error] ${formattedError.type}: ${formattedError.message}`
-    );
+
+    // Don't log 404 errors for user-stables endpoint (expected for new users)
+    const isExpected404 =
+      formattedError.statusCode === 404 &&
+      error.config?.url?.includes("/api/user-stables/user/");
+
+    if (!isExpected404) {
+      console.error(
+        `[API Error] ${formattedError.type}: ${formattedError.message}`
+      );
+      if (formattedError.details) {
+        console.error("Error details:", formattedError.details);
+      }
+    }
+
     return Promise.reject(formattedError);
   }
 );

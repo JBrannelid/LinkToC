@@ -10,5 +10,7 @@ export const ENDPOINTS = {
   WALLPOST: "api/wallpost",
   AUTH: "/api/auth",
   STABLEPOSTBYID: "/api/stable-post-by-stable-id/",
-  EXTRACT_USER_ROLES: "/api/userstables/",
+  EXTRACT_USER_ROLES: "/api/user-stables/",
+  DELETE_USER_FROM_STABLE: "/api/userstables",
+  CHANGE_PASSWORD: "/api/change-password",
 };

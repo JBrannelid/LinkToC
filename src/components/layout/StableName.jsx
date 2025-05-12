@@ -7,8 +7,10 @@ import { useLoadingState } from "../../hooks/useLoadingState";
 export default function StableName() {
   const { currentStable } = useAppContext();
   const {
+    currentStableData,
     status: { loading, error },
-  } = useStableData();
+  } = useStableData(currentStable?.id);
+
   const loadingState = useLoadingState(loading, "fetch");
 
   if (loading)
@@ -23,7 +25,7 @@ export default function StableName() {
 
   return (
     <span className="text-lg md:text-xl xl:text-2xl font-heading">
-      {currentStable.name || "Inget stall kopplat"}
+      {currentStableData?.name || currentStable?.name || "No stable connected"}
     </span>
   );
 }

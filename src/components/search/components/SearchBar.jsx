@@ -138,7 +138,7 @@ const SearchBar = ({
 
             {loading && (
                 <div
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 transition-opacity duration-150 ${loading ? 'opacity-100' : 'opacity-0'}`}
                     aria-hidden="true"
                 >
                     <LoadingSpinner

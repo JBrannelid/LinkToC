@@ -33,59 +33,69 @@ const DesktopNavigation = () => {
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+  // Check if the user has stable access
+  // Explicit check for undefined (user with a stable role 0, such as a stable manager)
+  const hasStableAccess =
+    currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
   return (
     <div className=" w-full bg-white shadow-md py-2">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
-          <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
-          <nav className="flex items-center space-x-8">
-            <Link
-              to={ROUTES.HOME}
-              className={`text-xl font-medium ${
-                isActive(ROUTES.HOME)
-                  ? "text-primary"
-                  : "text-black hover:text-primary"
-              }`}
-            >
-              Home
-            </Link>
-            <Link
-              to={buildRoute(ROUTES.STABLE_POST, {
-                stableId: currentStable?.id,
-              })}
-              className={`text-xl font-medium ${
-                isActive(ROUTES.STABLE_POST.split("/:")[0])
-                  ? "text-primary"
-                  : "text-black hover:text-primary"
-              }`}
-            >
-              Board
-            </Link>
-            <Link
-              to={buildRoute(ROUTES.HORSE_PROFILE, {
-                horseId: selectedHorse?.id || 2,
-              })}
-              className={`text-xl font-medium ${
-                isActive(ROUTES.HORSE_PROFILE.split("/:")[0])
-                  ? "text-primary"
-                  : "text-black hover:text-primary"
-              }`}
-            >
-              Horses
-            </Link>
-            <Link
-              to={buildRoute(ROUTES.USER_PROFILE, { userId: currentUser?.id })}
-              className={`text-xl font-medium ${
-                isActive(ROUTES.USER_PROFILE.split("/:")[0])
-                  ? "text-primary"
-                  : "text-black hover:text-primary"
-              }`}
-              aria-label="Användarprofil"
-            >
-              Members
-            </Link>
-          </nav>
+          <Link to={ROUTES.HOME}>
+            <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
+          </Link>
+          {hasStableAccess && (
+            <nav className="flex items-center space-x-8">
+              <Link
+                to={ROUTES.HOME}
+                className={`text-xl font-medium ${
+                  isActive(ROUTES.HOME)
+                    ? "text-primary"
+                    : "text-black hover:text-primary"
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                to={buildRoute(ROUTES.STABLE_POST, {
+                  stableId: currentStable?.id,
+                })}
+                className={`text-xl font-medium ${
+                  isActive(ROUTES.STABLE_POST.split("/:")[0])
+                    ? "text-primary"
+                    : "text-black hover:text-primary"
+                }`}
+              >
+                Feed
+              </Link>
+              <Link
+                to={buildRoute(ROUTES.HORSE_PROFILE, {
+                  horseId: selectedHorse?.id || 2,
+                })}
+                className={`text-xl font-medium ${
+                  isActive(ROUTES.HORSE_PROFILE.split("/:")[0])
+                    ? "text-primary"
+                    : "text-black hover:text-primary"
+                }`}
+              >
+                Horses
+              </Link>
+              <Link
+                to={buildRoute(ROUTES.USER_PROFILE, {
+                  userId: currentUser?.id,
+                })}
+                className={`text-xl font-medium ${
+                  isActive(ROUTES.USER_PROFILE.split("/:")[0])
+                    ? "text-primary"
+                    : "text-black hover:text-primary"
+                }`}
+                aria-label="Användarprofil"
+              >
+                Members
+              </Link>
+            </nav>
+          )}
         </div>
         <div className="flex items-center space-x-10">
           <Link to={ROUTES.NOTIFICATIONS} className="text-primary">

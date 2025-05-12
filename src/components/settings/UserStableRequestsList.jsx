@@ -20,7 +20,6 @@ const UserStableRequestsList = () => {
 
   const handleConfirmReject = () => {
     if (selectedItem) {
-      // Cancel a request sent by the user
       cancelRequest(selectedItem.id);
       setShowRejectModal(false);
       setSelectedItem(null);
@@ -45,28 +44,33 @@ const UserStableRequestsList = () => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4">
-      {/* Header */}
-      <h2 className="font-bold mb-4">Your stable requests</h2>
-      {/* Sent requests list */}
-      <div className="space-y-1 max-h-80 overflow-y-auto ">
+    <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
+      <header>
+        <h2 className="font-bold mb-4 text-lg md:text-xl">
+          Your pending stable applications
+        </h2>
+      </header>
+
+      <div className="space-y-1 max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto">
         {sentRequests.map((userRequest, index) => (
-          <div
+          <article
             key={`sent-${userRequest.id}-${index}`}
-            className="flex items-center justify-between py-3 border-b border-light"
+            className="flex flex-col md:flex-row md:items-center justify-between py-3 md:py-4 border-b border-light"
           >
-            <div>
-              <h3 className="font-medium">{userRequest.name}</h3>
+            <div className="mb-2 md:mb-0">
+              <h3 className="font-medium text-base md:text-lg">
+                {userRequest.name}
+              </h3>
               <p className="text-sm text-gray">
                 {userRequest.type}, {userRequest.county}
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-gray">
                 {userRequest.requestDate
                   ? new Date(userRequest.requestDate).toLocaleDateString()
                   : "Date not available"}
               </p>
             </div>
-            <div>
+            <div className="flex justify-end md:justify-center">
               <Button
                 type="icon"
                 onClick={() => handleShowRejectModal(userRequest)}
@@ -76,16 +80,14 @@ const UserStableRequestsList = () => {
                 <CloseIcon strokeWidth={4} />
               </Button>
             </div>
-          </div>
+          </article>
         ))}
 
-        {/* Display message when the list is empty */}
         {sentRequests.length === 0 && (
-          <p className="py-3 text-center text-gray">No sent requests</p>
+          <p className="py-8 text-center text-gray">No pending requests</p>
         )}
       </div>
 
-      {/* Confirmation modal */}
       <ConfirmationModal
         isOpen={showRejectModal}
         onClose={() => setShowRejectModal(false)}
@@ -111,7 +113,7 @@ const UserStableRequestsList = () => {
           will be canceled.
         </p>
       </ConfirmationModal>
-    </div>
+    </section>
   );
 };
 

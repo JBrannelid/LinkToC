@@ -6,23 +6,21 @@ import CheckIcon from "../../assets/icons/CheckIcon";
 import ConfirmationModal from "../../components/ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
+// Remove comments if we want to display sent invitations
 const StableRequestsList = ({ stableId }) => {
-  const [activeTab, setActiveTab] = useState("received");
+  // const [activeTab, setActiveTab] = useState("received");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const {
     receivedRequests,
-    sentInvites,
+    // sentInvites,
     loading,
     approveRequest,
     rejectRequest,
-    cancelInvitation,
+    // cancelInvitation,
   } = useStableManagement(stableId);
-
-  const displayItems =
-    activeTab === "received" ? receivedRequests : sentInvites;
 
   const handleShowRejectModal = (request) => {
     setSelectedRequest(request);
@@ -31,11 +29,7 @@ const StableRequestsList = ({ stableId }) => {
 
   const handleConfirmReject = () => {
     if (selectedRequest) {
-      if (activeTab === "sent") {
-        cancelInvitation(selectedRequest.id);
-      } else {
-        rejectRequest(selectedRequest.id);
-      }
+      rejectRequest(selectedRequest.id);
       setShowRejectModal(false);
       setSelectedRequest(null);
     }
@@ -55,134 +49,71 @@ const StableRequestsList = ({ stableId }) => {
   };
 
   if (loading) {
-    return <div className="text-center py-4">Laddar förfrågningar...</div>;
+    return <div className="text-center py-4">Loading requests...</div>;
   }
 
-  const getRejectModalTitle = () => {
-    if (activeTab === "sent") {
-      return "Vill du dra tillbaka inbjudan?";
-    }
-    return "Vill du ta bort förfrågan?";
-  };
-
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md p-4">
+    <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
       {/* Header */}
-      <h2 className="font-bold mb-4">Stable requests</h2>
+      <header>
+        <h2 className="font-bold mb-4 text-lg md:text-xl">
+          Stable join requests
+        </h2>
+      </header>
 
-      {/* Tab navigation */}
-      <div className="flex justify-center mb-4">
-        <div className="grid grid-cols-2 w-full gap-2">
-          <div className="flex justify-center">
-            <Button
-              type="secondary"
-              className={`tab-button-settings no-effects !rounded-full
-                ${activeTab === "received" ? "!bg-light/40" : ""}
-              `}
-              onClick={() => setActiveTab("received")}
-            >
-              <p className="text-sm">Applications </p>
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <Button
-              type="secondary"
-              className={`tab-button-settings no-effects !rounded-full
-                ${activeTab === "sent" ? "!bg-light/40" : ""}`}
-              onClick={() => setActiveTab("sent")}
-            >
-              <p className="text-sm">Invitations</p>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Requests/Invites list */}
-      <div className="space-y-1">
-        {displayItems.map((item, index) => (
-          <div
-            key={`${activeTab}-${item.id}-${index}`}
-            className="flex items-center justify-between py-3 border-b border-light"
+      {/* Applications list */}
+      <div className="space-y-1 max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto">
+        {receivedRequests.map((request, index) => (
+          <article
+            key={`request-${request.id}-${index}`}
+            className="flex flex-col md:flex-row md:items-center justify-between py-3 md:py-4 border-b border-light"
           >
-            {activeTab === "received" ? (
-              // Received request
-              <>
-                <div>
-                  <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
-                  <div className="text-sm text-gray-500">{item.email}</div>
-                  <div className="text-xs text-gray-400">
-                    {item.inviteDate
-                      ? new Date(item.inviteDate).toLocaleDateString()
-                      : "Datum saknas"}
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  <Button
-                    type="icon"
-                    onClick={() => handleShowAcceptModal(item)}
-                    aria-label="Godkänn förfrågan"
-                    className="text-primary"
-                  >
-                    <CheckIcon strokeWidth={4} />
-                  </Button>
-                  <Button
-                    type="icon"
-                    onClick={() => handleShowRejectModal(item)}
-                    aria-label="Avvisa förfrågan"
-                    className="text-error-500"
-                  >
-                    <CloseIcon strokeWidth={4} />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              // Sent invite display
-              <>
-                <div>
-                  <div className="font-medium">{`${item.firstName} ${item.lastName}`}</div>
-                  <div className="text-sm text-gray-500">{item.email}</div>
-                  <div className="text-xs text-gray-400">
-                    {item.inviteDate
-                      ? new Date(item.inviteDate).toLocaleDateString()
-                      : "Datum saknas"}
-                  </div>
-                </div>
-                <div className="flex space-x-2">
-                  <Button
-                    type="icon"
-                    onClick={() => handleShowRejectModal(item)}
-                    aria-label="Dra tillbaka inbjudan"
-                    className="text-error-500"
-                  >
-                    <CloseIcon strokeWidth={4} />
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
+            <div className="mb-2 md:mb-0">
+              <h3 className="font-medium text-base md:text-lg">{`${request.firstName} ${request.lastName}`}</h3>
+              <p className="text-sm text-gray">{request.email}</p>
+              <p className="text-xs text-gray">
+                {request.inviteDate
+                  ? new Date(request.inviteDate).toLocaleDateString()
+                  : "Date not available"}
+              </p>
+            </div>
+            <div className="flex justify-end md:justify-center space-x-2">
+              <Button
+                type="icon"
+                onClick={() => handleShowAcceptModal(request)}
+                aria-label="Accept request"
+                className="text-primary"
+              >
+                <CheckIcon strokeWidth={4} />
+              </Button>
+              <Button
+                type="icon"
+                onClick={() => handleShowRejectModal(request)}
+                aria-label="Reject request"
+                className="text-error-500"
+              >
+                <CloseIcon strokeWidth={4} />
+              </Button>
+            </div>
+          </article>
         ))}
 
-        {/* Display message when a list is empty */}
-        {displayItems.length === 0 && (
-          <div className="py-3 text-center text-gray">
-            Inga{" "}
-            {activeTab === "received"
-              ? "mottagna förfrågningar"
-              : "skickade inbjudningar"}
-          </div>
+        {/* Display message when list is empty */}
+        {receivedRequests.length === 0 && (
+          <p className="py-8 text-center text-gray">No pending requests</p>
         )}
       </div>
 
-      {/* Remove Confirmation modals */}
+      {/* Reject Confirmation Modal */}
       <ConfirmationModal
         isOpen={showRejectModal}
         onClose={() => setShowRejectModal(false)}
         onConfirm={handleConfirmReject}
         loading={loading}
-        title={getRejectModalTitle()}
-        confirmButtonText="Ja"
+        title="Do you want to reject this request?"
+        confirmButtonText="Yes"
         confirmButtonType="danger"
-        cancelButtonText="Nej"
+        cancelButtonText="No"
         icon={
           <HandRaisedIcon
             size={70}
@@ -191,18 +122,19 @@ const StableRequestsList = ({ stableId }) => {
           />
         }
       />
+
       {/* Accept Confirmation Modal */}
       <ConfirmationModal
         isOpen={showAcceptModal}
         onClose={() => setShowAcceptModal(false)}
         onConfirm={handleConfirmAccept}
         loading={loading}
-        title={`Vill du acceptera ${
-          selectedRequest?.firstName || "denna medlem"
+        title={`Do you want to accept ${
+          selectedRequest?.firstName || "this member"
         }?`}
-        confirmButtonText="Ja"
+        confirmButtonText="Yes"
         confirmButtonType="primary"
-        cancelButtonText="Nej"
+        cancelButtonText="No"
         icon={
           <CheckIcon
             size={70}
@@ -212,7 +144,7 @@ const StableRequestsList = ({ stableId }) => {
           />
         }
       />
-    </div>
+    </section>
   );
 };
 

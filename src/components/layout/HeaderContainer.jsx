@@ -14,6 +14,7 @@ const HeaderContainer = () => {
     currentPath.startsWith("/userpage/") ||
     currentPath.startsWith("/horse-page/") ||
     currentPath.startsWith("/stable-requests") ||
+    currentPath.startsWith("/select-stable") ||
     currentPath.startsWith("/stable-horses") ||
     currentPath.startsWith("/manage-stable");
 

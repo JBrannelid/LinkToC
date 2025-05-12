@@ -29,6 +29,7 @@ export default function StablePostPage() {
     createPost,
     updatePost,
     deletePost,
+    togglePinStatus,
   } = useStablePosts(currentStableId);
 
   // Form control functions
@@ -65,20 +66,7 @@ export default function StablePostPage() {
   // Handle toggling pin status
   const handleTogglePin = async (post) => {
     try {
-      const newPostData = {
-        title: post.title || "",
-        content: post.content || "",
-        userIdFk: currentUser?.id,
-        stableIdFk: parseInt(currentStableId),
-        date: post.date || new Date().toISOString(),
-        isPinned: !post.isPinned,
-      };
-
-      // Delete the old post
-      await deletePost(post.id);
-
-      // Create new post with updated pin status
-      await createPost(newPostData);
+      await togglePinStatus(post.id);
     } catch (error) {
       console.error("Error toggling pin status:", error);
     }
@@ -100,13 +88,13 @@ export default function StablePostPage() {
     <div className="bg-background min-h-screen flex flex-col pb-10">
       <div className="border-b-1 border-light flex justify-center">
         <ModalHeader
-          title="Board"
+          title="Feed"
           className="max-w-6xl mx-auto flex items-center"
         />
       </div>
 
       {/* Main content area */}
-      <div className="flex max-w-4xl mx-auto w-full">
+      <div className="flex max-w-5xl mx-auto w-full">
         {/* Main posts feed */}
         <div className="flex-1 p-4 md:px-6 lg:w-2/4 mt-8">
           <div className="space-y-4">
@@ -133,39 +121,54 @@ export default function StablePostPage() {
           </div>
         </div>
         {/* Right sidebar - visible on md display*/}
-        <div className="hidden md:flex md:flex-col md:w-1/4 p-4 space-y-5 mt-22">
+        <div className="hidden md:flex md:flex-col md:w-4/10 lg:3/10 p-4 space-y-5 mt-22">
           <div className="bg-white rounded-xl shadow-md p-4">
             <h3 className="font-medium text-md mb-3">Stable Info</h3>
-            <p className="text-sm lg:text-md mb-2">
-              {currentStable?.name || "Your Stable"}
+            <p className="text-xs lg:text-sm mb-2">
+              Stable:{" "}
+              <span className="text-primary">
+                {currentStable?.name || "Your Stable"}
+              </span>
             </p>
-            <p className="text-xs lg:text-sm">
-              Din roll: {""}
-              {currentRole === USER_ROLES.USER
-                ? "Medlem"
-                : currentRole === USER_ROLES.ADMIN
-                ? "Admin"
-                : currentRole === USER_ROLES.MANAGER
-                ? "Stallägare"
-                : "Medlem"}
+            <p className="text-xs lg:text-sm ">
+              Your role: {""}
+              {currentRole === USER_ROLES.USER ? (
+                <span className="text-primary">User</span>
+              ) : currentRole === USER_ROLES.ADMIN ? (
+                <span className="text-primary">Admin</span>
+              ) : currentRole === USER_ROLES.MANAGER ? (
+                <span className="text-primary">Owner</span>
+              ) : (
+                <span className="text-primary">User</span>
+              )}
             </p>
           </div>
           <div className="bg-white rounded-xl shadow-md p-4">
             <h3 className="font-medium text-md mb-3">Quick Stats</h3>
             <p className="text-xs lg:text-sm">
-              Total posts: {posts?.length || 0}
+              Total posts:{" "}
+              <span className="text-primary">{posts?.length || 0}</span>
             </p>
             <p className="text-xs lg:text-sm">
-              Pinned: {posts?.filter((p) => p.isPinned).length || 0}
+              Pinned:{" "}
+              <span className="text-primary">
+                {posts?.filter((p) => p.isPinned).length || 0}
+              </span>
             </p>
           </div>
-          {/* Create new post button - on medium screens */}
-          {canCreatePosts && (
-            <Button type="primary" onClick={handleOpenCreateForm}>
-              <span className="mr-5">New post</span>
-              <AddNoteIcon className="w-6 h-6" />
-            </Button>
-          )}
+          <div className="flex justify-center">
+            {/* Create new post button - on medium screens */}
+            {canCreatePosts && (
+              <Button
+                type="primary"
+                className="w-9/10"
+                onClick={handleOpenCreateForm}
+              >
+                <span className="mr-5">New post</span>
+                <AddNoteIcon className="w-6 h-6" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
