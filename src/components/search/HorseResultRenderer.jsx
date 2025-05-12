@@ -77,3 +77,4 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
         </div>
     )
 }
+export default HorseResultRenderer;

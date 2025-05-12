@@ -1,10 +1,10 @@
-import React, {forwardRef, useEffect} from "react";
-import {useFormContext} from 'react-hook-form'
-import SearchProvider from "../SearchProvider";
-import SearchBar from "./SearchBar";
-import SearchResults from "./SearchResults";
-import SearchActions from "./SearchActions";
-import {FormMessage} from "../../forms/index";
+import React, { forwardRef, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
+import SearchInput from './SearchInput';
+import SearchResults from './SearchResults';
+import SearchActions from './SearchActions';
+import { FormMessage } from '../../forms/index';
+import {SearchProvider} from "../index.js";
 
 const SearchField = forwardRef(({
                                     name,
@@ -27,44 +27,49 @@ const SearchField = forwardRef(({
     const {
         register,
         setValue,
-        formState: {errors},
+        formState: { errors },
         trigger
     } = useFormContext();
 
+    // Handle selection with form integration
     const handleSelectItem = (item) => {
-        if (!item && item.id) {
-            setValue(name, item.id, {shouldValidate: true});
+        if (item && item.id) {
+            setValue(name, item.id, { shouldValidate: true });
             trigger(name);
         }
+
         if (onSelectItem) {
             onSelectItem(item);
         }
     };
 
+    // Handle search action with form integration
     const handleSearchAction = (selectedItem) => {
         if (selectedItem && selectedItem.id) {
-            setValue(name, selectedItem.id, {shouldValidate: true});
+            setValue(name, selectedItem.id, { shouldValidate: true });
             trigger(name);
         }
+
         if (onSearch) {
             onSearch(selectedItem);
         }
     };
 
+    // Handle cancel action
     const handleCancel = () => {
         if (onCancel) {
             onCancel();
         }
     };
 
+    // Register the field with form
     useEffect(() => {
         register(name, validation);
     }, [register, name, validation]);
 
-    const showError = errors[name] || formError;
-
+    // Prepare display message
     const displayMessage = formError ||
-        (errors[name] ? {type: "error", text: errors[name].message || errorMessage} : null) ||
+        (errors[name] ? { type: "error", text: errors[name].message || errorMessage } : null) ||
         (message && message.text ? message : null);
 
     return (
@@ -92,7 +97,7 @@ const SearchField = forwardRef(({
                 />
 
                 {/* Search bar */}
-                <SearchBar
+                <SearchInput
                     className={searchBarClassName}
                     ariaLabel={label || "Sök"}
                     autoFocus
@@ -115,7 +120,7 @@ const SearchField = forwardRef(({
 
                 {/* Error message */}
                 {showMessage && displayMessage && (
-                    <FormMessage message={displayMessage}/>
+                    <FormMessage message={displayMessage} />
                 )}
             </div>
         </SearchProvider>

@@ -3,7 +3,7 @@ import { FormMessage, FormProvider } from "../forms/index.js";
 import searchConfigs from "../search/config/searchConfig.js";
 import {
   SearchActions,
-  SearchBar,
+  SearchInput,
   SearchProvider,
   SearchResults,
 } from "../search/index.js";
@@ -105,7 +105,7 @@ const JoinStableForm = ({
             <div className="space-y-10 mt-5 ">
               {/* Search input */}
               <div>
-                <SearchBar
+                <SearchInput
                   className="w-full"
                   inputClassName={`w-full bg-white ${inputClassName}`}
                   ariaLabel="Search for stable name"

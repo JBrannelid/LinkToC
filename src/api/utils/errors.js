@@ -8,7 +8,7 @@ export const ErrorTypes = {
   NOT_FOUND: "Not Found",
 };
 
-function extractReadableErrorMessage(errorData){
+export function extractReadableErrorMessage(errorData){
   if (typeof errorData === 'string') {
     const missingPropsMatch = errorData.match(/missing required properties, including the following: ([^.]+)/i);
     if(missingPropsMatch && missingPropsMatch[1]){
@@ -69,7 +69,6 @@ export function handleAxiosError(error) {
   if (error.response) {
     const { status, data } = error.response;
     let exception = ErrorTypes.UNKNOWN;
-    
     if (status === 404 &&
         data &&
         typeof data.message === 'string' &&
@@ -92,26 +91,21 @@ export function handleAxiosError(error) {
     } else if (status === 404) {
       exception = ErrorTypes.NOT_FOUND;
     }
+    
     console.log('Full error response:', {
       status,
       data,
       headers: error.response.headers
     });
+    const errorCode = `${exception.toUpperCase()}_${status}`;
     
-    let readableMessage;
-    if (status === 400 && data) {
-      readableMessage = extractReadableErrorMessage(data);
-    } else {
-      readableMessage = data?.message || "An error occured";
-    }
-    
-    return createError(readableMessage, exception, status, data);
+    return createError(errorCode, exception, status, data);
   }
 
   // The request was made but no response was received (network error)
   if (error.request) {
     return createError(
-      "Could not connect to the server",
+      'NETWORK_ERROR',
       ErrorTypes.NETWORK,
       0 // No connection code
     );
@@ -119,7 +113,7 @@ export function handleAxiosError(error) {
 
   // Error in request configuration
   return createError(
-    error.message || "Request configuration error",
+    'CONFIG_ERROR',
     ErrorTypes.UNKNOWN,
     0
   );

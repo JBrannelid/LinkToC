@@ -1,9 +1,32 @@
 
 import { ErrorTypes } from "../api/index.js";
+import { extractReadableErrorMessage } from "../api/utils/errors.js";
 
 // Re-export the error types for convenience
 export { ErrorTypes };
 
+const ERROR_MESSAGES = {
+    // Auth errors
+    'AUTH_401': 'Invalid email or password.',
+    'AUTH_403': 'You are not authorized to perform this action.',
+
+    // Not found errors
+    'NOT_FOUND_404': 'The requested resource was not found.',
+
+    // Server errors
+    'SERVER_500': 'An internal server error occurred. Please try again later.',
+    'SERVER_502': 'The server is temporarily unavailable. Please try again later.',
+    'SERVER_503': 'Service unavailable. Please try again later.',
+    'SERVER_504': 'The server took too long to respond. Please try again later.',
+
+    // Network errors
+    'NETWORK_ERROR': 'Could not connect to the server. Please check your internet connection.',
+
+    // Validation errors are handled separately with field-specific messages
+
+    // Default fallbacks
+    'UNKNOWN_ERROR': 'An unexpected error occurred. Please try again.'
+};
 // Converts API errors to user-friendly messages based on error type
 export function getErrorMessage(error, options = {}) {
     const {
@@ -20,44 +43,20 @@ export function getErrorMessage(error, options = {}) {
         return { type: 'error', text: customMessages[error.message] };
     }
 
-    // Handle specific error types from your standardized system
-    switch (error.type) {
-        case ErrorTypes.VALIDATION:
-            return {
-                type: 'error',
-                text: error.message || 'Vänligen kontrollera din inmatning.'
-            };
-        case ErrorTypes.NETWORK:
-            return {
-                type: 'error',
-                text: 'Nätverksfel. Kontrollera din anslutning.'
-            };
-        case ErrorTypes.SERVER:
-            return {
-                type: 'error',
-                text: 'Serverfel. Vänligen försök igen senare.'
-            };
-        case ErrorTypes.AUTH:
-            return {
-                type: 'error',
-                text: 'Autentiseringsfel. Försök eller kontakta support.'
-            };
-        default:
-            // Check for specific password reset scenarios by message content
-            if (error.message) {
-                if (isResetCodeInvalid(error)) {
-                    return {
-                        type: 'error',
-                        text: 'Ogiltig eller utgången återställningskod.'
-                    };
-                }
-            }
-
-            // Default fallback
-            return {
-                type: 'error',
-                text: error.message || defaultMessage
-            };
+   if(error.type === ErrorTypes.VALIDATION && error.details) {
+       const validationMessage = extractReadableErrorMessage(error.details);
+       return { type: 'error', text: validationMessage };
+   }
+   
+   if(error.message && ERROR_MESSAGES[error.message]) {
+       return { type: 'error', text: ERROR_MESSAGES[error.message] };
+   }
+    if (error.type === ErrorTypes.AUTH) {
+        return { type: 'error', text: 'Authentication error. Please try again or contact support.' };
+    } else if (error.type === ErrorTypes.NETWORK) {
+        return { type: 'error', text: 'Network error. Please check your connection.' };
+    } else if (error.type === ErrorTypes.SERVER) {
+        return { type: 'error', text: 'Server error. Please try again later.' };
     }
 }
 

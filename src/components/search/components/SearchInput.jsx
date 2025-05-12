@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useSearch } from "../../../context/searchContext";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 
-const SearchBar = ({
+const SearchInput = ({
   className = "",
   inputClassName = "",
   ariaLabel,
@@ -170,4 +170,4 @@ const SearchBar = ({
   );
 };
 
-export default SearchBar;
+export default SearchInput;

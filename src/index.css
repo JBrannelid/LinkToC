@@ -125,6 +125,9 @@
   .tab-button-settings {
     @apply w-full rounded-full border border-primary;
   }
+  .error-container {
+    @apply bg-red-50 text-error-600 rounded-md p-4;
+  }
 }
 
 @layer utilities {
