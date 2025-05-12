@@ -10,7 +10,8 @@ export default function Header() {
   const location = useLocation();
   const showBackButton =
     location.pathname.includes("/manage-stable") ||
-    location.pathname.includes("/stable-requests");
+    location.pathname.includes("/stable-requests") ||
+    location.pathname.includes("/notifications");
 
   return (
     <div className="relative py-5 lg:hidden">
