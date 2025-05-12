@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints";
 import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage";
 
@@ -9,11 +9,16 @@ const getUserIdFromToken = () => {
     if (!token) return null;
 
     // Parse JWT token
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
 
     const payload = JSON.parse(jsonPayload);
 
@@ -21,7 +26,7 @@ const getUserIdFromToken = () => {
     const userId = payload.sub;
     return userId ? parseInt(userId, 10) : null;
   } catch (error) {
-    console.error('Error extracting user ID from token:', error);
+    console.error("Error extracting user ID from token:", error);
     return null;
   }
 };
@@ -93,14 +98,14 @@ const stableService = {
   },
 
   createStable: async (stableData) => {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
     const userId = getUserIdFromToken() || currentUser.id;
 
     if (!userId) {
-      console.error('No userId available for stable creation');
-      throw new Error('User ID is required to create a stable');
+      console.error("No userId available for stable creation");
+      throw new Error("User ID is required to create a stable");
     }
-    
+
     const createData = {
       userId: parseInt(userId, 10),
       name: stableData.name,
@@ -108,24 +113,24 @@ const stableService = {
       address: stableData.streetAddress,
       boxCount: stableData.stableBoxes,
       postCode: stableData.postCode,
-      county: stableData.county
+      county: stableData.county,
     };
 
-    console.log('Creating stable with data:', createData);
-    
+    console.log("Creating stable with data:", createData);
+
     try {
       const response = await axiosInstance.post(
-          `${ENDPOINTS.STABLE}/create`,
-          createData
+        `${ENDPOINTS.STABLE}/create`,
+        createData
       );
 
-      console.log('Stable creation successful, response:', response);
+      console.log("Stable creation successful, response:", response);
       return response;
     } catch (error) {
-      console.error('Stable creation error:', error);
+      console.error("Stable creation error:", error);
 
       if (error.details) {
-        console.error('Server error details:', error.details);
+        console.error("Server error details:", error.details);
       }
 
       throw error;

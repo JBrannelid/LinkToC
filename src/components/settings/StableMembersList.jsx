@@ -72,9 +72,18 @@ const StableMembersList = ({ stableId }) => {
     <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
       <header>
         <h2 className="font-bold mb-1 text-lg md:text-xl">Members</h2>
-        <p className="text-sm mb-4 pt-1 text-gray">
-          Only stable owners can edit a member
-        </p>
+        <PermissionGate
+          requiredRoles={[USER_ROLES.MANAGER]}
+          fallback={
+            <p className="text-sm mb-4 pt-1 text-gray">
+              Only stable owners can edit a member
+            </p>
+          }
+        >
+          <p className="text-sm mb-4 pt-1 text-gray">
+            You can manage all members as the stable owner
+          </p>
+        </PermissionGate>
       </header>
 
       {/* List container with scroll */}

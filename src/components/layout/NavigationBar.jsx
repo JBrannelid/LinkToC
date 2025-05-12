@@ -11,13 +11,13 @@ import { useAuth } from "../../context/AuthContext";
 
 const NavigationBar = () => {
   const { user } = useAuth();
-
-  const { currentUser, selectedHorse, currentStable } = useAppContext();
+  const { currentUser, currentStable } = useAppContext();
   const location = useLocation();
   const currentPath = location.pathname;
 
   // Use isRouteActive with the current path
   const isActive = (path) => isRouteActive(path, currentPath);
+
   // Check if the user has stable access
   const hasStableAccess =
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
@@ -31,7 +31,7 @@ const NavigationBar = () => {
             className={`p-2 ${
               isActive(ROUTES.HOME) ? "bg-white rounded-full" : "text-primary"
             }`}
-            aria-label="Hem"
+            aria-label="Home"
           >
             <HomeIcon
               className={`w-6 h-6 ${
@@ -43,11 +43,11 @@ const NavigationBar = () => {
           <Link
             to={buildRoute(ROUTES.STABLE_POST, { stableId: currentStable?.id })}
             className={`p-2 ${
-              isActive(ROUTES.STABLE.split("/:")[0])
+              isActive(ROUTES.STABLE_POST.split("/:")[0])
                 ? "bg-white rounded-full"
                 : "text-primary"
             }`}
-            aria-label="Stall"
+            aria-label="Feed"
           >
             <FeedIcon
               className={`w-6 h-6 ${
@@ -55,26 +55,27 @@ const NavigationBar = () => {
                   ? "text-primary"
                   : "currentColor"
               }`}
-              color={
-                isActive(ROUTES.STABLE_POST.split("/:")[0])
-                  ? "currentColor"
-                  : "currentColor"
-              }
             />
           </Link>
 
           <Link
-            to={buildRoute(ROUTES.HORSE_PROFILE, {
-              horseId: selectedHorse?.id || 2,
+            to={buildRoute(ROUTES.STABLE_HORSES, {
+              stableId: currentStable?.id,
             })}
             className={`p-2 ${
-              isActive(ROUTES.HORSE_PROFILE.split("/:")[0])
+              isActive(ROUTES.STABLE_HORSES.split("/:")[0])
                 ? "bg-white rounded-full"
                 : "text-primary"
             }`}
-            aria-label="Häst profil"
+            aria-label="Horses"
           >
-            <HorseFaceIcon className="w-6 h-6" size={24} />
+            <HorseFaceIcon
+              className={`w-6 h-6 ${
+                isActive(ROUTES.STABLE_HORSES.split("/:")[0])
+                  ? "text-primary"
+                  : ""
+              }`}
+            />
           </Link>
 
           <Link
@@ -84,7 +85,7 @@ const NavigationBar = () => {
                 ? "bg-white rounded-full"
                 : "text-primary"
             }`}
-            aria-label="Användarprofil"
+            aria-label="Members"
           >
             <UserIcon
               className={`w-6 h-6 ${

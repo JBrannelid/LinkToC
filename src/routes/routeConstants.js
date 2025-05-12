@@ -3,7 +3,6 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   SELECT_STABLE: "/select-stable",
-  HORSE_PROFILE: "/horse-page/:horseId",
   USER_PROFILE: "/userpage/:userId",
   STABLE: "/stable/:stableId",
   STABLE_POST: "/stablePost/:stableId",
@@ -12,6 +11,7 @@ export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   STABLE_ONBOARDING: "/stable-onboarding",
   NOTIFICATIONS: "/notifications",
+  STABLE_HORSES: "/stable-horses/:stableId",
   MANAGE_STABLE: "/manage-stable",
   STABLE_REQUESTS: "/stable-requests",
 };

@@ -1,6 +1,6 @@
 import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints";
 
 const baseService = createBaseService(ENDPOINTS.USERS);
 
@@ -24,10 +24,21 @@ const userService = {
         console.info(
           `User has no stable roles yet - this is normal for new users`
         );
-        return []; // Return empty array
+        return [];
       }
-      // Logga endast oväntade fel
-      console.error("Error fetching user stables:", error);
+
+      throw error;
+    }
+  },
+
+  getUsersByStableId: async (stableId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/user-stables/stable/${stableId}`
+      );
+      return response.value || [];
+    } catch (error) {
+      console.error("Error fetching stable members:", error);
       throw error;
     }
   },
@@ -45,7 +56,7 @@ const userService = {
 
   updateUserStableRole: async (userStableId, role) => {
     return await axiosInstance.put(
-      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?UpdateStableUserRole=${role}`
+      `${ENDPOINTS.EXTRACT_USER_ROLES}stable-user/${userStableId}?userStableRole=${role}`
     );
   },
 
