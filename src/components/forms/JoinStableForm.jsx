@@ -109,7 +109,9 @@ const JoinStableForm = ({
                 className="w-full"
                 inputClassName={`w-full ${inputClassName}`}
                 ariaLabel="Search for stable name"
-                autoFocus
+                autoFocus={!desktopView}
+                desktopView={desktopView}
+                maintainFocus={!desktopView}
                 disabled={isLoading}
               />
             </div>
