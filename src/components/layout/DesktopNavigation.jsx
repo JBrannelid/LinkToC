@@ -4,21 +4,18 @@ import { ROUTES, buildRoute } from "../../routes/routeConstants";
 import { useAppContext } from "../../context/AppContext";
 import { isRouteActive } from "../../routes/routeUtils";
 import SettingIcon from "../../assets/icons/SettingIcon";
-import NotificationIcon from "../../assets/icons/NotificationIcon";
 import { getProfileImageUrl, formatUserFullName } from "../../utils/userUtils";
 import { useUserData } from "../../hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
+import NotificationDropdown from "../layout/NotificationDropdown";
 
 const DesktopNavigation = () => {
   const { currentUser, currentStable } = useAppContext();
   const location = useLocation();
   const currentPath = location.pathname;
   const { user } = useAuth();
-
-  // Fetch user data with loading handling
   const { userData, userLoading, loadingState } = useUserData();
 
-  // Display loading spinner
   if (userLoading) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -33,6 +30,7 @@ const DesktopNavigation = () => {
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+
   // Check if the user has stable access
   // Explicit check for undefined (user with a stable role 0, such as a stable manager)
   const hasStableAccess =
@@ -99,7 +97,7 @@ const DesktopNavigation = () => {
         </div>
         <div className="flex items-center space-x-10">
           <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
-            <NotificationIcon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+            <NotificationDropdown />
           </Link>
           <Link to={ROUTES.SETTINGS} className="text-primary">
             <SettingIcon

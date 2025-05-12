@@ -5,12 +5,18 @@ import SettingIcon from "../../assets/icons/SettingIcon";
 import NotificationIcon from "../../assets/icons/NotificationIcon";
 import CloseIcon from "../../assets/icons/CloseIcon";
 import Button from "../ui/Button";
+import mockNotificationsData from "../../testing/mockNotifications.json";
 
 export default function Header() {
   const location = useLocation();
   const showBackButton =
     location.pathname.includes("/manage-stable") ||
-    location.pathname.includes("/stable-requests");
+    location.pathname.includes("/stable-requests") ||
+    location.pathname.includes("/notifications");
+
+  // Get notification count from mock json data
+  const { notifications } = mockNotificationsData;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <div className="relative py-5 lg:hidden">
@@ -31,18 +37,25 @@ export default function Header() {
         <Button
           onClick={() => window.history.back()} // Go back
           type="icon"
-          className="absolute right-0 top-3 border-0 text-primary"
+          className="absolute right-0 top-2 border-0 text-primary"
           aria-label="Close"
         >
           <CloseIcon size={30} strokeWidth={2} className="text-primary" />
         </Button>
       ) : (
         <Link
-          to="/notifications" // Open notification
+          to={ROUTES.NOTIFICATIONS} // Open notification
           aria-label="Notifikationer"
           className="absolute right-4 top-4 border-0 text-primary"
         >
-          <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+          <div className="relative">
+            <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-2 -right-2 w-4 h-4 md:w-5 md:h-5 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </div>
         </Link>
       )}
     </div>

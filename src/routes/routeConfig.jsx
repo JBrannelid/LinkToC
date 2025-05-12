@@ -104,6 +104,11 @@ export const protectedRoutes = [
     element: <StableRequestsPage />,
     requiresStable: false,
   },
+  {
+    path: ROUTES.NOTIFICATIONS,
+    element: <NotificationPage />,
+    requiresStable: true,
+  },
 ];
 
 // Error handling

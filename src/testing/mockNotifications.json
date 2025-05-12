@@ -1,0 +1,46 @@
+{
+  "notifications": [
+    {
+      "id": 1,
+      "type": "error",
+      "title": "Missed check-in",
+      "message": "Missed check-in between 19:00-20:00, no one checked that horses were brought in",
+      "timestamp": "12/3 14:43"
+    },
+    {
+      "id": 2,
+      "type": "success",
+      "title": "Check-out completed",
+      "message": "Frida checked out the horses at 08:45",
+      "timestamp": "12/3 14:43"
+    },
+    {
+      "id": 3,
+      "type": "info",
+      "title": "Lunch feeds",
+      "message": "Sara provided lunch feed at 12:03",
+      "timestamp": "12/3 14:43"
+    },
+    {
+      "id": 4,
+      "type": "warning",
+      "title": "Slippery fence",
+      "message": "Slippery fence on the south side of the paddock",
+      "timestamp": "12/3 14:43"
+    },
+    {
+      "id": 5,
+      "type": "comment",
+      "title": "Anna commented on your post",
+      "message": "Good job on the update!",
+      "timestamp": "12/3 14:43"
+    },
+    {
+      "id": 6,
+      "type": "error",
+      "title": "Missed check-out",
+      "message": "Missed check-out between 09:00-10:00, no one checked that horses were let out",
+      "timestamp": "24/1 09:13"
+    }
+  ]
+}
