@@ -31,7 +31,7 @@ const CreateStableForm = ({
       }
     }
   });
-  const inputClass = `w-1/3 px-2 py-3 border-2 w-full rounded-md !border-primary focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary ${inputClassName}`;
+  const inputClass = `bg-white w-1/3 px-2 py-3 border-2 w-full rounded-md !border-primary focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary ${inputClassName}`;
 
   const displayError =
     formError || (error ? { type: "error", text: error } : null);
