@@ -5,6 +5,7 @@ import { useLoadingState } from "./useLoadingState";
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
   const [currentStableData, setCurrentStableData] = useState(null);
+  const [stableInfo, setStableInfo] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
@@ -82,6 +83,24 @@ export function useStableData(stableId) {
 
   const loadingState = useLoadingState(loading, operationType);
 
+  // To only fetch stable with the corresponding ID, not all stables!
+  const getById = useCallback(async () => {
+    setOperationType("fetch");
+    try {
+      setLoading(true);
+      setError(false);
+      const fetchStableInfo = await stableService.getById(stableId);
+      setStableInfo(fetchStableInfo.value);
+      return true;
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [stableId]);
+
   return {
     stables,
     currentStableData,
@@ -91,6 +110,8 @@ export function useStableData(stableId) {
     fetchAndUpdateStables,
     getStableById,
     fetchStableById,
+    getById,
+    stableInfo,
   };
 }
 
