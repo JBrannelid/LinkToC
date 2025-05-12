@@ -69,13 +69,13 @@ const SearchResults = ({
     }, [handleSelectItem, contextHandleItemFocus, onItemFocus]);
 
     // Show empty state prompt when no search has been performed
-    if (!query.trim() && results.length === 0 && !error && !message && !showWhenEmpty) {
-        return (
-            <div className={`p-4 text-center text-gray-500 ${className}`}>
-                {config?.emptySearchPrompt || "Enter a search term to begin"}
-            </div>
-        );
-    }
+    // if (!query.trim() && results.length === 0 && !error && !message && !showWhenEmpty) {
+    //     return (
+    //         <div className={`p-4 text-center text-gray-500 ${className}`}>
+    //             {config?.emptySearchPrompt || "Enter a search term to begin"}
+    //         </div>
+    //     );
+    // }
 
     // Get the appropriate renderer component
     const ItemRenderer = config?.resultItemRenderer
