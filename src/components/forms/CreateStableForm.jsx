@@ -130,11 +130,11 @@ const CreateStableForm = ({
               Number of boxes in the stable
             </label>
           )}
-          <div className="flex">
+          <div className="flex w-4/10">
             <FormInput
               id="stableBoxes"
               name="stableBoxes"
-              placeholder="Number..."
+              placeholder="Boxes..."
               type="number"
               min="0"
               inputClassName={inputClass}
