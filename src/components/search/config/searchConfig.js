@@ -1,8 +1,13 @@
 import {ROUTES} from "../../../routes/index";
-import stableSearchConfig from "./stableSearchConfig";
-import horseSearchConfig from './horseSearchConfig';
-import userSearchConfig from './userSearchConfig';
+import {
+    createStableSearchConfig,
+    createHorseSearchConfig,
+    createUserSearchConfig
+} from './entityBuilder.js';
 
+const stableSearchConfig = createStableSearchConfig();
+const horseSearchConfig = createHorseSearchConfig();
+const userSearchConfig = createUserSearchConfig();
 const routeConfigMap = {
     [ROUTES.STABLE_ONBOARDING]: stableSearchConfig,
 
@@ -40,19 +45,5 @@ export const getConfigForRoutes = (route) => {
         return searchConfigs.stable;
     }
     return searchConfigs.stable;
-};
-
-export const registerSearchConfig = (key, config) => {
-    searchConfigs[key] = config;
-};
-
-export const registerRouteConfig = (route, configOrKey) => {
-    const config = typeof configOrKey === "string" ? searchConfigs[configOrKey] : configOrKey;
-
-    if (!config) {
-        console.warn(`Could not register route ${route} - config not found!`);
-        return;
-    }
-    routeConfigMap[route] = config;
 };
 export default searchConfigs;
