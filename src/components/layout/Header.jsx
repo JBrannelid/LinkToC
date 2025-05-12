@@ -32,7 +32,7 @@ export default function Header() {
         <Button
           onClick={() => window.history.back()} // Go back
           type="icon"
-          className="absolute right-0 top-3 border-0 text-primary"
+          className="absolute right-0 top-2 border-0 text-primary"
           aria-label="Close"
         >
           <CloseIcon size={30} strokeWidth={2} className="text-primary" />
