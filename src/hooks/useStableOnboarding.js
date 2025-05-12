@@ -51,6 +51,7 @@ export const useStableOnboarding = () => {
       checkFirstLogin();
     }
   }, [user]);
+
   useEffect(() => {
     setError(null);
     setMessage({ type: "", text: "" });
@@ -91,23 +92,17 @@ export const useStableOnboarding = () => {
 
         if (response && response.isSuccess) {
           const createdStable = response.value;
-          console.log("Created stable:", createdStable);
 
-          const createdStableId = createdStable.id;
-          console.log("Stable ID:", createdStableId);
-
-          const tempStableData = {
-            id: createdStableId,
-            name: formData.stableName.trim(),
-          };
-          localStorage.setItem("currentStable", JSON.stringify(tempStableData));
-          changeStable(createdStableId, formData.stableName.trim());
           setMessage({
             type: "success",
             text: response.message || "Stable created successfully.",
           });
 
-          return { success: true, message: response.message };
+          return {
+            success: true,
+            stable: createdStable,
+            message: response.message,
+          };
         } else {
           const errorMessage = getErrorMessage({
             type: "server",
