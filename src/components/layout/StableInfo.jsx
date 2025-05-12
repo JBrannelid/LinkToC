@@ -10,13 +10,14 @@ import HorseBoxIcon from "../../assets/icons/HorseBoxIcon";
 import LocationPinIcon from "../../assets/icons/LocationPinIcon";
 import PeopleIcon from "../../assets/icons/PeopleIcon";
 
-export default function StableInfo() {
+export default function StableInfo({ stableId }) {
   const { currentStable } = useAppContext();
   const {
     status: { loading, error },
     getById,
     stableInfo,
-  } = useStableData(currentStable?.id);
+    loadingState,
+  } = useStableData(stableId || currentStable?.id);
 
   useEffect(() => {
     if (currentStable.id) {
@@ -28,7 +29,7 @@ export default function StableInfo() {
     return (
       <div className="flex items-center justify-center p-4">
         <LoadingSpinner size="medium" className="text-gray" />
-        <span className="ml-2">Laddar...</span>
+        <span className="ml-2">{loadingState.getMessage()}</span>
       </div>
     );
   }

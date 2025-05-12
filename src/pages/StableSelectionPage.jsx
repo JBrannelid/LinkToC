@@ -175,16 +175,10 @@ const StableSelectionPage = () => {
           </div>
         ) : (
           // No stables available - display message
-          <div className="text-center py-12">
-            <div className="w-20 h-20 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="text-center py-10">
+            <div className="w-20 h-20 bg-primary-light rounded-full flex items-center justify-center mx-auto">
               <StableIcon className="w-10 h-10 text-primary" />
             </div>
-            <h3 className="text-xl font-semibold mb-2">
-              You don't have any stables yet
-            </h3>
-            <p className=" md:mb-6">
-              Create a new stable or wait for an invitation
-            </p>
           </div>
         )}
 

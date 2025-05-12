@@ -10,7 +10,7 @@ import { useUserData } from "../../hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
 
 const DesktopNavigation = () => {
-  const { currentUser, selectedHorse, currentStable } = useAppContext();
+  const { currentUser, currentStable } = useAppContext();
   const location = useLocation();
   const currentPath = location.pathname;
   const { user } = useAuth();
@@ -70,11 +70,11 @@ const DesktopNavigation = () => {
                 Feed
               </Link>
               <Link
-                to={buildRoute(ROUTES.HORSE_PROFILE, {
-                  horseId: selectedHorse?.id || 2,
+                to={buildRoute(ROUTES.STABLE_HORSES, {
+                  stableId: currentStable?.id,
                 })}
                 className={`text-xl font-medium ${
-                  isActive(ROUTES.HORSE_PROFILE.split("/:")[0])
+                  isActive(ROUTES.STABLE_HORSES.split("/:")[0])
                     ? "text-primary"
                     : "text-black hover:text-primary"
                 }`}
