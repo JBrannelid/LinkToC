@@ -30,7 +30,7 @@ export const AppProvider = ({ children }) => {
     // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
     if (user?.stableRoles?.[id] === undefined) {
       console.error(
-        `SÄKERHETSFEL: Användare försöker sätta stall ${id} utan medlemskap!`
+        "SECURITY ERROR: User is trying to set stable ${id} without membership!"
       );
       localStorage.removeItem("currentStable");
       setCurrentStable(null);
@@ -52,7 +52,7 @@ export const AppProvider = ({ children }) => {
         // explicit check for undefined (user with a stable role 0, such as a stable manager)
         if (user?.stableRoles && user.stableRoles[parsed.id] === undefined) {
           console.warn(
-            "Användare har inte access till sparat stall, rensar..."
+            "User does not have access to the saved stable, remove stable data..."
           );
           localStorage.removeItem("currentStable");
           setCurrentStable(null);
