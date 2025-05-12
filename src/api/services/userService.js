@@ -24,10 +24,9 @@ const userService = {
         console.info(
           `User has no stable roles yet - this is normal for new users`
         );
-        return []; // Return empty array
+        return [];
       }
-      // Logga endast oväntade fel
-      console.error("Error fetching user stables:", error);
+
       throw error;
     }
   },
