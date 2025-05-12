@@ -57,7 +57,7 @@ const ListUserStablePage = () => {
       {/* Member List */}
       <div className="px-5 py-3 md:px-8 lg:px-16">
         {/* Search Bar */}
-        <div className="mb-5 border-t border-b border-gray py-5">
+        <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
             <input
               type="text"
