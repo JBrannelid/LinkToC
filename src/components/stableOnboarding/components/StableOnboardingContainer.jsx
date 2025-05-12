@@ -6,10 +6,13 @@ import { useStableOnboarding } from "../../../hooks/useStableOnboarding";
 import { CreateStableForm, JoinStableForm } from "../../forms/index.js";
 import OnboardingLayout from "../OnboardingLayout.jsx";
 import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
+import { useAuth } from "../../../context/AuthContext";
+import { useAppContext } from "../../../context/AppContext";
 
 const StableOnboardingContainer = () => {
   const navigate = useNavigate();
-
+  const { verifyToken } = useAuth();
+  const { changeStable } = useAppContext();
   const {
     currentStep,
     isFirstLogin,
@@ -20,7 +23,6 @@ const StableOnboardingContainer = () => {
     formMethods,
     navigateToStep,
     handleCreateStable,
-    handleJoinStable,
   } = useStableOnboarding();
 
   useEffect(() => {
@@ -32,9 +34,12 @@ const StableOnboardingContainer = () => {
   const handleStableCreationSuccess = async (data) => {
     const result = await handleCreateStable(data);
 
-    if (result.success) {
+    if (result.success && result.stable) {
+      console.log("Success, refreshing token...");
+      await verifyToken();
+
       sessionStorage.removeItem("isFirstLogin");
-      navigate(ROUTES.HOME);
+      navigate(ROUTES.SELECT_STABLE);
     }
   };
 
