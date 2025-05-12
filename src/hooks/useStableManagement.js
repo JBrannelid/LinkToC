@@ -22,11 +22,11 @@ export const useStableManagement = (stableId) => {
 
     try {
       // Fetch members for a specific stable
-      const membersResponse = await userService.getUsersByStableId(stableId);
+      const membersResponse = await userService.getUserStables(stableId);
 
       // Format response to match expected format
-      const formattedMembers = Array.isArray(membersResponse)
-        ? membersResponse.map((member) => ({
+      const formattedMembers = Array.isArray(membersResponse.value)
+        ? membersResponse.value.map((member) => ({
             id: member.userStableId,
             userId: member.userId,
             firstName: member.firstName,
