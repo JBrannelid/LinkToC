@@ -19,6 +19,9 @@ const JoinStableForm = ({
   loadingState: externalLoadingState = null,
   error: externalError = null,
   message: externalMessage = null,
+  hideLabel = false,
+  inputClassName = "",
+  desktopView = false,
 }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [selectedStable, setSelectedStable] = useState(null);
@@ -94,15 +97,17 @@ const JoinStableForm = ({
           <div className="space-y-4">
             {/* Search input */}
             <div>
-              <label
-                htmlFor="stable-search"
-                className="block text-sm font-medium mb-1"
-              >
-                Search for stable
-              </label>
+              {!hideLabel && (
+                <label
+                  htmlFor="stable-search"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Search for stable
+                </label>
+              )}
               <SearchBar
                 className="w-full"
-                inputClassName="w-full"
+                inputClassName={`w-full ${inputClassName}`}
                 ariaLabel="Search for stable name"
                 autoFocus
                 disabled={isLoading}
@@ -133,12 +138,24 @@ const JoinStableForm = ({
 
             {/* Action button */}
             <div className="mt-6">
-              <SearchActions
-                onCancel={handleCancelSearch}
-                loading={isLoading}
-                loadingState={loadingState}
-                disabled={isLoading}
-              />
+              {!desktopView ? (
+                <SearchActions
+                  onCancel={handleCancelSearch}
+                  loading={isLoading}
+                  loadingState={loadingState}
+                  disabled={isLoading}
+                />
+              ) : (
+                // Only show search button in desktop view, no cancel button
+                <div className="hidden">
+                  <SearchActions
+                    onCancel={handleCancelSearch}
+                    loading={isLoading}
+                    loadingState={loadingState}
+                    disabled={isLoading}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </SearchProvider>
