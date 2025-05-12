@@ -55,7 +55,7 @@ const ListUserStablePage = () => {
       <StableInfo stableId={stableId} />
 
       {/* Member List */}
-      <div className="px-5 py-3 md:px-8 lg:px-16">
+      <div className="px-5 py-3 md:px-10 lg:px-30">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
@@ -84,7 +84,7 @@ const ListUserStablePage = () => {
         </div>
 
         {/* Members Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
           {filteredMembers.map((member) => (
             <MemberCard
               key={member.userId}
