@@ -43,50 +43,50 @@ export default function StableInfo({ stableId }) {
     <>
       {stableInfo ? (
         // Header
-        <div className="bg-primary-light">
+        <div className="bg-primary-light px-5  ">
           <ModalHeader className="bg-primary-light" title={stableInfo.name} />
 
           {/* stable info body */}
           <ol className="pb-3">
-            <li className="m-1 mb-1">
-              <p className="flex m-0.5">
+            <li className="m-1 mb-2">
+              <p className="flex m-0.5 font-normal">
                 <LocationPinIcon
                   className="w-5 h-5 mr-2 text-primary"
-                  size={24}
+                  size={29}
                 />
                 {stableInfo.address}
               </p>
             </li>
             <div className="grid grid-cols-2 gap-0.5">
               <li className="m-1">
-                <p className="flex m-0.5 items-center">
+                <p className="flex m-0.5 items-center font-normal">
                   <HorseFaceIcon
                     className="w-5 h-5 mr-3 text-primary"
-                    size={24}
+                    size={25}
                   />
                   Hästar {stableInfo.horseCount}
                 </p>
               </li>
               <li className="m-1">
-                <p className="flex m-0.5 items-center">
+                <p className="flex m-0.5 items-center font-normal">
                   <HorseRidingIcon
                     className="w-5 h-5 mr-3 text-primary mt-0.5"
-                    size={24}
+                    size={25}
                   />
                   {stableInfo.type}
                 </p>
               </li>
               <li className="m-1">
-                <p className="flex m-0.5 items-center">
+                <p className="flex m-0.5 items-center font-normal">
                   <PeopleIcon className="w-5 h-4 mr-3 text-primary" size={24} />
                   Medlemar {stableInfo.memberCount}
                 </p>
               </li>
               <li className="m-1">
-                <p className="flex m-0.5 items-center">
+                <p className="flex m-0.5 items-center font-normal">
                   <HorseBoxIcon
                     className="w-5 h-5 mr-3 text-primary mt-0.5"
-                    size={24}
+                    size={25}
                   />
                   Boxar {stableInfo.boxCount}
                 </p>
@@ -95,10 +95,15 @@ export default function StableInfo({ stableId }) {
           </ol>
         </div>
       ) : (
-        //Header
-        <div className="bg-primary-light">
-          <ModalHeader title={`Error: ${error}`} />
-          <p>Gärna Kontakta KundService!</p>
+        // Error state
+        <div className="bg-primary-light p-4 text-center">
+          <ModalHeader title="Stable Information Unavailable" />
+          <p className="text-gray mb-2">
+            We couldn't load the stable information at this time.
+          </p>
+          <p className="text-primary font-medium">
+            Please contact Customer Service for assistance.
+          </p>
         </div>
       )}
     </>
