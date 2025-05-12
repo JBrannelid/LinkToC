@@ -90,7 +90,7 @@ const NotificationDropdown = () => {
               <div className="bg-primary p-2 text-center rounded-lg w-1/2 mb-2">
                 <Link
                   to={ROUTES.NOTIFICATIONS}
-                  className="text-white hover:underline text-sm font-medium block"
+                  className="text-white text-sm font-medium block no-underline"
                   onClick={handleViewAll}
                 >
                   View all notifications
