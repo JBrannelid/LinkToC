@@ -1,15 +1,28 @@
 import React from "react";
 
-const HorseFaceIcon = ({ className, color = "currentColor", size = 24 }) => {
+const HorseFaceIcon = ({
+  className,
+  color = "currentColor",
+  size = 24,
+  ...props
+}) => {
+  const sizeStyle = {
+    width: `${size}px`,
+    height: `${size}px`,
+    minWidth: `${size}px`,
+    minHeight: `${size}px`,
+    display: "inline-block",
+    flexShrink: 0,
+  };
+
   return (
     <svg
-      width={size}
-      height={size}
+      style={sizeStyle}
       viewBox="0 0 128 128"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       preserveAspectRatio="xMidYMid meet"
-      fill={color}
+      {...props}
     >
       <path
         d="M67.79 14.3s4.54 4.26 11.47 6.97c8.09 3.17 21.9 1.34 25.27 7.67c3.52 6.62-3.76 14.22-2.53 18.16c1.21 3.89 13.06 4.56 14.5 13.66c1.48 9.36-6.09 13.23-5.35 16.33c.86 3.59 9.36 5 9.57 11.68c.16 5.21-4.65 10.01-5.06 13.23c-.7 5.43 2.8 8.23.77 13.52c-1.13 2.94-3.87 4.36-5.84 4.79s-14.5-19.15-14.5-19.15L65.68 17.54l2.11-3.24z"
