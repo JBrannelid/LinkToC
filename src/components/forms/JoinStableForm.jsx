@@ -3,7 +3,7 @@ import { FormMessage, FormProvider } from "../forms/index.js";
 import searchConfigs from "../search/config/searchConfig.js";
 import {
   SearchActions,
-  SearchBar,
+  SearchInput,
   SearchProvider,
   SearchResults,
 } from "../search/index.js";
@@ -100,7 +100,7 @@ const JoinStableForm = ({
               >
                 Search for stable
               </label>
-              <SearchBar
+              <SearchInput
                 className="w-full"
                 inputClassName="w-full"
                 ariaLabel="Search for stable name"
@@ -122,9 +122,6 @@ const JoinStableForm = ({
               showWhenEmpty={false}
               onItemSelect={handleStableSelect}
             />
-
-            {/* Error message display */}
-            {displayError && <FormMessage message={displayError} />}
 
             {/* Success message display */}
             {message && message.text && !displayError && (

@@ -2,6 +2,7 @@ import createBaseService from "./baseService.js";
 import { ENDPOINTS } from "./endPoints.js";
 import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage.js";
+import { getErrorMessage } from "../../utils/errorUtils.js";
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 
@@ -15,20 +16,14 @@ const authService = {
     try {
       return await axiosInstance.post(`${ENDPOINTS.AUTH}/login`, loginData);
     } catch (error) {
-      if (error.response) {
-        const errorMessage =
-          error.response.data?.message ||
-          "Authentication failed. Please check your credentials.";
-        throw new Error(errorMessage);
-      } else if (error.request) {
-        throw new Error(
-          "No response from authentication server. Please try again later."
-        );
-      } else {
-        throw new Error(
-          `Error setting up authentication request: ${error.message}`
-        );
-      }
+      const errorMessage = getErrorMessage(error, {
+        defaultMessage: "Login failed. Please try again.",
+        customMessages: {
+          // Add specific error message mappings if needed
+          "Invalid credentials": "Invalid username or password. Please try again."
+        }
+      });
+      throw new Error(errorMessage.text);
     }
   },
 
