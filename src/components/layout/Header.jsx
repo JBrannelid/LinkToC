@@ -17,7 +17,9 @@ export default function Header() {
     location.pathname.includes("/notifications");
 
   // Hide back and notification button on the following paths
-  const hideBackButton = location.pathname.includes("/stable-onboarding");
+  const hideBackButton =
+    location.pathname.includes("/stable-onboarding") ||
+    location.pathname.includes("/select-stable");
 
   // Get notification count from mock json data
   const { notifications } = mockNotificationsData;
