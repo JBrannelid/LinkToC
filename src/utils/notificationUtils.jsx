@@ -7,7 +7,6 @@ export const getNotificationTypeStyles = (type) => {
             !
           </div>
         ),
-        borderColor: "border-error-500",
       };
     case "success":
       return {
@@ -16,7 +15,6 @@ export const getNotificationTypeStyles = (type) => {
             ✓
           </div>
         ),
-        borderColor: "border-primary",
       };
     case "warning":
       return {
@@ -25,7 +23,6 @@ export const getNotificationTypeStyles = (type) => {
             !
           </div>
         ),
-        borderColor: "border-warning-300",
       };
     case "comment":
       return {
@@ -34,7 +31,6 @@ export const getNotificationTypeStyles = (type) => {
             💬
           </div>
         ),
-        borderColor: "border-primary",
       };
     default:
       return {
@@ -43,7 +39,6 @@ export const getNotificationTypeStyles = (type) => {
             i
           </div>
         ),
-        borderColor: "border-primary-light",
       };
   }
 };
