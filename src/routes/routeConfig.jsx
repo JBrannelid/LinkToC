@@ -19,6 +19,7 @@ import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
 import NotificationPage from "../pages/NotificationPage";
 import StableManagementPage from "../pages/StableManagementPage";
 import StableRequestsPage from "../pages/StableRequestsPage.jsx";
+import StableHorsePage from "../pages/StableHorsePage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -85,6 +86,12 @@ export const protectedRoutes = [
     path: ROUTES.STABLE_ONBOARDING,
     element: <StableOnboardingPage />,
     requiresStable: false,
+  },
+
+  {
+    path: ROUTES.STABLE_HORSES,
+    element: <StableHorsePage />,
+    requiresStable: true,
   },
   {
     path: ROUTES.MANAGE_STABLE,
