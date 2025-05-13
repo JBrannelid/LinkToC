@@ -1,5 +1,6 @@
 import React from "react";
 import Card from "../card/";
+import UserHorsesTab from "./UserHorsesTab";
 
 const UserProfileContent = ({ user, activeTab }) => {
   // render content based on the active tab
@@ -10,7 +11,7 @@ const UserProfileContent = ({ user, activeTab }) => {
       case "assignments":
         return <AssignmentsTabContent user={user} />;
       case "horses":
-        return <HorsesTabContent user={user} />;
+        return <UserHorsesTab userId={user.userId} />;
       default:
         return <InfoTabContent user={user} />;
     }
@@ -47,18 +48,7 @@ const InfoTabContent = ({ user }) => {
 
 // Assignments tab content
 const AssignmentsTabContent = ({ user }) => {
-  return <p className="text-center  py-4">Display a list of icons</p>;
-};
-
-// Horses tab content
-const HorsesTabContent = ({ user }) => {
-  return (
-    <Card.Container>
-      <Card.Body>
-        <p className="text-center text-gray py-4">No horses available</p>
-      </Card.Body>
-    </Card.Container>
-  );
+  return <p className="text-center py-4">Display a list of icons</p>;
 };
 
 export default UserProfileContent;
