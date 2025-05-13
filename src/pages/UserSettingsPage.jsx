@@ -29,7 +29,7 @@ const UserSettingsPage = () => {
       />
       <SettingsMenuItem label="Support" onClick={handleSupport} />
       <SettingsMenuItem label="Privacy Policy" onClick={handleCookieSettings} />
-        <SettingsMenuItem lable="Manage Horses" onClick={handleManageHorses} />
+        <SettingsMenuItem label="Manage Horses" onClick={handleManageHorses} />
     </>
   );
 
