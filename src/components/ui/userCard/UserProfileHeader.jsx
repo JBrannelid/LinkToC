@@ -2,19 +2,17 @@ import React from "react";
 import {
   formatUserFullName,
   getProfileImageUrl,
+  getRoleName,
 } from "../../../utils/userUtils";
 import Button from "../../ui/Button";
 import MessageIcon from "../../../assets/icons/MessageIcon";
 import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
 import PhoneIcon from "../../../assets/icons/PhoneIcon";
-import { useAppContext } from "../../../context/AppContext";
-import { USER_ROLES } from "../../../utils/userUtils";
 
 const UserProfileHeader = ({ user }) => {
   const userFullName = formatUserFullName(user);
   const profileImageUrl = getProfileImageUrl(user?.profileImage);
-  const { getCurrentStableRole } = useAppContext();
-  const currentRole = getCurrentStableRole();
+  const roleName = getRoleName(user.role);
 
   return (
     <div className="relative">
@@ -34,16 +32,7 @@ const UserProfileHeader = ({ user }) => {
             {userFullName}
           </h1>
           <p className="text-sm text-gray">
-            Stable role: {""}
-            {currentRole === USER_ROLES.USER ? (
-              <span>User</span>
-            ) : currentRole === USER_ROLES.ADMIN ? (
-              <span>Admin</span>
-            ) : currentRole === USER_ROLES.MANAGER ? (
-              <span>Owner</span>
-            ) : (
-              <span>User</span>
-            )}
+            Stable role: <span>{roleName || "Member"}</span>
           </p>
         </div>
 
