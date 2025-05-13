@@ -9,7 +9,7 @@ const UserProfileTabs = ({ activeTab, onChange }) => {
 
   return (
     <div className="px-6 py-2">
-      <div className="flex justify-between">
+      <div className="flex justify-between sm:px-10 md:px-20">
         {tabs.map((tab) => (
           <button
             key={tab.id}

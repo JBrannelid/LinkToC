@@ -25,23 +25,21 @@ const InfoTabContent = ({ user }) => {
   const currentStatus = user?.currentStatus || "";
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 px-5 sm:px-10 md:px-20">
       {/* Current status section */}
-      <div className="flex flex-row">
-        <h3 className="font-bold mb-2 mr-3 mt-2 w-6/10">Current status:</h3>
-        <div className="bg-white p-3 rounded-lg w-full">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+        <h3 className="font-bold">Current status:</h3>
+        <div className="bg-white p-3 rounded-lg w-full sm:w-auto flex-1">
           <p>{currentStatus || "No current status"}</p>
         </div>
       </div>
 
       {/* Bio section */}
-      <Card.Container>
-        <Card.Body>
-          <p className="whitespace-pre-line">
-            {user?.bio || "No bio information available."}
-          </p>
-        </Card.Body>
-      </Card.Container>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
+        <div className="bg-white p-3 rounded-lg w-full sm:w-auto flex-1">
+          <p>BIO</p>
+        </div>
+      </div>
     </div>
   );
 };
