@@ -4,7 +4,7 @@ import { useAppContext } from "../../context/AppContext.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 import { useLoadingState } from "../../hooks/useLoadingState";
 
-export default function StableName() {
+export default function StableName({ currentStableId, className = "" }) {
   const { currentStable } = useAppContext();
   const {
     currentStableData,
@@ -24,7 +24,9 @@ export default function StableName() {
   if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
 
   return (
-    <span className="text-lg md:text-xl xl:text-2xl font-heading">
+    <span
+      className={`text-lg md:text-xl xl:text-2xl font-heading ${className}`}
+    >
       {currentStableData?.name || currentStable?.name || "No stable connected"}
     </span>
   );
