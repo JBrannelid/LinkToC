@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints";
 import { createError } from "../utils/errors.js";
 
 // Create base service with standard CRUD operations
@@ -24,6 +24,23 @@ const horseService = {
       return await baseService.create(createData);
     } catch (error) {
       console.error(`Error creating item at ${ENDPOINTS.HORSES}:`, error);
+      throw error;
+    }
+  },
+
+  getHorsesWithOwnersByStable: async (stableId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/stables/${stableId}/horses/with-owners`
+      );
+
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error fetching horses with owners:", error);
       throw error;
     }
   },
