@@ -7,12 +7,19 @@ const HorseBoxIcon = ({
   strokeWidth = 1.5,
   ...props
 }) => {
+  // Create style object with explicit sizing
+  const sizeStyle = {
+    width: `${size}px`,
+    height: `${size}px`,
+    minWidth: `${size}px`, // Prevent shrinking
+    minHeight: `${size}px`, // Prevent shrinking
+  };
+
   return (
     <svg
-      width={size}
-      height={size}
+      style={sizeStyle}
       viewBox="0 0 512 512"
-      fill={color}
+      fill="none" // Set fill to none so paths control the fill
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}

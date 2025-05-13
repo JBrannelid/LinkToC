@@ -79,9 +79,11 @@ const NavigationBar = () => {
           </Link>
 
           <Link
-            to={buildRoute(ROUTES.USER_PROFILE, { userId: currentUser?.id })}
+            to={buildRoute(ROUTES.STABLE_MEMBERS, {
+              stableId: currentStable?.id,
+            })}
             className={`p-2 ${
-              isActive(ROUTES.USER_PROFILE.split("/:")[0])
+              isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
                 ? "bg-white rounded-full"
                 : "text-primary"
             }`}
@@ -89,7 +91,7 @@ const NavigationBar = () => {
           >
             <UserIcon
               className={`w-6 h-6 ${
-                isActive(ROUTES.USER_PROFILE.split("/:")[0])
+                isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
                   ? "text-primary"
                   : ""
               }`}

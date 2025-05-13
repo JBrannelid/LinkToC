@@ -60,3 +60,16 @@ export const getProfileImageUrl = (
 ) => {
   return profileImageUrl || fallbackUrl;
 };
+
+export const getRoleName = (role) => {
+  switch (role) {
+    case 0:
+      return "Owner";
+    case 1:
+      return "Admin";
+    case 2:
+      return "Member";
+    default:
+      return "";
+  }
+};

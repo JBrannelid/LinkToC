@@ -12,7 +12,7 @@ import StableSelectionPage from "../pages/StableSelectionPage";
 import HorseProfilePage from "../pages/HorseProfilePage";
 import ErrorPage from "../pages/ErrorPage";
 import StablePostPage from "../pages/StablePostPage";
-import UserProfilePage from "../pages/UserProfilePage";
+import ListUserStablePage from "../pages/ListUserStablePage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
 import ForgotPasswordPage from "../pages/ForgotPasswordPage";
 import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
@@ -68,8 +68,8 @@ export const protectedRoutes = [
     requiresStable: true,
   },
   {
-    path: ROUTES.USER_PROFILE,
-    element: <UserProfilePage />,
+    path: ROUTES.STABLE_MEMBERS,
+    element: <ListUserStablePage />,
     requiresStable: true,
   },
   {

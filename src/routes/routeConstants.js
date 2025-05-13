@@ -3,7 +3,7 @@ export const ROUTES = {
   LOGIN: "/login",
   REGISTER: "/register",
   SELECT_STABLE: "/select-stable",
-  USER_PROFILE: "/userpage/:userId",
+  STABLE_MEMBERS: "/stable-members/:stableId",
   STABLE: "/stable/:stableId",
   STABLE_POST: "/stablePost/:stableId",
   SETTINGS: "/settings",

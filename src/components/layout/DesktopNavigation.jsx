@@ -80,15 +80,15 @@ const DesktopNavigation = () => {
                 Horses
               </Link>
               <Link
-                to={buildRoute(ROUTES.USER_PROFILE, {
-                  userId: currentUser?.id,
+                to={buildRoute(ROUTES.STABLE_MEMBERS, {
+                  stableId: currentStable?.id,
                 })}
                 className={`text-xl font-medium ${
-                  isActive(ROUTES.USER_PROFILE.split("/:")[0])
+                  isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
                     ? "text-primary"
                     : "text-black hover:text-primary"
                 }`}
-                aria-label="Användarprofil"
+                aria-label="Members"
               >
                 Members
               </Link>
