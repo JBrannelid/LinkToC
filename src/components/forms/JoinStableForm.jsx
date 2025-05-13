@@ -97,7 +97,7 @@ const JoinStableForm = ({
           <ModalHeader title="Join a Stable" />
         </div>
       )}
-
+      
       <FormProvider methods={formMethods} className="w-full">
         <div {...ariaAttributes}>
           {/* The SearchProvider encapsulates all search functionality */}
