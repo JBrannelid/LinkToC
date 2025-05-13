@@ -1,7 +1,12 @@
 import React from "react";
 import { getProfileImageUrl } from "../../utils/userUtils";
 
-export default function StableHorseCard({ horse }) {
+export default function StableHorseCard({
+  horse,
+  className = "",
+  imageClassName = "",
+  contentClassName = "",
+}) {
   // If no horse data was provided, use default placeholder values
   const horseName = horse?.horseName || "Name";
   const horseColor = horse?.horseColor || "Color";
@@ -17,8 +22,12 @@ export default function StableHorseCard({ horse }) {
   );
 
   return (
-    <div className="flex px my-4 mx-12 bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg">
-      <div className="flex-1 rounded-full border-2 border-primary overflow-hidden m-2 my-4 h-24">
+    <div
+      className={`flex px my-4 mx-12 bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg${className}`}
+    >
+      <div
+        className={`flex-1 rounded-full border-2 border-primary overflow-hidden m-2 my-4 h-24${imageClassName}`}
+      >
         <img
           src={profileImageUrl}
           alt={`${horseName} profile picture`}
@@ -26,7 +35,7 @@ export default function StableHorseCard({ horse }) {
         />
       </div>
 
-      <div className="flex-auto ml-1 m-4">
+      <div className={`flex-auto ml-1 m-4${contentClassName}`}>
         <h4 className="mb-1">{horseName}</h4>
         <p className="mb-0.5">Color: {horseColor}</p>
         <p className="mb-0.5">Parents: {horse?.parents || "Unknown"}</p>
