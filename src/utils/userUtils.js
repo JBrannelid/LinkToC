@@ -22,6 +22,10 @@ export const handleSwitchStable = (navigate, ROUTES) => {
   navigate(ROUTES.SELECT_STABLE);
 };
 
+export const handleManageHorses = (navigate, ROUTES) => {
+  console.log("Manage horses clicked");
+}
+
 export const handleLogout = async (logout, navigate, setLoading, ROUTES) => {
   try {
     setLoading(true);
