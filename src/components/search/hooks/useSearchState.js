@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import {useState, useCallback, useRef, useEffect, useMemo} from 'react';
 
 function useSearchState(config) {
     // Core state - simplified for single selection only
@@ -102,10 +102,8 @@ function useSearchState(config) {
     
     const handleInputChange = useCallback((e) => {
         const newValue = e.target.value;
-        const prevValue = prevQueryRef.current;
-        const isDeleting = newValue.length < prevValue.length;
 
-        // Update state
+        // Update query state immediately for responsive UI
         setQuery(newValue);
         prevQueryRef.current = newValue;
 
@@ -115,7 +113,7 @@ function useSearchState(config) {
             searchTimeoutRef.current = null;
         }
 
-        // Handle empty query
+        // Handle empty query immediately
         if (!newValue.trim()) {
             setIsTyping(false);
             resetSearch();
@@ -125,28 +123,17 @@ function useSearchState(config) {
         // Show typing indicator
         setIsTyping(true);
 
-        // Use different debounce times based on action
-        const debounceTime = isDeleting ? 800 : 400;
+        // Use consistent debounce time
+        const DEBOUNCE_TIME = 400; // milliseconds
 
-        // Schedule search
+        // Schedule search with single, predictable timeout
         searchTimeoutRef.current = setTimeout(() => {
-            // Special case: Short text while deleting
-            if (isDeleting && newValue.length <= 2) {
-                // Add extra delay
-                searchTimeoutRef.current = setTimeout(() => {
-                    // Only search if query hasn't changed during delay
-                    if (newValue === query && newValue.trim()) {
-                        setIsTyping(false);
-                        performSearch(newValue);
-                    }
-                }, 500);
-            } else {
-                // Standard search
+            if (newValue.trim()) {
                 setIsTyping(false);
                 performSearch(newValue);
             }
-        }, debounceTime);
-    }, [query, performSearch, resetSearch]);
+        }, DEBOUNCE_TIME);
+    }, [performSearch, resetSearch]);
 
 
     const handleSelectItem = useCallback((item) => {
@@ -161,7 +148,7 @@ function useSearchState(config) {
     }, [selectedItem, config?.idField]);
 
     // Return all necessary state and handlers
-    return {
+    return useMemo(() => ({
         // State
         query,
         results,
@@ -181,7 +168,11 @@ function useSearchState(config) {
 
         // Config reference
         config
-    };
+    }), [
+        query, results, selectedItem, isLoading, isTyping, error, message,
+        handleInputChange, handleSelectItem, isItemSelected, resetSearch, performSearch,
+        config
+    ]);
 }
 
 export default useSearchState;
