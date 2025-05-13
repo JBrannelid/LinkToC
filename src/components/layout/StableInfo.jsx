@@ -11,7 +11,12 @@ import LocationPinIcon from "../../assets/icons/LocationPinIcon";
 import PeopleIcon from "../../assets/icons/PeopleIcon";
 import SearchIcon from "../../assets/icons/SearchIcon";
 
-export default function StableInfo({ stableId }) {
+export default function StableInfo({
+  stableId,
+  searchTerm = "",
+  onSearchChange = () => {},
+  searchPlaceholder = "Search...",
+}) {
   const { currentStable } = useAppContext();
   const {
     status: { loading, error },
@@ -151,7 +156,9 @@ export default function StableInfo({ stableId }) {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder={searchPlaceholder}
+                  value={searchTerm}
+                  onChange={(e) => onSearchChange(e.target.value)}
                   className="w-full px-10 py-1 border border-primary rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <div className="absolute inset-y-0 left-3 flex items-center">
