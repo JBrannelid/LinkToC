@@ -3,6 +3,7 @@ import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 import { useLoadingState } from "../../hooks/useLoadingState";
+import { getErrorMessage } from "../../utils/errorUtils.js";
 
 export default function StableName({ currentStableId, className = "" }) {
   const { currentStable } = useAppContext();
@@ -21,7 +22,15 @@ export default function StableName({ currentStableId, className = "" }) {
       </div>
     );
 
-  if (error) return <p className="py-2 text-error-500">Error: {error}</p>;
+  if (error) {
+    const errorMessage = getErrorMessage(error);
+
+    return (
+      <p className="py-2 text-error-500">
+        {errorMessage?.text || "Something went wrong."}
+      </p>
+    );
+  }
 
   return (
     <span
