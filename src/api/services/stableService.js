@@ -106,14 +106,23 @@ const stableService = {
       throw new Error("User ID is required to create a stable");
     }
 
+    if (!stableData.stableName) {
+      console.error("stableName is missing from form data");
+      throw new Error("Stable name is required");
+    }
+
+    // Build the payload based on the field names in the form
     const createData = {
-      userId: parseInt(userId, 10),
-      name: stableData.name,
-      type: stableData.typeOfStable,
-      address: stableData.streetAddress,
-      boxCount: stableData.stableBoxes,
-      postCode: stableData.postCode,
-      county: stableData.county,
+      userId: parseInt(userId, 10), // Radix parameter for safety
+      stable: {
+        name: stableData.stableName || stableData.name,
+        type: stableData.typeOfStable || stableData.type,
+        county: stableData.county,
+        address: stableData.streetAddress || stableData.address,
+        postCode: stableData.postCode,
+        boxCount:
+          parseInt(stableData.stableBoxes || stableData.boxCount, 10) || 0,
+      },
     };
 
     console.log("Creating stable with data:", createData);
