@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import { useSearch } from "../../../context/searchContext";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 
@@ -23,11 +23,42 @@ const SearchInput = ({
     selectedItem,
     executeActionForSelectedItem,
   } = useSearch();
-
+  const [localValue, setLocalValue] = useState(query || '');
+  const isUserTypingRef = useRef(false);
+  useEffect(() => {
+    if (!isUserTypingRef.current && query !== localValue) {
+      setLocalValue(query || '');
+    }
+  }, [query, localValue]);
+  
   const inputRef = useRef(null);
   const wasLoadingRef = useRef(loading);
   const placeholder = config?.placeholderText || "Search...";
+  const debounceTimerRef = useRef(null);
   
+  const handleLocalInputChange = useCallback((e) => {
+    const newValue = e.target.value;
+
+    // Update local state immediately for responsive UI
+    setLocalValue(newValue);
+
+    // Mark that user is typing
+    isUserTypingRef.current = true;
+
+    // Clear any previous debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Only update context after debounce period
+    debounceTimerRef.current = setTimeout(() => {
+      isUserTypingRef.current = false;
+      const syntheticEvent = { target: { value: newValue } };
+      handleInputChange(syntheticEvent);
+      
+    }, 400); 
+
+  }, [query, handleInputChange]);
   useEffect(() => {
     if (wasLoadingRef.current && !loading && maintainFocus && !desktopView) {
       setTimeout(() => {
@@ -135,8 +166,8 @@ const SearchInput = ({
       <input
         ref={inputRef}
         type="text"
-        value={query}
-        onChange={handleInputChange}
+        value={localValue}
+        onChange={handleLocalInputChange}
         placeholder={placeholder}
         className={`w-full px-3 py-2 border border-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputClassName} ${
           loading ? "pr-10" : ""
@@ -155,12 +186,11 @@ const SearchInput = ({
       />
 
       {loading && (
-        <div
-          className={`absolute right-3 top-1/2 transform -translate-y-1/2 transition-opacity duration-150 ${
-            loading ? "opacity-100" : "opacity-0"
-          }`}
-          aria-hidden="true"
-        >
+          <div
+              className={`absolute inset-0 flex items-center justify-center bg-white
+    transition-opacity duration-200 ${!loading && message ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+              role="alert"
+          >
           <LoadingSpinner
             size="small"
             withMargin={false}
