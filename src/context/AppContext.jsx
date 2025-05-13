@@ -22,7 +22,7 @@ export const AppProvider = ({ children }) => {
     return savedStable ? JSON.parse(savedStable) : null;
   });
 
-  // Selected horse state - initialize as null
+  const [stableRefreshKey, setStableRefreshKey] = useState(0);
   const [selectedHorse, setSelectedHorse] = useState(null);
 
   // Update the current stable
@@ -40,6 +40,8 @@ export const AppProvider = ({ children }) => {
     const stableData = { id, name };
     setCurrentStable(stableData);
     localStorage.setItem("currentStable", JSON.stringify(stableData));
+
+    setStableRefreshKey((prev) => prev + 1);
     return true;
   };
 
@@ -82,6 +84,7 @@ export const AppProvider = ({ children }) => {
     selectedHorse,
     setSelectedHorse,
     getCurrentStableRole,
+    stableRefreshKey,
   };
 
   return (

@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import stablePostService from "../api/services/stablePostService";
 import { useLoadingState } from "./useLoadingState";
+import { useAppContext } from "../context/AppContext";
 
 export function useStablePosts(stableId) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+  const { stableRefreshKey } = useAppContext();
 
   const fetchAndUpdatePosts = useCallback(async () => {
     if (!stableId) return false;
@@ -31,7 +33,7 @@ export function useStablePosts(stableId) {
 
   useEffect(() => {
     fetchAndUpdatePosts();
-  }, [fetchAndUpdatePosts]);
+  }, [fetchAndUpdatePosts, stableRefreshKey]);
 
   // Create new post
   const createPost = async (postData) => {
