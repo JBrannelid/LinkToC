@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useSearch} from '../../../context/searchContext.js';
 import Button from '../../ui/Button';
 
-const SearchActions = ({
-                           onCancel,
-                           onAction,
-                           cancelButtonClassName = '',
-                           actionsContainerClassName = ''
-                       }) => {
+const SearchActions = (
+    {
+        onCancel,
+        onAction,
+        cancelButtonClassName = '',
+        actionsContainerClassName = ''
+    }) => {
     const {
         config,
         loading,
@@ -15,17 +16,17 @@ const SearchActions = ({
         executeActionForSelectedItem
     } = useSearch();
 
-    const handleActionClick = () => {
+    const handleActionClick = useCallback(() => {
         if (onAction && selectedItem) {
             executeActionForSelectedItem(onAction);
         }
-    };
+    },[onAction, selectedItem, executeActionForSelectedItem]);
 
-    const handleCancelClick = () => {
+    const handleCancelClick = useCallback(() => {
         if (onCancel) {
             onCancel();
         }
-    };
+    },[onCancel]);
 
     return (
         <div className={`space-y-3 ${actionsContainerClassName}`}>
@@ -56,4 +57,4 @@ const SearchActions = ({
     );
 };
 
-export default SearchActions;
+export default React.memo(SearchActions);
