@@ -34,9 +34,7 @@ const NotificationPage = ({ isDropdown = false }) => {
       </div>
       {/* Content */}
       <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80 ">
-        <p className="text-error-500 text-center text-sm">
-          Placeholder - Not implementet yet{" "}
-        </p>
+        <p className="text-error-500 text-center text-sm">Placeholder</p>
         <div className="max-w-4xl mx-auto space-y-6">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
