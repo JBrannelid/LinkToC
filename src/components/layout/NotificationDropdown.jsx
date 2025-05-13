@@ -4,28 +4,7 @@ import { ROUTES } from "../../routes/routeConstants";
 import NotificationIcon from "../../assets/icons/NotificationIcon";
 import Button from "../ui/Button";
 import mockNotificationsData from "../../testing/mockNotifications.json";
-import { getNotificationTypeStyles } from "../../utils/notificationUtils";
-
-const NotificationCard = ({ notification }) => {
-  const { type, title, message, timestamp } = notification;
-  const { iconElement } = getNotificationTypeStyles(type);
-
-  // Return notification card with mock json data
-  return (
-    <div className={`bg-white rounded-lg shadow-sm mb-3 p-2 `}>
-      <div className="flex">
-        <div className="mr-3">{iconElement}</div>
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <h3 className="font-medium text-black">{title}</h3>
-            <span className="text-xs text-gray ml-2">{timestamp}</span>
-          </div>
-          <p className="text-sm mt-1 text-black">{message}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+import NotificationCard from "./NotificationCard";
 
 const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
