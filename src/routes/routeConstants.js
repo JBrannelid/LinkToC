@@ -15,6 +15,7 @@ export const ROUTES = {
   MANAGE_STABLE: "/manage-stable",
   STABLE_REQUESTS: "/stable-requests",
   NOTIFICATIONS: "/notifications",
+  USER_PROFILE: "/userpage/:userId",
 };
 
 // Dynamic routes with params
