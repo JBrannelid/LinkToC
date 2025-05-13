@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import stableService from "../api/services/stableService";
 import { useLoadingState } from "./useLoadingState";
+import { useAppContext } from "../context/AppContext";
 
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
@@ -9,6 +10,7 @@ export function useStableData(stableId) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+  const { stableRefreshKey } = useAppContext();
 
   // Fetch single stable by ID
   const fetchStableById = useCallback(async () => {
@@ -71,7 +73,7 @@ export function useStableData(stableId) {
       // Fetch all stables when no stableId is provided
       fetchAndUpdateStables();
     }
-  }, [fetchAndUpdateStables, fetchStableById, stableId]);
+  }, [fetchAndUpdateStables, fetchStableById, stableId, stableRefreshKey]);
 
   // Use useCallback to unvoid rerendering fetch data from DB
   const getStableById = useCallback(

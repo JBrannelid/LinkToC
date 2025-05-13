@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
-import { USER_ROLES } from "../../context/AppContext";
+import { USER_ROLES } from "../../utils/userUtils";
+
 import CheckIcon from "../../assets/icons/CheckIcon";
 import PermissionGate from "../../components/settings/PermissionGate";
 

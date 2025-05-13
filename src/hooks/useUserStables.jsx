@@ -3,6 +3,7 @@ import stableService from "../api/services/stableService";
 import { useLoadingState } from "./useLoadingState";
 import { useAuth } from "../context/AuthContext";
 import userService from "../api/services/userService";
+import { useAppContext } from "../context/AppContext";
 
 export function useUserStables() {
   const [userStables, setUserStables] = useState([]);
@@ -10,6 +11,7 @@ export function useUserStables() {
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
   const { user } = useAuth();
+  const { stableRefreshKey } = useAppContext();
 
   const fetchUserStables = useCallback(async () => {
     if (!user?.id) {
@@ -54,7 +56,7 @@ export function useUserStables() {
 
   useEffect(() => {
     fetchUserStables();
-  }, [fetchUserStables]);
+  }, [fetchUserStables, stableRefreshKey]);
 
   const loadingState = useLoadingState(loading, operationType);
 

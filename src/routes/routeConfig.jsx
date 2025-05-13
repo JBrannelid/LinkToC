@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
-import { USER_ROLES } from "../context/AppContext";
+import { USER_ROLES } from "../utils/userUtils";
 import SettingsRouter from "../components/settings/SettingsRouter";
 
 // Pages components
