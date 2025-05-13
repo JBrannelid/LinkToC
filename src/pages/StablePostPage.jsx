@@ -8,7 +8,7 @@ import { useParams } from "react-router";
 import Button from "../components/ui/Button";
 import AddNoteIcon from "../assets/icons/AddNoteIcon";
 import StablePostForm from "../components/forms/StablePostForm";
-import { USER_ROLES } from "../context/AppContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 export default function StablePostPage() {
   const { stableId: urlStableId } = useParams();

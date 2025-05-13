@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useAuth } from "./AuthContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 const AppContext = createContext();
 
@@ -113,13 +114,6 @@ export const AppProvider = ({ children }) => {
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
-};
-
-// User role constants. Remove when we have a contact with BE
-export const USER_ROLES = {
-  USER: 2,
-  ADMIN: 1,
-  MANAGER: 0,
 };
 
 export default AppContext;

@@ -73,3 +73,9 @@ export const getRoleName = (role) => {
       return "";
   }
 };
+
+export const USER_ROLES = {
+  USER: 2,
+  ADMIN: 1,
+  MANAGER: 0,
+};
