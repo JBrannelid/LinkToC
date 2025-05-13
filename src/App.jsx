@@ -9,11 +9,17 @@ function App() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  const headerHiddenRoutes = ["/login", "/register"];
-  const shouldHideHeader = headerHiddenRoutes.includes(location.pathname);
+  const headerHiddenRoutes = ["/login", "/register", "/userpage"];
+  const shouldHideHeader = headerHiddenRoutes.some(
+    (route) =>
+      location.pathname === route || location.pathname.startsWith(`${route}/`)
+  );
 
   const footerHiddenRoutes = ["/login", "/register", "/stable-onboarding"];
-  const shouldHideFooter = footerHiddenRoutes.includes(location.pathname);
+  const shouldHideFooter = footerHiddenRoutes.some(
+    (route) =>
+      location.pathname === route || location.pathname.startsWith(`${route}/`)
+  );
 
   // Show nav only if authenticated and not on login/register pages
   const showHeader = isAuthenticated && !shouldHideHeader;
