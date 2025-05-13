@@ -1,18 +1,20 @@
 import React, {createElement} from 'react';
 import Button from "../ui/Button.jsx";
 
-export const ListItemRenderer = ({
-                                     item,
-                                     isSelected,
-                                     onSelect,
-                                     onFocus,
-                                     config,
-    onJoinStable,
-                                     actionLabel = 'Join',
-                                     index,
-    onAction,
-                                     ...props
-                                 }) => {
+
+export const ListItemRenderer = (
+    {
+        item,
+        isSelected,
+        onSelect,
+        onFocus,
+        config,
+        onJoinStable,
+        actionLabel = 'Join',
+        index,
+        onAction,
+        ...props
+    }) => {
     const primaryText = item[config?.labelField || 'name']
     const countyText = item.county || '';
     const imageUrl = item[config?.imageField || 'image'];
@@ -159,7 +161,22 @@ export const GridRenderer = ({
         </div>
     );
 };
+export const MemoizedListItemRenderer = React.memo(
+    ListItemRenderer,
+    (prev, next) => {
+
+        return (
+            prev.isSelected === next.isSelected &&
+            prev.item[prev.config?.idField || 'id'] === next.item[next.config?.idField || 'id'] &&
+            prev.item[prev.config?.labelField || 'name'] === next.item[next.config?.labelField || 'name'] &&
+            prev.item[prev.config?.secondaryField] === next.item[next.config?.secondaryField] &&
+            prev.item.county === next.item.county &&
+            prev.item.type === next.item.type
+        );
+    }
+);
 export default {
     ListItemRenderer,
+    MemoizedListItemRenderer,
     GridRenderer
 };
