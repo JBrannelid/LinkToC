@@ -8,7 +8,7 @@ import { getProfileImageUrl, formatUserFullName } from "../../utils/userUtils";
 import { useUserData } from "../../hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
 import NotificationDropdown from "../layout/NotificationDropdown";
-import StableName from "./StableName";
+import StableDropdown from "./StableDropdown";
 
 const DesktopNavigation = () => {
   const { currentUser, currentStable } = useAppContext();
@@ -41,16 +41,16 @@ const DesktopNavigation = () => {
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
   return (
-    <div className=" w-full bg-white shadow-md py-2">
+    <div className=" w-full bg-white shadow-md py-2 xxl:py-4">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
           {/* Title */}
           <Link to={ROUTES.HOME}>
-            <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
+            <h1 className="text-2xl font-semibold text-black mr-5">Equilog</h1>
           </Link>
           {/* Stable Name */}
-          <div className="flex items-center text-sm">
-            <StableName currentStableId={currentStable.id} />
+          <div className="flex items-center">
+            <StableDropdown />
           </div>
         </div>
         {/* Right side */}
