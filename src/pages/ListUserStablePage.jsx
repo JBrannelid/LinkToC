@@ -27,6 +27,10 @@ const ListUserStablePage = () => {
     return searchTerm === "" || fullName.includes(searchTerm.toLowerCase());
   });
 
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
   const handleProfileClick = (userId) => {
     navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
   };
@@ -52,7 +56,12 @@ const ListUserStablePage = () => {
       </div>
 
       {/* Stable Info */}
-      <StableInfo stableId={stableId} />
+      <StableInfo
+        stableId={stableId}
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
+        searchPlaceholder="Search members..."
+      />
 
       {/* Member List */}
       <div className="px-5 py-3 md:px-10 lg:px-30">
