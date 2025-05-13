@@ -32,7 +32,8 @@ const ListUserStablePage = () => {
   };
 
   const handleProfileClick = (userId) => {
-    navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
+    const route = buildRoute(ROUTES.USER_PROFILE, { userId });
+    navigate(route);
   };
 
   const handleMyProfileClick = () => {
@@ -96,7 +97,7 @@ const ListUserStablePage = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
           {filteredMembers.map((member) => (
             <MemberCard
-              key={member.userId}
+              key={`member-${member.userId}`}
               member={member}
               onClick={() => handleProfileClick(member.userId)}
             />
