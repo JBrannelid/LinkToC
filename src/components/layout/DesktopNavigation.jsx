@@ -8,6 +8,7 @@ import { getProfileImageUrl, formatUserFullName } from "../../utils/userUtils";
 import { useUserData } from "../../hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
 import NotificationDropdown from "../layout/NotificationDropdown";
+import StableName from "./StableName";
 
 const DesktopNavigation = () => {
   const { currentUser, currentStable } = useAppContext();
@@ -26,7 +27,6 @@ const DesktopNavigation = () => {
   }
 
   const isActive = (path) => isRouteActive(path, currentPath);
-  // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
@@ -36,7 +36,7 @@ const DesktopNavigation = () => {
   const shouldHideNotification = notificationHiddenRoutes.includes(currentPath);
 
   // Check if the user has stable access
-  // Explicit check for undefined (user with a stable role 0, such as a stable manager)
+  // Explicit check for undefined (user with a stable role 0)
   const hasStableAccess =
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
@@ -44,11 +44,20 @@ const DesktopNavigation = () => {
     <div className=" w-full bg-white shadow-md py-2">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
+          {/* Title */}
           <Link to={ROUTES.HOME}>
             <h1 className="text-2xl font-semibold text-black mr-25">Equilog</h1>
           </Link>
+          {/* Stable Name */}
+          <div className="flex items-center text-sm">
+            <StableName currentStableId={currentStable.id} />
+          </div>
+        </div>
+        {/* Right side */}
+        <div className="flex items-center space-x-10">
           {hasStableAccess && (
             <nav className="flex items-center space-x-8">
+              {/* Home */}
               <Link
                 to={ROUTES.HOME}
                 className={`text-xl font-medium ${
@@ -59,6 +68,7 @@ const DesktopNavigation = () => {
               >
                 Home
               </Link>
+              {/* Feed */}
               <Link
                 to={buildRoute(ROUTES.STABLE_POST, {
                   stableId: currentStable?.id,
@@ -71,6 +81,7 @@ const DesktopNavigation = () => {
               >
                 Feed
               </Link>
+              {/* Horses */}
               <Link
                 to={buildRoute(ROUTES.STABLE_HORSES, {
                   stableId: currentStable?.id,
@@ -83,6 +94,7 @@ const DesktopNavigation = () => {
               >
                 Horses
               </Link>
+              {/* Members */}
               <Link
                 to={buildRoute(ROUTES.STABLE_MEMBERS, {
                   stableId: currentStable?.id,
@@ -98,16 +110,16 @@ const DesktopNavigation = () => {
               </Link>
             </nav>
           )}
-        </div>
-        <div className="flex items-center space-x-10">
+          {/* Notification icon */}
           {!shouldHideNotification && <NotificationDropdown />}
+          {/* Settings icon */}
           <Link to={ROUTES.SETTINGS} className="text-primary">
             <SettingIcon
               strokeWidth={9}
               className="w-6 h-6 md:w-7 md:h-7 text-primary"
             />
           </Link>
-          {/* Display user image */}
+          {/* User image */}
           <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
             <img
               src={profileImageUrl}
