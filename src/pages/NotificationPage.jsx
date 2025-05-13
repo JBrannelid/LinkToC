@@ -25,16 +25,18 @@ const NotificationPage = ({ isDropdown = false }) => {
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden">
       {/* Header */}
-      <div className="bg-background ">
+      <div className="bg-background lg:pt-10">
         <ModalHeader
           title="Important Notices"
           showCloseBtn={false}
           onCloseClick={() => window.history.back()}
         />
       </div>
-
       {/* Content */}
-      <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80">
+      <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80 ">
+        <p className="text-error-500 text-center text-sm">
+          Placeholder - Not implementet yet{" "}
+        </p>
         <div className="max-w-4xl mx-auto space-y-6">
           {notifications.length > 0 ? (
             notifications.map((notification) => (
