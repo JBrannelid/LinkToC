@@ -100,11 +100,7 @@ const DesktopNavigation = () => {
           )}
         </div>
         <div className="flex items-center space-x-10">
-          {!shouldHideNotification && (
-            <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
-              <NotificationDropdown />
-            </Link>
-          )}
+          {!shouldHideNotification && <NotificationDropdown />}
           <Link to={ROUTES.SETTINGS} className="text-primary">
             <SettingIcon
               strokeWidth={9}
