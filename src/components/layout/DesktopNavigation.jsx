@@ -31,6 +31,10 @@ const DesktopNavigation = () => {
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
+  // Hide notification icon on certain routes
+  const notificationHiddenRoutes = ["/stable-onboarding", "/select-stable"];
+  const shouldHideNotification = notificationHiddenRoutes.includes(currentPath);
+
   // Check if the user has stable access
   // Explicit check for undefined (user with a stable role 0, such as a stable manager)
   const hasStableAccess =
@@ -96,9 +100,11 @@ const DesktopNavigation = () => {
           )}
         </div>
         <div className="flex items-center space-x-10">
-          <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
-            <NotificationDropdown />
-          </Link>
+          {!shouldHideNotification && (
+            <Link to={ROUTES.NOTIFICATIONS} className="text-primary">
+              <NotificationDropdown />
+            </Link>
+          )}
           <Link to={ROUTES.SETTINGS} className="text-primary">
             <SettingIcon
               strokeWidth={9}
