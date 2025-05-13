@@ -17,7 +17,7 @@ const UserProfileContent = ({ user, activeTab }) => {
     }
   };
 
-  return <div className="px-4 py-4">{renderTabContent()}</div>;
+  return <div className="py-2">{renderTabContent()}</div>;
 };
 
 // Info tab content

@@ -36,7 +36,7 @@ export default function StableHorseCard({
       </div>
 
       <div className={`flex-auto ml-1 m-4${contentClassName}`}>
-        <h4 className="mb-1">{horseName}</h4>
+        <h4 className="mb-1 font-semibold">{horseName}</h4>
         <p className="mb-0.5">Color: {horseColor}</p>
         <p className="mb-0.5">Parents: {horse?.parents || "Unknown"}</p>
         <p className="mb-0.5">Owner: {horseOwners}</p>

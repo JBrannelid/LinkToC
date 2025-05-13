@@ -42,9 +42,15 @@ const UserHorsesTab = ({ userId }) => {
 
   // Right now we display all stable horses since the API doesn't support filtering by owner yet
   return (
-    <div className="space-y-2">
+    <div className="">
       {horses.map((horse) => (
-        <StableHorseCard key={`horse-${horse.horseId}`} horse={horse} />
+        <StableHorseCard
+          key={`horse-${horse.horseId}`}
+          horse={horse}
+          className="!border-1 !shadow-md !mx-4"
+          imageClassName="!rounded-full !border-primary"
+          contentClassName="!ml-2 mt-8 "
+        />
       ))}
     </div>
   );
