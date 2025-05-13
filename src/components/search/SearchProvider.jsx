@@ -20,12 +20,22 @@ const SearchProvider = ({ children, customConfig = null }) => {
     const loadingState = useLoadingState(searchState.isLoading, 'fetch');
 
     // Create context value object
-    const contextValue = {
+    const contextValue = useMemo(() => ({
         ...searchState,              
         loading: searchState.isLoading,  
         loadingState,                
         config
-    };
+    }),[
+        searchState.query,
+        searchState.results,
+        searchState.selectedItem,
+        searchState.isLoading,
+        searchState.isTyping,
+        searchState.error,
+        searchState.message,
+        loadingState,
+        config
+    ]);
 
     return (
         <SearchContext.Provider value={contextValue}>
@@ -34,4 +44,4 @@ const SearchProvider = ({ children, customConfig = null }) => {
     );
 };
 
-export default SearchProvider;
+export default React.memo(SearchProvider);

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, {useRef, useEffect, useCallback, useMemo, useState} from 'react';
 import { useSearch } from '../../../context/searchContext.js';
 import { ListItemRenderer } from '../SearchResultRenderers';
 import LoadingSpinner from '../../ui/LoadingSpinner';
@@ -9,13 +9,14 @@ const MemoizedListItem = React.memo(ListItemRenderer, (prev, next) => {
         prev.item[prev.config?.idField || 'id'] === next.item[next.config?.idField || 'id'];
 });
 
-const SearchResults = ({
-                           className = '',
-                           maxHeight = '20rem',
-                           showWhenEmpty = false,
-                           onItemSelect,
-                           onItemFocus = null
-                       }) => {
+const SearchResults = (
+    {
+        className = '',
+        maxHeight = '20rem',
+        showWhenEmpty = false,
+        onItemSelect,
+        onItemFocus = null
+    }) => {
     const {
         // State from search context
         results,
@@ -33,11 +34,28 @@ const SearchResults = ({
     } = useSearch();
 
     const resultsRef = useRef(null);
-
-    // Scroll to top when results change
+    const prevQueryRef = useRef(query);
+    const [showResults, setShowResults] = useState(false);
+    
     useEffect(() => {
-        if (resultsRef.current && results.length > 0) {
+        if (loading) {
+
+        } else if (results.length > 0) {
+            
+            const timer = setTimeout(() => {
+                setShowResults(true);
+            }, 50);
+            return () => clearTimeout(timer);
+        } else {
+            setShowResults(false);
+        }
+    }, [loading, results.length]);
+    
+    useEffect(() => {
+        // Only scroll when query changes AND we have results
+        if (resultsRef.current && results.length > 0 && results.length !== prevQueryRef.current) {
             resultsRef.current.scrollTop = 0;
+            prevQueryRef.current = results.length;
         }
     }, [results]);
 
@@ -68,22 +86,13 @@ const SearchResults = ({
         }
     }, [handleSelectItem, contextHandleItemFocus, onItemFocus]);
 
-    // Show empty state prompt when no search has been performed
-    // if (!query.trim() && results.length === 0 && !error && !message && !showWhenEmpty) {
-    //     return (
-    //         <div className={`p-4 text-center text-gray-500 ${className}`}>
-    //             {config?.emptySearchPrompt || "Enter a search term to begin"}
-    //         </div>
-    //     );
-    // }
-
     // Get the appropriate renderer component
     const ItemRenderer = config?.resultItemRenderer
         ? React.memo(config.resultItemRenderer)
         : MemoizedListItem;
 
     // Render search results based on layout configuration
-    const renderResultItems = () => {
+    const renderedResults = useMemo(() => {
         if (results.length === 0) return null;
 
         const { layout = 'list', columns = 1 } = config || {};
@@ -139,64 +148,77 @@ const SearchResults = ({
                 ))}
             </ul>
         );
-    };
-
+    }, [results, config, isItemSelected, handleItemClick, handleItemFocus, onItemSelect, ItemRenderer]);
+   
+    const containerStyle = useMemo(() => ({
+        maxHeight,
+        minHeight: results.length > 0 ? '150px' : '0px', 
+        position: 'relative', 
+        overflow: 'hidden' 
+   
+    }), [maxHeight, results.length]);
     return (
         <div
             ref={resultsRef}
             id="search-results"
-            className={`overflow-y-auto ${className}`}
-            style={{ maxHeight }}
+            className={`overflow-y-auto transition-all duration-300 ${className}`}
+            style={containerStyle}
             aria-live="polite"
         >
+            
             {/* Loading state */}
-            {loading && (
-                <div className="p-4 flex flex-col items-center justify-center h-full">
-                    <LoadingSpinner size="medium" className="text-primary mb-2" />
-                    <p className="text-center text-gray-500">
-                        {loadingState?.getMessage() || config?.loadingText || 'Searching...'}
-                    </p>
-                </div>
-            )}
+            <div
+                className={`p-4 flex flex-col items-center justify-center absolute inset-0 bg-white
+                transition-opacity duration-200 ${loading ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+            >
+                <LoadingSpinner size="medium" className="text-primary mb-2" />
+                <p className="text-center text-gray-500">
+                    {loadingState?.getMessage() || config?.loadingText || 'Searching...'}
+                </p>
+            </div>
 
             {/* Error state */}
-            {!loading && error && (
-                <div className="h-full flex items-center justify-center">
-                    <FormMessage
-                        message={typeof error === 'string'
-                            ? { type: 'error', text: error }
-                            : (error.text ? error : { type: 'error', text: 'An error occurred during search' })}
-                    />
-                </div>
-            )}
+            <div
+                className={`absolute inset-0 flex items-center justify-center bg-white
+                transition-opacity duration-200 ${!loading && error ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+            >
+                <FormMessage
+                    message={typeof error === 'string'
+                        ? { type: 'error', text: error }
+                        : (error?.text ? error : { type: 'error', text: 'An error occurred during search' })}
+                />
+            </div>
 
             {/* Empty results / No matches message */}
-            {!loading && !error && message && (
-                <div role="alert" className="h-full flex items-center justify-center">
-                    <div>
-                        <FormMessage message={message} />
-                        {message.type === 'error' && message.text.includes("Can't find") && (
-                            <div className="mt-3 text-sm">
-                                <p>Suggestions:</p>
-                                <ul className="list-disc pl-5 mt-1">
-                                    <li>Check for spelling errors</li>
-                                    <li>Try using fewer or different keywords</li>
-                                    <li>Try searching for part of the name</li>
-                                </ul>
-                            </div>
-                        )}
-                    </div>
+            <div
+                className={`absolute inset-0 flex items-center justify-center bg-white
+                transition-opacity duration-200 ${!loading && !error && message ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                role="alert"
+            >
+                <div>
+                    <FormMessage message={message} />
+                    {message && message.type === 'error' && message.text && message.text.includes("Can't find") && (
+                        <div className="mt-3 text-sm">
+                            <p>Suggestions:</p>
+                            <ul className="list-disc pl-5 mt-1">
+                                <li>Check for spelling errors</li>
+                                <li>Try using fewer or different keywords</li>
+                                <li>Try searching for part of the name</li>
+                            </ul>
+                        </div>
+                    )}
                 </div>
-            )}
+            </div>
 
             {/* Results display */}
-            {!loading && !error && !message && results.length > 0 && (
-                <div className="transition-opacity duration-200">
-                    {renderResultItems()}
-                </div>
-            )}
+            <div
+                className={`transition-opacity duration-300 w-full
+                ${!loading && !error && !message && results.length > 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+            >
+                {renderedResults}
+            </div>
         </div>
     );
 };
 
-export default SearchResults;
+export default React.memo(SearchResults);

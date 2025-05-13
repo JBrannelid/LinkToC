@@ -192,6 +192,8 @@ const RegistrationForm = () => {
           name="password"
           type="password"
           placeholder="Password..."
+          labelPosition="above"
+          label="Password needs to be at least 8 characters long, contain a capital letter and a special sign"
           id={`${uniqueId}-password`}
           autoComplete="new-password"
           showPasswordToggle={true}

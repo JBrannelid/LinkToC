@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import { useSearch } from "../../../context/searchContext";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 
@@ -27,38 +27,39 @@ const SearchInput = ({
   const inputRef = useRef(null);
   const wasLoadingRef = useRef(loading);
   const placeholder = config?.placeholderText || "Search...";
+  
   useEffect(() => {
-    if (wasLoadingRef.current && !loading && maintainFocus) {
+    if (wasLoadingRef.current && !loading && maintainFocus && !desktopView) {
       setTimeout(() => {
-        if (inputRef.current) {
+        if (inputRef.current && document.activeElement?.tagName !== "INPUT") {
           inputRef.current.focus();
 
           const length = inputRef.current.value.length;
           inputRef.current.setSelectionRange(length, length);
         }
-      }, 10);
+      }, 100);
     }
 
     wasLoadingRef.current = loading;
-  }, [loading, maintainFocus]);
+  }, [loading, maintainFocus, desktopView]);
 
-  useEffect(() => {
-    if (
-      maintainFocus &&
-      !desktopView &&
-      inputRef.current &&
-      document.activeElement !== inputRef.current
-    ) {
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-
-          const length = inputRef.current.value.length;
-          inputRef.current.setSelectionRange(length, length);
-        }
-      }, 10);
-    }
-  }, [results, maintainFocus, desktopView]);
+  // useEffect(() => {
+  //   if (
+  //     maintainFocus &&
+  //     !desktopView &&
+  //     inputRef.current &&
+  //     document.activeElement !== inputRef.current
+  //   ) {
+  //     setTimeout(() => {
+  //       if (inputRef.current) {
+  //         inputRef.current.focus();
+  //
+  //         const length = inputRef.current.value.length;
+  //         inputRef.current.setSelectionRange(length, length);
+  //       }
+  //     }, 10);
+  //   }
+  // }, [results, maintainFocus, desktopView]);
 
   useEffect(() => {
     // Only auto-focus if:
@@ -76,28 +77,35 @@ const SearchInput = ({
     }
   }, [autoFocus, desktopView]);
 
-  const handleFocus = (e) => {
+
+  const handleFocus = useCallback((e) => {
     if (onFocus) {
       onFocus(e);
     }
-  };
+  }, [onFocus]);
 
-  const handleBlur = (e) => {
+  const handleBlur = useCallback((e) => {
     const relatedTarget = e.relatedTarget;
-
-    if (maintainFocus && !relatedTarget?.closest('[role="listbox"]')) {
+    
+    if (
+        maintainFocus &&
+        !relatedTarget?.closest('[role="listbox"]') &&
+        !relatedTarget?.closest('button') &&
+        !desktopView
+    ) {
+      // Increased timeout for better UX
       setTimeout(() => {
         if (inputRef.current) {
           inputRef.current.focus();
         }
-      }, 10);
+      }, 150);
     }
 
     if (onBlur) {
       onBlur(e);
     }
-  };
-  const handleKeyDown = (e) => {
+  },[maintainFocus, onBlur, desktopView]);
+  const handleKeyDown = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
 
@@ -121,7 +129,7 @@ const SearchInput = ({
         firstResultItem.focus();
       }
     }
-  };
+  },[selectedItem, results, executeActionForSelectedItem, handleSelectItem]);
   return (
     <div className={`relative ${className}`}>
       <input
@@ -170,4 +178,4 @@ const SearchInput = ({
   );
 };
 
-export default SearchInput;
+export default React.memo(SearchInput);
