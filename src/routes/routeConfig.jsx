@@ -20,6 +20,7 @@ import NotificationPage from "../pages/NotificationPage";
 import StableManagementPage from "../pages/StableManagementPage";
 import StableRequestsPage from "../pages/StableRequestsPage.jsx";
 import StableHorsePage from "../pages/StableHorsePage.jsx";
+import UserProfilePage from "../pages/UserProfilePage.jsx";
 
 // Public Routes
 export const publicRoutes = [
@@ -107,6 +108,11 @@ export const protectedRoutes = [
   {
     path: ROUTES.NOTIFICATIONS,
     element: <NotificationPage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.USER_PROFILE,
+    element: <UserProfilePage />,
     requiresStable: true,
   },
 ];
