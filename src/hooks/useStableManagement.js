@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
 import userService from "../api/services/userService";
+import { useAppContext } from "../context/AppContext";
 
 export const useStableManagement = (stableId) => {
   const [members, setMembers] = useState([]);
@@ -10,7 +11,7 @@ export const useStableManagement = (stableId) => {
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
   const [sentInvites, setSentInvites] = useState([]);
-
+  const { stableRefreshKey } = useAppContext();
   const loadingState = useLoadingState(loading, operationType);
 
   // Fetch members and requests in a single function
@@ -143,7 +144,7 @@ export const useStableManagement = (stableId) => {
 
   useEffect(() => {
     fetchStableData();
-  }, [fetchStableData]);
+  }, [fetchStableData, stableRefreshKey]);
 
   return {
     // Data

@@ -12,7 +12,7 @@ export function useCalendarEvents(stableId) {
   const [error, setError] = useState(null);
 
   // Get current user from context
-  const { currentUser } = useAppContext();
+  const { currentUser, stableRefreshKey } = useAppContext();
   const currentUserId = currentUser.id;
   const [operationType, setOperationType] = useState("fetch");
 
@@ -66,7 +66,7 @@ export function useCalendarEvents(stableId) {
 
   useEffect(() => {
     fetchAndUpdateEvents();
-  }, [fetchAndUpdateEvents, stableId]);
+  }, [fetchAndUpdateEvents, stableId, stableRefreshKey]);
 
   const createEvent = async (eventData) => {
     setOperationType("create");
