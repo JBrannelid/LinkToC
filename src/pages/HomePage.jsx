@@ -224,7 +224,7 @@ export default function HomePage() {
       </section>
 
       {/* Mobile Wall Post */}
-      <section className="mx-auto md:mx-0 md:hidden lg:hidden">
+      <section className="mx-5 sm:mx-15 md:hidden lg:hidden">
         <WallPost />
       </section>
     </div>
