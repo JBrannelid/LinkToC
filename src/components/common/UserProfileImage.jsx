@@ -92,6 +92,17 @@ const UserProfileImage = ({
             setImageError(true);
           }}
         />
+      ) : user && !placeholderUrl ? (
+        // Use the placeholder image instead of showing initials when placeholderUrl is provided
+        <img
+          src={placeholderUrl}
+          alt={altText}
+          className={`${sizeClass} rounded-full object-cover`}
+          onError={() => {
+            // Fall back to initials if placeholder also fails
+            setImageError(true);
+          }}
+        />
       ) : (
         <span className={`${fontSizeClass} lg:text-[8px] font-normal`}>
           {customContent || getInitials()}
