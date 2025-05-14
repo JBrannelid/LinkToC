@@ -49,12 +49,31 @@ axiosInstance.interceptors.response.use(
 
   // Error (status >= 400): Format the error into a standardized JSON object
   (error) => {
+      if (error.response?.status === 404) {
+          // Check various places where the message might be
+          const errorMessage =
+              error.response.data?.message ||
+              error.response.data?.details?.message ||
+              '';
+
+          if (errorMessage.includes("No horses found") ||
+              errorMessage.includes("No horses")) {
+              return {
+                  isSuccess: true,
+                  statusCode: 200,
+                  value: [],
+                  message: null
+              };
+          }
+      }
     const formattedError = handleAxiosError(error);
 
     // Don't log 404 errors for user-stables endpoint (expected for new users)
     const isExpected404 =
-      formattedError.statusCode === 404 &&
-      error.config?.url?.includes("/api/user-stables/user/");
+        formattedError.statusCode === 404 &&
+        (error.config?.url?.includes("/api/user-stables/user/") ||
+            (error.config?.url?.includes("/horses/with-owners") &&
+                formattedError.details?.message?.includes("No horses")));
 
     if (!isExpected404) {
       console.error(

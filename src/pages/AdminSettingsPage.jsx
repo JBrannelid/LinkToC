@@ -3,10 +3,10 @@ import { useNavigate } from "react-router";
 import BaseSettingsPage, { SettingsMenuItem } from "./BaseSettingPage";
 import { ROUTES } from "../routes/routeConstants";
 import {
-  handleTermsOfService,
-  handleSupport,
-  handleCookieSettings,
-  handleManageStables,
+    handleTermsOfService,
+    handleSupport,
+    handleCookieSettings,
+    handleManageStables, handleManageHorses,
 } from "../utils/userUtils";
 
 const AdminSettingsPage = () => {
@@ -18,6 +18,9 @@ const AdminSettingsPage = () => {
         label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
       />
+        <SettingsMenuItem
+            label="Mange Horses"
+            onClick={() => handleManageHorses(navigate, ROUTES)}/>
       <SettingsMenuItem
         label="Manage Stables"
         onClick={() => handleManageStables(navigate, ROUTES)}

@@ -14,7 +14,7 @@ export const ROUTES = {
   STABLE_HORSES: "/stable-horses/:stableId",
   MANAGE_STABLE: "/manage-stable",
   STABLE_REQUESTS: "/stable-requests",
-  NOTIFICATIONS: "/notifications",
+  MANAGE_HORSES: "/manage-horses",
 };
 
 // Dynamic routes with params
