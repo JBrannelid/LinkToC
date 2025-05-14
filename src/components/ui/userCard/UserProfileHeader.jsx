@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   formatUserFullName,
   getProfileImageUrl,
@@ -13,6 +13,7 @@ const UserProfileHeader = ({ user }) => {
   const userFullName = formatUserFullName(user);
   const profileImageUrl = getProfileImageUrl(user?.profileImage);
   const roleName = getRoleName(user.role);
+  const [showPhoneNumber, setShowPhoneNumber] = useState(false);
 
   return (
     <>
@@ -46,7 +47,8 @@ const UserProfileHeader = ({ user }) => {
             {/* Emergency contact */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary flex flex-col max-h-15"
+              // Opacity - Remove when emergency contact is available
+              className="rounded-lg !border-primary flex flex-col max-h-15 opacity-40"
               aria-label="Emergency contact"
             >
               <EmergencyContactIcon className="text-primary mb-1" size={20} />
@@ -58,7 +60,8 @@ const UserProfileHeader = ({ user }) => {
             {/* Messenger */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary flex flex-col max-h-15"
+              // Opacity - Remove when messenger is available
+              className="rounded-lg !border-primary flex flex-col max-h-15 opacity-40"
               aria-label="Messenger"
             >
               <MessageIcon className="text-primary mb-1" size={20} />
@@ -107,19 +110,29 @@ const UserProfileHeader = ({ user }) => {
               type="secondary"
               className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl"
               aria-label="Phone"
+              onClick={() => setShowPhoneNumber(!showPhoneNumber)}
             >
-              <PhoneIcon className="text-primary" size={30} />
+              {showPhoneNumber ? (
+                <span className="text-sm text-primary font-medium">
+                  {user.phoneNumber}
+                </span>
+              ) : (
+                <PhoneIcon className="text-primary" size={30} />
+              )}
             </Button>
+
             <Button
               type="secondary"
-              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl"
+              // Opacity - Remove when emergency contact is available
+              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl opacity-40"
               aria-label="Emergency contact"
             >
               <EmergencyContactIcon className="text-primary" size={30} />
             </Button>
             <Button
               type="secondary"
-              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl"
+              // Opacity - Remove when messenger is available
+              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl opacity-40"
               aria-label="Messenger"
             >
               <MessageIcon className="text-primary" size={30} />
