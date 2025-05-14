@@ -6,18 +6,14 @@ import ModalHeader from "../layout/ModalHeader";
 import Button from "../ui/Button";
 import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
-import { triggerFileUpload, handleImageUpload } from "../../utils/imagesUtils";
 import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import {
-  handleProfileUpdate,
-  getProfileImageUrl,
-  formatUserFullName,
-} from "../../utils/userUtils";
+import { handleProfileUpdate, formatUserFullName } from "../../utils/userUtils";
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import ConfirmationModal from "../ui/ConfirmationModal";
+import ImageUploader from "../fileUpload/ImageUploader";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -39,13 +35,13 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   // Use either passed userData or fetched userData
   const userData = initialUserData || fetchedUserData || user;
 
-  const [profileImage, setProfileImage] = useState(
-    userData?.profileImage || null
-  );
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const fileInputRef = useRef(null);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [profileImageData, setProfileImageData] = useState(null);
+  const [uploadError, setUploadError] = useState("");
+  const [previewImageUrl, setPreviewImageUrl] = useState(null);
 
   const methods = useForm({
     defaultValues: {
@@ -82,9 +78,20 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       setSubmitting(true);
       setMessage({ type: "", text: "" });
 
+      // Include profile image data if available
+      const updateData = {
+        ...data,
+        // Add the profile image URL
+        ...(profileImageData && { profileImage: profileImageData.url }),
+        // Send  blob name to backend
+        ...(profileImageData && {
+          profileImageBlobName: profileImageData.blobName,
+        }),
+      };
+
       // Use the extracted utility function
       const result = await handleProfileUpdate(
-        data,
+        updateData,
         updateUserData,
         verifyToken
       );
@@ -128,11 +135,10 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       </div>
     );
   }
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+  const profileImageUrl = displayUser?.profileImage;
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
@@ -147,32 +153,39 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
           <FormProvider {...methods}>
             <div>
               {/* Profile Image */}
-              <div className="bg-white rounded-lg p-2 mb-4 flex items-center justify-between border-light border-2 shadow-md">
-                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
-                  <img
-                    src={profileImageUrl}
-                    alt={`Profile image of ${userFullName}`}
-                    className="w-full h-full object-cover"
-                  />
+              <div className="bg-white rounded-lg p-2 mb-4 flex flex-col border-light border-2 shadow-md">
+                <div className="flex items-center justify-between">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
+                    <img
+                      src={
+                        previewImageUrl ||
+                        profileImageUrl ||
+                        "/src/assets/images/userPlaceholder.jpg"
+                      }
+                      alt={`Profile image of ${userFullName}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="mr-5">
+                    <ImageUploader
+                      initialImageUrl={profileImageUrl}
+                      onImageUploaded={(fileData) => {
+                        setProfileImageData(fileData);
+                        // Update image preview
+                        setPreviewImageUrl(fileData.url);
+                      }}
+                      onError={setUploadError}
+                      label="Choose image"
+                      displayImagePreview={true}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <Button
-                    type="secondary"
-                    onClick={() => triggerFileUpload(fileInputRef)}
-                    className="text-sm"
-                  >
-                    Choose image
-                  </Button>
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    onChange={(event) =>
-                      handleImageUpload(event, setProfileImage)
-                    }
-                    accept="image/*"
-                    className="hidden"
-                  />
-                </div>
+
+                {uploadError && (
+                  <p className="text-sm text-error-500 text-end mr-5">
+                    {uploadError}
+                  </p>
+                )}
               </div>
 
               {/* Personal Info Section */}
