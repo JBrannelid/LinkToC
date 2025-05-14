@@ -17,7 +17,9 @@ const UserProfileContent = ({ user, activeTab }) => {
   return (
     <>
       {/* Desktop content */}
-      <div className="hidden lg:block px-40 py-4">{renderTabContent()}</div>
+      <div className="hidden lg:block lg:px-40 xl:px-60 py-4">
+        {renderTabContent()}
+      </div>
 
       {/* Mobile  */}
       <div className="py-2 lg:hidden">{renderTabContent()}</div>
@@ -33,7 +35,7 @@ const InfoTabContent = ({ user }) => {
   return (
     <div className="space-y-4 px-10">
       {/* Current status section  */}
-      <div className="bg-primary-light p-4 rounded-lg shadow-lg max-w-xs md:max-w-md">
+      <div className="bg-primary-light p-4 rounded-lg shadow-lg max-w-xs lg:max-w-full border border-primary">
         <div className="flex">
           <strong className="font-semibold mr-2">Current: </strong>
           <p>{currentStatus}</p>
@@ -41,7 +43,7 @@ const InfoTabContent = ({ user }) => {
       </div>
 
       {/* Bio section */}
-      <div className="bg-white p-6 rounded-lg border border-primary-light shadow-lg ">
+      <div className="bg-white p-6 rounded-lg border border-primary shadow-lg ">
         <p className="whitespace-pre-line">{bio || "lorem"}</p>
       </div>
     </div>

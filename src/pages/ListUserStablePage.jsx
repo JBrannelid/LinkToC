@@ -61,17 +61,17 @@ const ListUserStablePage = () => {
         stableId={stableId}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
-        searchPlaceholder="Search members..."
+        searchPlaceholder="Search..."
       />
 
       {/* Member List */}
-      <div className="px-5 py-3 md:px-10 lg:px-40 pt-2 lg:pt-10">
+      <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search members..."
+              placeholder="Search..."
               className="w-full px-10 py-2 border border-primary rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

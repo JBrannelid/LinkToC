@@ -17,7 +17,7 @@ const UserProfileHeader = ({ user }) => {
   return (
     <>
       {/* Desktop header  */}
-      <div className="hidden lg:block px-40 pt-8">
+      <div className="hidden lg:block lg:px-40 xl:px-60 pt-8">
         <div className="flex justify-between items-start ">
           {/* User info */}
           <div className="flex flex-col">
@@ -25,48 +25,51 @@ const UserProfileHeader = ({ user }) => {
               {userFullName}
             </h1>
             <p className="text-sm text-gray">
-              Stable role: <span>{roleName || "Member"}</span>
+              <span>{roleName || "Member"}</span>
             </p>
+            <p className="text-sm text-gray">2004</p>
           </div>
 
           {/* Contact buttons */}
-          <div className="flex gap-2 mt-6">
+          <div className="flex flex-row gap-2 mr-5 mt-10">
             {user.phoneNumber && (
               <Button
                 type="secondary"
-                className="rounded-lg !border-primary"
+                className="rounded-lg !border-primary flex flex-col max-h-15"
                 aria-label="Phone"
               >
-                <PhoneIcon className="text-primary mr-2" size={20} />
-                {user.phoneNumber}
+                <PhoneIcon className="text-primary mb-1" size={20} />
+                <span className="text-xs">{user.phoneNumber}</span>
               </Button>
             )}
 
             {/* Emergency contact */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary"
+              className="rounded-lg !border-primary flex flex-col max-h-15"
               aria-label="Emergency contact"
             >
-              <EmergencyContactIcon className="text-primary mr-2" size={20} />
-              {user.emergencyContact || "Phonenumber"}
+              <EmergencyContactIcon className="text-primary mb-1" size={20} />
+              <span className="text-xs">
+                {user.emergencyContact || "Phonenumber"}
+              </span>
             </Button>
 
-            {/* Chatt */}
+            {/* Messenger */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary"
+              className="rounded-lg !border-primary flex flex-col max-h-15"
               aria-label="Messenger"
             >
-              <MessageIcon className="text-primary mr-2" size={20} />
-              Messenger
+              <MessageIcon className="text-primary mb-1" size={20} />
+              <span className="text-xs">Messenger</span>
             </Button>
           </div>
         </div>
 
         {/* Image carousel */}
         <div className="relative mt-4 border-2 border-primary rounded-lg overflow-hidden">
-          <div className="w-full h-64 relative">
+          <div className="w-full h-55 relative">
             <img
               src={profileImageUrl}
               alt={`Profile of ${userFullName}`}
