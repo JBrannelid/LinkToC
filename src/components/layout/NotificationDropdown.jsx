@@ -54,10 +54,12 @@ const NotificationDropdown = () => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute -right-10 z-50 w-100 max-h-[80vh] overflow-auto mt-7">
+        <div className="absolute right-5 z-50 w-100 max-h-[80vh] overflow-auto mt-3">
           <div className="bg-primary-light rounded-lg shadow-lg">
             <div className="p-4">
-              <p className="text-error-500 text-center text-sm">Placeholder</p>
+              <p className="text-error-500 text-center text-sm mb-2">
+                Placeholder
+              </p>
               {notifications.slice(0, 4).map((notification) => (
                 <NotificationCard
                   key={notification.id}
