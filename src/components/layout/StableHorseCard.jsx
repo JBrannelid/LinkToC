@@ -11,10 +11,10 @@ import {
 
 const StableHorseCard = ({ horse }) => {
   const horseProfileImageUrl = getHorseProfileImageUrl(horse);
-  const horseFullName = getHorseFullName(horse);
+  const horseFullName = getHorseFullName(horse.horseName);
   const horseAge = formatHorseAge(horse.age);
-  const horseColor = getHorseColor(horse.color);
-  const horseOwnerName = getHorseOwnerName(horse.owner);
+  const horseColor = getHorseColor(horse.horseColor);
+  const horseOwnerName = getHorseOwnerName(horse.horseOwners);
 
   return (
     <Card.Container
