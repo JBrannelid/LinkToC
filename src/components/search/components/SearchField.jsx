@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, {forwardRef, useCallback, useEffect, useMemo} from 'react';
 import { useFormContext } from 'react-hook-form';
 import SearchInput from './SearchInput';
 import SearchResults from './SearchResults';
@@ -33,7 +33,7 @@ const SearchField = forwardRef((
     } = useFormContext();
 
     // Handle selection with form integration
-    const handleSelectItem = (item) => {
+    const handleSelectItem = useCallback((item) => {
         if (item && item.id) {
             setValue(name, item.id, { shouldValidate: true });
             trigger(name);
@@ -42,10 +42,10 @@ const SearchField = forwardRef((
         if (onSelectItem) {
             onSelectItem(item);
         }
-    };
+    },[onSelectItem,setValue, name, trigger]);
 
     // Handle search action with form integration
-    const handleSearchAction = (selectedItem) => {
+    const handleSearchAction = useCallback((selectedItem) => {
         if (selectedItem && selectedItem.id) {
             setValue(name, selectedItem.id, { shouldValidate: true });
             trigger(name);
@@ -54,14 +54,14 @@ const SearchField = forwardRef((
         if (onSearch) {
             onSearch(selectedItem);
         }
-    };
+    },[onSearch, trigger, setValue, trigger]);
 
     // Handle cancel action
-    const handleCancel = () => {
+    const handleCancel = useCallback(() => {
         if (onCancel) {
             onCancel();
         }
-    };
+    }, [onCancel]);
 
     // Register the field with form
     useEffect(() => {
@@ -69,26 +69,40 @@ const SearchField = forwardRef((
     }, [register, name, validation]);
 
     // Prepare display message
-    const displayMessage = formError ||
-        (errors[name] ? { type: "error", text: errors[name].message || errorMessage } : null) ||
-        (message && message.text ? message : null);
+    const displayMessage = useMemo(()=> {
+        return formError ||
+            (errors[name] ? { type: "error", text: errors[name].message || errorMessage } : null) ||
+            (message && message.text ? message : null);
+    },[formError, errors, name, errorMessage, message]);
+    const labelElement = useMemo(() => {
+        if (!label) return null;
 
+        return (
+            <label
+                htmlFor={name}
+                className={`form-label ${
+                    labelPosition === "above" ? "mb-1" : "mr-2"
+                } text-sm font-medium ${labelClassName}`}
+            >
+                {label}
+            </label>
+        );
+    }, [label, labelPosition, labelClassName, name]);
+    const errorElement = useMemo(() => {
+        if (!showMessage || !displayMessage) return null;
+
+        return <FormMessage message={displayMessage} />;
+    }, [showMessage, displayMessage]);
+    const stableConfig = useMemo(() => {
+        return customConfig;
+    }, [customConfig]);
+    
     return (
         <SearchProvider customConfig={customConfig}>
             <div className={`form-control ${containerClassName}`}>
                 {/* Label */}
-                {label && (
-                    <label
-                        htmlFor={name}
-                        className={`form-label ${
-                            labelPosition === "above" ? "mb-1" : "mr-2"
-                        } text-sm font-medium ${labelClassName}`}
-                    >
-                        {label}
-                    </label>
-                )}
-
-                {/* Hidden input for form control */}
+                {labelElement}
+                
                 <input
                     type="hidden"
                     id={name}
@@ -119,14 +133,12 @@ const SearchField = forwardRef((
                     />
                 </div>
 
-                {/* Error message */}
-                {showMessage && displayMessage && (
-                    <FormMessage message={displayMessage} />
-                )}
+                {errorElement}
+
             </div>
         </SearchProvider>
     );
 });
 
 SearchField.displayName = "SearchField";
-export default SearchField;
+export default React.memo(SearchField);

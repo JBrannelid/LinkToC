@@ -109,6 +109,7 @@ export const AppProvider = ({ children }) => {
     setSelectedHorse,
     getCurrentStableRole,
     stableRefreshKey,
+    UserRoles: USER_ROLES,
   };
 
   return (

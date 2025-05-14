@@ -36,7 +36,7 @@ const SearchResults = (
     const resultsRef = useRef(null);
     const prevQueryRef = useRef(query);
     const [showResults, setShowResults] = useState(false);
-    
+
     useEffect(() => {
         if (loading) {
 
@@ -152,9 +152,10 @@ const SearchResults = (
    
     const containerStyle = useMemo(() => ({
         maxHeight,
-        minHeight: results.length > 0 ? '150px' : '0px', 
-        position: 'relative', 
-        overflow: 'hidden' 
+        minHeight: results.length > 0 ? '9rem' : 'auto',
+        position: 'relative',
+        overflow: results.length > 0 ? 'auto' : 'visible', // Allow overflow for messages
+        transition: 'min-height 0.3s ease'
    
     }), [maxHeight, results.length]);
     return (
@@ -191,9 +192,14 @@ const SearchResults = (
 
             {/* Empty results / No matches message */}
             <div
-                className={`absolute inset-0 flex items-center justify-center bg-white
-                transition-opacity duration-200 ${!loading && !error && message ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
+                className={`flex flex-col items-center justify-center w-full py-4
+    transition-opacity duration-300 ${!loading && message ? 'opacity-100' : 'opacity-0'}`}
                 role="alert"
+                style={{
+                    position: results.length > 0 ? 'absolute' : 'relative',
+                    inset: results.length > 0 ? 0 : 'auto',
+                    zIndex: message ? 10 : -1
+                }}
             >
                 <div>
                     <FormMessage message={message} />
