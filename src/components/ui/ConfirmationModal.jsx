@@ -17,7 +17,7 @@ const ConfirmationModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 backdrop-blur-[2px] flex items-center justify-center z-30">
+    <div className="fixed inset-0 backdrop-grayscale flex items-center justify-center z-30">
       <div className="bg-white rounded-lg w-9/10 p-7 shadow-lg border border-light max-w-md">
         {icon && <div className="flex justify-center mb-4">{icon}</div>}
 
