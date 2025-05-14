@@ -23,7 +23,6 @@ export const useStableHorses = (stableId) => {
       setHorses(data);
       setError(null);
     } catch (error) {
-      setError("Failed to load horses");
       setHorses([]);
     } finally {
       setLoading(false);
