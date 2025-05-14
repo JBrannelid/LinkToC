@@ -23,7 +23,7 @@ export const handleSwitchStable = (navigate, ROUTES) => {
 };
 
 export const handleManageHorses = (navigate, ROUTES) => {
-  console.log("Manage horses clicked");
+  navigate(ROUTES.MANAGE_HORSES);
 }
 
 export const handleLogout = async (logout, navigate, setLoading, ROUTES) => {
