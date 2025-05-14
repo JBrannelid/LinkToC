@@ -12,7 +12,7 @@ import UserProfileForm from "../components/forms/UserProfileForm";
 import {
   handleSwitchStable,
   formatUserFullName,
-  getProfileImageUrl, handleManageHorses,
+  getProfileImageUrl,
 } from "../utils/userUtils";
 import ConfirmationModal from "../components/ui/ConfirmationModal";
 import LogoutIcon from "../assets/icons/LogoutIcon";
