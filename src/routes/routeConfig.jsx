@@ -20,6 +20,7 @@ import NotificationPage from "../pages/NotificationPage";
 import StableManagementPage from "../pages/StableManagementPage";
 import StableRequestsPage from "../pages/StableRequestsPage.jsx";
 import StableHorsePage from "../pages/StableHorsePage.jsx";
+import HorseManagementPage from "../pages/HorseManagementPage";
 
 // Public Routes
 export const publicRoutes = [
@@ -87,7 +88,6 @@ export const protectedRoutes = [
     element: <StableOnboardingPage />,
     requiresStable: false,
   },
-
   {
     path: ROUTES.STABLE_HORSES,
     element: <StableHorsePage />,
@@ -96,6 +96,12 @@ export const protectedRoutes = [
   {
     path: ROUTES.MANAGE_STABLE,
     element: <StableManagementPage />,
+    requiresStable: true,
+    requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
+  },  
+  {
+    path: ROUTES.MANAGE_HORSES,
+    element: <HorseManagementPage />,
     requiresStable: true,
     requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
   },
