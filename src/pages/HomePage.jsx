@@ -10,6 +10,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { startOfToday } from "../utils/calendarUtils";
 import * as calendarUtils from "../utils/calendarUtils";
 import EventForm from "../components/forms/EventForm";
+import StableName from "../components/layout/StableName";
 
 export default function HomePage() {
   const [selectedDay, setSelectedDay] = useState(startOfToday());
@@ -190,8 +191,15 @@ export default function HomePage() {
         >
           {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
-            <div className="mt-15">
-              <WallPost />
+            <div className="mt-20">
+              <div className="hidden md:block lg:hidden">
+                <h1 className="hidden md:block lg:hidden md:text-center md:text-2xl">
+                  <StableName currentStableId={currentStable.id} />
+                </h1>
+              </div>
+              <div className="hidden md:block lg:block mt-10">
+                <WallPost />
+              </div>
             </div>
           ) : (
             <div>
