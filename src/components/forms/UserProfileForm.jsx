@@ -41,6 +41,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [profileImageData, setProfileImageData] = useState(null);
   const [uploadError, setUploadError] = useState("");
+  const [previewImageUrl, setPreviewImageUrl] = useState(null);
 
   const methods = useForm({
     defaultValues: {
@@ -138,6 +139,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = displayUser?.profileImage;
+  const placeholderImageUrl = "/src/assets/images/userPlaceholder.jpg";
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
@@ -156,7 +158,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                     <img
-                      src={profileImageUrl}
+                      src={
+                        previewImageUrl ||
+                        profileImageUrl ||
+                        placeholderImageUrl
+                      }
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
                     />
@@ -165,8 +171,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     <FileUploader
                       onFileUploaded={(fileData) => {
                         setProfileImageData(fileData);
-                        // Update image preview
-                        setProfileImageUrl(fileData.url);
+                        // Update image preview with the new state setter
+                        setPreviewImageUrl(fileData.url);
                       }}
                       onError={setUploadError}
                       label="Choose image"
