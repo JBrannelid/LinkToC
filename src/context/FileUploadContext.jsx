@@ -1,5 +1,14 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
-import { uploadFileToBlobStorage } from "../utils/fileUploadUtils";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+} from "react";
+import {
+  uploadFileToBlobStorage,
+  generateUniqueFilename,
+} from "../utils/fileUploadUtils";
 import { getUploadSasUrl } from "../api/services/fileService";
 
 const FileUploadContext = createContext();
@@ -101,6 +110,14 @@ export const FileUploadProvider = ({ children }) => {
     clearUpload,
     clearError,
   };
+
+  // Make the context globally available to solve the hook usage issue
+  useEffect(() => {
+    window.__fileUploadContext = value;
+    return () => {
+      delete window.__fileUploadContext;
+    };
+  }, [value]);
 
   return (
     <FileUploadContext.Provider value={value}>
