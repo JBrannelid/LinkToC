@@ -6,14 +6,12 @@ const EventItem = ({ event, index, onUpdate }) => {
   // Background for even/odd events rows
   const bgColor = index % 2 === 0 ? "bg-background" : "bg-white ";
 
-  // Get username or display unknown user
-  const userName =
+  // Get fullname or display unknown user
+  const userFullName =
     [event.user?.firstName, event.user?.lastName]
       .filter(Boolean)
       .join(" ")
-      .trim() ||
-    event.user?.userName ||
-    "Okänd Användare";
+      .trim() || "Okänd Användare";
 
   const handleItemClick = () => {
     if (onUpdate) {
@@ -36,7 +34,7 @@ const EventItem = ({ event, index, onUpdate }) => {
         <p className="font-normal">{event.title}</p>
 
         {/* Display user name */}
-        <p className="text-gray text-xs truncate">{userName}</p>
+        <p className="text-gray text-xs truncate">{userFullName}</p>
       </div>
 
       {/* Display time */}

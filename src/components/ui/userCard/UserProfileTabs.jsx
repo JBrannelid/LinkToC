@@ -1,28 +1,29 @@
 import React from "react";
 
 const UserProfileTabs = ({ activeTab, onChange }) => {
-  const tabs = [
-    { id: "info", label: "Info" },
-    { id: "assignments", label: "Assignments" },
-    { id: "horses", label: "Horses" },
-  ];
-
   return (
-    <div className="px-6 py-2">
-      <div className="flex justify-between sm:px-10 md:px-20">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`px-4 py-1 text-lg font-semibold ${
-              activeTab === tab.id
-                ? "text-primary border-b-2 border-primary"
-                : "text-gray"
-            }`}
-            onClick={() => onChange(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
+    <div className="px-1 md:px-6 py-2 mb-4">
+      <div className="flex justify-evenly px-0 sm:px-10 md:px-20">
+        <button
+          className={`px-4 py-1 text-lg lg:text-2xl lg:py-4 font-semibold ${
+            activeTab === "info"
+              ? "text-primary border-b-2 border-primary"
+              : "text-gray"
+          }`}
+          onClick={() => onChange("info")}
+        >
+          Info
+        </button>
+        <button
+          className={`px-4 py-1 text-lg lg:text-2xl lg:py-4 font-semibold ${
+            activeTab === "horses"
+              ? "text-primary border-b-2 border-primary"
+              : "text-gray"
+          }`}
+          onClick={() => onChange("horses")}
+        >
+          Horses
+        </button>
       </div>
     </div>
   );
