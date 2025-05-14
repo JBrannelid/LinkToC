@@ -7,7 +7,7 @@ import {
   getHorseImageAltText,
   getHorseOwnerName,
   getHorseBreed,
-} from "../../utils/horseUtils";
+} from "../../utils/horseProfileUtils";
 
 export default function StableHorseCard() {
   // const { stableHorse, setStableHorse } = useState("");

@@ -1,6 +1,6 @@
 import React from "react";
 import StableInfo from "../components/layout/StableInfo";
-import StableHorseCard from "../components/stableHorse/StableHorseCard";
+import StableHorseCard from "../components/layout/StableHorseCard";
 import { useParams } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import SearchIcon from "../assets/icons/SearchIcon";
