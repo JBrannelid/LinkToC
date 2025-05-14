@@ -6,7 +6,6 @@ import EventsContainer from "../components/calendar/events/EventsContainer";
 import { useCalendarEvents } from "../hooks/useCalendarEvents";
 import { useStableData } from "../hooks/useStableData";
 import { useAppContext } from "../context/AppContext";
-import StableName from "../components/layout/StableName";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { startOfToday } from "../utils/calendarUtils";
 import * as calendarUtils from "../utils/calendarUtils";
@@ -158,11 +157,6 @@ export default function HomePage() {
 
   return (
     <div className="mt-5 md:mt-10 pb-20 md:pb-10 lg:max-w-[1440px] sm:px-1 xl:px-16 lg:px-14">
-      {/* Stable Title */}
-      <h1 className="text-center mb-5 md:hidden lg:hidden">
-        <StableName currentStableId={currentStable.id} />
-      </h1>
-
       {/* Event form modal */}
       {isFormOpen && (
         <EventForm
@@ -196,10 +190,7 @@ export default function HomePage() {
         >
           {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
-            <div>
-              <h1 className="text-center pt-12 mb-10">
-                <StableName currentStableId={currentStable.id} />
-              </h1>
+            <div className="mt-15">
               <WallPost />
             </div>
           ) : (
