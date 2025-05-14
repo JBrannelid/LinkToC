@@ -17,7 +17,7 @@ const UserProfileHeader = ({ user }) => {
   return (
     <>
       {/* Desktop header  */}
-      <div className="hidden lg:block px-30 pt-8">
+      <div className="hidden lg:block px-40 pt-8">
         <div className="flex justify-between items-start ">
           {/* User info */}
           <div className="flex flex-col">

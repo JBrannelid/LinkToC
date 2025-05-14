@@ -17,7 +17,7 @@ const UserProfileContent = ({ user, activeTab }) => {
   return (
     <>
       {/* Desktop content */}
-      <div className="hidden lg:block px-30 py-4">{renderTabContent()}</div>
+      <div className="hidden lg:block px-40 py-4">{renderTabContent()}</div>
 
       {/* Mobile  */}
       <div className="py-2 lg:hidden">{renderTabContent()}</div>

@@ -65,7 +65,7 @@ const ListUserStablePage = () => {
       />
 
       {/* Member List */}
-      <div className="px-5 py-3 md:px-10 lg:px-30">
+      <div className="px-5 py-3 md:px-10 lg:px-40 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
