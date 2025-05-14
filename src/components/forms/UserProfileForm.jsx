@@ -13,7 +13,7 @@ import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import ConfirmationModal from "../ui/ConfirmationModal";
-import FileUploader from "../fileUpload/FileUploader";
+import ImageUploader from "../fileUpload/ImageUploader";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -139,7 +139,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = displayUser?.profileImage;
-  const placeholderImageUrl = "/src/assets/images/userPlaceholder.jpg";
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
@@ -161,24 +160,27 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       src={
                         previewImageUrl ||
                         profileImageUrl ||
-                        placeholderImageUrl
+                        "/src/assets/images/userPlaceholder.jpg"
                       }
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div className="mr-5">
-                    <FileUploader
-                      onFileUploaded={(fileData) => {
+                    <ImageUploader
+                      initialImageUrl={profileImageUrl}
+                      onImageUploaded={(fileData) => {
                         setProfileImageData(fileData);
-                        // Update image preview with the new state setter
+                        // Update image preview
                         setPreviewImageUrl(fileData.url);
                       }}
                       onError={setUploadError}
                       label="Choose image"
+                      displayImagePreview={true}
                     />
                   </div>
                 </div>
+
                 {uploadError && (
                   <p className="text-sm text-error-500 text-end mr-5">
                     {uploadError}
