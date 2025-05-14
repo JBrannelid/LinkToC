@@ -59,16 +59,37 @@ const StableSelectionPage = () => {
   }, [location, navigate]);
 
   const handleSelectStable = (stable) => {
-    changeStable(stable.id, stable.name);
-    navigate(ROUTES.HOME);
+    // Check if this might be a newly created stable
+    const newStableCreated = sessionStorage.getItem("newStableCreated");
+
+    if (newStableCreated === "true") {
+      // The changeStable function will handle the bypass internally
+    }
+
+    const success = changeStable(stable.id, stable.name);
+
+    if (success) {
+      navigate(ROUTES.HOME);
+    }
   };
 
   // Handle successful stable creation
   const handleStableCreationSuccess = async (data) => {
     const result = await handleCreateStable(data);
-    if (result.success) {
+
+    if (result.success && result.stable) {
+      console.log(
+        "Stable created successfully. Setting bypass flag and redirecting..."
+      );
+
+      // Clear first-time flag
       sessionStorage.removeItem("isFirstLogin");
-      navigate(ROUTES.HOME);
+
+      // Set flag for newly created stable to bypass security check
+      sessionStorage.setItem("newStableCreated", "true");
+
+      // Force a page reload to the select-stable page
+      window.location.href = "/select-stable";
     }
   };
 

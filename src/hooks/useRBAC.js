@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAppContext } from "../context/AppContext";
-import { USER_ROLES } from "../context/AppContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 export function useRBAC() {
   const { getCurrentStableRole } = useAppContext();

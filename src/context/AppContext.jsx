@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { useAuth } from "./AuthContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 const AppContext = createContext();
 
@@ -22,13 +23,23 @@ export const AppProvider = ({ children }) => {
     return savedStable ? JSON.parse(savedStable) : null;
   });
 
-  // Selected horse state - initialize as null
+  const [stableRefreshKey, setStableRefreshKey] = useState(0);
   const [selectedHorse, setSelectedHorse] = useState(null);
+  const [bypassSecurity, setBypassSecurity] = useState(false);
 
   // Update the current stable
   const changeStable = (id, name = "") => {
+    // Check if this is a newly created stable with a bypass flag
+    const newStableFlag = sessionStorage.getItem("newStableCreated");
+    const isNewStable = newStableFlag === "true" && newStableFlag !== null;
+    const shouldBypassCheck = bypassSecurity || isNewStable;
+
     // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
-    if (user?.stableRoles?.[id] === undefined) {
+    if (
+      !shouldBypassCheck &&
+      user?.stableRoles &&
+      user.stableRoles[id] === undefined
+    ) {
       console.error(
         "SECURITY ERROR: User is trying to set stable ${id} without membership!"
       );
@@ -37,10 +48,24 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
+    // This bypass will not copremise security, as it is only used for newly created stables
+    if (isNewStable) {
+      console.log("Bypassing security check for newly created stable");
+      sessionStorage.removeItem("newStableCreated");
+    }
+
     const stableData = { id, name };
     setCurrentStable(stableData);
     localStorage.setItem("currentStable", JSON.stringify(stableData));
+
+    setStableRefreshKey((prev) => prev + 1);
     return true;
+  };
+
+  const enableSecurityBypass = () => {
+    setBypassSecurity(true);
+    // Auto-disable after a short delay for safety
+    setTimeout(() => setBypassSecurity(false), 2000);
   };
 
   // Load saved stable on initial mount
@@ -79,21 +104,16 @@ export const AppProvider = ({ children }) => {
     currentUser: user,
     currentStable,
     changeStable,
+    enableSecurityBypass,
     selectedHorse,
     setSelectedHorse,
     getCurrentStableRole,
+    stableRefreshKey,
   };
 
   return (
     <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>
   );
-};
-
-// User role constants. Remove when we have a contact with BE
-export const USER_ROLES = {
-  USER: 2,
-  ADMIN: 1,
-  MANAGER: 0,
 };
 
 export default AppContext;

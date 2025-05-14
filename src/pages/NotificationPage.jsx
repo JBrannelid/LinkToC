@@ -1,28 +1,7 @@
 import React from "react";
 import ModalHeader from "../components/layout/ModalHeader";
 import mockNotificationsData from "../testing/mockNotifications.json";
-import { getNotificationTypeStyles } from "../utils/notificationUtils";
-
-const NotificationCard = ({ notification }) => {
-  const { type, title, message, timestamp } = notification;
-  const { iconElement } = getNotificationTypeStyles(type);
-
-  // Return notification card with mock json data
-  return (
-    <div className={`bg-white rounded-lg shadow-sm mb-3 p-2 `}>
-      <div className="flex">
-        <div className="mr-3">{iconElement}</div>
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <h3 className="font-medium">{title}</h3>
-            <span className="text-xs text-gray ml-2">{timestamp}</span>
-          </div>
-          <p className="text-sm mt-1">{message}</p>
-        </div>
-      </div>
-    </div>
-  );
-};
+import NotificationCard from "../components/layout/NotificationCard";
 
 const NotificationPage = ({ isDropdown = false }) => {
   const { notifications } = mockNotificationsData;
@@ -46,16 +25,16 @@ const NotificationPage = ({ isDropdown = false }) => {
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden">
       {/* Header */}
-      <div className="bg-background ">
+      <div className="bg-background lg:pt-10">
         <ModalHeader
           title="Important Notices"
           showCloseBtn={false}
           onCloseClick={() => window.history.back()}
         />
       </div>
-
       {/* Content */}
-      <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80">
+      <div className="flex-1 px-4 py-6 md:px-8 lg:px-16 xl:px-80 ">
+        <p className="text-error-500 text-center text-sm">Placeholder</p>
         <div className="max-w-4xl mx-auto space-y-6">
           {notifications.length > 0 ? (
             notifications.map((notification) => (

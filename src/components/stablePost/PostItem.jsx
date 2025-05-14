@@ -7,7 +7,8 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import { format, parseISO } from "../../utils/calendarUtils";
 import Button from "../ui/Button";
 import PenIcon from "../../assets/icons/PenIcon";
-import { USER_ROLES } from "../../context/AppContext";
+import { USER_ROLES } from "../../utils/userUtils";
+
 import CommentIcon from "../../assets/icons/CommentIcon";
 
 const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {

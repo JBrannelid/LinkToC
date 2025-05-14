@@ -79,7 +79,7 @@ export const useStableOnboarding = () => {
 
       try {
         const stableData = {
-          name: formData.stableName.trim(),
+          stableName: formData.stableName.trim(),
           streetAddress: formData.streetAddress,
           postCode: formData.postCode,
           county: formData.county,

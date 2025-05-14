@@ -6,24 +6,25 @@ import SearchActions from './SearchActions';
 import { FormMessage } from '../../forms/index';
 import {SearchProvider} from "../index.js";
 
-const SearchField = forwardRef(({
-                                    name,
-                                    label,
-                                    labelClassName = '',
-                                    containerClassName = '',
-                                    validation = {},
-                                    customConfig = null,
-                                    onSearch,
-                                    onSelectItem,
-                                    onCancel,
-                                    errorMessage = "Detta fält krävs",
-                                    resultsClassName = '',
-                                    searchBarClassName = '',
-                                    labelPosition = 'above',
-                                    showMessage = true,
-                                    formError = null,
-                                    message = null,
-                                }, ref) => {
+const SearchField = forwardRef((
+    {
+        name,
+        label,
+        labelClassName = '',
+        containerClassName = '',
+        validation = {},
+        customConfig = null,
+        onSearch,
+        onSelectItem,
+        onCancel,
+        errorMessage = "This field is required. Please enter a value.",
+        resultsClassName = '',
+        searchBarClassName = '',
+        labelPosition = 'above',
+        showMessage = true,
+        formError = null,
+        message = null,
+    }, ref) => {
     const {
         register,
         setValue,
