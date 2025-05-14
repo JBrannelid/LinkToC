@@ -91,8 +91,8 @@ export function getHorseOwnerName(horse) {
 }
 
 //Format horse breed
-export function getHorseBreed(horse) {
-  return `${horse.breed || ""}`.trim() || "Unknown Breed";
+export function getHorseColor(horse) {
+  return `${horse.color || ""}`.trim() || "Unknown Breed";
 }
 
 // Format horse age display based on value
