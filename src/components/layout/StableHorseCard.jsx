@@ -10,7 +10,6 @@ import {
 } from "../../utils/horseProfileUtils";
 
 export default function StableHorseCard() {
-  // const { stableHorse, setStableHorse1§23 } = useState("");
   const horseProfileImageUrl = getHorseProfileImageUrl();
 
   return (
