@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "../components/calendar/calendar";
-import { sv } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import WallPost from "../components/posts/WallPost";
 import EventsContainer from "../components/calendar/events/EventsContainer";
 import { useCalendarEvents } from "../hooks/useCalendarEvents";
@@ -179,7 +179,7 @@ export default function HomePage() {
           stableId={stableId || currentStable.id}
           events={events}
           users={users}
-          locale={sv}
+          locale={enUS}
           noEventsMessage="No scheduled events"
           onAddEvent={handleOpenEventForm}
           onUpdateEvent={handleOpenUpdateForm}
@@ -209,7 +209,7 @@ export default function HomePage() {
                 events={currentDayEvents}
                 format={calendarUtils.format}
                 formatFullDayDate={calendarUtils.formatFullDayDate}
-                locale={sv}
+                locale={enUS}
                 noEventsMessage="No scheduled events"
                 onUpdateEvent={handleOpenUpdateForm}
                 onDeleteEvent={handleDeleteEvent}

@@ -41,18 +41,14 @@ const UserHorsesTab = ({ userId }) => {
     );
   }
 
-  // Helper function to get the horse image URL
-  const getHorseImageUrl1 = (horse) => {
-    return horse?.imageUrl || "/src/assets/images/horsePlaceholder.jpg";
-  };
   const getHorseImageUrl2 = (horse) => {
     return horse?.imageUrl || "/src/assets/images/testhorseimg.png";
   };
 
   return (
     <>
-      {/* Custom Desktop layout */}
-      <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6 px-4">
+      {/* Horse layout*/}
+      <div className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6">
         {horses.map((horse) => {
           // Extract horse data with fallback values
           const horseName = horse?.horseName || "Unnamed Horse";
@@ -82,55 +78,6 @@ const UserHorsesTab = ({ userId }) => {
                   <br />
                   Owner: {horseOwners}
                 </p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* mobile layout */}
-      <div className=" grid grid-row-1 gap-2 px-2 sm:grid sm:grid-cols-2 sm:gap-4 lg:hidden">
-        {horses.map((horse) => {
-          // Extract horse data with fallback values
-          const horseName = horse?.horseName || "Unnamed Horse";
-          const horseBirthYear = horse?.birthYear || "";
-          const horseColor = horse?.horseColor || "Unknown";
-          const horseOwners =
-            horse?.horseOwners?.length > 0
-              ? horse.horseOwners.join(", ")
-              : "No owner assigned";
-
-          return (
-            <div className="mx-5 ">
-              <div
-                key={`horse-${horse.horseId}`}
-                className="border border-primary rounded-lg overflow-hidden cursor-pointer flex h-30 max-h-35"
-                onClick={() => handleHorseClick(horse.horseId)}
-              >
-                {/* Img */}
-                <div className="w-50 h-auto">
-                  <img
-                    src={getHorseImageUrl1(horse)}
-                    alt={`Horse ${horseName}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Content */}
-                <div className="w-full flex flex-col justify-center p-3">
-                  <h3 className="font-bold truncate">{horseName}</h3>
-                  <p className="text-gray text-sm">
-                    {horseBirthYear && (
-                      <span>
-                        {horseBirthYear}
-                        <br />
-                      </span>
-                    )}
-                    Color: {horseColor}
-                    <br />
-                    Owner: {horseOwners}
-                  </p>
-                </div>
               </div>
             </div>
           );
