@@ -68,7 +68,7 @@ export function formatHorseMetadata(horse) {
 //Horse image URL
 export const getHorseProfileImageUrl = (
   horse,
-  fallbackUrl = "/src/assets/images/horsePlaceholder.jpg"
+  fallbackUrl = "/src/assets/images/testhorseimg.png"
 ) => {
   return horse?.HorseImageUrl || fallbackUrl;
 };
@@ -114,9 +114,9 @@ export function classNames(...classes) {
 
 // Function to format horse age based on a owners role
 export const HORSE_USER_ROLES = {
-  OWNER: 1,
-  RIDER: 2,
-  HELPER: 3,
+  OWNER: 0,
+  RIDER: 1,
+  HELPER: 2,
 };
 
 // Convert role number to readable name
