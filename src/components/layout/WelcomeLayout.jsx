@@ -1,31 +1,33 @@
 import React from "react";
 
-// Layout component for authentication pages (login, register, etc.)
 const WelcomeLayout = ({ children }) => {
   return (
     <>
-      {/* Default - Render children (register/forgott password ect) */}
+      {/* Mobile layout - unchanged */}
       <div className="lg:hidden relative">{children}</div>
 
-      {/* Desktop - Split screen */}
-      <div className="hidden lg:grid lg:grid-cols-8 lg:min-h-screen">
-        <div className="lg:col-span-5 bg-background flex flex-col justify-center items-center px-8 py-12">
-          <div className="w-full max-w-md mt-20">
-            <h1 className="absolute top-10 left-15 text-3xl">Equilog</h1>
-            {children}
-          </div>
-        </div>
-
-        {/* Right side - Image section */}
-        <div className="lg:col-span-2 relative">
+      {/* Desktop - Overlay design with image fade */}
+      <div className="hidden lg:block lg:min-h-screen relative overflow-hidden">
+        {/* Background image with gradient fade effect */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/10 to-transparent z-10"></div>
           <img
             src="/src/assets/images/BgLoginDesktop.jpg"
-            alt="Horses grazing in a field"
-            className="absolute w-full h-full object-cover object-[20%]"
+            alt="Abstract padlock background"
+            className="absolute w-full h-full object-cover "
           />
         </div>
-        {/* Empty space */}
-        <div className="lg:col-span-1"></div>
+
+        {/* Content overlay */}
+        <div className="relative z-20 grid grid-cols-8 min-h-screen">
+          {/* Form area that extends over the image */}
+          <div className="col-span-4 bg-white/70 backdrop-blur-sm flex flex-col justify-center items-center px-8 py-12 rounded-r-3xl shadow-2xl">
+            <div className="w-full max-w-md mt-20">
+              <h1 className="absolute top-10 left-15 text-3xl">Equilog</h1>
+              {children}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
