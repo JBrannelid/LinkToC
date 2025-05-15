@@ -6,6 +6,7 @@ import wallPostService from "./services/wallPostService";
 import horseService from "./services/horseService";
 import authService from "./services/authService";
 import userService from "./services/userService";
+import stableHorseService from "./services/stableHorseService";
 
 // Export endpoint configurations
 import { ENDPOINTS } from "./services/endpoints";
@@ -23,6 +24,7 @@ export {
   horseService,
   userService,
   authService,
+  stableHorseService,
 
   // Endpoint configurations
   ENDPOINTS,
