@@ -1,6 +1,7 @@
 // hooks/useStableLocationData.js
 import { useState } from "react";
 import { createErrorMessage, createSuccessMessage } from "../utils/errorUtils";
+import axiosInstance from "../api/config/axiosConfig.js";
 
 export const useStableLocation = () => {
     const [locationData, setLocationData] = useState(null);
@@ -14,15 +15,8 @@ export const useStableLocation = () => {
         setMessage(null);
 
         try {
-            const apiUrl = `/api/stable-location/${postcode}`;
-            const response = await fetch(apiUrl);
-
-            if (!response.ok) {
-                throw new Error(`API returned status ${response.status}`);
-            }
-
-            const result = await response.json();
-
+            const result = await axiosInstance.get(`/api/stable-location/${postcode}`);
+            
             if (result.isSuccess === true) {
                 setLocationData(result.value);
                 setIsLoading(false);
