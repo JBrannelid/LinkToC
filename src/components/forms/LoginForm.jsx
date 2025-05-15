@@ -55,7 +55,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <h2 className="hidden lg:block text-2xl font-medium text-center mb-8">
+      <h2 className="hidden md:block text-2xl font-medium text-center mb-8">
         Welcome
       </h2>
 
