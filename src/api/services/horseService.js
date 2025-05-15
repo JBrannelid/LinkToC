@@ -9,7 +9,6 @@ const baseService = createBaseService(ENDPOINTS.HORSES);
 const horseService = {
   ...baseService,
 
-  // Implement event-specific method
   create: async (data) => {
     try {
       if (!data) {
@@ -35,16 +34,37 @@ const horseService = {
         `/api/stables/${stableId}/horses/with-owners`
       );
 
-      if (response && response.isSuccess && Array.isArray(response.value)) {
+      if (response?.data?.value && Array.isArray(response.data.value)) {
+        return response.data.value;
+      } else if (response?.value && Array.isArray(response.value)) {
         return response.value;
+      } else {
+        console.warn(
+          "Unexpected response format from horses/with-owners endpoint"
+        );
+        return [];
+      }
+    } catch (error) {
+      if (error.status === 404 || error.response?.status === 404) {
+        if (
+          error.details?.message?.includes("No horses") ||
+          error.response?.data?.details?.message?.includes("No horses")
+        ) {
+          console.log(
+            "No horses found for this stable - returning empty array"
+          );
+          return [];
+        }
       }
 
-      return [];
-    } catch (error) {
-      console.error("Error fetching horses with owners:", error);
+      console.error(
+        `Error fetching horses with owners for stable ${stableId}:`,
+        error
+      );
       throw error;
     }
   },
+
   getHorsesByStableId: async (stableId) => {
     try {
       const response = await axiosInstance.get(
@@ -52,7 +72,6 @@ const horseService = {
       );
       console.log("Raw API response:", response);
 
-      // Based on your API response format, extract the horses array
       let horses = [];
 
       if (response?.data?.value && Array.isArray(response.data.value)) {
