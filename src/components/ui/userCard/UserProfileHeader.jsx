@@ -103,40 +103,55 @@ const UserProfileHeader = ({ user }) => {
               Stable role: <span>{roleName || "Member"}</span>
             </p>
           </div>
-
-          {/* Contact buttons */}
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">
-            <Button
-              type="secondary"
-              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl"
-              aria-label="Phone"
-              onClick={() => setShowPhoneNumber(!showPhoneNumber)}
-            >
-              {showPhoneNumber ? (
-                <span className="text-sm text-primary font-medium">
-                  {user.phoneNumber}
-                </span>
-              ) : (
-                <PhoneIcon className="text-primary" size={30} />
-              )}
-            </Button>
+            {/* Contact buttons */}
+            <div className="flex flex-col items-center w-full md:w-9/10">
+              <Button
+                type="secondary"
+                className="w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl"
+                aria-label="Phone"
+                onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+              >
+                {showPhoneNumber ? (
+                  <span className="text-sm text-primary font-medium">
+                    {user.phoneNumber}
+                  </span>
+                ) : (
+                  <PhoneIcon className="text-primary" size={30} />
+                )}
+              </Button>
+              <span className="mt-1 text-xs text-center text-primary">
+                Number
+              </span>
+            </div>
 
-            <Button
-              type="secondary"
-              // Opacity - Remove when emergency contact is available
-              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl opacity-40"
-              aria-label="Emergency contact"
-            >
-              <EmergencyContactIcon className="text-primary" size={30} />
-            </Button>
-            <Button
-              type="secondary"
-              // Opacity - Remove when messenger is available
-              className="w-full h-13 md:h-12 md:w-9/10 !bg-primary-light !border-primary rounded-xl opacity-40"
-              aria-label="Messenger"
-            >
-              <MessageIcon className="text-primary" size={30} />
-            </Button>
+            {/* Emergency button */}
+            <div className="flex flex-col items-center w-full md:w-9/10 opacity-40">
+              <Button
+                type="secondary"
+                className="w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl"
+                aria-label="Emergency contact"
+              >
+                <EmergencyContactIcon className="text-primary" size={30} />
+              </Button>
+              <span className="mt-1 text-xs text-center text-primary">
+                Emergency contact
+              </span>
+            </div>
+
+            {/* Messenger */}
+            <div className="flex flex-col items-center w-full md:w-9/10 opacity-40">
+              <Button
+                type="secondary"
+                className="w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl"
+                aria-label="Messenger"
+              >
+                <MessageIcon className="text-primary" size={30} />
+              </Button>
+              <span className="mt-1 text-xs text-center text-primary">
+                Messenger
+              </span>
+            </div>
           </div>
         </div>
       </div>
