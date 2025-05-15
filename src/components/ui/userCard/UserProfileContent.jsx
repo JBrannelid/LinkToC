@@ -35,15 +35,15 @@ const InfoTabContent = ({ user }) => {
   return (
     <div className="space-y-4 px-10">
       {/* Current status section  */}
-      <div className="bg-primary-light p-4 rounded-lg shadow-lg max-w-xs lg:max-w-full border border-primary">
-        <div className="flex">
-          <strong className="font-semibold mr-2">Current: </strong>
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold mr-2">Current: </h3>
+        <div className="bg-white p-4 rounded-lg shadow-lg w-full h-10">
           <p>{currentStatus}</p>
         </div>
       </div>
 
       {/* Bio section */}
-      <div className="bg-white p-6 rounded-lg border border-primary shadow-lg ">
+      <div className="bg-white p-6 rounded-lg  shadow-lg ">
         <p className="whitespace-pre-line">{bio || "lorem"}</p>
       </div>
     </div>
