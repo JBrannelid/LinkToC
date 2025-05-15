@@ -33,20 +33,19 @@ const PasswordChangeForm = ({ onCancel, onSuccess }) => {
     setMessage({ type: "", text: "" });
 
     try {
-      const result = await authService.login({
+      // Attempt to authenticate with current password
+      await authService.login({
         email: user.email,
         password: data.current_password,
       });
 
-      if (result) {
-        setStep(2);
-      }
+      // If login succeeds, proceed to step 2
+      setStep(2);
     } catch (error) {
-      setMessage(
-        getErrorMessage(error, {
-          defaultMessage: "Incorrect password. Please try again.",
-        })
-      );
+      setMessage({
+        type: "error",
+        text: "Incorrect password. Please try again.",
+      });
     } finally {
       setLoading(false);
     }
