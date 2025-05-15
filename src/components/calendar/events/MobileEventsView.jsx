@@ -7,7 +7,6 @@ const MobileEventsView = ({
   selectedDay,
   events,
   format,
-  formatFullDayDate,
   locale,
   noEventsMessage,
   onUpdateEvent,
@@ -18,14 +17,13 @@ const MobileEventsView = ({
 }) => {
   if (!isOpen) return null;
 
-  const dayName = format(selectedDay, "EEEE", { locale }).toUpperCase();
-  const formattedDate = formatFullDayDate(selectedDay, locale);
+  const formattedDate = format(selectedDay, "EEEE, MMMM d", { locale });
 
   return (
     <div className="flex flex-col fixed inset-0 bg-white z-20 shadow-lg rounded-md overflow-hidden">
       <EventsHeader
         selectedDay={selectedDay}
-        dayName={dayName}
+        dayName={formattedDate}
         formattedDate={formattedDate}
         format={format}
         onClose={onClose}
