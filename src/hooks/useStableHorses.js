@@ -2,11 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import horseService from "../api/services/horseService";
 import { useLoadingState } from "./useLoadingState";
 
+import { stableHorseService } from "../api/index.js";
+
 export const useStableHorses = (stableId) => {
   const [horses, setHorses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
+  const [stableHorses, setStableHorses] = useState([]);
 
   const fetchHorsesWithOwners = useCallback(async () => {
     if (!stableId) {
@@ -32,27 +35,6 @@ export const useStableHorses = (stableId) => {
   useEffect(() => {
     fetchHorsesWithOwners();
   }, [fetchHorsesWithOwners]);
-
-  const loadingState = useLoadingState(loading, operationType);
-
-  return {
-    horses,
-    loading,
-    error,
-    loadingState,
-    refreshHorses: fetchHorsesWithOwners,
-  };
-};
-
-import { useEffect, useState, useCallback } from "react";
-import { stableHorseService } from "../api/index.js";
-import { useLoadingState } from "./useLoadingState";
-
-export function useStableHorses(stableId) {
-  const [stableHorses, setStableHorses] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [operationType, setOperationType] = useState("fetch");
 
   const getStableHorses = useCallback(async () => {
     setOperationType("fetch");
@@ -87,6 +69,20 @@ export function useStableHorses(stableId) {
     }
   }, [getStableHorses, stableId]);
 
-  return { getStableHorses, stableHorses, loading, error, operationType };
-}
+  const loadingState = useLoadingState(loading, operationType);
+
+  return {
+    horses,
+    loading,
+    error,
+    loadingState,
+    refreshHorses: fetchHorsesWithOwners,
+    getStableHorses,
+    stableHorses,
+    loading,
+    error,
+    operationType,
+  };
+};
+
 export default useStableHorses;
