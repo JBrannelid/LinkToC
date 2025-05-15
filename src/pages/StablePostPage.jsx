@@ -174,7 +174,7 @@ export default function StablePostPage() {
 
       {/* Create new post button - on sm screen */}
       {canCreatePosts && (
-        <div className="md:hidden fixed bottom-20 right-1 z-40">
+        <div className="md:hidden fixed bg-primary-light rounded-full border border-light top-33 right-4 z-40">
           <Button
             type="primary"
             variant="icon"
