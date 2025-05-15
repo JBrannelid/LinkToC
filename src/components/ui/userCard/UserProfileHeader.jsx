@@ -10,20 +10,30 @@ import MessageIcon from "../../../assets/icons/MessageIcon";
 import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
 import PhoneIcon from "../../../assets/icons/PhoneIcon";
 
-const UserProfileHeader = ({ user }) => {
+const UserProfileHeader = ({ user, userProfile }) => {
   const { currentStable } = useAppContext();
-  const userFullName = formatUserFullName(user);
-  const profileImageUrl = getProfileImageUrl(user?.profileImage);
 
-  const userRole = user.stableRoles
+  // Combine data from user and userProfile
+  const userStableRole = userProfile?.userStableRole;
+  const enhancedUser = userStableRole?.user || user;
+
+  const userFullName = formatUserFullName(enhancedUser);
+  const profileImageUrl = getProfileImageUrl(enhancedUser?.profileImage);
+
+  // Get role from userProfile if available
+  const userRole = userStableRole
+    ? userStableRole.role
+    : user.stableRoles
     ? user.stableRoles[currentStable?.id]
     : user.role;
+
   const roleName = getRoleName(userRole);
 
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
 
-  console.log("User in profile header:", user);
-  console.log("Current stable:", currentStable);
+  // Use emergency contact from enhanced profile data if available
+  const emergencyContact = enhancedUser?.emergencyContact;
+
   return (
     <>
       {/* Desktop header  */}
@@ -42,34 +52,34 @@ const UserProfileHeader = ({ user }) => {
 
           {/* Contact buttons */}
           <div className="flex flex-row gap-2 mr-5 mt-10">
-            {user.phoneNumber && (
+            {enhancedUser.phoneNumber && (
               <Button
                 type="secondary"
                 className="rounded-lg !border-primary flex flex-col max-h-15"
                 aria-label="Phone"
               >
                 <PhoneIcon className="text-primary mb-1" size={20} />
-                <span className="text-xs">{user.phoneNumber}</span>
+                <span className="text-xs">{enhancedUser.phoneNumber}</span>
               </Button>
             )}
 
             {/* Emergency contact */}
             <Button
               type="secondary"
-              // Opacity - Remove when emergency contact is available
-              className="rounded-lg !border-primary flex flex-col max-h-15 opacity-40"
+              className={`rounded-lg !border-primary flex flex-col max-h-15 ${
+                !emergencyContact ? "opacity-40" : ""
+              }`}
               aria-label="Emergency contact"
             >
               <EmergencyContactIcon className="text-primary mb-1" size={20} />
               <span className="text-xs">
-                {user.emergencyContact || "Phonenumber"}
+                {emergencyContact || "No emergency contact"}
               </span>
             </Button>
 
             {/* Messenger */}
             <Button
               type="secondary"
-              // Opacity - Remove when messenger is available
               className="rounded-lg !border-primary flex flex-col max-h-15 opacity-40"
               aria-label="Messenger"
             >
@@ -123,7 +133,7 @@ const UserProfileHeader = ({ user }) => {
               >
                 {showPhoneNumber ? (
                   <span className="text-sm text-primary font-medium">
-                    {user.phoneNumber}
+                    {enhancedUser.phoneNumber}
                   </span>
                 ) : (
                   <PhoneIcon className="text-primary" size={30} />
