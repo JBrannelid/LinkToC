@@ -111,3 +111,24 @@ export function getNestedProperty(obj, path, defaultValue = "Not available") {
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
+
+// Function to format horse age based on a owners role
+export const HORSE_USER_ROLES = {
+  OWNER: 1,
+  RIDER: 2,
+  HELPER: 3,
+};
+
+// Convert role number to readable name
+export function getHorseUserRoleName(roleId) {
+  switch (roleId) {
+    case HORSE_USER_ROLES.OWNER:
+      return "Owner";
+    case HORSE_USER_ROLES.RIDER:
+      return "Rider";
+    case HORSE_USER_ROLES.HELPER:
+      return "Helper";
+    default:
+      return "Unknown role";
+  }
+}
