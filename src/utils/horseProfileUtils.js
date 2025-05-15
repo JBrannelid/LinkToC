@@ -75,9 +75,7 @@ export const getHorseProfileImageUrl = (
 
 // Generate appropriate alt text for horse images
 export function getHorseImageAltText(horse) {
-  return `${horse.color || ""} ${horse.breed || ""} horse named ${
-    horse.name
-  }`.trim();
+  return `Image of horse named ${horse.name}`.trim();
 }
 
 // Generate full name for horse

@@ -79,17 +79,18 @@ function StableHorsePage() {
         </div>
 
         {/* My horse */}
-        <div
-          className="mb-6 flex justify-center lg:hidden w-full max-w-sm font-body border-1 shadow-lg rounded-lg bg-white p-3
-           items-center transition-colors drop-shadow-md
-            border-primary focus:ring-primary-light focus:outline-none focus:ring-3
-            py-2 px-4 text-base font-medium "
-        >
-          Min Häst
+        <div className="mb-6 flex justify-center lg:hidden ">
+          <Button
+            type="secondary"
+            className="w-full max-w-sm"
+            onClick={() => handleHorseClick(currentStable?.id)}
+          >
+            My horse
+          </Button>
         </div>
 
         {/* Horse List */}
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid justify-center gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {filteredHorses.map((horse, index) => (
             <StableHorseCard
               key={horse.id ?? `horse-${index}`}

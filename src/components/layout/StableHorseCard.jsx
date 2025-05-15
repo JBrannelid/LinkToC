@@ -1,5 +1,5 @@
 import React from "react";
-import Card, { CardBody } from "../ui/card";
+import Card, { CardBody, CardSubtitle } from "../ui/card";
 import {
   formatHorseAge,
   getHorseProfileImageUrl,
@@ -18,10 +18,10 @@ const StableHorseCard = ({ horse, onClick }) => {
 
   return (
     <Card.Container
-      className="cursor-pointer flex px my-4 mx-12 bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg"
+      className="cursor-pointer flex px bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg"
       onClick={onClick}
     >
-      <div className="flex-1 rounded-full border-2 border-primary overflow-hidden m-2 my-4 h-24 w-24 lg:w-full lg:h-30 lg:rounded-none">
+      <div className="flex-1 rounded-full border-2 border-primary h-24 w-45 overflow-hidden m-2 my-4  lg:w-full lg:h-30 lg:rounded-none">
         <img
           src={horseProfileImageUrl}
           alt={getHorseImageAltText(horse)}
@@ -31,10 +31,10 @@ const StableHorseCard = ({ horse, onClick }) => {
 
       <div className="flex-auto ml-1 m-4">
         <Card.Title className="text-xs !text-start">{horseFullName}</Card.Title>
-        <CardBody className="text-xs !text-start">
-          <p className="mb-0.5">{horseColor}</p>
-          <p className="mb-0.5">{horseOwnerName}</p>
-        </CardBody>
+        <CardSubtitle className="text-xs !text-start">
+          <p>{horseColor}</p>
+          <p>{horseOwnerName}</p>
+        </CardSubtitle>
       </div>
     </Card.Container>
   );
