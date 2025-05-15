@@ -34,10 +34,13 @@ const horseService = {
         `/api/stables/${stableId}/horses/with-owners`
       );
 
-      if (response?.data?.value && Array.isArray(response.data.value)) {
-        return response.data.value;
-      } else if (response?.value && Array.isArray(response.value)) {
+      // Handle different response formats
+      if (response?.value && Array.isArray(response.value)) {
         return response.value;
+      } else if (response?.data?.value && Array.isArray(response.data.value)) {
+        return response.data.value;
+      } else if (response?.data && Array.isArray(response.data)) {
+        return response.data;
       } else {
         console.warn(
           "Unexpected response format from horses/with-owners endpoint"
@@ -45,11 +48,15 @@ const horseService = {
         return [];
       }
     } catch (error) {
+      // Handle 404 error as empty results - this is expected when a stable has no horses
       if (error.status === 404 || error.response?.status === 404) {
-        if (
-          error.details?.message?.includes("No horses") ||
-          error.response?.data?.details?.message?.includes("No horses")
-        ) {
+        const errorMessage =
+          error.details?.message ||
+          error.response?.data?.details?.message ||
+          error.message ||
+          "";
+
+        if (errorMessage.includes("No horses")) {
           console.log(
             "No horses found for this stable - returning empty array"
           );
@@ -95,42 +102,7 @@ const horseService = {
       throw error;
     }
   },
-  getHorsesWithOwners: async (stableId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/stables/${stableId}/horses/with-owners`
-      );
 
-      if (response?.data?.value && Array.isArray(response.data.value)) {
-        return response.data.value;
-      } else if (response?.value && Array.isArray(response.value)) {
-        return response.value;
-      } else {
-        console.warn(
-          "Unexpected response format from horses/with-owners endpoint"
-        );
-        return [];
-      }
-    } catch (error) {
-      if (error.status === 404 || error.response?.status === 404) {
-        if (
-          error.details?.message?.includes("No horses") ||
-          error.response?.data?.details?.message?.includes("No horses")
-        ) {
-          console.log(
-            "No horses found for this stable - returning empty array"
-          );
-          return [];
-        }
-      }
-
-      console.error(
-        `Error fetching horses with owners for stable ${stableId}:`,
-        error
-      );
-      throw error;
-    }
-  },
   removeHorseFromStable: async (stableHorseId) => {
     try {
       const response = await axiosInstance.get(
@@ -142,6 +114,7 @@ const horseService = {
       throw error;
     }
   },
+
   createHorseComposition: async (compositionData) => {
     if (
       !compositionData ||
@@ -162,15 +135,19 @@ const horseService = {
       throw error;
     }
   },
+
   addHorse: async (horseData) => {
     return await baseService.create(horseData);
   },
+
   updateHorse: async (horseData, horseId) => {
     return await baseService.update({ ...horseData, id: horseId });
   },
+
   deleteHorse: async (horseId) => {
     return await baseService.delete(horseId);
   },
+
   getHorseById: async (horseId) => {
     return await baseService.getById(horseId);
   },
