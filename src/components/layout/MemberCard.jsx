@@ -15,7 +15,7 @@ const MemberCard = ({ member, onClick }) => {
     <Card.Container className="cursor-pointer" onClick={onClick}>
       <div className="p-2 flex flex-col">
         <div className="flex justify-center">
-          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-30 lg:rounded-none">
+          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-30 lg:rounded-md">
             <img
               src={profileImageUrl}
               alt={`Profile picture of ${fullName}`}
@@ -29,6 +29,8 @@ const MemberCard = ({ member, onClick }) => {
             {roleName}
           </Card.Subtitle>
         )}
+        <Card.Subtitle className="text-xs !text-start">????</Card.Subtitle>
+        <Card.Subtitle className="text-xs !text-start">????</Card.Subtitle>
       </div>
     </Card.Container>
   );

@@ -7,6 +7,7 @@ import {
   handleSupport,
   handleCookieSettings,
   handleManageStables,
+  handleManageHorses,
 } from "../utils/userUtils";
 
 const AdminSettingsPage = () => {
@@ -17,6 +18,10 @@ const AdminSettingsPage = () => {
       <SettingsMenuItem
         label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
+      />
+      <SettingsMenuItem
+        label="Manage Horses"
+        onClick={() => handleManageHorses(navigate, ROUTES)}
       />
       <SettingsMenuItem
         label="Manage Stables"

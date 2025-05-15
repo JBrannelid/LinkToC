@@ -52,11 +52,13 @@ function useSearchState(config) {
                     setMessage(null);
                 } else {
                     // No results found
+                    
                     setSelectedItem(null);
                     setMessage({
                         type: 'error',
                         text: config.noResultsText || 'No results found'
                     });
+                    
                 }
             } else {
                 // Failed search
@@ -85,6 +87,7 @@ function useSearchState(config) {
     
     const resetSearch = useCallback(() => {
         // Clear any pending searches
+       
         if (searchTimeoutRef.current) {
             clearTimeout(searchTimeoutRef.current);
             searchTimeoutRef.current = null;
@@ -102,7 +105,8 @@ function useSearchState(config) {
     
     const handleInputChange = useCallback((e) => {
         const newValue = e.target.value;
-
+        
+        if (newValue === query) return;
         // Update query state immediately for responsive UI
         setQuery(newValue);
         prevQueryRef.current = newValue;
@@ -133,7 +137,7 @@ function useSearchState(config) {
                 performSearch(newValue);
             }
         }, DEBOUNCE_TIME);
-    }, [performSearch, resetSearch]);
+    }, [performSearch, resetSearch, query]);
 
 
     const handleSelectItem = useCallback((item) => {

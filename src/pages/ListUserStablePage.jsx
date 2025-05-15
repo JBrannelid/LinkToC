@@ -32,7 +32,8 @@ const ListUserStablePage = () => {
   };
 
   const handleProfileClick = (userId) => {
-    navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
+    const route = buildRoute(ROUTES.USER_PROFILE, { userId });
+    navigate(route);
   };
 
   const handleMyProfileClick = () => {
@@ -60,17 +61,17 @@ const ListUserStablePage = () => {
         stableId={stableId}
         searchTerm={searchTerm}
         onSearchChange={handleSearchChange}
-        searchPlaceholder="Search members..."
+        searchPlaceholder="Search..."
       />
 
       {/* Member List */}
-      <div className="px-5 py-3 md:px-10 lg:px-30">
+      <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search members..."
+              placeholder="Search..."
               className="w-full px-10 py-2 border border-primary rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -96,7 +97,7 @@ const ListUserStablePage = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
           {filteredMembers.map((member) => (
             <MemberCard
-              key={member.userId}
+              key={`member-${member.userId}`}
               member={member}
               onClick={() => handleProfileClick(member.userId)}
             />

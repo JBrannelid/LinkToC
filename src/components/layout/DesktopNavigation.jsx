@@ -28,6 +28,7 @@ const DesktopNavigation = () => {
 
   const isActive = (path) => isRouteActive(path, currentPath);
   const displayUser = userData || user;
+  const userId = displayUser?.id;
   const userFullName = formatUserFullName(displayUser);
   const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
 
@@ -41,7 +42,7 @@ const DesktopNavigation = () => {
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
   return (
-    <div className=" w-full bg-white shadow-md py-2 xxl:py-4">
+    <div className=" w-full bg-white shadow-md py-2 xxl:py-4 xl:h-18">
       <div className="container max-w-full px-7 flex justify-between">
         <div className="flex items-center">
           {/* Title */}
@@ -120,13 +121,18 @@ const DesktopNavigation = () => {
             />
           </Link>
           {/* User image */}
-          <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-            <img
-              src={profileImageUrl}
-              alt={`Profile image of ${userFullName}`}
-              className="w-full h-full object-cover"
-            />
-          </div>
+          <Link
+            to={buildRoute(ROUTES.USER_PROFILE, { userId })}
+            className="text-primary"
+          >
+            <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img
+                src={profileImageUrl}
+                alt={`Profile image of ${userFullName}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </Link>
         </div>
       </div>
     </div>

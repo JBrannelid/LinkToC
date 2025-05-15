@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { FormProvider, FormInput, FormMessage } from "./index.js";
 import Button from "../ui/Button.jsx";
 import { createErrorMessage } from "../../utils/errorUtils.js";
 import ModalHeader from "../../components/layout/ModalHeader.jsx";
+import { useStableLocation} from "../../hooks/useStableLocation.js";
+import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 
 const CreateStableForm = ({
   formMethods,
@@ -17,6 +19,8 @@ const CreateStableForm = ({
   hideLabel = false,
 }) => {
   const [formError, setFormError] = useState(null);
+  const { locationData, isLoading: isLoadingLocation, message: locationMessage, fetchLocationData } = useStableLocation();
+  
   const handleSubmit = formMethods.handleSubmit((data) => {
     setFormError(null);
 
@@ -32,10 +36,24 @@ const CreateStableForm = ({
       }
     }
   });
+  const handlePostcodeBlur = (e) => {
+    const postcode = e.target.value;
+    if (postcode && postcode.trim() !== "") {
+      fetchLocationData(postcode);
+    }
+  };
+
+  useEffect(() => {
+    if (locationData) {
+      formMethods.setValue("county", locationData.countyName, { shouldValidate: true });
+      formMethods.clearErrors("county");
+    }
+  }, [locationData, formMethods]);
   const inputClass = `bg-white w-1/3 px-2 py-3 border-2 w-full rounded-md !border-primary focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary ${inputClassName}`;
 
   const displayError =
-    formError || (error ? { type: "error", text: error } : null);
+    formError ||  (locationMessage?.type === 'error' ? locationMessage : null) ||
+      (error ? { type: "error", text: error } : null);
   return (
     <div>
       {!desktopView && (
@@ -92,25 +110,52 @@ const CreateStableForm = ({
             />
 
             <div className="grid grid-cols-2 gap-2">
-              <FormInput
-                id="county"
-                name="county"
-                placeholder="County..."
-                validation={{
-                  required: "County is mandatory",
-                }}
-                inputClassName={inputClass}
-                disabled={isLoading}
-                aria-required="true"
-              />
-
-              <FormInput
-                id="postCode"
-                name="postCode"
-                placeholder="Postcode..."
-                inputClassName={inputClass}
-              />
+              <div className="relative">
+                <FormInput
+                    id="county"
+                    name="county"
+                    placeholder="County..."
+                    validation={{
+                      required: "County is mandatory",
+                    }}
+                    inputClassName={inputClass}
+                    disabled={isLoading}
+                    aria-required="true"
+                    aria-autocomplete="list"
+                    aria-describedby="county-info"
+                />
+                {isLoadingLocation && (
+                    <div className="absolute right-3 top-3">
+                      <LoadingSpinner size="small" withMargin={false} />
+                    </div>
+                )}
+              </div>
+              <div className="relative">
+                <FormInput
+                    id="postCode"
+                    name="postCode"
+                    placeholder="Postcode..."
+                    inputClassName={inputClass}
+                    onBlur={handlePostcodeBlur}
+                    aria-describedby="postcode-info"
+                />
+                {isLoadingLocation && (
+                    <div className="absolute right-3 top-3">
+                      <LoadingSpinner size="small" withMargin={false} />
+                    </div>
+                )}
+              </div>
             </div>
+            {locationMessage?.type === 'error' && (
+                <div
+                    id="postcode-info"
+                    className="text-sm text-red-500"
+                    aria-live="polite"
+                >
+                  {locationMessage.text}
+                </div>
+            )}
+            
           </div>
 
           {/* Stable Type Field */}
@@ -157,7 +202,10 @@ const CreateStableForm = ({
         </div>
 
         {displayError && <FormMessage message={displayError} />}
-
+        
+        {!displayError && locationMessage?.type === 'success' && !message && (
+            <FormMessage message={locationMessage} />
+        )}
         {message && message.text && !displayError && (
           <FormMessage message={message} />
         )}

@@ -8,7 +8,7 @@ const EventsContainer = ({
   format,
   formatFullDayDate,
   locale,
-  noEventsMessage = "Inga schemalagda händelser",
+  noEventsMessage = "No scheduled events",
   onUpdateEvent,
   onDeleteEvent,
   onAddEvent,

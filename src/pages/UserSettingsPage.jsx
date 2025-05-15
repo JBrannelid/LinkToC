@@ -7,6 +7,7 @@ import {
   handleSupport,
   handleCookieSettings,
   handleStableRequests,
+  handleManageHorses,
 } from "../utils/userUtils";
 
 const UserSettingsPage = () => {
@@ -18,6 +19,8 @@ const UserSettingsPage = () => {
         label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
       />
+      <SettingsMenuItem label="Manage Horses" onClick={handleManageHorses} />
+
       <SettingsMenuItem
         label="Stable Requests"
         onClick={() => handleStableRequests(navigate, ROUTES)}

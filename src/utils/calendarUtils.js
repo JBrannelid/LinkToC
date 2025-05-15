@@ -90,8 +90,12 @@ export function formatDayNumber(date) {
   return format(date, "d");
 }
 
-// Format full day date
-export function formatFullDayDate(date, locale) {
+export function formatFullDayDate(date, locale, useEnglish = false) {
+  // For English format (md screens and up): "Saturday, May 3"
+  if (useEnglish) {
+    return format(date, "EEEE, MMMM d");
+  }
+  // Default format with passed locale (Swedish): "Lördag 3 maj"
   return format(date, "EEEE d MMMM", { locale });
 }
 

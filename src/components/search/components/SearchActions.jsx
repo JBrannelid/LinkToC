@@ -44,15 +44,17 @@ const SearchActions = (
             )}
 
             {/* Cancel button */}
-            <Button
-                type="secondary"
-                onClick={handleCancelClick}
-                disabled={loading}
-                className={`w-full ${cancelButtonClassName}`}
-                data-action-button="secondary"
-            >
-                {config?.cancelButtonText || 'Cancel'}
-            </Button>
+            <div className="block lg:hidden">
+                <Button
+                    type="secondary"
+                    onClick={handleCancelClick}
+                    disabled={loading}
+                    className={`w-full ${cancelButtonClassName}`}
+                    data-action-button="secondary"
+                >
+                    {config?.cancelButtonText || 'Cancel'}
+                </Button>
+            </div>
         </div>
     );
 };

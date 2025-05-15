@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "../components/calendar/calendar";
-import { sv } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import WallPost from "../components/posts/WallPost";
 import EventsContainer from "../components/calendar/events/EventsContainer";
 import { useCalendarEvents } from "../hooks/useCalendarEvents";
 import { useStableData } from "../hooks/useStableData";
 import { useAppContext } from "../context/AppContext";
-import StableName from "../components/layout/StableName";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { startOfToday } from "../utils/calendarUtils";
 import * as calendarUtils from "../utils/calendarUtils";
 import EventForm from "../components/forms/EventForm";
+import StableName from "../components/layout/StableName";
 
 export default function HomePage() {
   const [selectedDay, setSelectedDay] = useState(startOfToday());
@@ -158,11 +158,6 @@ export default function HomePage() {
 
   return (
     <div className="mt-5 md:mt-10 pb-20 md:pb-10 lg:max-w-[1440px] sm:px-1 xl:px-16 lg:px-14">
-      {/* Stable Title */}
-      <h1 className="text-center mb-5 md:hidden lg:hidden">
-        <StableName currentStableId={currentStable.id} />
-      </h1>
-
       {/* Event form modal */}
       {isFormOpen && (
         <EventForm
@@ -184,7 +179,7 @@ export default function HomePage() {
           stableId={stableId || currentStable.id}
           events={events}
           users={users}
-          locale={sv}
+          locale={enUS}
           noEventsMessage="No scheduled events"
           onAddEvent={handleOpenEventForm}
           onUpdateEvent={handleOpenUpdateForm}
@@ -196,11 +191,15 @@ export default function HomePage() {
         >
           {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
-            <div>
-              <h1 className="text-center pt-12 mb-10">
-                <StableName currentStableId={currentStable.id} />
-              </h1>
-              <WallPost />
+            <div className="mt-20">
+              <div className="hidden md:block lg:hidden">
+                <h1 className="hidden md:block lg:hidden md:text-center md:text-2xl">
+                  <StableName currentStableId={currentStable.id} />
+                </h1>
+              </div>
+              <div className="hidden md:block lg:block mt-10">
+                <WallPost />
+              </div>
             </div>
           ) : (
             <div>
@@ -210,7 +209,7 @@ export default function HomePage() {
                 events={currentDayEvents}
                 format={calendarUtils.format}
                 formatFullDayDate={calendarUtils.formatFullDayDate}
-                locale={sv}
+                locale={enUS}
                 noEventsMessage="No scheduled events"
                 onUpdateEvent={handleOpenUpdateForm}
                 onDeleteEvent={handleDeleteEvent}
@@ -225,7 +224,7 @@ export default function HomePage() {
       </section>
 
       {/* Mobile Wall Post */}
-      <section className="mx-auto md:mx-0 md:hidden lg:hidden">
+      <section className="mx-5 sm:mx-15 md:hidden lg:hidden">
         <WallPost />
       </section>
     </div>

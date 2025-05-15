@@ -14,6 +14,7 @@ export default function Header() {
   const showBackButton =
     location.pathname.includes("/manage-stable") ||
     location.pathname.includes("/stable-requests") ||
+    location.pathname.includes("/manage-horses") ||
     location.pathname.includes("/notifications");
 
   // Hide back and notification button on the following paths

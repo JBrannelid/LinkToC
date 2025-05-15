@@ -7,6 +7,7 @@ const CardContainer = ({
   ariaLabel,
   ariaLabelledby,
   ariaDescribedby,
+  onClick,
 }) => {
   return (
     <div
@@ -16,6 +17,7 @@ const CardContainer = ({
       aria-labelledby={ariaLabelledby}
       aria-describedby={ariaDescribedby}
       className={`border border-primary rounded-lg shadow-md overflow-hidden max-w-md bg-white ${className}`}
+      onClick={onClick}
     >
       {children}
     </div>

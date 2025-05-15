@@ -1,17 +1,22 @@
-import React from "react";
+import { useState } from "react";
 
 const UserProfileImage = ({
   user,
   size = "small",
   className = "",
   customContent,
+  placeholderUrl = "/src/assets/images/userPlaceholder.jpg",
 }) => {
   // STEP 1: Set up the size of the avatar circle based on the size prop
   let sizeClass = "h-4 w-4";
+  if (size === "medium") {
+    sizeClass = "h-8 w-8";
+  } else if (size === "large") {
+    sizeClass = "h-12 w-12";
+  }
 
   // STEP 2: Determine font size for the initials
   let fontSizeClass = "text-sm";
-
   if (size === "small") {
     fontSizeClass = "text-mini";
   }
@@ -46,7 +51,7 @@ const UserProfileImage = ({
       "bg-fuchsia-500",
     ];
 
-    if (typeof user.id === "number") {
+    if (typeof user?.id === "number") {
       const colorIndex = user.id % colors.length;
       return colors[colorIndex];
     }
@@ -60,23 +65,43 @@ const UserProfileImage = ({
     if (user.firstName && user.lastName) {
       return `${user.firstName} ${user.lastName}`;
     }
-    return `Okänd användare`;
+    return `Unknown user`;
   }
 
-  const altText =
-    user && user.profileImage
-      ? `Profil picture for ${getUserDisplayName()}`
-      : `Initials for ${getUserDisplayName()}`;
+  const altText = `${
+    user && user.profileImage ? "Profile picture" : "Initials"
+  } for ${getUserDisplayName()}`;
+
+  // STEP 6: Handle image error - when the image fails to load, we'll show initials instead
+  const [imageError, setImageError] = useState(false);
+
+  // Check if we have a valid image URL and no error has occurred
+  const hasValidImage = user?.profileImage && !imageError;
 
   return (
     <div
       className={`${sizeClass} ${getBackgroundColor()} rounded-full flex items-center justify-center text-white ${className}`}
     >
-      {user && user.profileImage ? (
+      {hasValidImage ? (
         <img
           src={user.profileImage}
           alt={altText}
           className={`${sizeClass} rounded-full object-cover`}
+          onError={(e) => {
+            console.log("Image failed to load:", user.profileImage);
+            setImageError(true);
+          }}
+        />
+      ) : user && !placeholderUrl ? (
+        // Use the placeholder image instead of showing initials when placeholderUrl is provided
+        <img
+          src={placeholderUrl}
+          alt={altText}
+          className={`${sizeClass} rounded-full object-cover`}
+          onError={() => {
+            // Fall back to initials if placeholder also fails
+            setImageError(true);
+          }}
         />
       ) : (
         <span className={`${fontSizeClass} lg:text-[8px] font-normal`}>

@@ -141,11 +141,11 @@ const StableSelectionPage = () => {
 
         {/* Stables grid from card grid container */}
         {stables.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 md:mb-20 mt-10">
+          <div className="grid justify-items-center grid-cols-1 md:grid-cols-2 gap-6 mb-10 md:mb-20 mt-10">
             {stables.map((stable) => (
               <Card.Container
                 key={stable.id}
-                className="cursor-pointer"
+                className="cursor-pointer w-full"
                 onClick={() => handleSelectStable(stable)}
               >
                 <Card.Body className="p-6">

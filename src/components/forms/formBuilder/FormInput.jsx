@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Mail } from "lucide-react";
 
 // A form input component that integrates with React Hook Form
 const FormInput = ({
@@ -18,6 +18,7 @@ const FormInput = ({
   inputClassName = "",
   rows = 3,
   showPasswordToggle = false,
+  showEmailIcon = false,
   ...rest
 }) => {
   const {
@@ -43,6 +44,7 @@ const FormInput = ({
   // Determine input type based on password visibility
   const inputType = type === "password" && showPassword ? "text" : type;
   const shouldShowToggle = type === "password" && showPasswordToggle;
+  const shouldShowEmailIcon = type === "email" && showEmailIcon;
 
   // Use custom id if provided, otherwise use name
   const inputId = id || name;
@@ -65,7 +67,7 @@ const FormInput = ({
       )}
       <div className="relative w-full">
         {type === "textarea" ? (
-          // Render textarea
+          // Textarea rendering (unchanged)
           <textarea
             id={inputId}
             placeholder={placeholder}
@@ -78,8 +80,8 @@ const FormInput = ({
             {...rest}
           />
         ) : (
-          // Render regular input
-          <>
+          // Regular input with eye icon positioning fix
+          <div className="relative">
             <input
               id={inputId}
               type={inputType}
@@ -88,7 +90,7 @@ const FormInput = ({
                 ${errors[name] ? "border-error-500" : "border-primary-light"} 
                 focus:outline-none focus:ring-0 focus:ring-primary focus:border-primary
                 transition-colors duration-200 ${
-                  shouldShowToggle ? "pr-10" : ""
+                  shouldShowToggle || shouldShowEmailIcon ? "pr-10" : ""
                 } ${inputClassName}`}
               {...register(name, validation)}
               onFocus={
@@ -99,11 +101,18 @@ const FormInput = ({
               autoComplete={autoComplete}
               {...rest}
             />
+            {/* Email icon */}
+            {shouldShowEmailIcon && (
+              <div className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500">
+                <Mail className="h-5 w-5" />
+              </div>
+            )}
+            {/* Eye/toggle icons */}
             {shouldShowToggle && (
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -113,12 +122,14 @@ const FormInput = ({
                 )}
               </button>
             )}
-          </>
+          </div>
+        )}
+
+        {/* Error message positioned below without affecting input layout */}
+        {errors[name] && (
+          <p className="mt-1 text-sm text-error-600">{errors[name].message}</p>
         )}
       </div>
-      {errors[name] && (
-        <p className="mt-1 text-sm text-error-600">{errors[name].message}</p>
-      )}
     </div>
   );
 };
