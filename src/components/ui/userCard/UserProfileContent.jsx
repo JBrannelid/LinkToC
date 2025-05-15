@@ -1,16 +1,21 @@
 import React from "react";
 import UserHorsesTab from "./UserHorsesTab";
 
-const UserProfileContent = ({ user, activeTab }) => {
+const UserProfileContent = ({ user, userProfile, activeTab }) => {
   // Render content based on the active tab
   const renderTabContent = () => {
     switch (activeTab) {
       case "info":
-        return <InfoTabContent user={user} />;
+        return <InfoTabContent user={user} userProfile={userProfile} />;
       case "horses":
-        return <UserHorsesTab userId={user.userId} />;
+        return (
+          <UserHorsesTab
+            userId={user.userId || user.id}
+            userProfile={userProfile}
+          />
+        );
       default:
-        return <InfoTabContent user={user} />;
+        return <InfoTabContent user={user} userProfile={userProfile} />;
     }
   };
 
@@ -28,9 +33,16 @@ const UserProfileContent = ({ user, activeTab }) => {
 };
 
 // Info tab content
-const InfoTabContent = ({ user }) => {
-  const currentStatus = user?.currentStatus;
-  const bio = user?.bio;
+const InfoTabContent = ({ user, userProfile }) => {
+  const userStableRole = userProfile?.userStableRole;
+  const bio =
+    user?.description ||
+    userStableRole?.user?.description ||
+    "No bio available";
+  const currentStatus =
+    user?.coreInformation ||
+    userStableRole?.user?.coreInformation ||
+    "No status available";
 
   return (
     <div className="space-y-4 px-10">
@@ -44,7 +56,7 @@ const InfoTabContent = ({ user }) => {
 
       {/* Bio section */}
       <div className="bg-white p-6 rounded-lg  shadow-lg ">
-        <p className="whitespace-pre-line">{bio || "lorem"}</p>
+        <p className="whitespace-pre-line">{bio}</p>
       </div>
     </div>
   );

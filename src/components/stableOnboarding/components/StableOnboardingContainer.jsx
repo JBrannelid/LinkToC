@@ -158,16 +158,12 @@ const StableOnboardingContainer = () => {
   return (
     <>
       {/* Mobile layout */}
-      <div
-        className="lg:hidden container mx-auto py-2 max-h-screen"
-        role="main"
-        aria-live="polite"
-      >
+      <div className="lg:hidden w-full py-2" role="main" aria-live="polite">
         {renderCurrentStep()}
       </div>
 
       {/* Desktop layout - new split design */}
-      <div className="hidden lg:flex h-screen">
+      <div className="hidden lg:flex h-screen overflow-hidden">
         {/* Left side - Join existing stable */}
         <div className="w-1/2 bg-background p-8 overflow-y-auto flex flex-col items-center">
           <div className="max-w-md w-full mt-16">

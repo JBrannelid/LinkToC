@@ -5,9 +5,12 @@ import { useLoadingState } from "./useLoadingState";
 import { useNavigate } from "react-router";
 import { getErrorMessage } from "../utils/errorUtils";
 import { ROUTES } from "../routes/routeConstants";
+import { useAppContext } from "../context/AppContext";
 
-export const useUserData = (userId) => {
+export const useUserData = (userId, includeProfile = false) => {
   const [userData, setUserData] = useState(null);
+  const [userProfile, setUserProfile] = useState(null);
+  const { currentStable } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user, logout } = useAuth();
@@ -41,6 +44,32 @@ export const useUserData = (userId) => {
       setLoading(false);
     }
   }, [currentUserId]);
+
+  const fetchUserProfile = useCallback(async (userId, stableId) => {
+    if (!userId || !stableId) {
+      setError("User ID and Stable ID are required");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setOperationType("fetch");
+    setError(null);
+
+    try {
+      const response = await userService.getUserProfile(userId, stableId);
+
+      if (response && (response.isSuccess || response.statusCode === 200)) {
+        setUserProfile(response.value);
+      } else {
+        setError(response?.message || "Failed to fetch user profile");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to fetch user profile");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const updateUserData = async (data) => {
     if (!currentUserId) {
@@ -112,17 +141,28 @@ export const useUserData = (userId) => {
   useEffect(() => {
     if (currentUserId) {
       fetchAndUpdateUserData();
+      if (includeProfile && currentStable?.id) {
+        fetchUserProfile();
+      }
     }
-  }, [fetchAndUpdateUserData, currentUserId]);
+  }, [
+    fetchAndUpdateUserData,
+    fetchUserProfile,
+    currentUserId,
+    includeProfile,
+    currentStable?.id,
+  ]);
 
   const loadingState = useLoadingState(loading, operationType);
 
   return {
     userData,
+    userProfile,
     loading,
     error,
     loadingState,
     fetchAndUpdateUserData,
+    fetchUserProfile,
     updateUserData,
     deleteAccount,
   };

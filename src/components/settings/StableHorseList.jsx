@@ -183,7 +183,7 @@ const HorseList = ({ stableId, showOwners = true }) => {
             type="primary"
             variant="icon"
             size="medium"
-            className="!bg-primary !rounded-full"
+            className="!bg-primary !rounded-full md:hidden"
             onClick={handleAdd}
             aria-label="Add new horse"
           >

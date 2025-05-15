@@ -17,6 +17,7 @@ export const ROUTES = {
   NOTIFICATIONS: "/notifications",
   USER_PROFILE: "/userpage/:userId",
   MANAGE_HORSES: "/manage-horses",
+  HORSE_PROFILE: "/horse-profile/:horseId",
 };
 
 // Dynamic routes with params

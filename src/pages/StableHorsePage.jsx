@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useStableHorses } from "../hooks/useStableHorses";
@@ -18,28 +18,21 @@ function StableHorsePage() {
 
   // StableId from context or URL params
   const stableId = urlStableId || currentStable?.id;
-  const { stableHorses, loading, error, loadingState } =
-    useStableHorses(stableId);
+  const { horses, loading, loadingState } = useStableHorses(stableId);
 
   // Filter horses based on search term
-  const filteredHorses = stableHorses.filter((horse) => {
-    const horseName = horse.name?.toLowerCase() || "";
+  const filteredHorses = horses.filter((horse) => {
+    const horseName = horse.horseName?.toLowerCase() || "";
     return searchTerm === "" || horseName.includes(searchTerm.toLowerCase());
   });
 
   const handleSearchChange = (value) => {
     setSearchTerm(value);
   };
+
   const handleHorseClick = (horseId) => {
     navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId }));
   };
-
-  //Show horses logged in user owns in stable
-  //------------------------------------------------------------------------------------------
-  // const handleMyHorseClick = () => {
-  //   navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId: currentStable?.id }));
-  // }
-  //------------------------------------------------------------------------------------------
 
   if (loading) {
     return (
@@ -58,16 +51,21 @@ function StableHorsePage() {
       </div>
 
       {/* Stable Info */}
-      <StableInfo stableId={stableId} />
+      <StableInfo
+        stableId={stableId}
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
+        searchPlaceholder="Search..."
+      />
 
-      {/* Stable Horse List */}
-      <div className="px-5 py-3 md:px-10 lg:px-30">
+      {/* Member List */}
+      <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search horses..."
+              placeholder="Search..."
               className="w-full px-10 py-2 border border-primary rounded-lg focus:outline-none focus:ring-1 focus:ring-primary"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -78,7 +76,7 @@ function StableHorsePage() {
           </div>
         </div>
 
-        {/* My horse */}
+        {/* Profile Btn */}
         <div className="mb-6 flex justify-center lg:hidden ">
           <Button
             type="secondary"
@@ -89,20 +87,21 @@ function StableHorsePage() {
           </Button>
         </div>
 
-        {/* Horse List */}
-        <div className="grid justify-center gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        {/* Horses Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
           {filteredHorses.map((horse, index) => (
             <StableHorseCard
               key={horse.id ?? `horse-${index}`}
               horse={horse}
-              onClick={() => handleHorseClick(horse.id)}
+              onClick={() =>
+                handleHorseClick(horse.id || horse.horseId || horse.HorseId)
+              }
             />
           ))}
         </div>
 
-        {/* No horses found */}
         {filteredHorses.length === 0 && (
-          <div className="flex items-center justify-center h-screen">
+          <div className="text-center py-10">
             <p className="text-gray">No horses found</p>
           </div>
         )}
@@ -110,4 +109,5 @@ function StableHorsePage() {
     </div>
   );
 }
+
 export default StableHorsePage;

@@ -2,20 +2,17 @@ import { useState, useEffect, useCallback } from "react";
 import horseService from "../api/services/horseService";
 import { useLoadingState } from "./useLoadingState";
 
-import { stableHorseService } from "../api/index.js";
-
 export const useStableHorses = (stableId) => {
   const [horses, setHorses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
-  const [stableHorses, setStableHorses] = useState([]);
 
-  const fetchHorsesWithOwners = useCallback(async () => {
+  const fetchHorses = useCallback(async () => {
     if (!stableId) {
       setHorses([]);
       setLoading(false);
-      return;
+      return false;
     }
 
     setLoading(true);
@@ -23,51 +20,29 @@ export const useStableHorses = (stableId) => {
 
     try {
       const data = await horseService.getHorsesWithOwnersByStable(stableId);
-      setHorses(data);
+      setHorses(data || []);
       setError(null);
-    } catch (error) {
-      setHorses([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [stableId]);
-
-  useEffect(() => {
-    fetchHorsesWithOwners();
-  }, [fetchHorsesWithOwners]);
-
-  const getStableHorses = useCallback(async () => {
-    setOperationType("fetch");
-    if (!stableId) {
-      console.error("Stable ID is required");
-      setError(true);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const response = await stableHorseService.getStableHorsesbyStableId(
-        stableId
-      );
-      if (response?.value) {
-        setStableHorses(response.value);
-      }
       return true;
     } catch (error) {
-      console.error("Error fetching stable horses:", error);
-      setError(error.message || "Failed to retrieve stable horses");
+      // Handle 404 as an empty result, not an error
+      if (error.status === 404 || error.message?.includes("NOT FOUND_404")) {
+        console.log("No horses found for this stable - setting empty array");
+        setHorses([]);
+        setError(null);
+      } else {
+        console.error("Error fetching stable horses:", error);
+        setError(error.message || "Failed to retrieve horses");
+      }
       return false;
     } finally {
       setLoading(false);
     }
   }, [stableId]);
 
+  // Load horses when the component mounts or stableId changes
   useEffect(() => {
-    if (stableId) {
-      getStableHorses();
-    }
-  }, [getStableHorses, stableId]);
+    fetchHorses();
+  }, [fetchHorses]);
 
   const loadingState = useLoadingState(loading, operationType);
 
@@ -76,12 +51,7 @@ export const useStableHorses = (stableId) => {
     loading,
     error,
     loadingState,
-    refreshHorses: fetchHorsesWithOwners,
-    getStableHorses,
-    stableHorses,
-    loading,
-    error,
-    operationType,
+    refreshHorses: fetchHorses,
   };
 };
 

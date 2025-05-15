@@ -29,8 +29,6 @@ const MemberCard = ({ member, onClick }) => {
             {roleName}
           </Card.Subtitle>
         )}
-        <Card.Subtitle className="text-xs !text-start">????</Card.Subtitle>
-        <Card.Subtitle className="text-xs !text-start">????</Card.Subtitle>
       </div>
     </Card.Container>
   );

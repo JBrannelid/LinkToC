@@ -68,7 +68,7 @@ export function formatHorseMetadata(horse) {
 //Horse image URL
 export const getHorseProfileImageUrl = (
   horse,
-  fallbackUrl = "/src/assets/images/horsePlaceholder.jpg"
+  fallbackUrl = "/src/assets/images/testhorseimg.png"
 ) => {
   return horse?.HorseImageUrl || fallbackUrl;
 };
@@ -110,4 +110,25 @@ export function getNestedProperty(obj, path, defaultValue = "Not available") {
 // Combines multiple CSS class names into a single string, filtering out falsy values
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
+}
+
+// Function to format horse age based on a owners role
+export const HORSE_USER_ROLES = {
+  OWNER: 0,
+  RIDER: 1,
+  HELPER: 2,
+};
+
+// Convert role number to readable name
+export function getHorseUserRoleName(roleId) {
+  switch (roleId) {
+    case HORSE_USER_ROLES.OWNER:
+      return "Owner";
+    case HORSE_USER_ROLES.RIDER:
+      return "Rider";
+    case HORSE_USER_ROLES.HELPER:
+      return "Helper";
+    default:
+      return "Unknown connection";
+  }
 }
