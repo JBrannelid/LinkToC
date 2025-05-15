@@ -26,7 +26,17 @@ export const useStableHorses = (stableId) => {
       setHorses(data);
       setError(null);
     } catch (error) {
-      setHorses([]);
+      // Check if it's a 404 error
+      if (error.status === 404 || error.message?.includes("NOT FOUND_404")) {
+        // Set an empty array instead of treating this as an error
+        setHorses([]);
+        setError(null);
+        console.log("No horses found for this user - this is normal");
+      } else {
+        // For all other errors, set the error message
+        setError(error.message || "Failed to load horses");
+        setHorses([]);
+      }
     } finally {
       setLoading(false);
     }
