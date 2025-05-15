@@ -108,14 +108,14 @@ const HorseList = ({stableId, showOwners = true}) => {
             if (result && result.success) {
                 setActionSuccess(
                     actionType === "add"
-                        ? "Horse added successfully!"
+                        ? "🐴 New horse recruited for glory!"
                         : actionType === "edit"
-                            ? "Horse updated successfully!"
+                            ? "✏️ Horse info polished to perfection!"
                             : actionType === "delete"
-                                ? "Horse deleted successfully!"
-                                : "Horse removed from stable successfully!"
+                                ? "🗑️ Horse sent galloping into the sunset!"
+                                : "🏇 Horse trotted away from the stable!"
                 );
-                setActionSuccess("Operation successful message here");
+                setActionSuccess("🐎 Message cleared. Back to the stables!");
                 setTimeout(() => handleCloseModal(), 1500);
             } else if (result && !result.success) {
                 setActionError(result.error?.message || result.message || "Operation failed");
@@ -186,7 +186,7 @@ const HorseList = ({stableId, showOwners = true}) => {
             </header>
             
             {/* Content area - shown when not loading and no error */}
-            {loading ? (
+            {loading && !showActionModal ? (
                 <div>
                     <LoadingSpinner size="medium" />
                     <p className="mt-2">{loadingState.getMessage()}</p>
