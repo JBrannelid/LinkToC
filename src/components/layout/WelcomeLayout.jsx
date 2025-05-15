@@ -1,24 +1,53 @@
 import React from "react";
 
+const LOGIN_PAGE_BACKGROUND = "/src/assets/images/BgLoginDesktop.jpg";
+const LOGIN_BG_ALT_TEXT = "Abstract padlock background - mobile view";
+
 const WelcomeLayout = ({ children }) => {
   return (
     <>
-      {/* Mobile layout - unchanged */}
-      <div className="lg:hidden relative">{children}</div>
-
-      {/* Desktop - Overlay design with image fade */}
-      <div className="hidden lg:block lg:min-h-screen relative overflow-hidden">
-        {/* Background image with gradient fade effect */}
+      {/* Main layout */}
+      <div className="md:hidden max-h-screen relative overflow-hidden">
+        {/* Full-size background image container */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/10 to-transparent z-10"></div>
+          {/* Vertical overlay for mobile */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-white/90 z-10"></div>
           <img
-            src="/src/assets/images/BgLoginDesktop.jpg"
-            alt="Abstract padlock background"
-            className="absolute w-full h-full object-cover "
+            src={LOGIN_PAGE_BACKGROUND}
+            alt={LOGIN_BG_ALT_TEXT}
+            className="absolute w-full h-full object-cover"
           />
         </div>
 
-        {/* Content overlay */}
+        {/* Content overlay  */}
+        <div className="relative z-20 flex flex-col min-h-screen">
+          {/* Logo/header area taking up top 40% of mobile screen */}
+          <div className="flex-none h-[40vh] flex items-end justify-center pb-6">
+            <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-6 py-2 rounded-sm shadow-sm">
+              <h1 className="text-3xl text-black">EQUILOG</h1>
+            </div>
+          </div>
+
+          {/* Form content area */}
+          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-t-3xl shadow-lg px-6 py-8">
+            <div className="w-full max-w-md mx-auto">{children}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop  */}
+      <div className="hidden md:block md:min-h-screen relative overflow-hidden">
+        {/* Background  */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/10 to-transparent z-10"></div>
+          <img
+            src={LOGIN_PAGE_BACKGROUND}
+            alt={LOGIN_BG_ALT_TEXT}
+            className="absolute w-full h-full object-cover"
+          />
+        </div>
+
+        {/* Content  */}
         <div className="relative z-20 grid grid-cols-8 min-h-screen">
           {/* Form area that extends over the image */}
           <div className="col-span-4 bg-white/70 backdrop-blur-sm flex flex-col justify-center items-center px-8 py-12 rounded-r-3xl shadow-2xl">
