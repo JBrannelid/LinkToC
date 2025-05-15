@@ -3,7 +3,7 @@ import { StableOnboardingContainer } from "../components/stableOnboarding/index.
 
 const StableOnboardingPage = () => {
   return (
-    <div className="min-h-screen">
+    <div className="h-full w-full">
       <StableOnboardingContainer />
     </div>
   );
