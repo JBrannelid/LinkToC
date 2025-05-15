@@ -78,6 +78,7 @@ const LoginForm = () => {
           placeholder="Email..."
           id={`${uniqueId}-email`}
           autoComplete="username email"
+          showEmailIcon={true}
           validation={{
             required: "Email is required",
             pattern: {
