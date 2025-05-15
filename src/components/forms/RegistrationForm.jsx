@@ -78,11 +78,9 @@ const RegistrationForm = () => {
   };
 
   return (
-    <>
+    <div className="lg: max-h-screen">
       {/* Desktop heading */}
-      <h2 className="hidden lg:block lg:text-2xl lg:text-center lg:mb-8">
-        Sign up
-      </h2>
+      <h2 className="hidden lg:block lg:text-2xl lg:text-center">Sign up</h2>
 
       <FormProvider methods={methods} onSubmit={onSubmit}>
         {serverError && (
@@ -233,7 +231,7 @@ const RegistrationForm = () => {
             Back to login
           </Button>
           {/* Lg screen - Hide button and display a go back text */}
-          <div className="hidden lg:flex lg:items-center lg:gap-1 lg:mt-4">
+          <div className="hidden lg:flex lg:items-center lg:gap-1 lg:mt-2">
             <span className="text-sm text-gray">Already have an account,</span>
             <button
               type="button"
@@ -246,7 +244,7 @@ const RegistrationForm = () => {
           </div>
         </div>
       </FormProvider>
-    </>
+    </div>
   );
 };
 
