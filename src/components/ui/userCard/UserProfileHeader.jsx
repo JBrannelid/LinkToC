@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAppContext } from "../../../context/AppContext";
 import {
   formatUserFullName,
   getProfileImageUrl,
@@ -10,11 +11,19 @@ import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
 import PhoneIcon from "../../../assets/icons/PhoneIcon";
 
 const UserProfileHeader = ({ user }) => {
+  const { currentStable } = useAppContext();
   const userFullName = formatUserFullName(user);
   const profileImageUrl = getProfileImageUrl(user?.profileImage);
-  const roleName = getRoleName(user.role);
+
+  const userRole = user.stableRoles
+    ? user.stableRoles[currentStable?.id]
+    : user.role;
+  const roleName = getRoleName(userRole);
+
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
 
+  console.log("User in profile header:", user);
+  console.log("Current stable:", currentStable);
   return (
     <>
       {/* Desktop header  */}
@@ -100,7 +109,7 @@ const UserProfileHeader = ({ user }) => {
               {userFullName}
             </h1>
             <p className="text-sm text-gray">
-              Stable role: <span>{roleName || "Member"}</span>
+              <span>{roleName || "Unknown user role"}</span>
             </p>
           </div>
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">
