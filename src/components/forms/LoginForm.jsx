@@ -5,9 +5,6 @@ import { useAuth } from "../../context/AuthContext";
 import Button from "../ui/Button";
 import { ROUTES } from "../../routes/index.jsx";
 import { useLoadingState } from "../../hooks/useLoadingState";
-import FacebookIcon from "../../assets/icons/FacebookIcon";
-import LinkedinIcon from "../../assets/icons/LinkedinIcon";
-import GoogleIcon from "../../assets/icons/GoogleIcon";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 
