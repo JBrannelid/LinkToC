@@ -34,19 +34,7 @@ const horseService = {
         `/api/stables/${stableId}/horses/with-owners`
       );
 
-      // Handle different response formats
-      if (response?.value && Array.isArray(response.value)) {
-        return response.value;
-      } else if (response?.data?.value && Array.isArray(response.data.value)) {
-        return response.data.value;
-      } else if (response?.data && Array.isArray(response.data)) {
-        return response.data;
-      } else {
-        console.warn(
-          "Unexpected response format from horses/with-owners endpoint"
-        );
-        return [];
-      }
+      return response.value || [];
     } catch (error) {
       // Handle 404 error as empty results - this is expected when a stable has no horses
       if (error.status === 404 || error.response?.status === 404) {
@@ -68,6 +56,19 @@ const horseService = {
         `Error fetching horses with owners for stable ${stableId}:`,
         error
       );
+      throw error;
+    }
+  },
+
+  getHorseProfile: async (horseId) => {
+    if (!horseId) {
+      throw new Error("Horse ID is required");
+    }
+
+    try {
+      return await axiosInstance.get(`/api/horse/${horseId}/profile`);
+    } catch (error) {
+      console.error("Error fetching horse profile:", error);
       throw error;
     }
   },
