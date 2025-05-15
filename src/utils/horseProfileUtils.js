@@ -129,6 +129,6 @@ export function getHorseUserRoleName(roleId) {
     case HORSE_USER_ROLES.HELPER:
       return "Helper";
     default:
-      return "Unknown role";
+      return "Unknown connection";
   }
 }
