@@ -13,4 +13,5 @@ export const ENDPOINTS = {
   EXTRACT_USER_ROLES: "/api/user-stables/",
   DELETE_USER_FROM_STABLE: "/api/userstables",
   CHANGE_PASSWORD: "/api/change-password",
+  STABLE_HORSES: "api/stable-horses",
 };
