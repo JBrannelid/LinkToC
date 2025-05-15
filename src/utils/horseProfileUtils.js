@@ -67,10 +67,10 @@ export function formatHorseMetadata(horse) {
 
 //Horse image URL
 export const getHorseProfileImageUrl = (
-  horseProfileImageUrl,
+  horse,
   fallbackUrl = "/src/assets/images/horsePlaceholder.jpg"
 ) => {
-  return horseProfileImageUrl || fallbackUrl;
+  return horse?.HorseImageUrl || fallbackUrl;
 };
 
 // Generate appropriate alt text for horse images
@@ -80,17 +80,17 @@ export function getHorseImageAltText(horse) {
 
 // Generate full name for horse
 export function getHorseFullName(horse) {
-  return `${horse.name || ""}`.trim() || "Unknown Horse";
+  return `${horse.horseName || ""}`.trim() || "Unknown Horse";
 }
 
 //Get horse owner name
 export function getHorseOwnerName(horse) {
-  return `${horse.owner || ""}`.trim() || "Unknown Owner";
+  return `${horse.horseOwners || ""}`.trim() || "Unknown Owner";
 }
 
 //Format horse breed
 export function getHorseColor(horse) {
-  return `${horse.color || ""}`.trim() || "Unknown Color";
+  return `${horse.horseColor || ""}`.trim() || "Unknown Color";
 }
 
 // Format horse age display based on value
