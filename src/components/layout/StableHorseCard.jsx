@@ -9,12 +9,12 @@ import {
   getHorseColor,
 } from "../../utils/horseProfileUtils";
 
-const StableHorseCard = ({ horse }) => {
+const StableHorseCard = ({ horse, onClick }) => {
   const horseProfileImageUrl = getHorseProfileImageUrl(horse);
-  const horseFullName = getHorseFullName(horse.horseName);
-  const horseAge = formatHorseAge(horse.age);
-  const horseColor = getHorseColor(horse.horseColor);
-  const horseOwnerName = getHorseOwnerName(horse.horseOwners);
+  const horseFullName = getHorseFullName(horse);
+  const horseAge = formatHorseAge(horse);
+  const horseColor = getHorseColor(horse);
+  const horseOwnerName = getHorseOwnerName(horse);
 
   return (
     <Card.Container
@@ -32,7 +32,6 @@ const StableHorseCard = ({ horse }) => {
       <div className="flex-auto ml-1 m-4">
         <Card.Title className="text-xs !text-start">{horseFullName}</Card.Title>
         <CardBody className="text-xs !text-start">
-          <p className="mb-0.5">{horseAge}</p>
           <p className="mb-0.5">{horseColor}</p>
           <p className="mb-0.5">{horseOwnerName}</p>
         </CardBody>
