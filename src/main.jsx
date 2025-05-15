@@ -6,12 +6,15 @@ import { RouterProvider } from "react-router";
 import { router } from "./routes/index.jsx";
 import { AppProvider } from "./context/AppContext";
 import { AuthProvider } from "./context/AuthContext";
+import { FileUploadProvider } from "./context/FileUploadContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
       <AppProvider>
-        <RouterProvider router={router} />
+        <FileUploadProvider>
+          <RouterProvider router={router} />
+        </FileUploadProvider>
       </AppProvider>
     </AuthProvider>
   </StrictMode>
