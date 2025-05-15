@@ -6,9 +6,7 @@ const StableHorseCard = ({ horse, onClick }) => {
     horse?.HorseImageUrl || "/src/assets/images/testhorseimg.png";
   const horseFullName = horse?.horseName || "Unknown Horse";
   const horseColor = horse?.horseColor || "";
-  const horseOwners = Array.isArray(horse?.horseOwners)
-    ? horse.horseOwners.join(", ")
-    : horse?.horseOwners || "";
+  const horseOwners = horse?.horseOwners || "";
 
   return (
     <Card.Container className="cursor-pointer" onClick={onClick}>
@@ -30,7 +28,7 @@ const StableHorseCard = ({ horse, onClick }) => {
         )}
         {horseOwners && (
           <Card.Subtitle className="text-xs !text-start">
-            {horseOwners}
+            {horseOwners} (owner)
           </Card.Subtitle>
         )}
       </div>
