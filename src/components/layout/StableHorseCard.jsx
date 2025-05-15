@@ -3,7 +3,7 @@ import Card from "../ui/card";
 
 const StableHorseCard = ({ horse, onClick }) => {
   const horseProfileImageUrl =
-    horse?.HorseImageUrl || "/src/assets/images/horsePlaceholder.jpg";
+    horse?.HorseImageUrl || "/src/assets/images/testhorseimg.png";
   const horseFullName = horse?.horseName || "Unknown Horse";
   const horseColor = horse?.horseColor || "";
   const horseOwners = Array.isArray(horse?.horseOwners)
