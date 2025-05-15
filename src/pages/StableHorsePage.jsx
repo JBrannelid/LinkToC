@@ -91,9 +91,11 @@ function StableHorsePage() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
           {filteredHorses.map((horse, index) => (
             <StableHorseCard
-              key={horse.horseId ?? `horse-${index}`}
+              key={horse.id ?? `horse-${index}`}
               horse={horse}
-              onClick={() => handleHorseClick(horse.horseId)}
+              onClick={() =>
+                handleHorseClick(horse.id || horse.horseId || horse.HorseId)
+              }
             />
           ))}
         </div>
