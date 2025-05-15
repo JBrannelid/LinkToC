@@ -65,6 +65,18 @@ const userService = {
       `${ENDPOINTS.DELETE_USER_FROM_STABLE}/${userStableId}`
     );
   },
+
+  getUserProfile: async (userId, stableId) => {
+    try {
+      const response = await axiosInstance.get(
+        `/api/user/${userId}/stable/${stableId}`
+      );
+      return response;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      throw error;
+    }
+  },
 };
 
 export default userService;
