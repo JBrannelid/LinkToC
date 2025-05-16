@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { getProfileImageUrl } from "../../utils/userUtils";
 import { useAuth } from "../../context/AuthContext";
 import { useAppContext } from "../../context/AppContext";
@@ -8,20 +8,39 @@ import { format, parseISO } from "../../utils/calendarUtils";
 import Button from "../ui/Button";
 import PenIcon from "../../assets/icons/PenIcon";
 import { USER_ROLES } from "../../utils/userUtils";
+import CommentInput from "../stablePost/CommentInput";
+import CommentCount from "../stablePost/CommentCount";
+import CommentsModal from "../stablePost/CommentsModal";
 
-import CommentIcon from "../../assets/icons/CommentIcon";
-
-const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
+const PostItem = ({
+  post,
+  onEditPost,
+  onTogglePin,
+  onCreateComment,
+  onDeleteComment,
+  comments,
+  commentLoading,
+  fetchComments,
+}) => {
   const { user, isLoading } = useAuth();
   const { getCurrentStableRole } = useAppContext();
+
+  // State for comments modal
+  const [showCommentsModal, setShowCommentsModal] = useState(false);
+
+  // Handler for opening comments modal
+  const handleShowComments = () => {
+    if (fetchComments) {
+      fetchComments(post.id);
+    }
+    setShowCommentsModal(true);
+  };
 
   // Check if user is admin or post creator
   const currentRole = getCurrentStableRole();
   const isAdmin =
     currentRole === USER_ROLES.ADMIN || currentRole === USER_ROLES.MANAGER;
   const isPostCreator = String(user?.id) === String(post.userId);
-
-  // Post access controllers
   const canEditPost = isPostCreator || isAdmin;
   const canPinPost = isAdmin;
 
@@ -75,7 +94,10 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
   const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
 
   // Comment count - placeholder for now
-  const commentCount = post.commentCount || 0;
+  const commentCount =
+    comments && comments[post.id]
+      ? comments[post.id].length
+      : post.commentCount || 0;
 
   return (
     <div className="bg-background pb-2 md:w-9/10 lg:mb-6">
@@ -199,24 +221,29 @@ const PostItem = ({ post, onEditPost, onDeletePost, onTogglePin }) => {
             </div>
           )}
 
-          {/* Comment count - Hardcoded */}
-          <div className="flex justify-end items-center text-gray mt-2 pb-2 border-b-1 border-primary">
-            <span className="text-sm">{commentCount} comments</span>
-          </div>
+          {/* Comment count component */}
+          <CommentCount count={commentCount} onClick={handleShowComments} />
 
-          {/* Comment form placeholder - Hardcoded */}
-          <div className="mt-3 flex ">
-            <CommentIcon className="w-7 h-7 mr-1 text-primary " />
-            <div className="flex-grow bg-light/40 rounded-full">
-              <input
-                type="text"
-                placeholder={`Comment as ${displayUser.firstName} `}
-                className="w-full px-3 py-1 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-              />
-            </div>
-          </div>
+          {/* Comment input component */}
+          <CommentInput
+            onSubmit={onCreateComment}
+            user={displayUser}
+            postId={post.id}
+            disabled={!onCreateComment}
+          />
         </div>
       </div>
+
+      {/* Comments Modal */}
+      <CommentsModal
+        isOpen={showCommentsModal}
+        onClose={() => setShowCommentsModal(false)}
+        comments={comments?.[post.id] || []}
+        postId={post.id}
+        onCreateComment={onCreateComment}
+        onDeleteComment={onDeleteComment}
+        loading={commentLoading}
+      />
     </div>
   );
 };
