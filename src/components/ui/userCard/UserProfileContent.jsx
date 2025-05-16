@@ -97,7 +97,7 @@ const InfoTabContent = ({ user, userProfile, openEditModal }) => {
       <div className="flex justify-between items-center">
         <h3 className="font-semibold mr-2">Current: </h3>
         <div
-          className="bg-white p-4 rounded-lg shadow-lg w-full cursor-pointer hover:bg-primary-light transition-colors"
+          className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
           onClick={() =>
             openEditModal("coreInformation", "Current Status", currentStatus)
           }
@@ -108,7 +108,7 @@ const InfoTabContent = ({ user, userProfile, openEditModal }) => {
 
       {/* Bio section */}
       <div
-        className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:bg-primary-light transition-colors"
+        className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:border hover:border-primary"
         onClick={() => openEditModal("description", "Bio", bio, true)}
       >
         <p className="whitespace-pre-line">{bio}</p>
