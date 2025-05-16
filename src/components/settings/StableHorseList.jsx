@@ -283,7 +283,7 @@ const HorseList = ({ stableId, showOwners = true }) => {
       {/* Action Modal for Add/Edit/Delete/Remove */}
       {showActionModal && (
         <div
-          className="fixed inset-0 backdrop-grayscale flex items-center justify-center z-50"
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
           role="dialog"
           aria-modal="true"
         >

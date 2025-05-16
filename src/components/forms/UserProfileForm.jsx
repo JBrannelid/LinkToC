@@ -141,7 +141,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const profileImageUrl = displayUser?.profileImage;
 
   return (
-    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
       <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-white shadow-md rounded flex flex-col relative">
         <ModalHeader
           title="Edit profil"
