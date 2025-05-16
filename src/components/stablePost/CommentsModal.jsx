@@ -65,7 +65,7 @@ const CommentsModal = ({
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-30">
-      <div className="bg-white rounded-lg w-9/10 max-w-md max-h-[90vh] flex flex-col relative">
+      <div className="bg-white rounded-lg max-w-9/10 md:max-w-5/10 h-7/10 flex flex-col relative">
         {/* Header with X btn */}
         <div className="py-4 border-b border-gray-100">
           <h3 className="text-2xl font-semibold text-center">Comments</h3>
@@ -145,7 +145,9 @@ const CommentsModal = ({
               className="rounded-lg px-6 py-3"
               disabled={loading || !newComment.trim()}
             >
-              Comment
+              {/* Visa "+" på mobil, "Comment" på större skärmar */}
+              <span className="block md:hidden">+</span>
+              <span className="hidden md:block">Comment</span>
             </Button>
           </form>
         </div>
