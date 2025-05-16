@@ -62,6 +62,54 @@ const stablePostService = {
       `${ENDPOINTS.STABLEPOST}/is-pinned/change/${postId}`
     );
   },
+
+  // Get comments for a specific post
+  getCommentsByPostId: async (postId) => {
+    if (!postId) {
+      throw new Error("Post ID is required");
+    }
+
+    const response = await axiosInstance.get(`/api/comment/${postId}`);
+
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
+    }
+
+    return [];
+  },
+
+  // Create a new comment
+  createComment: async (commentData) => {
+    if (
+      !commentData.userId ||
+      !commentData.stablePostId ||
+      !commentData.content
+    ) {
+      throw new Error("User ID, Stable Post ID, and content are required");
+    }
+
+    const createData = {
+      userId: commentData.userId,
+      stablePostId: commentData.stablePostId,
+      comment: {
+        content: commentData.content,
+      },
+    };
+
+    return await axiosInstance.post(
+      `/api/comment/create/composition`,
+      createData
+    );
+  },
+
+  // Delete a comment
+  deleteComment: async (commentId) => {
+    if (!commentId) {
+      throw new Error("Comment ID is required");
+    }
+
+    return await axiosInstance.delete(`/api/comment/delete/${commentId}`);
+  },
 };
 
 export default stablePostService;
