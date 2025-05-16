@@ -54,17 +54,7 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
         <div className="flex justify-between items-start">
           {/* Horse info */}
           <div className="flex flex-col relative group">
-            <h1 className="text-3xl font-heading font-semibold">
-              {horseName}
-              <button
-                className="absolute right-0 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() =>
-                  openEditModal("name", "Horse Name", enhancedHorse.name || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
-            </h1>
+            <h1 className="text-3xl font-heading font-semibold">{horseName}</h1>
             <p className="text-sm text-gray">{horseAge}</p>
             <p className="text-sm text-gray">{horseBreed}</p>
             <p className="text-sm text-gray">{horseColor}</p>
@@ -75,14 +65,14 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
             <div className="relative group">
               <Button
                 type="secondary"
-                className="rounded-lg !border-primary flex flex-col max-h-15"
+                className="rounded-lg !border-primary flex flex-col max-h-20 min-h-15 min-w-25"
                 aria-label="Stable Place"
               >
                 <span className="text-primary mb-1">Box</span>
                 <span className="text-xs">{stablePlace}</span>
               </Button>
               <button
-                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
                 onClick={() =>
                   openEditModal(
                     "currentBox",
@@ -91,45 +81,45 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                   )
                 }
               >
-                <PenIcon className="w-3 h-3 text-primary" />
+                <PenIcon className="w-5 h-5 text-primary" />
               </button>
             </div>
 
             <div className="relative group">
               <Button
                 type="secondary"
-                className="rounded-lg !border-primary flex flex-col max-h-15"
+                className="rounded-lg !border-primary flex flex-col max-h-20 min-h-15 min-w-25"
                 aria-label="Weight"
               >
                 <span className="text-primary mb-1">Weight</span>
-                <span className="text-xs">{weight}</span>
+                <span className="text-xs">{weight}kg</span>
               </Button>
               <button
-                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
                 onClick={() =>
                   openEditModal("weight", "Weight", enhancedHorse.weight || "")
                 }
               >
-                <PenIcon className="w-3 h-3 text-primary" />
+                <PenIcon className="w-5 h-5 text-primary" />
               </button>
             </div>
 
             <div className="relative group">
               <Button
                 type="secondary"
-                className="rounded-lg !border-primary flex flex-col max-h-15"
+                className="rounded-lg !border-primary flex flex-col max-h-20 min-h-15 min-w-25"
                 aria-label="Height"
               >
                 <span className="text-primary mb-1">Height</span>
-                <span className="text-xs">{height}</span>
+                <span className="text-xs">{height}cm</span>
               </Button>
               <button
-                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
                 onClick={() =>
                   openEditModal("height", "Height", enhancedHorse.height || "")
                 }
               >
-                <PenIcon className="w-3 h-3 text-primary" />
+                <PenIcon className="w-5 h-5 text-primary" />
               </button>
             </div>
           </div>
@@ -163,14 +153,6 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
           <div className="flex flex-col gap-1 relative group">
             <h1 className="text-3xl font-heading font-semibold pr-8">
               {horseName}
-              <button
-                className="absolute right-0 top-2 transition-opacity"
-                onClick={() =>
-                  openEditModal("name", "Horse Name", enhancedHorse.name || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
             </h1>
             <p className="text-sm text-gray">{horseAge}</p>
             <p className="text-sm text-gray">{horseBreed}</p>
