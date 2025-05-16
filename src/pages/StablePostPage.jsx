@@ -15,11 +15,8 @@ export default function StablePostPage() {
   const { currentStable, getCurrentStableRole, currentUser } = useAppContext();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState(null);
-
-  // Use stableId from context or url params
   const currentStableId = urlStableId || currentStable?.id;
   const currentRole = getCurrentStableRole();
-  // A user can create a post as long as they have a role in active stable
   const canCreatePosts = currentRole !== undefined;
 
   const {
@@ -30,7 +27,12 @@ export default function StablePostPage() {
     updatePost,
     deletePost,
     togglePinStatus,
-  } = useStablePosts(currentStableId);
+    comments,
+    commentLoading,
+    fetchComments,
+    createComment,
+    deleteComment,
+  } = useStablePosts(currentStableId, currentUser);
 
   // Form control functions
   const handleOpenCreateForm = () => {
@@ -103,6 +105,11 @@ export default function StablePostPage() {
               onEditPost={handleOpenEditForm}
               onDeletePost={handleDeletePost}
               onTogglePin={handleTogglePin}
+              onCreateComment={createComment}
+              onDeleteComment={deleteComment}
+              comments={comments}
+              commentLoading={commentLoading}
+              fetchComments={fetchComments}
               className="bg-white rounded-xl shadow-md"
             />
             {posts && posts.length === 0 && (
