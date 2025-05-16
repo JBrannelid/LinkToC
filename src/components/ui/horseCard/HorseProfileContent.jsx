@@ -93,6 +93,8 @@ const HorseProfileContent = ({
 
 // Info tab content
 const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
+  const coreInformation =
+    horse?.coreInformation || "No important information added yet";
   const breed = horse?.breed || "Unknown breed";
   const age = horse?.age ? new Date(horse.age).getFullYear() : "Unknown";
   const currentYear = new Date().getFullYear();
@@ -114,9 +116,15 @@ const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
 
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
-          onClick={() => openEditModal("breed", "Breed", breed)}
+          onClick={() =>
+            openEditModal(
+              "coreInformation",
+              "Important Information",
+              coreInformation
+            )
+          }
         >
-          <p className="font-semibold">{breed}</p>
+          <p className="font-semibold">{coreInformation}</p>
         </div>
       </div>
 
