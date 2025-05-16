@@ -99,7 +99,7 @@ const InfoTabContent = ({ user, userProfile, openEditModal }) => {
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
           onClick={() =>
-            openEditModal("coreInformation", "Current Status", currentStatus)
+            openEditModal("coreInformation", "Status", currentStatus)
           }
         >
           <p>{currentStatus}</p>

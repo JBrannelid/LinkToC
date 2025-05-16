@@ -116,13 +116,7 @@ const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
 
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
-          onClick={() =>
-            openEditModal(
-              "coreInformation",
-              "Important Information",
-              coreInformation
-            )
-          }
+          onClick={() => openEditModal("core info", "info", coreInformation)}
         >
           <p className="font-semibold">{coreInformation}</p>
         </div>
