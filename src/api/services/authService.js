@@ -85,6 +85,33 @@ const authService = {
       return true;
     }
   },
+  
+  logoutAndDeleteUser: async (userId) => {
+    if(!userId) {
+      throw new Error("User ID is required");
+    }
+    try {
+      const accessToken = tokenStorage.getAccessToken();
+      await authService.logout();
+
+      const result = await axiosInstance.delete(`${ENDPOINTS.USERS}/delete/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      
+      sessionStorage.removeItem("currentUser")
+      localStorage.removeItem("currentStable")
+      
+      return result;
+    } catch (error) {
+      console.error("Logout and delete user request failed:", error);
+      
+      tokenStorage.clearTokens();
+      
+      throw error;
+    }
+  },
 
   resetPassword: async (resetData) => {
     if (
