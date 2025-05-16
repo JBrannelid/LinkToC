@@ -30,8 +30,9 @@ const horseService = {
 
   getHorsesWithOwnersByStable: async (stableId) => {
     try {
+      // Use the constant instead of hardcoding
       const response = await axiosInstance.get(
-        `/api/stables/${stableId}/horses/with-owners`
+        `${ENDPOINTS.STABLE_HORSES}/${stableId}/horses/with-owners`
       );
 
       return response.value || [];
