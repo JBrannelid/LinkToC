@@ -3,13 +3,17 @@ import stablePostService from "../api/services/stablePostService";
 import { useLoadingState } from "./useLoadingState";
 import { useAppContext } from "../context/AppContext";
 
-export function useStablePosts(stableId) {
+export function useStablePosts(stableId, currentUser) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
   const { stableRefreshKey } = useAppContext();
   const loadingState = useLoadingState(loading, operationType);
+  const [comments, setComments] = useState({});
+  const [activePostId, setActivePostId] = useState(null);
+  const [commentLoading, setCommentLoading] = useState(false);
+  const [commentError, setCommentError] = useState(null);
 
   const fetchAndUpdatePosts = useCallback(async () => {
     if (!stableId) return false;
@@ -128,10 +132,19 @@ export function useStablePosts(stableId) {
     try {
       const response = await stablePostService.getCommentsByPostId(postId);
 
-      // Update comments state with the fetched comments for this post
+      const normalizedComments = Array.isArray(response)
+        ? response.map((comment) => ({
+            id: comment.id,
+            content: comment.content || comment.Content,
+            commentDate: comment.commentDate || comment.CommentDate,
+            userId: comment.userId || comment.UserId || currentUser?.id,
+          }))
+        : [];
+
+      // Update comments state
       setComments((prevComments) => ({
         ...prevComments,
-        [postId]: response,
+        [postId]: normalizedComments,
       }));
 
       return true;
@@ -145,7 +158,7 @@ export function useStablePosts(stableId) {
 
   // Create a new comment
   const createComment = async (postId, content) => {
-    if (!postId || !content) return false;
+    if (!postId || !content || !currentUser?.id) return false;
 
     setCommentLoading(true);
     setCommentError(null);
@@ -154,15 +167,14 @@ export function useStablePosts(stableId) {
       const commentData = {
         userId: currentUser.id,
         stablePostId: postId,
-        content: content,
+        comment: {
+          content: content,
+        },
       };
 
       await stablePostService.createComment(commentData);
 
-      // Refresh comments for this post
       await fetchComments(postId);
-
-      // Also refresh posts to update comment counts
       await fetchAndUpdatePosts();
 
       return true;
@@ -182,16 +194,34 @@ export function useStablePosts(stableId) {
     setCommentError(null);
 
     try {
-      await stablePostService.deleteComment(commentId);
+      console.log(
+        `Deleting comment with ID: ${commentId} from post: ${postId}`
+      );
 
-      // Refresh comments for this post
-      await fetchComments(postId);
+      // Call the API to delete the comment
+      const result = await stablePostService.deleteComment(commentId);
 
-      // Also refresh posts to update comment counts
-      await fetchAndUpdatePosts();
+      // If successful, update our local state
+      if (result) {
+        // Remove the comment from our local state
+        setComments((prevComments) => {
+          const updatedPostComments = (prevComments[postId] || []).filter(
+            (comment) => comment.id !== commentId
+          );
+
+          return {
+            ...prevComments,
+            [postId]: updatedPostComments,
+          };
+        });
+
+        // Also refresh the posts to update any comment counts
+        await fetchAndUpdatePosts();
+      }
 
       return true;
     } catch (error) {
+      console.error("Error deleting comment:", error);
       setCommentError(error.message || "Failed to delete comment");
       return false;
     } finally {
@@ -206,6 +236,23 @@ export function useStablePosts(stableId) {
       fetchComments(postId);
     }
   };
+
+  const initializeCommentCounts = useCallback(async () => {
+    if (!posts || posts.length === 0) return;
+
+    try {
+      await Promise.all(posts.map((post) => fetchComments(post.id)));
+    } catch (error) {
+      console.error("Failed to initialize comment counts:", error);
+    }
+  }, [posts, fetchComments]);
+
+  // Call this function when posts are loaded
+  useEffect(() => {
+    if (posts && posts.length > 0) {
+      initializeCommentCounts();
+    }
+  }, [posts, initializeCommentCounts]);
 
   return {
     posts,
