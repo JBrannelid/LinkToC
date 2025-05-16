@@ -1,5 +1,6 @@
 import React, {createElement} from 'react';
 import Button from "../ui/Button.jsx";
+import {ConnectedDisplayDistance} from "../ui/DisplayDistance.jsx"
 
 
 export const ListItemRenderer = (
@@ -117,6 +118,14 @@ export const ListItemRenderer = (
                     {stableType && (
                         <div className="text-xs text-gray-600 truncate">{stableType}</div>
                     )}
+                    {config?.entityType === 'stable' && item.latitude && item.longitude && (
+                        <ConnectedDisplayDistance
+                            latitude={item.latitude}
+                            longitude={item.longitude}
+                            distance={item.distance}
+                            locationName={primaryText}
+                        />
+                    )}
                 </div>
             </div>
 
@@ -127,9 +136,9 @@ export const ListItemRenderer = (
                     ${!isSelected && 'group-hover:bg-primary group-hover:text-white group-hover:border-primary'}`}
                 onClick={handleJoinClick}
                 aria-pressed={isSelected}
-                data-action-button={isSelected ? 'primary' : 'secondary'}
+                data-action-button={isSelected ? 'primary' : ' '}
             >
-                {isSelected ? (actionLabel || 'Join') : 'Select'}
+                {isSelected ? (actionLabel || 'Join') : ' '}
             </Button>
         </li>
     );

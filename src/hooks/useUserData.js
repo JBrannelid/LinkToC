@@ -5,6 +5,7 @@ import { useLoadingState } from "./useLoadingState";
 import { useNavigate } from "react-router";
 import { getErrorMessage } from "../utils/errorUtils";
 import { ROUTES } from "../routes/routeConstants";
+import {authService} from "../api/index.js";
 import { useAppContext } from "../context/AppContext";
 
 export const useUserData = (userId, includeProfile = true) => {
@@ -120,15 +121,7 @@ export const useUserData = (userId, includeProfile = true) => {
       setOperationType("delete");
       setError(null);
 
-      // Attempt deletion but don't worry if it fails
-      await userService.delete(userId).catch(() => {});
-
-      // Clear storage
-      sessionStorage.removeItem("authToken");
-      localStorage.removeItem("currentStable");
-
-      // Attempt logout but don't worry if it fails
-      await logout().catch(() => {});
+      await authService.logoutAndDeleteUser(userId);
 
       // Always navigate to login
       navigate(ROUTES.LOGIN, { replace: true });

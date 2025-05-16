@@ -1,4 +1,3 @@
-import React from "react";
 import { useRBAC } from "../../hooks/useRBAC";
 
 const PermissionGate = ({ requiredRoles, children, fallback = null }) => {
@@ -23,3 +22,4 @@ export default PermissionGate;
         {isFormOpen ? "Avbryt" : wallPost?.title ? "Redigera" : "Skapa"}
     </Button>
 </PermissionGate>*/
+
