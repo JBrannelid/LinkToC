@@ -94,9 +94,34 @@ export function getHorseColor(horse) {
 }
 
 // Format horse age display based on value
-export function formatHorseAge(age) {
-  if (!age) return "Not available";
-  return isNaN(age) ? age : `${age} years`;
+export function formatHorseAge(birthDate) {
+  if (!birthDate) return "Age unknown";
+
+  try {
+    // Parse the birth date
+    const birthDateObj = new Date(birthDate);
+    if (isNaN(birthDateObj.getTime())) return "Invalid birthdate";
+
+    // Calculate age in years
+    const today = new Date();
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+
+    // Adjust age if birthday hasn't occurred yet this year
+    const hasBirthdayOccurredThisYear =
+      today.getMonth() > birthDateObj.getMonth() ||
+      (today.getMonth() === birthDateObj.getMonth() &&
+        today.getDate() >= birthDateObj.getDate());
+
+    if (!hasBirthdayOccurredThisYear) {
+      age--;
+    }
+
+    // Format the age string
+    return `${age} ${age === 1 ? "year" : "years"} old`;
+  } catch (error) {
+    console.error("Error calculating horse age:", error);
+    return "Age calculation error";
+  }
 }
 
 // Helper to safely access nested properties
