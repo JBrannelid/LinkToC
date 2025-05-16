@@ -37,25 +37,54 @@ const EditInformationModal = ({
       let result;
 
       if (isHorse) {
-        // Handle horse update by importing the service directly
-        const horseService = await import(
-          "../../api/services/horseService"
-        ).then((m) => m.default);
+        try {
+          // Import the horse service
+          const horseServiceModule = await import(
+            "../../api/services/horseService"
+          );
+          const horseService = horseServiceModule.default;
 
-        const updateData = {
-          id: userId,
-          name: userData?.name || "",
-          breed: userData?.breed || "",
-          color: userData?.color || "",
-          age: userData?.age || null,
-          description: userData?.description || "",
-          bio: userData?.bio || "",
-          [fieldName]: data[fieldName],
-        };
+          const parseNumericValue = (value) => {
+            if (!value) return null;
 
-        console.log("Sending horse update data:", updateData);
-        result = await horseService.update(updateData);
+            // Extract only numeric characters
+            const numericValue = value.toString().replace(/[^\d]/g, "");
+            return numericValue ? parseInt(numericValue, 10) : null;
+          };
+
+          const updateData = {
+            id: userId,
+            name: userData?.name || "",
+            breed: userData?.breed || "",
+            color: userData?.color || "",
+            age: userData?.age || null,
+            description: userData?.description || "",
+            bio: userData?.bio || "",
+
+            // Convert numeric values properly
+            weight: parseNumericValue(userData?.weight),
+            height: parseNumericValue(userData?.height),
+
+            // Handle special case for currentBox which might be a string
+            currentBox: userData?.currentBox || userData?.stablePlace || "",
+          };
+
+          // Handle the field being updated specially
+          if (fieldName === "height" || fieldName === "weight") {
+            updateData[fieldName] = parseNumericValue(data[fieldName]);
+          } else {
+            updateData[fieldName] = data[fieldName];
+          }
+
+          console.log("Sending horse update data:", updateData);
+
+          // Use the correct method from the horse service
+          result = await horseService.updateHorse(updateData, userId);
+        } catch (importError) {
+          throw new Error("Could not update horse: " + importError.message);
+        }
       } else {
+        // User update code (unchanged)
         const userService = await import("../../api/services/userService").then(
           (m) => m.default
         );
@@ -72,14 +101,13 @@ const EditInformationModal = ({
           [fieldName]: data[fieldName],
         };
 
-        console.log("Sending user update data:", updateData);
         result = await userService.update(updateData);
       }
 
+      // Rest of the function remains the same
       if (result.success || result.isSuccess || result.statusCode === 200) {
         setMessage(createSuccessMessage("Information updated successfully"));
 
-        // Call refreshUserData function and handle any errors
         if (typeof refreshUserData === "function") {
           try {
             await refreshUserData();
@@ -91,7 +119,7 @@ const EditInformationModal = ({
 
         setTimeout(() => {
           onClose();
-        }, 2000); // Close modal after 2 seconds
+        }, 2000);
 
         return { success: true };
       } else {
