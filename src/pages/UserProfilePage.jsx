@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
 import { useUserData } from "../hooks/useUserData";
 import { useAppContext } from "../context/AppContext";
@@ -11,6 +11,7 @@ const UserProfilePage = () => {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState("info");
   const { currentStable } = useAppContext();
+  const [refreshCounter, setRefreshCounter] = useState(0); // Add counter for forced refreshes
 
   const {
     userData,
@@ -20,6 +21,20 @@ const UserProfilePage = () => {
     loadingState,
     fetchUserProfile,
   } = useUserData(userId);
+
+  // Refreshes API data and updates local state
+  const forceRefresh = useCallback(async () => {
+    if (userId && currentStable?.id) {
+      try {
+        await fetchUserProfile(userId, currentStable.id);
+        // Force component re-render by incrementing counter
+        setRefreshCounter((prev) => prev + 1);
+        console.log("Profile data refreshed, counter:", refreshCounter + 1);
+      } catch (error) {
+        console.error("Error refreshing profile:", error);
+      }
+    }
+  }, [userId, currentStable?.id, fetchUserProfile]);
 
   useEffect(() => {
     if (userId && currentStable?.id) {
@@ -41,7 +56,7 @@ const UserProfilePage = () => {
       <div className="bg-white rounded-lg p-6 m-4 text-center">
         <h2 className="text-xl font-medium mb-2">User not found</h2>
         <p className="text-gray-600 mb-4">
-          The user profile you are looking for could not be found.
+          Poof! That user just pulled a disappearing act 🧙‍♂️
         </p>
       </div>
     );
@@ -49,12 +64,19 @@ const UserProfilePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-auto">
-      <UserProfileHeader user={userData} userProfile={userProfile} />
+      <UserProfileHeader
+        key={`header-${refreshCounter}`}
+        user={userData}
+        userProfile={userProfile}
+        forceRefresh={forceRefresh} // Pass the refresh function to the header
+      />
       <UserProfileTabs activeTab={activeTab} onChange={setActiveTab} />
       <UserProfileContent
+        key={`content-${refreshCounter}`}
         user={userData}
         userProfile={userProfile}
         activeTab={activeTab}
+        forceRefresh={forceRefresh}
       />
     </div>
   );

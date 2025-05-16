@@ -3,11 +3,6 @@ import { createHorseProfile } from "../utils/horseProfileUtils.js";
 import { horseService } from "../api/index.js";
 import { useLoadingState } from "./useLoadingState";
 
-/**
- * Hook for managing a single horse profile
- * @returns {Object}
- * @param horseId
- */
 export const useHorseProfile = (horseId) => {
   const [horse, setHorse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -144,10 +139,6 @@ export const useHorseProfile = (horseId) => {
   };
 };
 
-/**
- * Hook for managing multiple horses
- * @returns {Object}
- */
 export const useHorseManagement = () => {
   const [horses, setHorses] = useState([]);
   const [loading, setLoading] = useState(true);

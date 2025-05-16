@@ -1,18 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
 import HorseOwnersTab from "./HorseOwnersTab";
+import EditInformationModal from "../../layout/EditInformationModal";
 
-const HorseProfileContent = ({ horse, horseProfile, activeTab }) => {
+const HorseProfileContent = ({
+  horse,
+  horseProfile,
+  activeTab,
+  forceRefresh,
+}) => {
+  const [editModal, setEditModal] = useState({
+    isOpen: false,
+    field: "",
+    label: "",
+    value: "",
+    multiline: false,
+  });
+
+  // Get the complete horse data from horseProfile or horse
+  const enhancedHorse = horseProfile?.horse || horse;
+  const horseId = enhancedHorse?.id;
+
+  const openEditModal = (field, label, value, multiline = false) => {
+    setEditModal({
+      isOpen: true,
+      field,
+      label,
+      value,
+      multiline,
+    });
+  };
+
+  const closeEditModal = () => {
+    setEditModal({
+      isOpen: false,
+      field: "",
+      label: "",
+      value: "",
+      multiline: false,
+    });
+  };
+
   // Render content based on the active tab
   const renderTabContent = () => {
     switch (activeTab) {
       case "info":
-        return <InfoTabContent horse={horse} horseProfile={horseProfile} />;
-      case "owners":
         return (
-          <HorseOwnersTab horseId={horse.id} horseProfile={horseProfile} />
+          <InfoTabContent
+            horse={enhancedHorse}
+            horseProfile={horseProfile}
+            openEditModal={openEditModal}
+          />
         );
+      case "owners":
+        return <HorseOwnersTab horseId={horseId} horseProfile={horseProfile} />;
       default:
-        return <InfoTabContent horse={horse} horseProfile={horseProfile} />;
+        return (
+          <InfoTabContent
+            horse={enhancedHorse}
+            horseProfile={horseProfile}
+            openEditModal={openEditModal}
+          />
+        );
     }
   };
 
@@ -25,47 +73,62 @@ const HorseProfileContent = ({ horse, horseProfile, activeTab }) => {
 
       {/* Mobile  */}
       <div className="py-2 lg:hidden">{renderTabContent()}</div>
+
+      {/* Edit Modal */}
+      <EditInformationModal
+        isOpen={editModal.isOpen}
+        onClose={closeEditModal}
+        fieldName={editModal.field}
+        fieldLabel={editModal.label}
+        initialValue={editModal.value}
+        userId={horseId}
+        multiline={editModal.multiline}
+        userData={enhancedHorse} // Use the horse data object
+        refreshUserData={forceRefresh} // Use the force refresh function from parent
+        isHorse={true} // Flag to indicate we're editing a horse
+      />
     </>
   );
 };
 
 // Info tab content
-const InfoTabContent = ({ horse, horseProfile }) => {
-  const enhancedHorse = horseProfile?.horse || horse;
-
-  // Get horse data
-  const breed = enhancedHorse?.breed || "Unknown breed";
-  const color = enhancedHorse?.color || "Unknown color";
-  const age = enhancedHorse?.age
-    ? new Date(enhancedHorse.age).getFullYear()
-    : "Unknown";
+const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
+  const coreInformation =
+    horse?.coreInformation || "No important information added yet";
+  const breed = horse?.breed || "Unknown breed";
+  const age = horse?.age ? new Date(horse.age).getFullYear() : "Unknown";
   const currentYear = new Date().getFullYear();
   const ageInYears = age !== "Unknown" ? currentYear - age : "Unknown";
 
-  // Additional fields we might want to display
-  const bio = enhancedHorse?.bio || "No bio available";
-  const discipline = enhancedHorse?.discipline || "No discipline specified";
+  const bio =
+    horse?.bio ||
+    horse?.description ||
+    horse?.about ||
+    "Time to write your legend! ✍️";
 
   return (
     <div className="space-y-4 px-10">
       {/* Details section */}
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold mr-2">Details: </h3>
-        <div className="bg-white p-4 rounded-lg shadow-lg w-full">
-          <p>lorem</p>
+      <div className="flex flex-col space-y-2">
+        <div>
+          <h3 className="font-normal mr-2 text-start text-xl">Important </h3>
+        </div>
+
+        <div
+          className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
+          onClick={() => openEditModal("core info", "info", coreInformation)}
+        >
+          <p className="font-semibold">{coreInformation}</p>
         </div>
       </div>
 
       {/* Bio section */}
-      <div className="bg-white p-6 rounded-lg shadow-lg">
-        <h3 className="font-semibold mb-2">About {enhancedHorse.name}</h3>
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:border hover:border-primary"
+        onClick={() => openEditModal("description", "About Horse", bio, true)}
+      >
+        {/* pre-line format the bio text */}
         <p className="whitespace-pre-line">{bio}</p>
-
-        {discipline !== "No discipline specified" && (
-          <div className="mt-4">
-            <p>lorem</p>
-          </div>
-        )}
       </div>
     </div>
   );
