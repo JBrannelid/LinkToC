@@ -7,7 +7,17 @@ import {
   dateFnsCompareDesc,
 } from "../../utils/calendarUtils";
 
-const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
+const PostContainer = ({
+  posts,
+  onEditPost,
+  onDeletePost,
+  onTogglePin,
+  onCreateComment,
+  onDeleteComment,
+  comments,
+  commentLoading,
+  fetchComments,
+}) => {
   const groupPostsByDate = () => {
     const groups = {
       today: [],
@@ -59,6 +69,11 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
           onTogglePin={onTogglePin}
+          onCreateComment={onCreateComment}
+          onDeleteComment={onDeleteComment}
+          comments={comments}
+          commentLoading={commentLoading}
+          fetchComments={fetchComments}
         />
       )}
 
@@ -69,6 +84,11 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
           onTogglePin={onTogglePin}
+          onCreateComment={onCreateComment}
+          onDeleteComment={onDeleteComment}
+          comments={comments}
+          commentLoading={commentLoading}
+          fetchComments={fetchComments}
         />
       )}
 
@@ -79,6 +99,11 @@ const PostContainer = ({ posts, onEditPost, onDeletePost, onTogglePin }) => {
           onEditPost={onEditPost}
           onDeletePost={onDeletePost}
           onTogglePin={onTogglePin}
+          onCreateComment={onCreateComment}
+          onDeleteComment={onDeleteComment}
+          comments={comments}
+          commentLoading={commentLoading}
+          fetchComments={fetchComments}
         />
       )}
     </div>

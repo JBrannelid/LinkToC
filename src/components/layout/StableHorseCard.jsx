@@ -1,38 +1,41 @@
 import React from "react";
-import Card, { CardBody, CardSubtitle } from "../ui/card";
+import Card, { CardSubtitle } from "../ui/card";
 import {
-  formatHorseAge,
   getHorseProfileImageUrl,
-  getHorseFullName,
   getHorseImageAltText,
-  getHorseOwnerName,
-  getHorseColor,
+  formatHorseAge,
 } from "../../utils/horseProfileUtils";
+import { useHorseProfile } from "../../hooks/useHorseProfile";
 
 const StableHorseCard = ({ horse, onClick }) => {
-  const horseProfileImageUrl = getHorseProfileImageUrl(horse);
-  const horseFullName = getHorseFullName(horse);
-  const horseColor = getHorseColor(horse);
-  const horseOwnerName = getHorseOwnerName(horse);
+  const horseId = horse.id || horse.horseId || horse.HorseId;
+  const { horse: horseProfile, loading } = useHorseProfile(horseId);
+
+  const displayHorse = horseProfile || horse;
+  const horseName = displayHorse.name || "Unknown Horse";
+  const horseProfileImageUrl = getHorseProfileImageUrl(displayHorse);
+  const horseColor = displayHorse.color || "";
+  const horseBreed = displayHorse.breed || "";
+  const ageValue = displayHorse.age || "";
+  const horseAge = ageValue ? formatHorseAge(ageValue) : "";
 
   return (
-    <Card.Container
-      className="cursor-pointer flex px bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg"
-      onClick={onClick}
-    >
-      <div className="flex-1 rounded-full border-2 border-primary h-24 w-45 overflow-hidden m-2 my-4  lg:w-full lg:h-30 lg:rounded-none">
-        <img
-          src={horseProfileImageUrl}
-          alt={getHorseImageAltText(horse)}
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      <div className="flex-auto ml-1 m-4">
-        <Card.Title className="text-xs !text-start">{horseFullName}</Card.Title>
+    <Card.Container className="cursor-pointer" onClick={onClick}>
+      <div className="p-2 flex flex-col">
+        <div className="flex justify-center">
+          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-30 lg:rounded-md">
+            <img
+              src={horseProfileImageUrl}
+              alt={getHorseImageAltText(displayHorse)}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+        <Card.Title className="text-xs !text-start">{horseName}</Card.Title>
         <CardSubtitle className="text-xs !text-start">
-          <p>{horseColor}</p>
-          <p>{horseOwnerName}</p>
+          {horseColor && <p>{horseColor}</p>}
+          {horseBreed && <p>{horseBreed}</p>}
+          {horseAge && <p>{horseAge}</p>}
         </CardSubtitle>
       </div>
     </Card.Container>
@@ -40,22 +43,3 @@ const StableHorseCard = ({ horse, onClick }) => {
 };
 
 export default StableHorseCard;
-
-// export default function StableHorseCard() {
-//   const horseProfileImageUrl = getHorseProfileImageUrl();
-
-//   return (
-//     <div className="flex px my-4 mx-12 bg-white border-1 border-primary rounded-xl overflow-hidden shadow-lg">
-//       <div className="flex-1 rounded-full border-2 border-primary overflow-hidden m-2 my-4 h-24">
-//         <img src={getHorseProfileImageUrl} alt={getHorseImageAltText} />
-//       </div>
-
-//       <div className="flex-auto ml-1 m-4">
-//         <h4 className="mb-1">{getHorseFullName}</h4>
-//         <p className="mb-0.5">{formatHorseAge}</p>
-//         <p className="mb-0.5">{getHorseBreed}</p>
-//         <p className="mb-0.5">{getHorseOwnerName}</p>
-//       </div>
-//     </div>
-//   );
-// }

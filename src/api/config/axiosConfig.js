@@ -12,36 +12,39 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-    response => response,
-    async error => {
-        const originalRequest = error.config;
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-        // Only retry for network errors, not auth or validation
-        if (error.message === 'Network Error' &&
-            !originalRequest._retry &&
-            !originalRequest.url.includes('/login')) { // Don't retry auth requests
+    // Only retry for network errors, not auth or validation
+    if (
+      error.message === "Network Error" &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/login")
+    ) {
+      // Don't retry auth requests
 
-            originalRequest._retry = true;
+      originalRequest._retry = true;
 
-            console.log('Retrying failed request due to network error...');
+      console.log("Retrying failed request due to network error...");
 
-            try {
-                // Wait before retrying
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                return await axiosInstance(originalRequest);
-            } catch (retryError) {
-                // If retry fails, continue to regular error handling
-                return Promise.reject(retryError);
-            }
-        }
-
-        // If not retrying, pass to regular error handling
-        return Promise.reject(error);
+      try {
+        // Wait before retrying
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        return await axiosInstance(originalRequest);
+      } catch (retryError) {
+        // If retry fails, continue to regular error handling
+        return Promise.reject(retryError);
+      }
     }
+
+    // If not retrying, pass to regular error handling
+    return Promise.reject(error);
+  }
 );
 
 axiosInstance.interceptors.response.use(
-  // Sucess (status 2xx): Return response data
+  // Success (status 2xx): Return response data
   (response) => {
     console.log(response.data);
     return response.data;
@@ -49,31 +52,41 @@ axiosInstance.interceptors.response.use(
 
   // Error (status >= 400): Format the error into a standardized JSON object
   (error) => {
-      if (error.response?.status === 404) {
-          // Check various places where the message might be
-          const errorMessage =
-              error.response.data?.message ||
-              error.response.data?.details?.message ||
-              '';
+    if (error.response?.status === 404) {
+      const errorMessage =
+        error.response.data?.message ||
+        error.response.data?.details?.message ||
+        "";
 
-          if (errorMessage.includes("No horses found") ||
-              errorMessage.includes("No horses")) {
-              return {
-                  isSuccess: true,
-                  statusCode: 200,
-                  value: [],
-                  message: null
-              };
-          }
+      if (
+        errorMessage.includes("No horses found") ||
+        errorMessage.includes("No horses")
+      ) {
+        return {
+          isSuccess: true,
+          statusCode: 200,
+          value: [],
+          message: null,
+        };
       }
+
+      if (errorMessage.includes("This post has no comments")) {
+        return {
+          isSuccess: true,
+          statusCode: 200,
+          value: [],
+          message: null,
+        };
+      }
+    }
     const formattedError = handleAxiosError(error);
 
-    // Don't log 404 errors for user-stables endpoint (expected for new users)
+    // Don't log 404 errors
     const isExpected404 =
-        formattedError.statusCode === 404 &&
-        (error.config?.url?.includes("/api/user-stables/user/") ||
-            (error.config?.url?.includes("/horses/with-owners") &&
-                formattedError.details?.message?.includes("No horses")));
+      formattedError.statusCode === 404 &&
+      (error.config?.url?.includes("/api/user-stables/user/") ||
+        (error.config?.url?.includes("/horses/with-owners") &&
+          formattedError.details?.message?.includes("No horses")));
 
     if (!isExpected404) {
       console.error(
@@ -92,11 +105,7 @@ axiosInstance.interceptors.response.use(
 axiosInstance.interceptors.request.use(
   (config) => {
     // Skip adding token for endpoints that don't require authentication
-    const noAuthRequired = [
-      "/api/auth/login",
-      "/api/auth/register",
-      // More page that dont need a authentication,
-    ];
+    const noAuthRequired = ["/api/auth/login", "/api/auth/register"];
 
     if (noAuthRequired.some((endpoint) => config.url.includes(endpoint))) {
       return config;
