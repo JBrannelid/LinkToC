@@ -9,6 +9,7 @@ export function useStablePosts(stableId) {
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
   const { stableRefreshKey } = useAppContext();
+  const loadingState = useLoadingState(loading, operationType);
 
   const fetchAndUpdatePosts = useCallback(async () => {
     if (!stableId) return false;
@@ -117,17 +118,112 @@ export function useStablePosts(stableId) {
     }
   };
 
-  const loadingState = useLoadingState(loading, operationType);
+  // Fetch comments for a specific post
+  const fetchComments = useCallback(async (postId) => {
+    if (!postId) return false;
+
+    setCommentLoading(true);
+    setCommentError(null);
+
+    try {
+      const response = await stablePostService.getCommentsByPostId(postId);
+
+      // Update comments state with the fetched comments for this post
+      setComments((prevComments) => ({
+        ...prevComments,
+        [postId]: response,
+      }));
+
+      return true;
+    } catch (error) {
+      setCommentError(error.message || "Failed to retrieve comments");
+      return false;
+    } finally {
+      setCommentLoading(false);
+    }
+  }, []);
+
+  // Create a new comment
+  const createComment = async (postId, content) => {
+    if (!postId || !content) return false;
+
+    setCommentLoading(true);
+    setCommentError(null);
+
+    try {
+      const commentData = {
+        userId: currentUser.id,
+        stablePostId: postId,
+        content: content,
+      };
+
+      await stablePostService.createComment(commentData);
+
+      // Refresh comments for this post
+      await fetchComments(postId);
+
+      // Also refresh posts to update comment counts
+      await fetchAndUpdatePosts();
+
+      return true;
+    } catch (error) {
+      setCommentError(error.message || "Failed to create comment");
+      return false;
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
+  // Delete a comment
+  const deleteComment = async (commentId, postId) => {
+    if (!commentId || !postId) return false;
+
+    setCommentLoading(true);
+    setCommentError(null);
+
+    try {
+      await stablePostService.deleteComment(commentId);
+
+      // Refresh comments for this post
+      await fetchComments(postId);
+
+      // Also refresh posts to update comment counts
+      await fetchAndUpdatePosts();
+
+      return true;
+    } catch (error) {
+      setCommentError(error.message || "Failed to delete comment");
+      return false;
+    } finally {
+      setCommentLoading(false);
+    }
+  };
+
+  // Set the active post for comments
+  const setActivePost = (postId) => {
+    setActivePostId(postId);
+    if (postId) {
+      fetchComments(postId);
+    }
+  };
 
   return {
     posts,
     status: { loading, error },
     loadingState,
+    comments,
+    activePostId,
+    commentLoading,
+    commentError,
     createPost,
     updatePost,
     deletePost,
     togglePinStatus,
     fetchAndUpdatePosts,
+    fetchComments,
+    createComment,
+    deleteComment,
+    setActivePost,
   };
 }
 
