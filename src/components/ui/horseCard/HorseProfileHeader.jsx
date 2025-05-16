@@ -1,5 +1,4 @@
 import React from "react";
-import { useAppContext } from "../../../context/AppContext";
 import {
   getHorseProfileImageUrl,
   formatHorseAge,
@@ -7,18 +6,12 @@ import {
 import Button from "../../ui/Button";
 
 const HorseProfileHeader = ({ horse, horseProfile }) => {
-  // Combine data from horse and horseProfile
   const enhancedHorse = horseProfile?.horse || horse;
-
-  // Basic horse information
   const horseName = enhancedHorse.name || "Unnamed Horse";
   const horseImageUrl = getHorseProfileImageUrl(enhancedHorse);
   const horseColor = enhancedHorse.color || "Unknown color";
   const horseAge = formatHorseAge(enhancedHorse.age);
   const horseBreed = enhancedHorse.breed || "Unknown breed";
-
-  // These properties likely don't exist in the API yet
-  // but we'll include them as empty values as requested
   const stablePlace = enhancedHorse.stablePlace || "";
   const weight = enhancedHorse.weight || "";
   const length = enhancedHorse.length || "";
