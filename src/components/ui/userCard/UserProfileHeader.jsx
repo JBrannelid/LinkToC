@@ -71,18 +71,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
           <div className="flex flex-col relative group">
             <h1 className="text-3xl font-heading font-semibold">
               {userFullName}
-              <button
-                className="absolute right-0 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                onClick={() =>
-                  openEditModal(
-                    "firstName",
-                    "First Name",
-                    enhancedUser.firstName || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
             </h1>
             <p className="text-sm text-gray">
               <span>{roleName || "Member"}</span>
@@ -96,23 +84,17 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <div className="relative group">
                 <Button
                   type="secondary"
-                  className="rounded-lg !border-primary flex flex-col max-h-15"
+                  className="rounded-lg !border-primary flex flex-col max-h-25"
                   aria-label="Phone"
-                  onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                  onClick={() => setShowPhoneNumber()}
                 >
-                  {showPhoneNumber ? (
-                    <span className="mt-1 mb-1 text-primary font-medium">
-                      {enhancedUser.phoneNumber}
-                    </span>
-                  ) : (
-                    <PhoneIcon className="text-primary mb-1" size={20} />
-                  )}
-                  <span className="text-xs">
-                    {showPhoneNumber ? "Phone" : "Number"}
+                  <PhoneIcon className="text-primary mb-1" size={20} />
+                  <span className="mt-1 mb-1 text-primary font-medium">
+                    {enhancedUser.phoneNumber}
                   </span>
                 </Button>
                 <button
-                  className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
                   onClick={() =>
                     openEditModal(
                       "phoneNumber",
@@ -121,7 +103,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                     )
                   }
                 >
-                  <PenIcon className="w-3 h-3 text-primary" />
+                  <PenIcon className="w-5 h-5 text-primary" />
                 </button>
               </div>
             )}
@@ -130,29 +112,20 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             <div className="relative group">
               <Button
                 type="secondary"
-                className={`rounded-lg !border-primary flex flex-col max-h-15 ${
+                className={`rounded-lg !border-primary flex flex-col  ${
                   !emergencyContact ? "opacity-40" : ""
                 }`}
                 aria-label="Emergency contact"
-                onClick={() => setShowEmergencyContact(!showEmergencyContact)}
+                onClick={() => setShowEmergencyContact()}
                 disabled={!emergencyContact}
               >
-                {showEmergencyContact && emergencyContact ? (
-                  <span className="mt-1 mb-1 text-primary font-medium">
-                    {emergencyContact}
-                  </span>
-                ) : (
-                  <EmergencyContactIcon
-                    className="text-primary mb-1"
-                    size={20}
-                  />
-                )}
-                <span className="text-xs">
-                  {showEmergencyContact ? "Emergency" : "Emergency contact"}
+                <EmergencyContactIcon className="text-primary mb-1" size={20} />
+                <span className="mt-1 mb-1 text-primary font-medium">
+                  {emergencyContact}
                 </span>
               </Button>
               <button
-                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
                 onClick={() =>
                   openEditModal(
                     "emergencyContact",
@@ -161,14 +134,14 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   )
                 }
               >
-                <PenIcon className="w-3 h-3 text-primary" />
+                <PenIcon className="w-5 h-5 text-primary" />
               </button>
             </div>
 
             {/* Messenger */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary flex flex-col max-h-15 opacity-40"
+              className="rounded-lg !border-primary flex flex-col opacity-40"
               aria-label="Messenger"
             >
               <MessageIcon className="text-primary mb-1" size={20} />
@@ -199,7 +172,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             className="w-full h-full object-cover"
           />
         </div>
-
         {/* User info */}
         <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10">
           <div className="flex flex-col gap-1 relative group">
