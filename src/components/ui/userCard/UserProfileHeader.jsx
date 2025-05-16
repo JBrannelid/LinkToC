@@ -86,7 +86,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   type="secondary"
                   className="rounded-lg !border-primary flex flex-col max-h-25"
                   aria-label="Phone"
-                  onClick={() => setShowPhoneNumber()}
                 >
                   <PhoneIcon className="text-primary mb-1" size={20} />
                   <span className="mt-1 mb-1 text-primary font-medium">
@@ -116,8 +115,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   !emergencyContact ? "opacity-40" : ""
                 }`}
                 aria-label="Emergency contact"
-                onClick={() => setShowEmergencyContact()}
-                disabled={!emergencyContact}
               >
                 <EmergencyContactIcon className="text-primary mb-1" size={20} />
                 <span className="mt-1 mb-1 text-primary font-medium">
