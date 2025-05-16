@@ -1,6 +1,6 @@
 import axiosInstance from "../config/axiosConfig";
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints.js";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
 const eventService = {

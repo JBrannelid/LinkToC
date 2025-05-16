@@ -7,7 +7,7 @@ import { getErrorMessage } from "../utils/errorUtils";
 import { ROUTES } from "../routes/routeConstants";
 import { useAppContext } from "../context/AppContext";
 
-export const useUserData = (userId, includeProfile = false) => {
+export const useUserData = (userId, includeProfile = true) => {
   const [userData, setUserData] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
   const { currentStable } = useAppContext();
@@ -57,10 +57,18 @@ export const useUserData = (userId, includeProfile = false) => {
     setError(null);
 
     try {
+      console.log(
+        `🔍 Fetching user profile API: /api/user/${userId}/stable/${stableId}`
+      );
       const response = await userService.getUserProfile(userId, stableId);
+      console.log("📊 User Profile API Response:", response);
 
       if (response && (response.isSuccess || response.statusCode === 200)) {
-        setUserProfile(response.value);
+        const profileData = response.value;
+
+        setUserData(profileData.userStableRole.user);
+
+        setUserProfile(profileData);
       } else {
         setError(response?.message || "Failed to fetch user profile");
       }
@@ -139,15 +147,14 @@ export const useUserData = (userId, includeProfile = false) => {
   };
 
   useEffect(() => {
-    if (currentUserId) {
+    if (currentUserId && currentStable?.id && includeProfile) {
+      fetchUserProfile(currentUserId, currentStable.id);
+    } else if (currentUserId && !includeProfile) {
       fetchAndUpdateUserData();
-      if (includeProfile && currentStable?.id) {
-        fetchUserProfile();
-      }
     }
   }, [
-    fetchAndUpdateUserData,
     fetchUserProfile,
+    fetchAndUpdateUserData,
     currentUserId,
     includeProfile,
     currentStable?.id,

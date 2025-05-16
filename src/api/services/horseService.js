@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endPoints";
+import { ENDPOINTS } from "./endPoints.js";
 import { createError, ErrorTypes } from "../utils/errors.js";
 import axiosInstance from "../config/axiosConfig.js";
 
@@ -61,10 +61,6 @@ const horseService = {
   },
 
   getHorseProfile: async (horseId) => {
-    if (!horseId) {
-      throw new Error("Horse ID is required");
-    }
-
     try {
       return await axiosInstance.get(`/api/horse/${horseId}/profile`);
     } catch (error) {

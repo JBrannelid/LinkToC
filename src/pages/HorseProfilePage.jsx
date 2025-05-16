@@ -5,6 +5,7 @@ import HorseProfileHeader from "../components/ui/horseCard/HorseProfileHeader";
 import HorseProfileTabs from "../components/ui/horseCard/HorseProfileTabs";
 import HorseProfileContent from "../components/ui/horseCard/HorseProfileContent";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
 
 const HorseProfilePage = () => {
   const { horseId } = useParams();

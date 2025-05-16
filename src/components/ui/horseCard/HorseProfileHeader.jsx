@@ -1,5 +1,4 @@
 import React from "react";
-import { useAppContext } from "../../../context/AppContext";
 import {
   getHorseProfileImageUrl,
   formatHorseAge,
@@ -7,18 +6,12 @@ import {
 import Button from "../../ui/Button";
 
 const HorseProfileHeader = ({ horse, horseProfile }) => {
-  // Combine data from horse and horseProfile
   const enhancedHorse = horseProfile?.horse || horse;
-
-  // Basic horse information
   const horseName = enhancedHorse.name || "Unnamed Horse";
   const horseImageUrl = getHorseProfileImageUrl(enhancedHorse);
   const horseColor = enhancedHorse.color || "Unknown color";
   const horseAge = formatHorseAge(enhancedHorse.age);
   const horseBreed = enhancedHorse.breed || "Unknown breed";
-
-  // These properties likely don't exist in the API yet
-  // but we'll include them as empty values as requested
   const stablePlace = enhancedHorse.stablePlace || "";
   const weight = enhancedHorse.weight || "";
   const length = enhancedHorse.length || "";
@@ -94,9 +87,9 @@ const HorseProfileHeader = ({ horse, horseProfile }) => {
         <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10">
           <div className="flex flex-col gap-1">
             <h1 className="text-3xl font-heading font-semibold">{horseName}</h1>
+            <p className="text-sm text-gray">{horseAge}</p>
             <p className="text-sm text-gray">{horseBreed}</p>
             <p className="text-sm text-gray">{horseColor}</p>
-            <p className="text-sm text-gray">{horseAge}</p>
           </div>
 
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">

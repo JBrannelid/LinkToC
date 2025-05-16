@@ -27,27 +27,6 @@ const UserProfilePage = () => {
     }
   }, [userId, currentStable?.id, fetchUserProfile]);
 
-  // Combine user data and profile data
-  const userWithProfile = React.useMemo(() => {
-    if (!userData) return null;
-
-    let userProfileData = { ...userData };
-
-    if (userProfile) {
-      // Extract user role from profile
-      if (userProfile.userStableRole) {
-        userProfileData.role = userProfile.userStableRole.role;
-      }
-
-      // Add horses data if available
-      if (userProfile.userHorseRoles) {
-        userProfileData.horses = userProfile.userHorseRoles;
-      }
-    }
-
-    return userProfileData;
-  }, [userData, userProfile]);
-
   if (loading) {
     return (
       <div className="flex items-center justify-center p-4">
@@ -57,7 +36,7 @@ const UserProfilePage = () => {
     );
   }
 
-  if (error || !userWithProfile) {
+  if (error || !userData) {
     return (
       <div className="bg-white rounded-lg p-6 m-4 text-center">
         <h2 className="text-xl font-medium mb-2">User not found</h2>
