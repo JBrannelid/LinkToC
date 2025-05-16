@@ -68,7 +68,7 @@ export function formatHorseMetadata(horse) {
 //Horse image URL
 export const getHorseProfileImageUrl = (
   horse,
-  fallbackUrl = "/src/assets/images/horsePlaceholder.jpg"
+  fallbackUrl = "/src/assets/images/testhorseimg.png"
 ) => {
   return horse?.HorseImageUrl || fallbackUrl;
 };
@@ -94,9 +94,34 @@ export function getHorseColor(horse) {
 }
 
 // Format horse age display based on value
-export function formatHorseAge(age) {
-  if (!age) return "Not available";
-  return isNaN(age) ? age : `${age} years`;
+export function formatHorseAge(birthDate) {
+  if (!birthDate) return "Age unknown";
+
+  try {
+    // Parse the birth date
+    const birthDateObj = new Date(birthDate);
+    if (isNaN(birthDateObj.getTime())) return "Invalid birthdate";
+
+    // Calculate age in years
+    const today = new Date();
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+
+    // Adjust age if birthday hasn't occurred yet this year
+    const hasBirthdayOccurredThisYear =
+      today.getMonth() > birthDateObj.getMonth() ||
+      (today.getMonth() === birthDateObj.getMonth() &&
+        today.getDate() >= birthDateObj.getDate());
+
+    if (!hasBirthdayOccurredThisYear) {
+      age--;
+    }
+
+    // Format the age string
+    return `${age} ${age === 1 ? "year" : "years"} old`;
+  } catch (error) {
+    console.error("Error calculating horse age:", error);
+    return "Age calculation error";
+  }
 }
 
 // Helper to safely access nested properties
@@ -110,4 +135,25 @@ export function getNestedProperty(obj, path, defaultValue = "Not available") {
 // Combines multiple CSS class names into a single string, filtering out falsy values
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
+}
+
+// Function to format horse age based on a owners role
+export const HORSE_USER_ROLES = {
+  OWNER: 0,
+  RIDER: 1,
+  HELPER: 2,
+};
+
+// Convert role number to readable name
+export function getHorseUserRoleName(roleId) {
+  switch (roleId) {
+    case HORSE_USER_ROLES.OWNER:
+      return "Owner";
+    case HORSE_USER_ROLES.RIDER:
+      return "Rider";
+    case HORSE_USER_ROLES.HELPER:
+      return "Helper";
+    default:
+      return "Unknown connection";
+  }
 }

@@ -11,11 +11,19 @@ const WelcomeScreen = ({ onCreateStable, onJoinStable }) => {
           new stable or join an existing one.
         </p>
       </div>
-      <Button type="primary" className="w-9/10" onClick={onCreateStable}>
+      <Button
+        type="primary"
+        className="w-9/10 max-w-md"
+        onClick={onCreateStable}
+      >
         New stable
       </Button>
 
-      <Button type="secondary" className="w-9/10" onClick={onJoinStable}>
+      <Button
+        type="secondary"
+        className="w-9/10 max-w-md"
+        onClick={onJoinStable}
+      >
         Search for existing stable
       </Button>
     </div>

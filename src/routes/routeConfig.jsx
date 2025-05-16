@@ -65,11 +65,6 @@ export const protectedRoutes = [
     requiresStable: true,
   },
   {
-    path: ROUTES.HORSE_PROFILE,
-    element: <HorseProfilePage />,
-    requiresStable: true,
-  },
-  {
     path: ROUTES.STABLE_MEMBERS,
     element: <ListUserStablePage />,
     requiresStable: true,
@@ -119,6 +114,16 @@ export const protectedRoutes = [
   {
     path: ROUTES.USER_PROFILE,
     element: <UserProfilePage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.USER_PROFILE,
+    element: <UserProfilePage />,
+    requiresStable: true,
+  },
+  {
+    path: ROUTES.HORSE_PROFILE,
+    element: <HorseProfilePage />,
     requiresStable: true,
   },
 ];

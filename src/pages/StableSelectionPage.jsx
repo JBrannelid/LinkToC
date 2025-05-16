@@ -328,18 +328,15 @@ const StableSelectionPage = () => {
         )}
 
         {/* Action buttom  */}
-        <div
-          ref={exploreButtonsRef}
-          className="mt-10 md:mt-0 max-w-md mx-auto "
-        >
+        <div ref={exploreButtonsRef} className="mt-10 md:mt-0 max-w-md mx-auto">
           {/* Show buttons if no form is selected */}
           {currentView === null && (
             <div>
               <h3 className="text-lg text-center mb-6">Explore new stables</h3>
-              <div className="space-y-3 flex flex-col justify-center  items-center">
+              <div className="space-y-3 flex flex-col justify-center items-center">
                 <Button
                   type="primary"
-                  className="w-9/10"
+                  className="w-9/10 max-w-md"
                   onClick={() => setCurrentView("create")}
                 >
                   New stable
@@ -347,7 +344,7 @@ const StableSelectionPage = () => {
 
                 <Button
                   type="secondary"
-                  className="w-9/10"
+                  className="w-9/10 max-w-md"
                   onClick={() => setCurrentView("join")}
                 >
                   Search for existing stable

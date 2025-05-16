@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useUserData } from "../hooks/useUserData";
 import { useAppContext } from "../context/AppContext";
-import { useStableManagement } from "../hooks/useStableManagement";
 import UserProfileHeader from "../components/ui/userCard/UserProfileHeader";
 import UserProfileTabs from "../components/ui/userCard/UserProfileTabs";
 import UserProfileContent from "../components/ui/userCard/UserProfileContent";
@@ -12,28 +11,21 @@ const UserProfilePage = () => {
   const { userId } = useParams();
   const [activeTab, setActiveTab] = useState("info");
   const { currentStable } = useAppContext();
-  const { userData, loading, error, loadingState } = useUserData(userId);
-  const { members } = useStableManagement(currentStable?.id);
 
-  // Find the user's role in the current stable
-  const userWithRole = React.useMemo(() => {
-    if (!userData || !members || members.length === 0) return userData;
+  const {
+    userData,
+    userProfile,
+    loading,
+    error,
+    loadingState,
+    fetchUserProfile,
+  } = useUserData(userId);
 
-    // Find this user in the members list to get their role
-    const memberData = members.find(
-      (member) => member.userId === Number(userId)
-    );
-
-    if (memberData) {
-      // Return user data with role added
-      return {
-        ...userData,
-        role: memberData.role,
-      };
+  useEffect(() => {
+    if (userId && currentStable?.id) {
+      fetchUserProfile(userId, currentStable.id);
     }
-
-    return userData;
-  }, [userData, members, userId]);
+  }, [userId, currentStable?.id, fetchUserProfile]);
 
   if (loading) {
     return (
@@ -57,9 +49,13 @@ const UserProfilePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-auto">
-      <UserProfileHeader user={userWithRole} />
+      <UserProfileHeader user={userData} userProfile={userProfile} />
       <UserProfileTabs activeTab={activeTab} onChange={setActiveTab} />
-      <UserProfileContent user={userWithRole} activeTab={activeTab} />
+      <UserProfileContent
+        user={userData}
+        userProfile={userProfile}
+        activeTab={activeTab}
+      />
     </div>
   );
 };

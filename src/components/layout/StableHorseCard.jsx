@@ -12,7 +12,6 @@ import {
 const StableHorseCard = ({ horse, onClick }) => {
   const horseProfileImageUrl = getHorseProfileImageUrl(horse);
   const horseFullName = getHorseFullName(horse);
-  const horseAge = formatHorseAge(horse);
   const horseColor = getHorseColor(horse);
   const horseOwnerName = getHorseOwnerName(horse);
 

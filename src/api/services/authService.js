@@ -20,8 +20,9 @@ const authService = {
         defaultMessage: "Login failed. Please try again.",
         customMessages: {
           // Add specific error message mappings if needed
-          "Invalid credentials": "Invalid username or password. Please try again."
-        }
+          "Invalid credentials":
+            "Invalid username or password. Please try again.",
+        },
       });
       throw new Error(errorMessage.text);
     }

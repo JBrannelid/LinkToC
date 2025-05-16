@@ -55,14 +55,13 @@ const HorseList = ({ stableId, showOwners = true }) => {
   };
 
   const handleEdit = (horse) => {
-    resetMessage();
     setActionType("edit");
     setSelectedHorse(horse);
     setHorseForm({
-      name: horse.name,
-      breed: horse.breed,
-      color: horse.color,
-      age: horse.age,
+      name: horse.name || "",
+      breed: horse.breed || "",
+      color: horse.color || "",
+      age: horse.age ? new Date(horse.age).toISOString().split("T")[0] : "",
     });
     setShowActionModal(true);
   };
@@ -183,7 +182,7 @@ const HorseList = ({ stableId, showOwners = true }) => {
             type="primary"
             variant="icon"
             size="medium"
-            className="!bg-primary !rounded-full"
+            className="!bg-primary !rounded-full md:hidden"
             onClick={handleAdd}
             aria-label="Add new horse"
           >

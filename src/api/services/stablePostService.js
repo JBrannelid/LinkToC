@@ -1,5 +1,5 @@
 import createBaseService from "../services/baseService";
-import { ENDPOINTS } from "./endpoints";
+import { ENDPOINTS } from "./endPoints.js";
 import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.STABLEPOST);

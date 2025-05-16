@@ -13,7 +13,7 @@ function App() {
   const alwaysHideHeaderRoutes = ["/login", "/register"];
 
   // Hide header on mobile but show on lg+
-  const mobileOnlyHideHeaderRoutes = ["/userpage"];
+  const mobileOnlyHideHeaderRoutes = ["/userpage", "/horse-profile"];
 
   // Check if we should completely hide the header
   const shouldCompletelyHideHeader = alwaysHideHeaderRoutes.some(
