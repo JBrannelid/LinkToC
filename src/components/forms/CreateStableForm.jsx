@@ -110,6 +110,22 @@ const CreateStableForm = ({
             />
 
             <div className="grid grid-cols-2 gap-2">
+
+              <div className="relative">
+                <FormInput
+                    id="postCode"
+                    name="postCode"
+                    placeholder="Postcode..."
+                    inputClassName={inputClass}
+                    onBlur={handlePostcodeBlur}
+                    aria-describedby="postcode-info"
+                />
+                {isLoadingLocation && (
+                    <div className="absolute right-3 top-3">
+                      <LoadingSpinner size="small" withMargin={false} />
+                    </div>
+                )}
+              </div>
               <div className="relative">
                 <FormInput
                     id="county"
@@ -123,21 +139,6 @@ const CreateStableForm = ({
                     aria-required="true"
                     aria-autocomplete="list"
                     aria-describedby="county-info"
-                />
-                {isLoadingLocation && (
-                    <div className="absolute right-3 top-3">
-                      <LoadingSpinner size="small" withMargin={false} />
-                    </div>
-                )}
-              </div>
-              <div className="relative">
-                <FormInput
-                    id="postCode"
-                    name="postCode"
-                    placeholder="Postcode..."
-                    inputClassName={inputClass}
-                    onBlur={handlePostcodeBlur}
-                    aria-describedby="postcode-info"
                 />
                 {isLoadingLocation && (
                     <div className="absolute right-3 top-3">
