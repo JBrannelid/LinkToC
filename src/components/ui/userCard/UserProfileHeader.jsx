@@ -9,9 +9,18 @@ import Button from "../../ui/Button";
 import MessageIcon from "../../../assets/icons/MessageIcon";
 import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
 import PhoneIcon from "../../../assets/icons/PhoneIcon";
+import PenIcon from "../../../assets/icons/PenIcon";
+import EditInformationModal from "../../layout/EditInformationModal";
 
-const UserProfileHeader = ({ user, userProfile }) => {
+const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const { currentStable } = useAppContext();
+  const [editModal, setEditModal] = useState({
+    isOpen: false,
+    field: "",
+    label: "",
+    value: "",
+    multiline: false,
+  });
 
   // Combine data from user and userProfile
   const userStableRole = userProfile?.userStableRole;
@@ -30,9 +39,28 @@ const UserProfileHeader = ({ user, userProfile }) => {
   const roleName = getRoleName(userRole);
 
   const [showPhoneNumber, setShowPhoneNumber] = useState(false);
-
-  // Use emergency contact from enhanced profile data if available
+  const [showEmergencyContact, setShowEmergencyContact] = useState(false);
   const emergencyContact = enhancedUser?.emergencyContact;
+
+  const openEditModal = (field, label, value, multiline = false) => {
+    setEditModal({
+      isOpen: true,
+      field,
+      label,
+      value,
+      multiline,
+    });
+  };
+
+  const closeEditModal = () => {
+    setEditModal({
+      isOpen: false,
+      field: "",
+      label: "",
+      value: "",
+      multiline: false,
+    });
+  };
 
   return (
     <>
@@ -40,9 +68,21 @@ const UserProfileHeader = ({ user, userProfile }) => {
       <div className="hidden lg:block lg:px-40 xl:px-60 pt-8">
         <div className="flex justify-between items-start ">
           {/* User info */}
-          <div className="flex flex-col">
+          <div className="flex flex-col relative group">
             <h1 className="text-3xl font-heading font-semibold">
               {userFullName}
+              <button
+                className="absolute right-0 top-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                onClick={() =>
+                  openEditModal(
+                    "firstName",
+                    "First Name",
+                    enhancedUser.firstName || ""
+                  )
+                }
+              >
+                <PenIcon className="w-5 h-5 text-primary" />
+              </button>
             </h1>
             <p className="text-sm text-gray">
               <span>{roleName || "Member"}</span>
@@ -53,29 +93,77 @@ const UserProfileHeader = ({ user, userProfile }) => {
           {/* Contact buttons */}
           <div className="flex flex-row gap-2 mr-5 mt-10">
             {enhancedUser.phoneNumber && (
-              <Button
-                type="secondary"
-                className="rounded-lg !border-primary flex flex-col max-h-15"
-                aria-label="Phone"
-              >
-                <PhoneIcon className="text-primary mb-1" size={20} />
-                <span className="text-xs">{enhancedUser.phoneNumber}</span>
-              </Button>
+              <div className="relative group">
+                <Button
+                  type="secondary"
+                  className="rounded-lg !border-primary flex flex-col max-h-15"
+                  aria-label="Phone"
+                  onClick={() => setShowPhoneNumber(!showPhoneNumber)}
+                >
+                  {showPhoneNumber ? (
+                    <span className="mt-1 mb-1 text-primary font-medium">
+                      {enhancedUser.phoneNumber}
+                    </span>
+                  ) : (
+                    <PhoneIcon className="text-primary mb-1" size={20} />
+                  )}
+                  <span className="text-xs">
+                    {showPhoneNumber ? "Phone" : "Number"}
+                  </span>
+                </Button>
+                <button
+                  className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "phoneNumber",
+                      "Phone Number",
+                      enhancedUser.phoneNumber || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-3 h-3 text-primary" />
+                </button>
+              </div>
             )}
 
             {/* Emergency contact */}
-            <Button
-              type="secondary"
-              className={`rounded-lg !border-primary flex flex-col max-h-15 ${
-                !emergencyContact ? "opacity-40" : ""
-              }`}
-              aria-label="Emergency contact"
-            >
-              <EmergencyContactIcon className="text-primary mb-1" size={20} />
-              <span className="text-xs">
-                {emergencyContact || "No emergency contact"}
-              </span>
-            </Button>
+            <div className="relative group">
+              <Button
+                type="secondary"
+                className={`rounded-lg !border-primary flex flex-col max-h-15 ${
+                  !emergencyContact ? "opacity-40" : ""
+                }`}
+                aria-label="Emergency contact"
+                onClick={() => setShowEmergencyContact(!showEmergencyContact)}
+                disabled={!emergencyContact}
+              >
+                {showEmergencyContact && emergencyContact ? (
+                  <span className="mt-1 mb-1 text-primary font-medium">
+                    {emergencyContact}
+                  </span>
+                ) : (
+                  <EmergencyContactIcon
+                    className="text-primary mb-1"
+                    size={20}
+                  />
+                )}
+                <span className="text-xs">
+                  {showEmergencyContact ? "Emergency" : "Emergency contact"}
+                </span>
+              </Button>
+              <button
+                className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white rounded-full p-1"
+                onClick={() =>
+                  openEditModal(
+                    "emergencyContact",
+                    "Emergency Contact",
+                    enhancedUser.emergencyContact || ""
+                  )
+                }
+              >
+                <PenIcon className="w-3 h-3 text-primary" />
+              </button>
+            </div>
 
             {/* Messenger */}
             <Button
@@ -114,17 +202,19 @@ const UserProfileHeader = ({ user, userProfile }) => {
 
         {/* User info */}
         <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-3xl font-heading font-semibold">
+          <div className="flex flex-col gap-1 relative group">
+            <h1 className="text-3xl font-heading font-semibold pr-8">
               {userFullName}
             </h1>
+            {/* RoleName */}
             <p className="text-sm text-gray">
               <span>{roleName || "Unknown user role"}</span>
             </p>
           </div>
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">
             {/* Contact buttons */}
-            <div className="flex flex-col items-center w-full md:w-9/10">
+            <div className="flex flex-col items-center w-full md:w-9/10 relative group">
+              {/* PhoneNumber - show number if pressed */}
               <Button
                 type="secondary"
                 className="w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl"
@@ -142,20 +232,54 @@ const UserProfileHeader = ({ user, userProfile }) => {
               <span className="mt-1 text-xs text-center text-primary">
                 Number
               </span>
+              <button
+                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                onClick={() =>
+                  openEditModal(
+                    "phoneNumber",
+                    "Phone Number",
+                    enhancedUser.phoneNumber || ""
+                  )
+                }
+              >
+                <PenIcon className="w-5 h-5 text-primary" />
+              </button>
             </div>
 
             {/* Emergency button */}
-            <div className="flex flex-col items-center w-full md:w-9/10 opacity-40">
+            <div className="flex flex-col items-center w-full md:w-9/10 relative group">
               <Button
                 type="secondary"
-                className="w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl"
+                className={`w-full h-13 md:h-12 !bg-primary-light !border-primary rounded-xl ${
+                  !emergencyContact ? "opacity-40" : ""
+                }`}
                 aria-label="Emergency contact"
+                onClick={() => setShowEmergencyContact(!showEmergencyContact)}
+                disabled={!emergencyContact}
               >
-                <EmergencyContactIcon className="text-primary" size={30} />
+                {showEmergencyContact && emergencyContact ? (
+                  <span className="text-sm text-primary font-medium">
+                    {emergencyContact}
+                  </span>
+                ) : (
+                  <EmergencyContactIcon className="text-primary" size={30} />
+                )}
               </Button>
               <span className="mt-1 text-xs text-center text-primary">
                 Emergency contact
               </span>
+              <button
+                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                onClick={() =>
+                  openEditModal(
+                    "emergencyContact",
+                    "Emergency Contact",
+                    enhancedUser.emergencyContact || ""
+                  )
+                }
+              >
+                <PenIcon className="w-5 h-5 text-primary" />
+              </button>
             </div>
 
             {/* Messenger */}
@@ -174,6 +298,19 @@ const UserProfileHeader = ({ user, userProfile }) => {
           </div>
         </div>
       </div>
+
+      {/* Edit Modal */}
+      <EditInformationModal
+        isOpen={editModal.isOpen}
+        onClose={closeEditModal}
+        fieldName={editModal.field}
+        fieldLabel={editModal.label}
+        initialValue={editModal.value}
+        userId={enhancedUser?.userId || enhancedUser?.id}
+        multiline={editModal.multiline}
+        userData={enhancedUser}
+        refreshUserData={forceRefresh}
+      />
     </>
   );
 };
