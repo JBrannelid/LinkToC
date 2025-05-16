@@ -66,6 +66,7 @@ const HorseProfilePage = () => {
         key={`header-${refreshCounter}`}
         horse={horse}
         horseProfile={horseProfile}
+        forceRefresh={forceRefresh}
       />
       <HorseProfileTabs activeTab={activeTab} onChange={setActiveTab} />
       <HorseProfileContent
