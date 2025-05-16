@@ -95,9 +95,9 @@ const ListUserStablePage = () => {
 
         {/* Members Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
-          {filteredMembers.map((member) => (
+          {filteredMembers.map((member, index) => (
             <MemberCard
-              key={`member-${member.userId}`}
+              key={`stable-member-${member.id}-${index}`}
               member={member}
               onClick={() => handleProfileClick(member.userId)}
             />
