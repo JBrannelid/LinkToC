@@ -91,7 +91,7 @@ const EventForm = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-white md:bg-black/20 md:backdrop-grayscale shadow-md flex flex-col md:items-center md:justify-center">
+    <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
       <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
         <ModalHeader
           title={title}

@@ -11,6 +11,7 @@ import { USER_ROLES } from "../../utils/userUtils";
 import CommentInput from "../stablePost/CommentInput";
 import CommentCount from "../stablePost/CommentCount";
 import CommentsModal from "../stablePost/CommentsModal";
+import MessageIcon from "../../assets/icons/MessageIcon";
 
 const PostItem = ({
   post,
@@ -149,6 +150,14 @@ const PostItem = ({
                 onClick={() => onEditPost(post)}
               >
                 <PenIcon className="w-25 h-25" />
+              </Button>
+              <Button
+                type="secondary"
+                variant="icon"
+                className="text-primary"
+                onClick={() => handleShowComments(post)}
+              >
+                <MessageIcon className="w-25 h-25" />
               </Button>
             </div>
           )}

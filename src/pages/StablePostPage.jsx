@@ -18,6 +18,7 @@ export default function StablePostPage() {
   const currentStableId = urlStableId || currentStable?.id;
   const currentRole = getCurrentStableRole();
   const canCreatePosts = currentRole !== undefined;
+  const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
 
   const {
     posts,
@@ -35,6 +36,14 @@ export default function StablePostPage() {
   } = useStablePosts(currentStableId, currentUser);
 
   // Form control functions
+  const handleCommentsModalOpen = () => {
+    setIsCommentsModalOpen(true);
+  };
+
+  const handleCommentsModalClose = () => {
+    setIsCommentsModalOpen(false);
+  };
+
   const handleOpenCreateForm = () => {
     setIsFormOpen(true);
     setCurrentPost(null);
@@ -110,6 +119,8 @@ export default function StablePostPage() {
               comments={comments}
               commentLoading={commentLoading}
               fetchComments={fetchComments}
+              onCommentsModalOpen={handleCommentsModalOpen}
+              onCommentsModalClose={handleCommentsModalClose}
               className="bg-white rounded-xl shadow-md"
             />
             {posts && posts.length === 0 && (
@@ -181,12 +192,12 @@ export default function StablePostPage() {
 
       {/* Create new post button - on sm screen */}
       {canCreatePosts && (
-        <div className="md:hidden fixed bg-primary-light rounded-full border border-light top-33 right-4 z-40">
+        <div className="md:hidden fixed bg-primary-light rounded-full border border-light top-33 right-6 z-20">
           <Button
             type="primary"
             variant="icon"
             size="medium"
-            className="text-primary "
+            className="text-primary"
             onClick={handleOpenCreateForm}
             aria-label="Add new post"
           >
