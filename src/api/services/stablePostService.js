@@ -69,13 +69,23 @@ const stablePostService = {
       throw new Error("Post ID is required");
     }
 
-    const response = await axiosInstance.get(`/api/comment/${postId}`);
+    try {
+      const response = await axiosInstance.get(`/api/comment/${postId}`);
 
-    if (response && response.isSuccess && Array.isArray(response.value)) {
-      return response.value;
+      if (response && response.isSuccess && Array.isArray(response.value)) {
+        return response.value;
+      }
+
+      // Fallback if the response doesn't match expected format
+      // Avoid 404 errors not found
+      return [];
+    } catch (error) {
+      // Silently handle the "no comments" case
+      console.log(
+        `No comments found for post ID ${postId} - returning empty array`
+      );
+      return [];
     }
-
-    return [];
   },
 
   // Create a new comment
@@ -83,22 +93,14 @@ const stablePostService = {
     if (
       !commentData.userId ||
       !commentData.stablePostId ||
-      !commentData.content
+      !commentData.comment?.content
     ) {
       throw new Error("User ID, Stable Post ID, and content are required");
     }
 
-    const createData = {
-      userId: commentData.userId,
-      stablePostId: commentData.stablePostId,
-      comment: {
-        content: commentData.content,
-      },
-    };
-
     return await axiosInstance.post(
       `/api/comment/create/composition`,
-      createData
+      commentData
     );
   },
 
