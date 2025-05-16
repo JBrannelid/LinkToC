@@ -2,6 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import stableService from "../api/services/stableService";
 import { useLoadingState } from "./useLoadingState";
 import { useAppContext } from "../context/AppContext";
+import { ENDPOINTS} from "../api/index.js";
+import axiosInstance from "../api/config/axiosConfig.js";
+import {getErrorMessage} from "../utils/errorUtils.js";
+import { useAuth } from "../context/AuthContext";
 
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
@@ -11,6 +15,7 @@ export function useStableData(stableId) {
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
   const { stableRefreshKey } = useAppContext();
+  const {user} = useAuth();
 
   // Fetch single stable by ID
   const fetchStableById = useCallback(async () => {
@@ -64,6 +69,48 @@ export function useStableData(stableId) {
       setLoading(false);
     }
   }, []);
+  const deleteStable = useCallback(async (id) => {
+    if (!id) {
+      setError("Stable ID is required for deletion");
+      return false;
+    }
+
+    setOperationType("delete");
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Direct API call using axios instead of going through stableService
+      await axiosInstance.delete(`${ENDPOINTS.STABLE}/delete/${id}`);
+
+      // Refresh data after successful deletion
+      if (stableId && stableId === id) {
+        // If we're viewing the specific stable that was just deleted
+        setCurrentStableData(null);
+      } else {
+        // Refresh the list of stables
+        await fetchAndUpdateStables();
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Stable deletion failed:", error);
+
+      setError(
+          getErrorMessage(error, {
+            defaultMessage: "Failed to delete stable. Please try again.",
+            customMessages: {
+              "403": "You don't have permission to delete this stable.",
+              "404": "Stable not found."
+            }
+          })
+      );
+
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [stableId, fetchAndUpdateStables]);
 
   useEffect(() => {
     if (stableId) {
@@ -82,6 +129,52 @@ export function useStableData(stableId) {
     },
     [stables]
   );
+  const leaveStable = useCallback(async (stableIdToLeave) => {
+    if (!stableIdToLeave) {
+      setError("Stable ID is required");
+      return false;
+    }
+
+    if (!user?.id) {
+      setError("User ID is required");
+      return false;
+    }
+
+    setOperationType("leave");
+    try {
+      setLoading(true);
+      setError(null);
+
+      // Direct API call to leave stable endpoint
+      await axiosInstance.delete(`/api/user-stables/leave`, {
+        params: {
+          userId: user.id,
+          stableId: stableIdToLeave
+        }
+      });
+
+      // Refresh data after successfully leaving
+      await fetchAndUpdateStables();
+
+      return true;
+    } catch (error) {
+      console.error("Failed to leave stable:", error);
+
+      setError(
+          getErrorMessage(error, {
+            defaultMessage: "Failed to leave stable. Please try again.",
+            customMessages: {
+              "403": "You don't have permission to leave this stable.",
+              "404": "Stable or user not found."
+            }
+          })
+      );
+
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }, [user?.id, fetchAndUpdateStables]);
 
   const loadingState = useLoadingState(loading, operationType);
 
@@ -102,6 +195,7 @@ export function useStableData(stableId) {
       setLoading(false);
     }
   }, [stableId]);
+  
 
   return {
     stables,
@@ -114,6 +208,8 @@ export function useStableData(stableId) {
     fetchStableById,
     getById,
     stableInfo,
+    deleteStable,
+    leaveStable,
   };
 }
 
