@@ -6,6 +6,7 @@ import {
 import Button from "../../ui/Button";
 import PenIcon from "../../../assets/icons/PenIcon";
 import EditInformationModal from "../../layout/EditInformationModal";
+import { useAuth } from "../../../context/AuthContext";
 
 const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
   const [editModal, setEditModal] = useState({

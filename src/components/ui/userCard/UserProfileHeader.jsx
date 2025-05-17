@@ -11,9 +11,11 @@ import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
 import PhoneIcon from "../../../assets/icons/PhoneIcon";
 import PenIcon from "../../../assets/icons/PenIcon";
 import EditInformationModal from "../../layout/EditInformationModal";
+import { useAuth } from "../../../context/AuthContext";
 
 const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const { currentStable } = useAppContext();
+  const { user: currentUser } = useAuth();
   const [editModal, setEditModal] = useState({
     isOpen: false,
     field: "",
@@ -25,9 +27,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   // Combine data from user and userProfile
   const userStableRole = userProfile?.userStableRole;
   const enhancedUser = userStableRole?.user || user;
-
   const userFullName = formatUserFullName(enhancedUser);
   const profileImageUrl = getProfileImageUrl(enhancedUser?.profileImage);
+
+  // Permissions check for editing user data
+  const isCurrentUser = String(currentUser.id) === String(enhancedUser.id);
 
   // Get role from userProfile if available
   const userRole = userStableRole
@@ -92,18 +96,22 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                     {enhancedUser.phoneNumber}
                   </span>
                 </Button>
-                <button
-                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
-                  onClick={() =>
-                    openEditModal(
-                      "phoneNumber",
-                      "Phone Number",
-                      enhancedUser.phoneNumber || ""
-                    )
-                  }
-                >
-                  <PenIcon className="w-5 h-5 text-primary" />
-                </button>
+
+                {/* Permission controll */}
+                {isCurrentUser && (
+                  <button
+                    className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
+                    onClick={() =>
+                      openEditModal(
+                        "phoneNumber",
+                        "Phone Number",
+                        enhancedUser.phoneNumber || ""
+                      )
+                    }
+                  >
+                    <PenIcon className="w-5 h-5 text-primary" />
+                  </button>
+                )}
               </div>
             )}
 
@@ -119,18 +127,21 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   {emergencyContact}
                 </span>
               </Button>
-              <button
-                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
-                onClick={() =>
-                  openEditModal(
-                    "emergencyContact",
-                    "Emergency Contact",
-                    enhancedUser.emergencyContact || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* Permission controll */}
+              {isCurrentUser && (
+                <button
+                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "emergencyContact",
+                      "Emergency Contact",
+                      enhancedUser.emergencyContact || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             {/* Messenger */}
@@ -199,18 +210,21 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <span className="mt-1 text-xs text-center text-primary">
                 Number
               </span>
-              <button
-                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
-                onClick={() =>
-                  openEditModal(
-                    "phoneNumber",
-                    "Phone Number",
-                    enhancedUser.phoneNumber || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* Permission controll */}
+              {isCurrentUser && (
+                <button
+                  className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "phoneNumber",
+                      "Phone Number",
+                      enhancedUser.phoneNumber || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             {/* Emergency button */}
@@ -235,18 +249,21 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <span className="mt-1 text-xs text-center text-primary">
                 Emergency contact
               </span>
-              <button
-                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
-                onClick={() =>
-                  openEditModal(
-                    "emergencyContact",
-                    "Emergency Contact",
-                    enhancedUser.emergencyContact || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* Permission controll */}
+              {isCurrentUser && (
+                <button
+                  className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "emergencyContact",
+                      "Emergency Contact",
+                      enhancedUser.emergencyContact || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             {/* Messenger */}
