@@ -157,7 +157,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="mt-5 md:mt-10 pb-20 md:pb-10 lg:max-w-[1440px] sm:px-1 xl:px-16 lg:px-14">
+    <div className="mt-5 md:mt-10 pb-20 md:pb-10 sm:px-1 xl:px-16 lg:px-14">
       {/* Event form modal */}
       {isFormOpen && (
         <EventForm
