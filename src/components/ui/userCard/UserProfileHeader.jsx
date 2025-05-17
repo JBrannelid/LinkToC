@@ -84,7 +84,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <div className="relative group">
                 <Button
                   type="secondary"
-                  className="rounded-lg !border-primary flex flex-col max-h-25"
+                  className="rounded-lg !border-primary flex flex-col max-h-20 min-h-19 min-w-25"
                   aria-label="Phone"
                 >
                   <PhoneIcon className="text-primary mb-1" size={20} />
@@ -111,9 +111,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             <div className="relative group">
               <Button
                 type="secondary"
-                className={`rounded-lg !border-primary flex flex-col  ${
-                  !emergencyContact ? "opacity-40" : ""
-                }`}
+                className="rounded-lg !border-primary flex flex-col max-h-20 min-h-19 min-w-25"
                 aria-label="Emergency contact"
               >
                 <EmergencyContactIcon className="text-primary mb-1" size={20} />
@@ -138,7 +136,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             {/* Messenger */}
             <Button
               type="secondary"
-              className="rounded-lg !border-primary flex flex-col opacity-40"
+              className="rounded-lg !border-primary flex flex-col opacity-40 max-h-20 min-h-19 min-w-25"
               aria-label="Messenger"
             >
               <MessageIcon className="text-primary mb-1" size={20} />
