@@ -106,8 +106,10 @@ const InfoTabContent = ({
   return (
     <div className="space-y-4 px-10">
       {/* Current status section  */}
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold mr-2">Current: </h3>
+      <div className="flex items-center gap-3">
+        <h3 className="font-semibold md:whitespace-nowrap md:flex-shrink-0">
+          Current status:
+        </h3>
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
           onClick={
@@ -121,7 +123,9 @@ const InfoTabContent = ({
               : undefined
           }
         >
-          <p>{currentStatus}</p>
+          <div className="w-full">
+            <p>{currentStatus}</p>
+          </div>
         </div>
       </div>
 
