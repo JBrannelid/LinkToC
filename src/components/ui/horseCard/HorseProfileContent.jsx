@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import HorseOwnersTab from "./HorseOwnersTab";
 import EditInformationModal from "../../layout/EditInformationModal";
+import { useAuth } from "../../../context/AuthContext";
 
 const HorseProfileContent = ({
   horse,
@@ -8,6 +9,7 @@ const HorseProfileContent = ({
   activeTab,
   forceRefresh,
 }) => {
+  const { user: currentUser } = useAuth();
   const [editModal, setEditModal] = useState({
     isOpen: false,
     field: "",
@@ -19,6 +21,9 @@ const HorseProfileContent = ({
   // Get the complete horse data from horseProfile or horse
   const enhancedHorse = horseProfile?.horse || horse;
   const horseId = enhancedHorse?.id;
+  const hasHorseRole = horseProfile?.userHorseRoles?.some(
+    (role) => String(role.user?.id) === String(currentUser?.id)
+  );
 
   const openEditModal = (field, label, value, multiline = false) => {
     setEditModal({
@@ -49,6 +54,7 @@ const HorseProfileContent = ({
             horse={enhancedHorse}
             horseProfile={horseProfile}
             openEditModal={openEditModal}
+            hasHorseRole={hasHorseRole}
           />
         );
       case "owners":
@@ -59,6 +65,7 @@ const HorseProfileContent = ({
             horse={enhancedHorse}
             horseProfile={horseProfile}
             openEditModal={openEditModal}
+            hasHorseRole={hasHorseRole}
           />
         );
     }
@@ -86,13 +93,19 @@ const HorseProfileContent = ({
         userData={enhancedHorse} // Use the horse data object
         refreshUserData={forceRefresh} // Use the force refresh function from parent
         isHorse={true} // Flag to indicate we're editing a horse
+        isCurrentUser={hasHorseRole}
       />
     </>
   );
 };
 
 // Info tab content
-const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
+const InfoTabContent = ({
+  horse,
+  horseProfile,
+  openEditModal,
+  hasHorseRole,
+}) => {
   const coreInformation =
     horse?.coreInformation || "No important information added yet";
   const breed = horse?.breed || "Unknown breed";
@@ -116,7 +129,16 @@ const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
 
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
-          onClick={() => openEditModal("core info", "info", coreInformation)}
+          onClick={
+            hasHorseRole
+              ? () =>
+                  openEditModal(
+                    "coreInformation",
+                    "Important Information",
+                    coreInformation
+                  )
+              : undefined
+          }
         >
           <p className="font-semibold">{coreInformation}</p>
         </div>
@@ -125,7 +147,11 @@ const InfoTabContent = ({ horse, horseProfile, openEditModal }) => {
       {/* Bio section */}
       <div
         className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:border hover:border-primary"
-        onClick={() => openEditModal("description", "About Horse", bio, true)}
+        onClick={
+          hasHorseRole
+            ? () => openEditModal("description", "About Horse", bio, true)
+            : undefined
+        }
       >
         {/* pre-line format the bio text */}
         <p className="whitespace-pre-line">{bio}</p>
