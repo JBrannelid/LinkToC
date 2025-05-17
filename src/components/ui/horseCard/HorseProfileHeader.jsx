@@ -6,8 +6,10 @@ import {
 import Button from "../../ui/Button";
 import PenIcon from "../../../assets/icons/PenIcon";
 import EditInformationModal from "../../layout/EditInformationModal";
+import { useAuth } from "../../../context/AuthContext";
 
 const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
+  const { user: currentUser } = useAuth();
   const [editModal, setEditModal] = useState({
     isOpen: false,
     field: "",
@@ -26,6 +28,9 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
     enhancedHorse.currentBox || enhancedHorse.stablePlace || "";
   const weight = enhancedHorse.weight || "";
   const height = enhancedHorse.height || "";
+  const hasHorseRole = horseProfile?.userHorseRoles?.some(
+    (role) => String(role.user?.id) === String(currentUser?.id)
+  );
 
   const openEditModal = (field, label, value, multiline = false) => {
     setEditModal({
@@ -56,8 +61,8 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
           <div className="flex flex-col relative group">
             <h1 className="text-3xl font-heading font-semibold">{horseName}</h1>
             <p className="text-sm text-gray">{horseAge}</p>
-            <p className="text-sm text-gray">{horseBreed}</p>
-            <p className="text-sm text-gray">{horseColor}</p>
+            <p className="text-sm text-gray">Breed - {horseBreed}</p>
+            <p className="text-sm text-gray">Color - {horseColor}</p>
           </div>
 
           {/* Horse stats buttons */}
@@ -71,18 +76,23 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                 <span className="text-primary mb-1">Box</span>
                 <span className="text-xs">{stablePlace}</span>
               </Button>
-              <button
-                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
-                onClick={() =>
-                  openEditModal(
-                    "currentBox",
-                    "Box Number",
-                    enhancedHorse.currentBox || enhancedHorse.stablePlace || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "currentBox",
+                      "Box Number",
+                      enhancedHorse.currentBox ||
+                        enhancedHorse.stablePlace ||
+                        ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             <div className="relative group">
@@ -94,14 +104,21 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                 <span className="text-primary mb-1">Weight</span>
                 <span className="text-xs">{weight}kg</span>
               </Button>
-              <button
-                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
-                onClick={() =>
-                  openEditModal("weight", "Weight", enhancedHorse.weight || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "weight",
+                      "Weight",
+                      enhancedHorse.weight || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             <div className="relative group">
@@ -113,14 +130,21 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                 <span className="text-primary mb-1">Height</span>
                 <span className="text-xs">{height}cm</span>
               </Button>
-              <button
-                className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
-                onClick={() =>
-                  openEditModal("height", "Height", enhancedHorse.height || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-2 -top-2 transition-opacity bg-primary-light rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "height",
+                      "Height",
+                      enhancedHorse.height || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -156,7 +180,7 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
             </h1>
             <p className="text-sm text-gray">{horseAge}</p>
             <p className="text-sm text-gray">{horseBreed}</p>
-            <p className="text-sm text-gray">{horseColor}</p>
+            <p className="text-sm text-gray">Color: {horseColor}</p>
           </div>
 
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">
@@ -172,19 +196,23 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                   <p className="mt-1 text-sm text-center">{stablePlace}</p>
                 </div>
               </Button>
-
-              <button
-                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
-                onClick={() =>
-                  openEditModal(
-                    "currentBox",
-                    "Box Number",
-                    enhancedHorse.currentBox || enhancedHorse.stablePlace || ""
-                  )
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "currentBox",
+                      "Box Number",
+                      enhancedHorse.currentBox ||
+                        enhancedHorse.stablePlace ||
+                        ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             <div className="flex flex-col items-center w-full md:w-9/10 relative group">
@@ -198,15 +226,21 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                   <p className="mt-1 text-sm text-center">{weight}kg</p>
                 </div>
               </Button>
-
-              <button
-                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
-                onClick={() =>
-                  openEditModal("weight", "Weight", enhancedHorse.weight || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "weight",
+                      "Weight",
+                      enhancedHorse.weight || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
 
             <div className="flex flex-col items-center w-full md:w-9/10 relative group">
@@ -220,15 +254,21 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
                   <p className="mt-1 text-sm text-center"> {height}cm</p>
                 </div>
               </Button>
-
-              <button
-                className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
-                onClick={() =>
-                  openEditModal("height", "Height", enhancedHorse.height || "")
-                }
-              >
-                <PenIcon className="w-5 h-5 text-primary" />
-              </button>
+              {/* SEQURITY Role check for edditing */}
+              {hasHorseRole && (
+                <button
+                  className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
+                  onClick={() =>
+                    openEditModal(
+                      "height",
+                      "Height",
+                      enhancedHorse.height || ""
+                    )
+                  }
+                >
+                  <PenIcon className="w-5 h-5 text-primary" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -246,6 +286,7 @@ const HorseProfileHeader = ({ horse, horseProfile, forceRefresh }) => {
         userData={enhancedHorse}
         refreshUserData={forceRefresh}
         isHorse={true}
+        isCurrentUser={hasHorseRole}
       />
     </>
   );

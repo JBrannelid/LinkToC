@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import UserHorsesTab from "./UserHorsesTab";
 import EditInformationModal from "../../layout/EditInformationModal";
+import { useAuth } from "../../../context/AuthContext";
 
 const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
+  const { user: currentUser } = useAuth();
   const [editModal, setEditModal] = useState({
     isOpen: false,
     field: "",
@@ -14,6 +16,8 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
   // Get the complete user data from userProfile or user
   const userData = userProfile?.userStableRole?.user || user;
   const userId = userData?.userId || userData?.id;
+  // Permissions check for editing user data
+  const isCurrentUser = String(currentUser?.id) === String(userId);
 
   const openEditModal = (field, label, value, multiline = false) => {
     setEditModal({
@@ -44,6 +48,7 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
             user={userData}
             userProfile={userProfile}
             openEditModal={openEditModal}
+            isCurrentUser={isCurrentUser}
           />
         );
       case "horses":
@@ -54,6 +59,7 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
             user={userData}
             userProfile={userProfile}
             openEditModal={openEditModal}
+            isCurrentUser={isCurrentUser}
           />
         );
     }
@@ -79,6 +85,7 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
         userId={userId}
         multiline={editModal.multiline}
         userData={userData}
+        isCurrentUser={isCurrentUser}
         refreshUserData={forceRefresh} // Use the force refresh function from parent
       />
     </>
@@ -86,7 +93,12 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
 };
 
 // Info tab content with clickable fields
-const InfoTabContent = ({ user, userProfile, openEditModal }) => {
+const InfoTabContent = ({
+  user,
+  userProfile,
+  openEditModal,
+  isCurrentUser,
+}) => {
   const bio = user?.description || "💬 No status update";
   const currentStatus =
     user?.coreInformation || "🤫 This user's keeping it mysterious...";
@@ -94,22 +106,37 @@ const InfoTabContent = ({ user, userProfile, openEditModal }) => {
   return (
     <div className="space-y-4 px-10">
       {/* Current status section  */}
-      <div className="flex justify-between items-center">
-        <h3 className="font-semibold mr-2">Current: </h3>
+      <div className="flex items-center gap-3">
+        <h3 className="font-semibold md:whitespace-nowrap md:flex-shrink-0">
+          Current status:
+        </h3>
         <div
           className="bg-primary-light p-4 rounded-lg shadow-lg w-full cursor-pointer hover:border hover:border-primary"
-          onClick={() =>
-            openEditModal("coreInformation", "Status", currentStatus)
+          onClick={
+            isCurrentUser
+              ? () =>
+                  openEditModal(
+                    "coreInformation",
+                    "Current Status",
+                    currentStatus
+                  )
+              : undefined
           }
         >
-          <p>{currentStatus}</p>
+          <div className="w-full">
+            <p>{currentStatus}</p>
+          </div>
         </div>
       </div>
 
       {/* Bio section */}
       <div
         className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:border hover:border-primary"
-        onClick={() => openEditModal("description", "Bio", bio, true)}
+        onClick={
+          isCurrentUser
+            ? () => openEditModal("description", "Bio", bio, true)
+            : undefined
+        }
       >
         <p className="whitespace-pre-line">{bio}</p>
       </div>
