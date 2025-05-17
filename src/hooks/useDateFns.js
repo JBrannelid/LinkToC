@@ -15,7 +15,6 @@ import {
   parseISO,
   classNames,
   colStartClasses,
-  weekdayTitles,
   formatMonthYear,
   formatMonth,
   formatDayNumber,
@@ -120,7 +119,6 @@ export const useDateFns = (locale, events = []) => {
 
     // Calendar data
     selectedDayEvents,
-    weekdayTitle: weekdayTitles,
     colStartClasses,
     classNames,
 
