@@ -10,7 +10,7 @@ const WallPostCard = ({
   form,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-gray-100 md:border-gray-200">
+    <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-light lg:border-none lg:shadow-none">
       <div
         className="p-4 flex items-center cursor-pointer"
         onClick={toggleExpand}
@@ -18,7 +18,7 @@ const WallPostCard = ({
       >
         <PinIcon className="w-6 h-6 text-primary" />
 
-        <p className="flex-1 pl-1 xl:text-xl md:text-lg">{title}</p>
+        <p className="flex-1 pl-2 md:text-sm lg:text-lg">{title}</p>
 
         <div className="text-primary">
           <ChevronDownIcon

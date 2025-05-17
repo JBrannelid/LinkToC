@@ -25,9 +25,8 @@ export default function WallPost() {
   const formatData = (dateString) => {
     try {
       const date = parseISO(dateString);
-      return format(date, "yyyy-MM-dd HH:mm");
+      return format(date, "yyyy-MM-dd");
     } catch (error) {
-      console.log("Invalid date format:", dateString);
       return "Unknown date";
     }
   };
@@ -76,34 +75,35 @@ export default function WallPost() {
 
   return (
     <div className="px-2 md:px-0 w-full md:max-w-full">
-      <h2 className="text-sm md:text-lg mb-2 md:mb-3 font-medium">
+      <h2 className="text-sm md:text-2xl 2xl:text-3xl mb-2 md:mb-3 font-medium">
         Important notes
       </h2>
-
-      {/* Display all pinned posts */}
-      {sortedPinnedPosts.map((post) => (
-        <div key={post.id} className="mb-4">
-          <WallPostCard
-            title={post.title || "Untitled post"}
-            isExpanded={expandedPost.has(post.id)}
-            toggleExpand={() => toggleExpand(post.id)}
-          >
-            <div className="mb-2">
-              <p className="font-light text-sm">{post.content}</p>
-            </div>
-            <div className="mt-2">
-              <p className="font-light text-xs text-gray-400">
-                {post.date ? formatData(post.date) : "No date"}
-              </p>
-              {post.posterFirstName && (
-                <p className="font-light text-xs text-gray-500">
-                  {post.posterFirstName} {post.posterLastName}
+      <div className="bg-white lg:h-full lg:rounded-lg shadow-lg">
+        {/* Display all pinned posts */}
+        {sortedPinnedPosts.map((post) => (
+          <div key={post.id} className="mb-4">
+            <WallPostCard
+              title={post.title || "Untitled post"}
+              isExpanded={expandedPost.has(post.id)}
+              toggleExpand={() => toggleExpand(post.id)}
+            >
+              <div className="mb-2">
+                <p className="font-light text-sm">{post.content}</p>
+              </div>
+              <div className="mt-2">
+                <p className="font-light text-xs text-gray">
+                  {post.date ? formatData(post.date) : "No date"}
                 </p>
-              )}
-            </div>
-          </WallPostCard>
-        </div>
-      ))}
+                {post.posterFirstName && (
+                  <p className="font-light text-xs text-gray">
+                    {post.posterFirstName} {post.posterLastName}
+                  </p>
+                )}
+              </div>
+            </WallPostCard>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
