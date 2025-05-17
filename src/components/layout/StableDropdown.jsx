@@ -71,7 +71,7 @@ const StableDropdown = () => {
       >
         <StableName
           currentStableId={currentStable?.id}
-          className="!text-sm text-primary"
+          className="!text-[16px] font-semibold text-primary text-base"
         />
         <div className="text-primary ml-2 ">
           <ChevronDownIcon size={15} />

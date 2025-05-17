@@ -1,47 +1,51 @@
 import React from "react";
 import { Link } from "react-router";
-import { ROUTES } from "../../routes/routeConstants";
+import { ROUTES, buildRoute } from "../../routes/routeConstants";
 import { format } from "date-fns";
+import { useAppContext } from "../../context/AppContext";
 
 function DesktopFooter() {
   const currentYear = format(new Date(), "yyyy");
+  const { currentUser, currentStable } = useAppContext();
 
   return (
-    <div className=" w-full bg-white shadow-md py-6">
-      <div className=" mx-auto px-10">
-        <div className="flex flex-row justify-between items-center">
-          <div className="flex items-center">
-            <p className="text-gray text-sm">
-              &copy; {currentYear} All rights reserved
-            </p>
-          </div>
+    <div className="w-full bg-white shadow-md h-20">
+      <div className="container mx-auto px-7 flex justify-between items-center h-full">
+        <div className="flex items-center">
+          <p className="text-lg font-normal">
+            &copy; {currentYear} All rights reserved
+          </p>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-x-8">
-            <Link
-              to={ROUTES.SETTINGS}
-              className="text-gray text-sm hover:text-primary "
-            >
-              About
-            </Link>
-            <Link
-              to={ROUTES.SETTINGS}
-              className="text-gray text-sm hover:text-primary "
-            >
-              Terms of Service
-            </Link>
-            <Link
-              to={ROUTES.SETTINGS}
-              className="text-gray text-sm hover:text-primary "
-            >
-              Support
-            </Link>
-            <Link
-              to={ROUTES.SETTINGS}
-              className="text-gray text-sm hover:text-primary "
-            >
-              Privacy Policy
-            </Link>
-          </div>
+        <div className="flex flex-wrap items-center gap-x-8">
+          <Link
+            to={ROUTES.SETTINGS}
+            className="text-primary text-sm hover:text-primary "
+          >
+            Contact
+          </Link>
+          <Link
+            to={ROUTES.SETTINGS}
+            className="text-primary text-sm hover:text-primary "
+          >
+            About
+          </Link>
+          <Link
+            to={buildRoute(ROUTES.STABLE_HORSES, {
+              stableId: currentStable?.id,
+            })}
+            className="text-primary text-sm hover:text-primary "
+          >
+            Horses
+          </Link>
+          <Link
+            to={buildRoute(ROUTES.STABLE_MEMBERS, {
+              stableId: currentStable?.id,
+            })}
+            className="text-primary text-sm hover:text-primary "
+          >
+            Members
+          </Link>
         </div>
       </div>
     </div>
