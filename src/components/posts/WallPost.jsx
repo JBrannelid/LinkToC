@@ -78,7 +78,7 @@ export default function WallPost() {
       <h2 className="text-sm md:text-2xl 2xl:text-3xl mb-2 md:mb-3 font-medium">
         Important notes
       </h2>
-      <div className="bg-white lg:h-full lg:rounded-lg shadow-lg">
+      <div className="lg:bg-white lg:h-full lg:rounded-lg lg:shadow-lg">
         {/* Display all pinned posts */}
         {sortedPinnedPosts.map((post) => (
           <div key={post.id} className="mb-4">
