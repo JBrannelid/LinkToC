@@ -9,10 +9,10 @@ function DesktopFooter() {
   const { currentUser, currentStable } = useAppContext();
 
   return (
-    <div className="w-full bg-white shadow-md h-20">
+    <div className="w-full bg-white shadow-md lg:h-16 2xl:h-20">
       <div className="container mx-auto px-7 flex justify-between items-center h-full">
         <div className="flex items-center">
-          <p className="text-lg font-normal">
+          <p className="lg:text-sm 2xl:text-lg font-normal">
             &copy; {currentYear} All rights reserved
           </p>
         </div>
