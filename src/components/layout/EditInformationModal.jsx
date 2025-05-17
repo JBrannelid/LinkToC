@@ -90,17 +90,21 @@ const EditInformationModal = ({
             bio: userData?.bio || "",
             weight: parseNumericValue(userData?.weight),
             height: parseNumericValue(userData?.height),
-            currentBox: userData?.currentBox || userData?.stablePlace || "",
+            currentBox: parseNumericValue(
+              userData?.currentBox || userData?.stablePlace || ""
+            ),
           };
 
           // Handle the field being updated specially
-          if (fieldName === "height" || fieldName === "weight") {
+          if (
+            fieldName === "height" ||
+            fieldName === "weight" ||
+            fieldName === "currentBox"
+          ) {
             updateData[fieldName] = parseNumericValue(data[fieldName]);
           } else {
             updateData[fieldName] = data[fieldName];
           }
-
-          // Use the correct method from the horse service
           result = await horseService.updateHorse(updateData, userId);
         } catch (importError) {
           throw new Error("Could not update horse: " + importError.message);
