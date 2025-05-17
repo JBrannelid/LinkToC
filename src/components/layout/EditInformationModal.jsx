@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../ui/Button";
 import { FormProvider, FormInput } from "../forms";
 import { useForm } from "react-hook-form";
 import ModalHeader from "./ModalHeader";
 import FormMessage from "../forms/formBuilder/FormMessage";
 import { createSuccessMessage } from "../../utils/errorUtils";
+import { useAuth } from "../../context/AuthContext";
 
 const EditInformationModal = ({
   isOpen,
@@ -17,7 +18,9 @@ const EditInformationModal = ({
   userData, // This will be user data or horse data
   refreshUserData,
   isHorse = false,
+  isCurrentUser = false,
 }) => {
+  const { user: currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
@@ -27,9 +30,34 @@ const EditInformationModal = ({
     },
   });
 
+  // Security check - prevent editing if not the current user
+  useEffect(() => {
+    if (
+      isOpen &&
+      !isCurrentUser &&
+      String(currentUser?.id) !== String(userId)
+    ) {
+      setMessage({
+        type: "error",
+        text: "You don't have permission to edit this profile",
+      });
+      setTimeout(() => onClose(), 2000);
+    }
+  }, [isOpen, isHorse, currentUser?.id, userId, onClose, isCurrentUser]);
+
   // Update call directly in handleSubmit sense we handle both user and horse
   // Don't know if this should be placed in a hook or not
   const handleSubmit = async (data) => {
+    // Security check - only proceed if it's the current user
+    if (!isCurrentUser && String(currentUser?.id) !== String(userId)) {
+      setMessage({
+        type: "error",
+        text: "You don't have permission to edit this profile",
+      });
+      setTimeout(() => onClose(), 2000);
+      return { success: false };
+    }
+
     try {
       setLoading(true);
       setMessage(null);
@@ -60,12 +88,8 @@ const EditInformationModal = ({
             age: userData?.age || null,
             description: userData?.description || "",
             bio: userData?.bio || "",
-
-            // Convert numeric values properly
             weight: parseNumericValue(userData?.weight),
             height: parseNumericValue(userData?.height),
-
-            // Handle special case for currentBox which might be a string
             currentBox: userData?.currentBox || userData?.stablePlace || "",
           };
 
@@ -75,8 +99,6 @@ const EditInformationModal = ({
           } else {
             updateData[fieldName] = data[fieldName];
           }
-
-          console.log("Sending horse update data:", updateData);
 
           // Use the correct method from the horse service
           result = await horseService.updateHorse(updateData, userId);
@@ -108,10 +130,10 @@ const EditInformationModal = ({
       if (result.success || result.isSuccess || result.statusCode === 200) {
         setMessage(createSuccessMessage("Information updated successfully"));
 
+        // Call refreshUserData function and handle any errors
         if (typeof refreshUserData === "function") {
           try {
             await refreshUserData();
-            console.log("Data refreshed after update");
           } catch (refreshError) {
             console.error("Error during refresh:", refreshError);
           }
@@ -126,7 +148,6 @@ const EditInformationModal = ({
         throw new Error(result?.message || "Update failed");
       }
     } catch (error) {
-      console.error("Update error:", error);
       setMessage({
         type: "error",
         text: error.message || "Failed to update information",
