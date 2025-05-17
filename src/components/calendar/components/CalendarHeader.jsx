@@ -15,8 +15,12 @@ const CalendarHeader = ({
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   return (
-    <header className="flex items-center justify-between px-4 mb-1">
-      <div className="flex items-center space-x-2">
+    <header className="flex items-center justify-between px-4 bg-white rounded-t-sm md:rounded-t-lg shadow-md">
+      <div className="flex items-center space-x-2 mt-2">
+        {/* Change to previous month */}
+        <button type="button" onClick={previousMonth} className="text-primary">
+          <ChevronLeft className="w-5 h-5 md:w-7 md:h-7" />
+        </button>
         {/* Display current month */}
         <h2 className="text-sm md:text-lg lg:text-xl font-normal font-heading">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
@@ -34,24 +38,16 @@ const CalendarHeader = ({
             </option>
           ))}
         </select>
-      </div>
-      <div className="flex space-x-1">
-        {/* Change to previous month */}
-        <button type="button" onClick={previousMonth} className="text-primary">
-          <ChevronLeft className="w-5 h-5 md:w-7 md:h-7" />
-        </button>
-
-        {/* Return to today */}
-        <button
-          type="button"
-          onClick={goToToday}
-          className="text-sm lg:text-lg font-normal font-heading"
-        >
-          Today
-        </button>
         {/* Change to next month */}
         <button type="button" onClick={nextMonth} className="text-primary">
           <ChevronRight className="w-5 h-5 md:w-7 md:h-7" />
+        </button>
+        <button
+          type="button"
+          onClick={goToToday}
+          className="text-sm lg:text-lg font-normal font-heading lg:ml-5 text-primary"
+        >
+          Today
         </button>
       </div>
     </header>
