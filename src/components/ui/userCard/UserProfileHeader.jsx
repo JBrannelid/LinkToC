@@ -79,7 +79,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             <p className="text-sm text-gray">
               <span>{roleName || "Member"}</span>
             </p>
-            <p className="text-sm text-gray">2004</p>
           </div>
 
           {/* Contact buttons */}
