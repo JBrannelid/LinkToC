@@ -183,7 +183,7 @@ export default function StablePostPage() {
                 onClick={handleOpenCreateForm}
               >
                 <span className="mr-5">New post</span>
-                <AddNoteIcon className="w-6 h-6" />
+                <AddNoteIcon className="w-8 h-8" />
               </Button>
             )}
           </div>
