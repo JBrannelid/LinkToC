@@ -26,7 +26,7 @@ const EventItem = ({ event, index, onUpdate }) => {
     >
       {/* User image */}
       <div className="flex-shrink-0 mr-6">
-        <UserProfileImage user={event.user} size="small" />
+        <UserProfileImage user={event.user} size="medium" />
       </div>
 
       {/* Event Title */}
