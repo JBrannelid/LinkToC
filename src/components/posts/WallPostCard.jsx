@@ -10,7 +10,7 @@ const WallPostCard = ({
   form,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm md:shadow overflow-hidden border border-light lg:border-none lg:shadow-none">
+    <div className="bg-white rounded-2xl shadow-sm md:shadow overflow-hidden border border-light lg:border-none lg:shadow-none">
       <div
         className="p-4 flex items-center cursor-pointer"
         onClick={toggleExpand}
