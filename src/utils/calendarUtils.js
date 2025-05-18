@@ -111,7 +111,16 @@ export const colStartClasses = [
 ];
 
 // Ordered Monday to Sunday following European convention (swe-conventions)
-export const weekdayTitles = ["M", "T", "W", "T", "F", "S", "S"];
+export const weekdayTitlesMobile = ["M", "T", "W", "T", "F", "S", "S"];
+export const weekdayTitlesDesktop = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 // Returns Tailwind CSS classes for calendar day buttons based on their state
 export function getDayButtonClasses(day, selectedDay, firstDayCurrentMonth) {

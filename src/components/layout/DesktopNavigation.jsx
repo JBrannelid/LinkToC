@@ -42,12 +42,14 @@ const DesktopNavigation = () => {
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
   return (
-    <div className=" w-full bg-white shadow-md py-2 xxl:py-4 xl:h-18">
-      <div className="container max-w-full px-7 flex justify-between">
+    <div className="w-full bg-white shadow-md lg:h-16 2xl:h-20">
+      <div className="container mx-auto px-7 flex justify-between items-center h-full">
         <div className="flex items-center">
           {/* Title */}
           <Link to={ROUTES.HOME}>
-            <h1 className="text-2xl font-semibold text-black mr-5">Equilog</h1>
+            <h1 className="text-2xl font- font-normal text-black mr-5">
+              Equilog
+            </h1>
           </Link>
           {/* Stable Name */}
           <div className="flex items-center">
@@ -61,7 +63,7 @@ const DesktopNavigation = () => {
               {/* Home */}
               <Link
                 to={ROUTES.HOME}
-                className={`text-xl font-medium ${
+                className={`text-[16px] font-medium ${
                   isActive(ROUTES.HOME)
                     ? "text-primary"
                     : "text-black hover:text-primary"
@@ -74,7 +76,7 @@ const DesktopNavigation = () => {
                 to={buildRoute(ROUTES.STABLE_POST, {
                   stableId: currentStable?.id,
                 })}
-                className={`text-xl font-medium ${
+                className={`text-[16px] font-medium ${
                   isActive(ROUTES.STABLE_POST.split("/:")[0])
                     ? "text-primary"
                     : "text-black hover:text-primary"
@@ -87,7 +89,7 @@ const DesktopNavigation = () => {
                 to={buildRoute(ROUTES.STABLE_HORSES, {
                   stableId: currentStable?.id,
                 })}
-                className={`text-xl font-medium ${
+                className={`text-[16px] font-medium ${
                   isActive(ROUTES.STABLE_HORSES.split("/:")[0])
                     ? "text-primary"
                     : "text-black hover:text-primary"
@@ -100,7 +102,7 @@ const DesktopNavigation = () => {
                 to={buildRoute(ROUTES.STABLE_MEMBERS, {
                   stableId: currentStable?.id,
                 })}
-                className={`text-xl font-medium ${
+                className={`text-[16px] font-medium ${
                   isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
                     ? "text-primary"
                     : "text-black hover:text-primary"
@@ -111,21 +113,18 @@ const DesktopNavigation = () => {
               </Link>
             </nav>
           )}
-          {/* Notification icon */}
-          {!shouldHideNotification && <NotificationDropdown />}
           {/* Settings icon */}
           <Link to={ROUTES.SETTINGS} className="text-primary">
-            <SettingIcon
-              strokeWidth={9}
-              className="w-6 h-6 md:w-7 md:h-7 text-primary"
-            />
+            <SettingIcon className="w-6 h-6 text-primary" />
           </Link>
+          {/* Notification icon */}
+          {!shouldHideNotification && <NotificationDropdown />}
           {/* User image */}
           <Link
             to={buildRoute(ROUTES.USER_PROFILE, { userId })}
             className="text-primary"
           >
-            <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+            <div className="w-9 h-9 rounded-full overflow-hidden mr-4">
               <img
                 src={profileImageUrl}
                 alt={`Profile image of ${userFullName}`}

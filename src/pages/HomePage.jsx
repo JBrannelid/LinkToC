@@ -157,7 +157,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className="mt-5 md:mt-10 pb-20 md:pb-10 lg:max-w-[1440px] sm:px-1 xl:px-16 lg:px-14">
+    <div className="mt-5 md:mt-10 pb-20 md:pb-10 sm:px-1 xl:px-16 lg:px-14">
+      <div className="flex items-center justify-center mb-5 md:hidden">
+        <StableName />
+      </div>
+
       {/* Event form modal */}
       {isFormOpen && (
         <EventForm
@@ -224,7 +228,7 @@ export default function HomePage() {
       </section>
 
       {/* Mobile Wall Post */}
-      <section className="mx-5 sm:mx-15 md:hidden lg:hidden">
+      <section className="mx-1 sm:mx-15 md:hidden lg:hidden">
         <WallPost />
       </section>
     </div>

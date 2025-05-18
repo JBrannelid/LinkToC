@@ -33,9 +33,7 @@ export default function StableName({ currentStableId, className = "" }) {
   }
 
   return (
-    <span
-      className={`text-lg md:text-xl xl:text-2xl font-heading ${className}`}
-    >
+    <span className={`text-2xl md:text-3xl font-heading ${className}`}>
       {currentStableData?.name || currentStable?.name || "No stable connected"}
     </span>
   );

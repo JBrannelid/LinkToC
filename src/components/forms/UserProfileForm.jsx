@@ -143,12 +143,15 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
       <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-white shadow-md rounded flex flex-col relative">
-        <ModalHeader
-          title="Edit profil"
-          showCloseBtn={true}
-          onCloseClick={onClose}
-          className="bg-primary-light"
-        />
+        <div className="bg-primary-light pb-5">
+          <ModalHeader
+            showChevronLeftBtn={true}
+            onChevronClick={onClose}
+            className="bg-primary-light"
+          />
+          <h1 className="text-center text-xl uppercase mt-5">Edit profile</h1>
+        </div>
+
         <div className="flex-1 overflow-y-auto p-4 pb-20 md:pb-5">
           <FormProvider {...methods}>
             <div>

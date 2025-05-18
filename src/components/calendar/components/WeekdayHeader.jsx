@@ -1,18 +1,35 @@
 import React from "react";
-import { weekdayTitles } from "../../../utils/calendarUtils";
+import {
+  weekdayTitlesDesktop,
+  weekdayTitlesMobile,
+} from "../../../utils/calendarUtils";
 
-// Renders the days "weekdayTitles" from CalendarUtils
 const WeekdayHeader = () => {
   return (
-    <div className="grid grid-cols-7 bg-white w-full md:h-auto md:pl-2 md:pr-2 rounded-t-sm shadow-md md:rounded-t-lg">
-      {weekdayTitles.map((day, index) => (
-        <p
-          key={index}
-          className="py-1 flex items-center justify-center text-sm lg:text-lg font-normal"
-        >
-          {day}
-        </p>
-      ))}
+    <div className="w-full bg-white shadow-md">
+      {/* Mobilversion */}
+      <div className="grid grid-cols-7 xl:hidden pl-2 pr-2 pt-2">
+        {weekdayTitlesMobile.map((day, index) => (
+          <p
+            key={index}
+            className="py-1 flex items-center justify-center text-sm text-normal"
+          >
+            {day}
+          </p>
+        ))}
+      </div>
+
+      {/* Desktopversion */}
+      <div className="hidden xl:grid grid-cols-7 xl:pl-2 xl:pr-2 pt-2">
+        {weekdayTitlesDesktop.map((day, index) => (
+          <p
+            key={index}
+            className="py-1 flex items-center justify-center text-xxs"
+          >
+            {day}
+          </p>
+        ))}
+      </div>
     </div>
   );
 };

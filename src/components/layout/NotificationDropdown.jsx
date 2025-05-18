@@ -44,9 +44,9 @@ const NotificationDropdown = () => {
         onClick={toggleDropdown}
         aria-label="View notifications"
       >
-        <NotificationIcon className="w-6 h-6 md:w-7 md:h-7 text-primary" />
+        <NotificationIcon className="w-6 h-6 text-primary" />
         {unreadCount > 0 && (
-          <span className="absolute -top-0 -right-0 w-5 h-5 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
+          <span className="absolute -top-0 right-2 w-4 h-4 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -54,7 +54,7 @@ const NotificationDropdown = () => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-5 z-50 w-100 max-h-[80vh] overflow-auto mt-3">
+        <div className="absolute right-5 z-50 w-100 max-h-[80vh] overflow-auto mt-3 2xl:top-12">
           <div className="bg-primary-light rounded-lg shadow-lg">
             <div className="p-4">
               <p className="text-error-500 text-center text-sm mb-2">

@@ -3,17 +3,17 @@ import React from "react";
 const CloseIcon = ({
   className,
   color = "currentColor",
-  size = 24,
+  size = 16,
   strokeWidth = 1,
 }) => {
   // Maintain aspect ratio
-  const viewBoxSize = 24;
+  const svgSize = size;
 
   return (
     <svg
-      width={size}
-      height={size}
-      viewBox="0 0 16 16" // 16x16 viewBox match the path data
+      width={svgSize}
+      height={svgSize}
+      viewBox="0 0 14 14"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

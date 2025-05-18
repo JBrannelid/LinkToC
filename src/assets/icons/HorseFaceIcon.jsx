@@ -6,14 +6,17 @@ const HorseFaceIcon = ({
   size = 24,
   ...props
 }) => {
-  const sizeStyle = {
-    width: `${size}px`,
-    height: `${size}px`,
-    minWidth: `${size}px`,
-    minHeight: `${size}px`,
-    display: "inline-block",
-    flexShrink: 0,
-  };
+  // Only use the size prop if no className is provided
+  const sizeStyle = className
+    ? {}
+    : {
+        width: `${size}px`,
+        height: `${size}px`,
+        minWidth: `${size}px`,
+        minHeight: `${size}px`,
+        display: "inline-block",
+        flexShrink: 0,
+      };
 
   return (
     <svg

@@ -126,7 +126,7 @@ const PostItem = ({
             {canPinPost && (
               <div onClick={handleTogglePin} className="cursor-pointer">
                 <PinIcon
-                  className={`w-6 h-6 ${
+                  className={`w-8 h-8 ${
                     // Opacity for not pinned icons
                     post.isPinned ? "text-primary" : "text-primary opacity-20"
                   }`}
@@ -134,30 +134,28 @@ const PostItem = ({
               </div>
             )}
             {!canPinPost && post.isPinned && (
-              <PinIcon className="w-6 h-6 text-primary" />
+              <PinIcon className="w-8 h-8 text-primary" />
             )}
           </div>
-          <h3 className="pb-4">{post.title}</h3>
-          <p className="max-w-9/10">{post.content}</p>
-          <p className="text-sm text-grey opacity-80 pt-5">{userFullName}</p>
+          <h3 className="pb-4 text-2xl">{post.title}</h3>
+          <p className="max-w-9/10 text-lg">{post.content}</p>
+          <p className="text-lg text-grey opacity-80 pt-5">{userFullName}</p>
           {/* Edit button - Display for admins and creators */}
           {canEditPost && (
             <div className="flex justify-end">
               <Button
-                type="secondary"
-                variant="icon"
+                type="icon"
                 className="text-primary"
                 onClick={() => onEditPost(post)}
               >
-                <PenIcon className="w-25 h-25" />
+                <PenIcon size={32} />
               </Button>
               <Button
-                type="secondary"
-                variant="icon"
-                className="text-primary"
+                type="icon"
+                className="text-primary border-none shadow-none"
                 onClick={() => handleShowComments(post)}
               >
-                <MessageIcon className="w-25 h-25" />
+                <MessageIcon size={32} />
               </Button>
             </div>
           )}
@@ -165,7 +163,7 @@ const PostItem = ({
       </div>
 
       {/* md screen layout and above */}
-      <div className="hidden md:block bg-white rounded-lg shadow-lg overflow-hidden">
+      <div className="hidden md:block bg-white rounded-lg shadow-lg overflow-hidden lg:mt-4">
         {/* Header */}
         <div className="px-5 pt-4 pb-4 flex justify-between items-center">
           <div className="flex items-center">
@@ -191,33 +189,33 @@ const PostItem = ({
             {canEditPost && (
               <div className="flex">
                 <Button
-                  type="secondary"
-                  variant="icon"
+                  type="icon"
                   className="text-primary"
                   onClick={() => onEditPost(post)}
                 >
-                  <PenIcon className="w-6 h-6" />
+                  <PenIcon size={32} />
                 </Button>
               </div>
             )}
             {canPinPost && (
               <div onClick={handleTogglePin} className="cursor-pointer ml-2">
                 <PinIcon
-                  className={`w-6 h-6 ${
+                  size={32}
+                  className={`${
                     post.isPinned ? "text-primary" : "text-primary opacity-20"
                   }`}
                 />
               </div>
             )}
             {!canPinPost && post.isPinned && (
-              <PinIcon className="w-6 h-6 text-primary ml-2" />
+              <PinIcon className=" text-primary ml-2" size={32} />
             )}
           </div>
         </div>
 
         {/* Post content */}
         <div className="px-6 pb-4">
-          <h3 className="md:text-lg lg:xl mb-3">{post.title}</h3>
+          <h3 className="md:text-xl mb-3">{post.title}</h3>
           <p className="mb-4">{post.content}</p>
 
           {post.image && (
