@@ -29,12 +29,14 @@ const NavigationBar = () => {
           <Link
             to={ROUTES.HOME}
             className={`p-2 ${
-              isActive(ROUTES.HOME) ? "bg-white rounded-full" : "text-primary"
+              isActive(ROUTES.HOME)
+                ? "bg-background rounded-full"
+                : "text-primary"
             }`}
             aria-label="Home"
           >
             <HomeIcon
-              className={`w-6 h-6 ${
+              className={`w-8 h-8 ${
                 isActive(ROUTES.HOME) ? "text-primary" : ""
               }`}
             />
@@ -44,16 +46,16 @@ const NavigationBar = () => {
             to={buildRoute(ROUTES.STABLE_POST, { stableId: currentStable?.id })}
             className={`p-2 ${
               isActive(ROUTES.STABLE_POST.split("/:")[0])
-                ? "bg-white rounded-full"
+                ? "bg-background rounded-full"
                 : "text-primary"
             }`}
             aria-label="Feed"
           >
             <FeedIcon
-              className={`w-6 h-6 ${
+              className={`w-8 h-8 ${
                 isActive(ROUTES.STABLE_POST.split("/:")[0])
-                  ? "text-primary"
-                  : "currentColor"
+                  ? "bg-background rounded-full"
+                  : "text-primary"
               }`}
             />
           </Link>
@@ -64,16 +66,16 @@ const NavigationBar = () => {
             })}
             className={`p-2 ${
               isActive(ROUTES.STABLE_HORSES.split("/:")[0])
-                ? "bg-white rounded-full"
+                ? "bg-background rounded-full"
                 : "text-primary"
             }`}
             aria-label="Horses"
           >
             <HorseFaceIcon
-              className={`w-6 h-6 ${
+              className={`w-8 h-8 ${
                 isActive(ROUTES.STABLE_HORSES.split("/:")[0])
-                  ? "text-primary"
-                  : ""
+                  ? "bg-background rounded-full"
+                  : "text-primary"
               }`}
             />
           </Link>
@@ -84,16 +86,16 @@ const NavigationBar = () => {
             })}
             className={`p-2 ${
               isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
-                ? "bg-white rounded-full"
+                ? "bg-background rounded-full"
                 : "text-primary"
             }`}
             aria-label="Members"
           >
             <UserIcon
-              className={`w-6 h-6 ${
+              className={`w-8 h-8 ${
                 isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
-                  ? "text-primary"
-                  : ""
+                  ? "bg-background rounded-full"
+                  : "text-primary"
               }`}
             />
           </Link>
