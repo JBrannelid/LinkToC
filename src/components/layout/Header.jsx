@@ -36,7 +36,7 @@ export default function Header() {
       >
         <SettingIcon
           strokeWidth={9}
-          className="w-6 h-6 md:w-8 md:h-8 text-primary"
+          className="w-7 h-7 md:w-8 md:h-8 text-primary"
         />
       </Link>
 
@@ -58,7 +58,7 @@ export default function Header() {
             className="absolute right-4 top-4 border-0 text-primary"
           >
             <div className="relative">
-              <NotificationIcon className="w-6 h-6 md:w-8 md:h-8 text-primary" />
+              <NotificationIcon className="w-7 h-7 md:w-8 md:h-8 text-primary" />
               {unreadCount > 0 && (
                 <span className="absolute -top-2 -right-2 w-4 h-4 md:w-5 md:h-5 bg-error-500 rounded-full text-white text-xs flex items-center justify-center">
                   {unreadCount > 9 ? "9+" : unreadCount}
