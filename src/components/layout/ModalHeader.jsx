@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../ui/Button";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import CloseIcon from "../../assets/icons/CloseIcon";
+import ChevronLeftIcon from "../../assets/icons/ChevronLeftIcon";
 
 const ModalHeader = ({
   // Button configuration
@@ -13,8 +14,14 @@ const ModalHeader = ({
   // Close btn
   showCloseBtn = false,
   closeBtn = <CloseIcon size={30} strokeWidth={2} />,
-  CloseAriaLabel = "Close module",
+  closeAriaLabel = "Close module",
   onCloseClick,
+
+  // chevron btn
+  showChevronLeftBtn = false,
+  goBackBtn = <ChevronLeftIcon size={30} strokeWidth={2} />,
+  chevronAriaLabel = "Go back",
+  onChevronClick,
 
   // Setting btn
   showSettingBtn = false,
@@ -31,10 +38,23 @@ const ModalHeader = ({
         <Button
           variant="icon"
           className={`absolute ${buttonPosition} top-4 border-0 text-primary`}
-          aria-label={CloseAriaLabel}
+          aria-label={closeAriaLabel}
           onClick={onCloseClick}
         >
           {closeBtn}
+        </Button>
+      )}
+
+      {/* ChevronLeft Btn */}
+      {showChevronLeftBtn && (
+        <Button
+          variant="icon"
+          size="small"
+          className={`absolute ${buttonPosition} top-4 border-0 text-primary`}
+          aria-label={chevronAriaLabel}
+          onClick={onChevronClick}
+        >
+          {goBackBtn}
         </Button>
       )}
 
