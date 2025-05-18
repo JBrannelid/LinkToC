@@ -19,7 +19,9 @@ const ModalHeader = ({
 
   // chevron btn
   showChevronLeftBtn = false,
-  goBackBtn = <ChevronLeftIcon size={30} strokeWidth={2} />,
+  goBackBtn = (
+    <ChevronLeftIcon className="w-5 h-5 md:w-8 md:h-8 text-primary" />
+  ),
   chevronAriaLabel = "Go back",
   onChevronClick,
 
@@ -49,7 +51,6 @@ const ModalHeader = ({
       {showChevronLeftBtn && (
         <Button
           variant="icon"
-          size="small"
           className={`absolute ${buttonPosition} top-4 border-0 text-primary`}
           aria-label={chevronAriaLabel}
           onClick={onChevronClick}
