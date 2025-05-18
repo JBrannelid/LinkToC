@@ -16,16 +16,14 @@ const CalendarHeader = ({
 
   return (
     <header className="flex items-center justify-between px-4 bg-white rounded-t-sm md:rounded-t-lg shadow-md">
-      <div className="flex items-center space-x-2 mt-2">
-        {/* Change to previous month */}
+      {/* Desktop view */}
+      <div className="hidden lg:flex items-center space-x-2 mt-2 w-full">
         <button type="button" onClick={previousMonth} className="text-primary">
-          <ChevronLeft className="w-5 h-5 md:w-7 md:h-7" />
+          <ChevronLeft className="w-7 h-7 lg:block hidden" />
         </button>
-        {/* Display current month */}
         <h2 className="text-sm md:text-lg lg:text-xl font-normal font-heading">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
         </h2>
-        {/* Year dropdown */}
         <select
           id="year"
           value={firstDayCurrentMonth.getFullYear()}
@@ -38,16 +36,51 @@ const CalendarHeader = ({
             </option>
           ))}
         </select>
-        {/* Change to next month */}
         <button type="button" onClick={nextMonth} className="text-primary">
-          <ChevronRight className="w-5 h-5 md:w-7 md:h-7" />
+          <ChevronRight className="w-7 h-7 lg:block hidden" />
         </button>
         <button
           type="button"
           onClick={goToToday}
-          className="text-sm lg:text-lg font-normal font-heading lg:ml-5 text-primary"
+          className="ml-auto lg:ml-5 text-xl lg:text-2xl font-normal font-heading text-primary"
         >
           Today
+        </button>
+      </div>
+
+      {/* Mobil view */}
+      <div className="flex lg:hidden items-center space-x-2 mt-2 w-full">
+        <h2 className="text-lg font-normal font-heading">
+          {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
+        </h2>
+        <select
+          id="year"
+          value={firstDayCurrentMonth.getFullYear()}
+          onChange={(e) => changeYear(Number(e.target.value))}
+          className="text-lg font-normal font-heading"
+        >
+          {years.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+        <button
+          type="button"
+          onClick={previousMonth}
+          className="text-primary ml-auto"
+        >
+          <ChevronLeft className="lg:hidden mr-2 md:w-7 md:h-7" />
+        </button>
+        <button
+          type="button"
+          onClick={goToToday}
+          className=" text-lg font-normal font-heading text-primary"
+        >
+          Today
+        </button>
+        <button type="button" onClick={nextMonth} className="text-primary">
+          <ChevronRight className="lg:hidden ml-2 md:w-8 md:h-8" />
         </button>
       </div>
     </header>
