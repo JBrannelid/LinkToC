@@ -179,14 +179,13 @@ const HorseList = ({ stableId, showOwners = true }) => {
         <PermissionGate requiredRoles={[UserRoles.MANAGER, UserRoles.ADMIN]}>
           {/* Mobile */}
           <Button
-            type="primary"
             variant="icon"
-            size="medium"
+            size="small"
             className="!bg-primary !rounded-full md:hidden"
             onClick={handleAdd}
             aria-label="Add new horse"
           >
-            <PlusIcon className="h-6 w-6 text-white" strokeWidth={3} />
+            <PlusIcon className="h-5 w-5 text-white" strokeWidth={3} />
           </Button>
 
           {/* md and above */}
