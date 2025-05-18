@@ -15,7 +15,7 @@ const CalendarHeader = ({
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   return (
-    <header className="flex items-center justify-between px-4 bg-white rounded-t-sm md:rounded-t-lg shadow-md">
+    <header className="flex items-center justify-between px-4 bg:background lg:bg-white rounded-t-sm md:rounded-t-lg lg:shadow-md">
       {/* Desktop view */}
       <div className="hidden lg:flex items-center space-x-2 mt-2 w-full">
         <button type="button" onClick={previousMonth} className="text-primary">
@@ -49,7 +49,7 @@ const CalendarHeader = ({
       </div>
 
       {/* Mobil view */}
-      <div className="flex lg:hidden items-center space-x-2 mt-2 w-full">
+      <div className="flex lg:hidden items-center space-x-2 mt-2 w-full ">
         <h2 className="text-lg font-normal font-heading">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
         </h2>
