@@ -4,7 +4,7 @@ const ChevronLeftIcon = ({
   size = 24,
   color = "currentColor",
   className = "",
-  strokeWidth = 1.5,
+  strokeWidth = 2,
   ...props
 }) => {
   return (
@@ -12,7 +12,9 @@ const ChevronLeftIcon = ({
       width={size}
       height={size}
       viewBox="0 0 32 32"
-      fill={color}
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
