@@ -37,7 +37,7 @@ const DayCell = ({
 
   return (
     <div
-      className={`${colStartClass} p-1 md:p-1.5 lg:p-1 relative flex flex-col`}
+      className={`${colStartClass} p-0.5 md:p-0.5 lg:p-1 relative flex flex-col`}
     >
       {/* Day container */}
       <div
