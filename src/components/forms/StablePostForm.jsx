@@ -76,13 +76,16 @@ const StablePostForm = ({
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
       <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
-        <ModalHeader
-          title={title}
-          showCloseBtn={true}
-          onCloseClick={onCancel}
-          className="bg-primary-light"
-          render="left"
-        />
+        <div className="bg-primary-light pb-5">
+          <ModalHeader
+            // title={title}
+            showCloseBtn={true}
+            onCloseClick={onCancel}
+            className="bg-primary-light"
+            render="left"
+          />
+          <h1 className="text-center text-xl uppercase mt-5">{title}</h1>
+        </div>
         {/* Main content container */}
         <div className="flex flex-col flex-1 px-4 pt-4 pb-6 md:pb-4">
           <FormProvider
