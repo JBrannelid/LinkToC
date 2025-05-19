@@ -156,7 +156,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       src={
                         previewImageUrl ||
                         profileImageUrl ||
-                        "/src/assets/images/userPlaceholder.jpg"
+                        "/src/assets/images/userPlaceholder.webp"
                       }
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"

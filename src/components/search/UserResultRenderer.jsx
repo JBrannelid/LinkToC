@@ -13,7 +13,7 @@ const UserResultRenderer = ({ item, isSelected, onSelect, config }) => {
     onSelect(item);
   };
 
-  const placeholderImage = "src/src/assets/images/userPlaceholder.jpg";
+  const placeholderImage = "src/src/assets/images/userPlaceholder.webp";
 
   return (
     <div

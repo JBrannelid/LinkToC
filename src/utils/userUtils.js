@@ -60,7 +60,7 @@ export const formatUserFullName = (user) => {
 
 export const getProfileImageUrl = (
   profilePictureUrl,
-  fallbackUrl = "/src/assets/images/userPlaceholder.jpg"
+  fallbackUrl = "/src/assets/images/userPlaceholder.webp"
 ) => {
   return profilePictureUrl || fallbackUrl;
 };
