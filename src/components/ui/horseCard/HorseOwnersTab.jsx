@@ -10,11 +10,12 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
 
   // Extract owners from horseProfile data
   const horseOwners = horseProfile?.userHorseRoles || [];
-  const loading = !horseProfile; // Assuming horseProfile is fetched from an API
-  const profilePictureUrl = getProfileImageUrl(user.profilePictureUrl);
+  const loading = !horseProfile;
 
   const handleUserClick = (userId) => {
-    navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
+    if (userId) {
+      navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
+    }
   };
 
   // Loading state
@@ -28,7 +29,7 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
   }
 
   // No owners available
-  if (horseOwners.length === 0) {
+  if (!horseOwners || horseOwners.length === 0) {
     return (
       <div className="bg-white rounded-lg p-4 border border-gray-200">
         <p className="text-center text-gray py-4">
@@ -42,37 +43,38 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6">
-        {horseOwners.map((ownerRole) => {
-          const user = ownerRole.user;
+        {horseOwners.map((ownerRole, index) => {
+          if (!ownerRole) return null;
 
-          if (!user) return null;
-
-          // Extract user data with fallback values
+          // Create a userData variable to avoid undefined references
+          const userData = ownerRole.user || {};
           const userName =
-            `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+            `${userData.firstName || ""} ${userData.lastName || ""}`.trim() ||
             "Unnamed User";
 
+          const profileImageUrl = getProfileImageUrl(userData.profileImage);
           const roleName = getHorseUserRoleName(ownerRole.userRole);
 
           return (
             <div
-              key={`user-${user.id}`}
-              className="border border-primary rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => handleUserClick(user.id)}
+              key={`user-${userData.id || index}`}
+              className="border border-primary rounded-lg overflow-hidden cursor-pointer mx-auto max-w-xs"
+              onClick={() => handleUserClick(userData.id)}
             >
-              <div className="w-full h-50">
+              <div className="flex justify-center items-center overflow-hidden">
                 <img
-                  src={profilePictureUrl}
+                  src={profileImageUrl}
                   alt={`User ${userName}`}
-                  className="w-full h-full object-cover"
+                  className="scale-70 w-35 h-35 sm:w-45 sm:h-45 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover border-2 border-primary rounded-full"
+                  loading="lazy"
                 />
               </div>
-              <div className="p-3">
+              <div className="p-3 text-center">
                 <h3 className="font-bold">{userName}</h3>
                 <p className="text-gray text-sm">
                   Role: {roleName || "Connected"}
                   <br />
-                  {user.phoneNumber && `Phone: ${user.phoneNumber}`}
+                  {userData.phoneNumber && `Phone: ${userData.phoneNumber}`}
                 </p>
               </div>
             </div>

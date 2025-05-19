@@ -7,7 +7,7 @@ const RegistrationPage = () => {
       {/* Mobile layout */}
       <div className="flex flex-col min-h-screen lg:hidden">
         {/* Header - fixed img size */}
-        <div className="relative w-full h-[200px] sm:h-[300px] md:h-[350px]">
+        {/* <div className="relative w-full h-[200px] sm:h-[300px] md:h-[350px]">
           <img
             src="/src/assets/images/BgLoginMobile.jpg"
             alt="Horses grazing in a meadow"
@@ -18,7 +18,7 @@ const RegistrationPage = () => {
               <h1 className="text-3xl text-black">EQUILOG</h1>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Registration Section for mobile */}
         <section className="flex-1 px-6 py-8 bg-background overflow-y-auto">

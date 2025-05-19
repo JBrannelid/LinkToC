@@ -68,7 +68,7 @@ export function formatHorseMetadata(horse) {
 //Horse image URL
 export const getHorseProfileImageUrl = (
   horse,
-  fallbackUrl = "/src/assets/images/testhorseimg.png"
+  fallbackUrl = "/src/assets/images/horeImagePlaceholder.webp"
 ) => {
   return horse?.HorseImageUrl || fallbackUrl;
 };

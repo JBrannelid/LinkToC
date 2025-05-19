@@ -153,11 +153,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                     <img
-                      src={
-                        previewImageUrl ||
-                        profileImageUrl ||
-                        "/src/assets/images/userPlaceholder.jpg"
-                      }
+                      src={previewImageUrl || profileImageUrl}
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -165,7 +161,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                   </div>
                   <div className="mr-5">
                     <ImageUploader
-                      initialImageUrl={profilePictureUrl}
+                      initialImageUrl={displayUser?.profileImage}
                       onImageUploaded={(fileData) => {
                         setProfileImageData(fileData);
                         // Update image preview

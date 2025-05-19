@@ -6,7 +6,7 @@ import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 const UserHorsesTab = ({ userId, userProfile }) => {
   const navigate = useNavigate();
   const getHorseImageUrl = (horse) => {
-    return horse?.imageUrl || "/src/assets/images/testhorseimg.png";
+    return horse?.imageUrl || "/src/assets/images/horeImagePlaceholder.webp";
   };
 
   // Extract horses from userProfile data

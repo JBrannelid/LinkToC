@@ -13,7 +13,7 @@ const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
     onSelect(item);
   };
 
-  const placeholderImage = "/src/assets/images/horsePlaceholder.jpg";
+  const placeholderImage = "/src/assets/images/horsePlaceholder.webp";
   return (
     // Card wrapper with mobile-first considerations
     <div

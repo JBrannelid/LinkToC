@@ -1,7 +1,7 @@
 import React from "react";
 
 const OnboardingLayout = ({
-  imageSrc = "/src/assets/images/FirstLoginImage.jpg",
+  imageSrc = "/src/assets/images/FirstLoginImage.webp",
   imageAlt = "Horse in paddock",
   children,
   showImage = true,
