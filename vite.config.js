@@ -6,6 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 // Build project by code-split the application for better performance
 export default defineConfig({
   base: "/",
+  assetsInclude: ["**/*.woff", "**/*.woff2"],
   plugins: [
     react(),
     tailwindcss(),
