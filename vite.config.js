@@ -18,6 +18,9 @@ export default defineConfig({
       deleteOriginFile: false, // Keep original files alongside compressed ones
     }),
   ],
+  define: {
+    "process.env": process.env,
+  },
   build: {
     rollupOptions: {
       output: {
