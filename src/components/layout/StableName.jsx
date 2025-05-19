@@ -1,40 +1,33 @@
-import React from "react";
-import { useStableData } from "../../hooks/useStableData.js";
+import React, { useState, useEffect } from "react";
 import { useAppContext } from "../../context/AppContext.jsx";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import { useLoadingState } from "../../hooks/useLoadingState";
-import { getErrorMessage } from "../../utils/errorUtils.js";
 
-export default function StableName({ currentStableId, className = "" }) {
-  const { currentStable } = useAppContext();
-  const {
-    currentStableData,
-    status: { loading, error },
-  } = useStableData(currentStable?.id);
+export default function StableName({ className = "" }) {
+  const { currentStable, stableData } = useAppContext();
+  const [displayName, setDisplayName] = useState(() => {
+    const savedStable = localStorage.getItem("currentStable");
+    if (savedStable) {
+      try {
+        const parsed = JSON.parse(savedStable);
+        return parsed.name || "Loading...";
+      } catch (error) {
+        return "Loading...";
+      }
+    }
+    return "No stable connected";
+  });
 
-  const loadingState = useLoadingState(loading, "fetch");
-
-  if (loading)
-    return (
-      <div className="flex items-center py-2">
-        <LoadingSpinner size="small" className="text-gray" />
-        <span>{loadingState.getMessage()}</span>
-      </div>
-    );
-
-  if (error) {
-    const errorMessage = getErrorMessage(error);
-
-    return (
-      <p className="py-2 text-error-500">
-        {errorMessage?.text || "Something went wrong."}
-      </p>
-    );
-  }
+  // Update once context data is available
+  useEffect(() => {
+    if (stableData?.name) {
+      setDisplayName(stableData.name);
+    } else if (currentStable?.name) {
+      setDisplayName(currentStable.name);
+    }
+  }, [stableData?.name, currentStable?.name]);
 
   return (
     <span className={`text-2xl md:text-3xl font-heading ${className}`}>
-      {currentStableData?.name || currentStable?.name || "No stable connected"}
+      {displayName}
     </span>
   );
 }
