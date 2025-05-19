@@ -134,7 +134,6 @@ export const useHorseManagement = (stableId) => {
         breed: horseData.breed || null,
         color: horseData.color || null,
         age: horseData.age || null,
-        // stableId: stableId
       };
 
       const response = await horseService.update(updateData);
