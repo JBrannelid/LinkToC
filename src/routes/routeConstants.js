@@ -14,7 +14,6 @@ export const ROUTES = {
   STABLE_HORSES: "/stable-horses/:stableId",
   MANAGE_STABLE: "/manage-stable",
   STABLE_REQUESTS: "/stable-requests",
-  NOTIFICATIONS: "/notifications",
   USER_PROFILE: "/userpage/:userId",
   MANAGE_HORSES: "/manage-horses",
   HORSE_PROFILE: "/horse-profile/:horseId",
