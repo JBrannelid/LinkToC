@@ -3,14 +3,15 @@ import useStableLocation from "../../hooks/useStableLocation.js";
 import LocationPinIcon from "../../assets/icons/LocationPinIcon.jsx";
 
 
-const DisplayDistance = ({
-                             directionsUrl,
-                             distance,
-                             locationName,
-                             className = '',
-                             iconSize = 14,
-                             showLabel = true
-                         }) => {
+const DisplayDistance = (
+    {
+        directionsUrl,
+        distance,
+        locationName,
+        className = '',
+        iconSize = 14,
+        showLabel = true
+    }) => {
     // Format distance
     const formattedDistance = distance !== undefined
         ? `${distance.toFixed(1)} km ${showLabel ? 'from you' : ''}`
@@ -31,14 +32,15 @@ const DisplayDistance = ({
     );
 };
 
-const ConnectedDisplayDistance = ({
-                                      stableId,
-                                      latitude,
-                                      longitude,
-                                      locationName,
-                                      distance: propDistance,
-                                      ...otherProps
-                                  }) => {
+const ConnectedDisplayDistance = (
+    {
+        stableId,
+        latitude,
+        longitude,
+        locationName,
+        distance: propDistance,
+        ...otherProps
+    }) => {
     const {
         userLocation,
         calculateDistance,
