@@ -165,7 +165,7 @@ function useSearchState(config) {
         // Handlers
         handleInputChange,
         handleSelectItem,
-        setSelectedItem,       // Direct setter for external use
+        setSelectedItem,       
         isItemSelected,
         resetSearch,
         performSearch,
