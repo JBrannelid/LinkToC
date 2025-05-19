@@ -89,7 +89,7 @@ const BaseSettingsPage = ({
   // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">
@@ -103,7 +103,7 @@ const BaseSettingsPage = ({
         <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg">
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
             <img
-              src={profileImageUrl}
+              src={profilePictureUrl}
               alt={`Profile image of ${userFullName}`}
               className="w-full h-full object-cover"
             />
