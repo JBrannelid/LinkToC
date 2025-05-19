@@ -31,7 +31,7 @@ const DesktopNavigation = () => {
   const displayUser = userData || user;
   const userId = displayUser?.id;
   const userFullName = formatUserFullName(displayUser);
-  const profileImageUrl = getProfileImageUrl(displayUser?.profileImage);
+  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   // Hide notification icon on certain routes
   const notificationHiddenRoutes = ["/stable-onboarding", "/select-stable"];
@@ -127,8 +127,8 @@ const DesktopNavigation = () => {
           >
             <div className="w-9 h-9 rounded-full overflow-hidden mr-4">
               <img
-                src={profileImageUrl}
-                alt={`Profile image of ${userFullName}`}
+                src={profilePictureUrl}
+                alt={`Profile of ${userFullName}`}
                 className="w-full h-full object-cover"
                 loading="lazy"
               />

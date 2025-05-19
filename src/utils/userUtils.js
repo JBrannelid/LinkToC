@@ -59,10 +59,10 @@ export const formatUserFullName = (user) => {
 };
 
 export const getProfileImageUrl = (
-  profileImageUrl,
+  profilePictureUrl,
   fallbackUrl = "/src/assets/images/userPlaceholder.jpg"
 ) => {
-  return profileImageUrl || fallbackUrl;
+  return profilePictureUrl || fallbackUrl;
 };
 
 export const getRoleName = (role) => {

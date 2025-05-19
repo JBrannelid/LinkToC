@@ -29,7 +29,10 @@ export const AuthProvider = ({ children }) => {
       }
       const base64Url = parts[1];
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const paddedBase64 = base64.padEnd(base64.length + (4 - base64.length % 4), "=");
+      const paddedBase64 = base64.padEnd(
+        base64.length + (4 - (base64.length % 4)),
+        "="
+      );
       return JSON.parse(window.atob(paddedBase64));
     } catch (error) {
       console.error("Error decoding JWT:", error);
@@ -71,11 +74,11 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
-  
+
   const loadCachedUser = useCallback(() => {
     try {
       const cachedUser = sessionStorage.getItem("currentUser");
-      if(cachedUser) {
+      if (cachedUser) {
         return JSON.parse(cachedUser);
       }
       return null;
@@ -84,7 +87,6 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   }, []);
-  
 
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
@@ -151,6 +153,8 @@ export const AuthProvider = ({ children }) => {
             lastName: fullUserData.lastName || userData.lastName,
             email: fullUserData.email || userData.email,
             phoneNumber: fullUserData.phoneNumber || userData.phoneNumber,
+            profilePictureUrl:
+              fullUserData.profilePictureUrl || userData.profilePictureUrl,
             stableRoles: stableRoles,
           });
         } catch (rolesError) {

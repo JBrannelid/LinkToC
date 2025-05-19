@@ -79,12 +79,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       // Include profile image data if available
       const updateData = {
         ...data,
-        // Add the profile image URL
-        ...(profileImageData && { profileImage: profileImageData.url }),
-        // Send  blob name to backend
-        ...(profileImageData && {
-          profileImageBlobName: profileImageData.blobName,
-        }),
+        profilePictureUrl: profileImageData ? profileImageData.url : undefined,
       };
 
       // Use the extracted utility function
@@ -170,7 +165,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                   </div>
                   <div className="mr-5">
                     <ImageUploader
-                      initialImageUrl={profileImageUrl}
+                      initialImageUrl={profilePictureUrl}
                       onImageUploaded={(fileData) => {
                         setProfileImageData(fileData);
                         // Update image preview

@@ -69,14 +69,14 @@ const UserProfileImage = ({
   }
 
   const altText = `${
-    user && user.profileImage ? "Profile picture" : "Initials"
+    user && user.profilePictureUrl ? "Profile picture" : "Initials"
   } for ${getUserDisplayName()}`;
 
   // STEP 6: Handle image error - when the image fails to load, we'll show initials instead
   const [imageError, setImageError] = useState(false);
 
   // Check if we have a valid image URL and no error has occurred
-  const hasValidImage = user?.profileImage && !imageError;
+  const hasValidImage = user?.profilePictureUrl && !imageError;
 
   return (
     <div
@@ -84,12 +84,12 @@ const UserProfileImage = ({
     >
       {hasValidImage ? (
         <img
-          src={user.profileImage}
+          src={user.profilePictureUrl}
           alt={altText}
           className={`${sizeClass} rounded-full object-cover`}
           loading="lazy"
           onError={(e) => {
-            console.log("Image failed to load:", user.profileImage);
+            console.log("Image failed to load:", user.profilePictureUrl);
             setImageError(true);
           }}
         />
