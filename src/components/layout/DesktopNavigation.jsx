@@ -130,6 +130,7 @@ const DesktopNavigation = () => {
                 src={profileImageUrl}
                 alt={`Profile image of ${userFullName}`}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
           </Link>

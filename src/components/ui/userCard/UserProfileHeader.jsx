@@ -162,6 +162,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               src={profileImageUrl}
               alt={`Profile of ${userFullName}`}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
         </div>
@@ -175,6 +176,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             src={profileImageUrl}
             alt={`Profile of ${userFullName}`}
             className="w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
         {/* User info */}

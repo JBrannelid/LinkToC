@@ -18,7 +18,12 @@ const CalendarHeader = ({
     <header className="flex items-center justify-between px-4 bg:background lg:bg-white rounded-t-sm md:rounded-t-lg lg:shadow-md">
       {/* Desktop view */}
       <div className="hidden lg:flex items-center space-x-2 mt-2 w-full">
-        <button type="button" onClick={previousMonth} className="text-primary">
+        <button
+          type="button"
+          onClick={previousMonth}
+          className="text-primary"
+          aria-label="Previous month"
+        >
           <ChevronLeft className="w-7 h-7 lg:block hidden" />
         </button>
         <h2 className="text-sm md:text-lg lg:text-xl font-normal font-heading">
@@ -29,6 +34,7 @@ const CalendarHeader = ({
           value={firstDayCurrentMonth.getFullYear()}
           onChange={(e) => changeYear(Number(e.target.value))}
           className="text-sm md:text-lg lg:text-xl font-normal font-heading"
+          aria-label="Select year"
         >
           {years.map((year) => (
             <option key={year} value={year}>
@@ -36,13 +42,19 @@ const CalendarHeader = ({
             </option>
           ))}
         </select>
-        <button type="button" onClick={nextMonth} className="text-primary">
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="text-primary"
+          aria-label="Next month"
+        >
           <ChevronRight className="w-7 h-7 lg:block hidden" />
         </button>
         <button
           type="button"
           onClick={goToToday}
           className="ml-auto lg:ml-5 text-xl lg:text-2xl font-normal font-heading text-primary"
+          aria-label="Go to today"
         >
           Today
         </button>
@@ -54,10 +66,11 @@ const CalendarHeader = ({
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
         </h2>
         <select
-          id="year"
+          id="year-mobile"
           value={firstDayCurrentMonth.getFullYear()}
           onChange={(e) => changeYear(Number(e.target.value))}
           className="text-lg font-normal font-heading"
+          aria-label="Select year"
         >
           {years.map((year) => (
             <option key={year} value={year}>
@@ -69,17 +82,24 @@ const CalendarHeader = ({
           type="button"
           onClick={previousMonth}
           className="text-primary ml-auto"
+          aria-label="Previous month"
         >
           <ChevronLeft className="lg:hidden mr-2 md:w-7 md:h-7" />
         </button>
         <button
           type="button"
           onClick={goToToday}
-          className=" text-lg font-normal font-heading text-primary"
+          className="text-lg font-normal font-heading text-primary"
+          aria-label="Go to today"
         >
           Today
         </button>
-        <button type="button" onClick={nextMonth} className="text-primary">
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="text-primary"
+          aria-label="Next month"
+        >
           <ChevronRight className="lg:hidden ml-2 md:w-8 md:h-8" />
         </button>
       </div>

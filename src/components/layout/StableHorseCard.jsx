@@ -28,6 +28,7 @@ const StableHorseCard = ({ horse, onClick }) => {
               src={horseProfileImageUrl}
               alt={getHorseImageAltText(displayHorse)}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
         </div>

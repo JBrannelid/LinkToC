@@ -231,7 +231,7 @@ export const useHorseProfile = (horseId) => {
 
     try {
       setLoading(true);
-      const response = await horseService.getById(horseId);
+      const response = await horseService.getHorseProfile(horseId);
 
       // Extract horse data from response
       let rawHorseData = null;

@@ -33,7 +33,7 @@ export default function StableInfo({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-4">
+      <div className="flex items-center justify-center p-4 bg-background">
         <LoadingSpinner size="medium" className="text-gray" />
         <span className="ml-2">{loadingState.getMessage()}</span>
       </div>

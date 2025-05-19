@@ -16,6 +16,7 @@ const WelcomeLayout = ({ children }) => {
             src={LOGIN_PAGE_BACKGROUND}
             alt={LOGIN_BG_ALT_TEXT}
             className="absolute w-full h-full object-cover"
+            loading="lazy"
           />
         </div>
 

@@ -6,18 +6,43 @@ import tailwindcss from "@tailwindcss/vite";
 // Build project by code-split the application for better performance
 export default defineConfig({
   base: "/",
+  assetsInclude: ["**/*.woff", "**/*.woff2"],
   plugins: [
     react(),
     tailwindcss(),
-    // gzip for better support across browsers and good balance between compression ratio and speed
+    // gzip for better support across browsers
     compression({
       algorithm: "gzip",
       ext: ".gz",
       filter: /\.(js|css|html|svg)$/i,
       threshold: 1024, // Only compress files larger than 1KB
-      deleteOriginFile: false, // Keep original files alongside compressed ones
+      deleteOriginFile: false,
+      compressionOptions: { level: 9 }, // Maximum compression level
+      verbose: true,
+      disable: false,
+    }),
+    // brotliCompress - better performance with compatible browsers
+    compression({
+      algorithm: "brotliCompress",
+      ext: ".br",
+      filter: /\.(js|css|html|svg|json)$/i,
+      compressionOptions: { level: 11 }, // Maximum compression level
+      threshold: 1024, // Only compress files larger than 1KB
+      deleteOriginFile: false,
+      verbose: true,
+      disable: false,
     }),
   ],
+  // Configure the development server to use compression
+  server: {
+    middlewareMode: false,
+    cors: true,
+    hmr: true,
+    compress: true,
+  },
+  define: {
+    "process.env": process.env,
+  },
   build: {
     rollupOptions: {
       output: {

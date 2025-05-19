@@ -16,6 +16,7 @@ const ResetPasswordPage = () => {
             src="/src/assets/images/BgLoginMobile.jpg"
             alt="Horses grazing in a meadow"
             className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 flex flex-col items-center justify-end pb-4 sm:pb-6">
             <div className="bg-light/20 backdrop-blur-[2px] backdrop-brightness-120 px-6 py-2 rounded-sm shadow-sm">

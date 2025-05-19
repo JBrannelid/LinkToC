@@ -134,6 +134,7 @@ const ImageUploader = ({
               src={imageUrl}
               alt="Uploaded image"
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
 

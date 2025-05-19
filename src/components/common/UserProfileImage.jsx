@@ -87,6 +87,7 @@ const UserProfileImage = ({
           src={user.profileImage}
           alt={altText}
           className={`${sizeClass} rounded-full object-cover`}
+          loading="lazy"
           onError={(e) => {
             console.log("Image failed to load:", user.profileImage);
             setImageError(true);
@@ -97,6 +98,7 @@ const UserProfileImage = ({
         <img
           src={placeholderUrl}
           alt={altText}
+          loading="lazy"
           className={`${sizeClass} rounded-full object-cover`}
           onError={() => {
             // Fall back to initials if placeholder also fails
