@@ -144,32 +144,6 @@ export const ListItemRenderer = (
     );
 };
 
-export const GridRenderer = ({
-                                 items,
-                                 itemRenderer,
-                                 onSelect,
-                                 config,
-                                 columns = 1
-                             }) => {
-    const gridClassName = `grid gap-4 ${
-        columns === 1 ? '' :
-            columns === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3'
-    }`;
-
-    return (
-        <div className={gridClassName}>
-            {items.map((item, index) => (
-                createElement(itemRenderer, {
-                    key: item[config?.idField || 'id'] || index, item,
-                    isSelected: false,
-                    onSelect,
-                    config,
-                })
-            ))}
-
-        </div>
-    );
-};
 export const MemoizedListItemRenderer = React.memo(
     ListItemRenderer,
     (prev, next) => {
@@ -187,5 +161,4 @@ export const MemoizedListItemRenderer = React.memo(
 export default {
     ListItemRenderer,
     MemoizedListItemRenderer,
-    GridRenderer
 };
