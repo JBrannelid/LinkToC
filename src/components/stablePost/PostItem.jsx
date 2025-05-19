@@ -67,9 +67,7 @@ const PostItem = ({
   const displayUser = {
     firstName: post.posterFirstName || "Unknown",
     lastName: post.posterLastName || "",
-
-    // Not in use
-    profileImage: post.posterProfileImage,
+    profilePictureUrl: post.posterProfileImage,
   };
 
   const userFullName =
@@ -92,7 +90,7 @@ const PostItem = ({
   }
 
   // Until we have solved image handling all post is display with a default user image
-  const profileImageUrl = getProfileImageUrl(displayUser.profileImage);
+  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   // Comment count - placeholder for now
   const commentCount =
@@ -117,7 +115,7 @@ const PostItem = ({
           <div className="flex justify-between pb-4">
             <div className="w-10 h-10 md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden">
               <img
-                src={profileImageUrl}
+                src={profilePictureUrl}
                 alt={`Profile image of ${userFullName}`}
                 className="w-full h-full object-cover"
               />
@@ -169,9 +167,10 @@ const PostItem = ({
           <div className="flex items-center">
             <div className="w-10 h-10 border border-primary rounded-full overflow-hidden">
               <img
-                src={profileImageUrl}
+                src={profilePictureUrl}
                 alt={`Profile image of ${userFullName}`}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
             <div className="ml-3">
