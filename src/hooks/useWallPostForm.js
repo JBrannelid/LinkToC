@@ -9,11 +9,7 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
     body: "",
     postDateTime: "",
     stableIdFk: "",
-
-    // title: "",
-    // body: "",
-    // postDateTime: "",a
-    // editedDateTime: "",
+    
   });
 
   //Validation state
@@ -28,7 +24,6 @@ export const useWallPostForm = (event, onSubmit, onCancel) => {
         body: event.body,
         postDateTime: formatDateForInput(event.postDate),
         stableIdFk: currentStable.id,
-        // editedDateTime: formatDateForInput(event.lastEdited),
       });
     }
   }, [event]);
