@@ -153,8 +153,8 @@ export const AuthProvider = ({ children }) => {
             lastName: fullUserData.lastName || userData.lastName,
             email: fullUserData.email || userData.email,
             phoneNumber: fullUserData.phoneNumber || userData.phoneNumber,
-            profileImage:
-              fullUserData.profilePictureUrl || userData.profileImage,
+            profilePictureUrl:
+              fullUserData.profilePictureUrl || userData.profilePictureUrl,
             stableRoles: stableRoles,
           });
         } catch (rolesError) {
