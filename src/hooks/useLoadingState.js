@@ -2,15 +2,15 @@ export const useLoadingState = (isLoading, operationType = "default") => {
   const getLoadingMessage = () => {
     switch (operationType) {
       case "fetch":
-        return "Laddar hem data, vänligen vänta...";
+        return "Loading data, please wait...";
       case "create":
-        return "Skapar ny data, vänligen vänta...";
+        return "Creating new data, please wait...";
       case "update":
-        return "Uppdaterar, vänligen vänta...";
+        return "Updating, please wait...";
       case "delete":
-        return "Tar bort, vänligen vänta...";
+        return "Deleting, please wait...";
       default:
-        return "Snart är vi färdiga, vänligen vänta...";
+        return "Almost done, please wait...";
     }
   };
 

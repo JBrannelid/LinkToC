@@ -77,7 +77,7 @@ export default function StableInfo({
                     size={25}
                   />
                   <span className="font-normal">
-                    Hästar {stableInfo.horseCount}
+                    Horses {stableInfo.horseCount}
                   </span>
                 </div>
 
@@ -93,7 +93,7 @@ export default function StableInfo({
                 <div className="flex justify-center items-center ml-7">
                   <PeopleIcon className="w-5 h-5 mr-2 text-primary" size={24} />
                   <span className="font-normal">
-                    Medlemar {stableInfo.memberCount}
+                    Members {stableInfo.memberCount}
                   </span>
                 </div>
 
@@ -103,7 +103,7 @@ export default function StableInfo({
                     size={25}
                   />
                   <span className="font-normal">
-                    Boxar {stableInfo.boxCount}
+                    Boxes {stableInfo.boxCount}
                   </span>
                 </div>
               </div>
@@ -130,19 +130,19 @@ export default function StableInfo({
                   className="w-5 h-5 mr-2 text-primary"
                   size={21}
                 />
-                <span className="text-xs">Hästar {stableInfo.horseCount}</span>
+                <span className="text-xs">Horses {stableInfo.horseCount}</span>
               </div>
 
               <div className="flex items-center">
                 <PeopleIcon className="w-5 h-5 mr-2 text-primary" size={21} />
                 <span className="text-xs">
-                  Medlemar {stableInfo.memberCount}
+                  Members {stableInfo.memberCount}
                 </span>
               </div>
 
               <div className="flex items-center">
                 <HorseBoxIcon className="w-5 h-5 mr-2 text-primary" size={21} />
-                <span className="text-xs">Boxar {stableInfo.boxCount}</span>
+                <span className="text-xs">Boxes {stableInfo.boxCount}</span>
               </div>
 
               <div className="flex items-center">
@@ -150,7 +150,7 @@ export default function StableInfo({
                   className="w-5 h-5 mr-2 text-primary"
                   size={21}
                 />
-                <span className="text-xs">Ridskola</span>
+                <span className="text-xs">Riding school</span>
               </div>
 
               <div className="relative">

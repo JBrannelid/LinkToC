@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { useUserData } from "../../hooks/useUserData";
@@ -47,8 +47,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      // email: "",
-      // phoneNumber: "",
       current_password: "",
       new_password: "",
       confirm_password: "",
@@ -97,10 +95,10 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       );
 
       if (!result.success) {
-        throw new Error(result.error || "Uppdatering av profil misslyckades");
+        throw new Error(result.error || "Updating profile failed");
       }
 
-      setMessage(createSuccessMessage("Profilen uppdaterad"));
+      setMessage(createSuccessMessage("Profile is updated."));
 
       if (onSuccess) {
         onSuccess();
@@ -108,7 +106,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     } catch (error) {
       setMessage(
         getErrorMessage(error, {
-          defaultMessage: "Det gick inte att uppdatera profilen. Försök igen.",
+          defaultMessage: "Could not update profile. Please try again later.",
         })
       );
     } finally {
