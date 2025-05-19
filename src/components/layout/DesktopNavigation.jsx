@@ -31,7 +31,7 @@ const DesktopNavigation = () => {
   const displayUser = userData || user;
   const userId = displayUser?.id;
   const userFullName = formatUserFullName(displayUser);
-  const profilePictureUrl = getProfileImageUrl(enhancedUser?.profilePictureUrl);
+  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   // Hide notification icon on certain routes
   const notificationHiddenRoutes = ["/stable-onboarding", "/select-stable"];
