@@ -1,8 +1,6 @@
 import SearchConfigBuilder from './SearchConfigBuilder';
 import { stableService} from '../../../api/index.js';
 
-
-
 export const createStableSearchConfig = (options = {}) => {
     return new SearchConfigBuilder('stable')
         // Set the search function with the stableService
