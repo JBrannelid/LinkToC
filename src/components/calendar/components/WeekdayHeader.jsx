@@ -19,7 +19,7 @@ const WeekdayHeader = () => {
         ))}
       </div>
 
-      {/* Desktopversion */}
+      {/* Desktop-version */}
       <div className="hidden xl:grid grid-cols-7 xl:pl-2 xl:pr-2 pt-2">
         {weekdayTitlesDesktop.map((day, index) => (
           <p

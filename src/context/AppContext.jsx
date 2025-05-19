@@ -1,18 +1,11 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
-import { useAuth } from "./AuthContext";
-import { USER_ROLES } from "../utils/userUtils";
+import React, {createContext, useCallback, useContext, useEffect, useState,} from "react";
+import {useAuth} from "./AuthContext";
+import {USER_ROLES} from "../utils/userUtils";
 
 const AppContext = createContext();
 
 export const useAppContext = () => {
-  const context = useContext(AppContext);
-  return context;
+  return useContext(AppContext);
 };
 
 export const AppProvider = ({ children }) => {

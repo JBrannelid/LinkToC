@@ -30,7 +30,7 @@ const ERROR_MESSAGES = {
 // Converts API errors to user-friendly messages based on error type
 export function getErrorMessage(error, options = {}) {
     const {
-        defaultMessage = 'Något gick fel. Vänligen försök igen.',
+        defaultMessage = 'Something went wrong. Please try again later.',
         customMessages = {}
     } = options;
 

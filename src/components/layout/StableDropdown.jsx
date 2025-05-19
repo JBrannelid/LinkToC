@@ -4,7 +4,7 @@ import { useAppContext } from "../../context/AppContext";
 import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { useNavigate, useLocation } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/routeConstants";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import StableName from "./StableName";
 import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
 

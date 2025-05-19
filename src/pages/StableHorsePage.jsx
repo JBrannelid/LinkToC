@@ -6,7 +6,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Button from "../components/ui/Button";
 import ModalHeader from "../components/layout/ModalHeader";
 import StableInfo from "../components/layout/StableInfo";
-import { ROUTES, buildRoute } from "../routes/routeConstants";
+import { ROUTES, buildRoute } from "../routes/index.jsx";
 import SearchIcon from "../assets/icons/SearchIcon";
 import StableHorseCard from "../components/layout/StableHorseCard";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import BaseSettingsPage, { SettingsMenuItem } from "./BaseSettingPage";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import {
   handleTermsOfService,
   handleSupport,

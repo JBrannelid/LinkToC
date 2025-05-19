@@ -78,7 +78,6 @@ const StablePostForm = ({
       <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
         <div className="bg-primary-light pb-5">
           <ModalHeader
-            // title={title}
             showCloseBtn={true}
             onCloseClick={onCancel}
             className="bg-primary-light"

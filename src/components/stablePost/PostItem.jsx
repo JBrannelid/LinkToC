@@ -86,7 +86,7 @@ const PostItem = ({
     return (
       <div className="flex justify-center p-4">
         <LoadingSpinner size="small" className="text-gray" />
-        <p className="ml-2">Laddar...</p>
+        <p className="ml-2">Loading...</p>
       </div>
     );
   }
