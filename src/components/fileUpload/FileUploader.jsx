@@ -46,7 +46,7 @@ const FileUploader = ({
       return;
     }
 
-    onError?.(""); // Clear error
+    onError?.(""); 
     setLoading(true);
 
     try {
@@ -61,15 +61,15 @@ const FileUploader = ({
             type: file.type,
             size: file.size,
           });
-          onError?.(""); // Clear error on success
+          onError?.("");
         }
       } else {
         const errorMsg = getUserFriendlyErrorMessage(result.error);
-        onError?.(errorMsg); // Send error to parent
+        onError?.(errorMsg);
       }
     } catch (err) {
       console.error("Upload error:", err);
-      onError?.(getUserFriendlyErrorMessage(err.message || err)); // Send error to parent
+      onError?.(getUserFriendlyErrorMessage(err.message || err)); 
     } finally {
       setLoading(false);
     }
