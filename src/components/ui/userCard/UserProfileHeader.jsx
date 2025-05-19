@@ -29,6 +29,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const enhancedUser = userStableRole?.user || user;
   const userFullName = formatUserFullName(enhancedUser);
   const profileImageUrl = getProfileImageUrl(enhancedUser?.profileImage);
+  const hasCustomProfileImage = !!enhancedUser?.profileImage;
 
   // Permissions check for editing user data
   const isCurrentUser = String(currentUser.id) === String(enhancedUser.id);
@@ -158,12 +159,33 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
         {/* Image carousel */}
         <div className="relative mt-4 border-2 border-primary rounded-lg overflow-hidden">
           <div className="w-full h-55 relative">
-            <img
-              src={profileImageUrl}
-              alt={`Profile of ${userFullName}`}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
+            {hasCustomProfileImage ? (
+              // User has a custom profile image
+              <img
+                src={enhancedUser.profileImage}
+                alt={`Profile of ${userFullName}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : (
+              // Use responsive placeholder images
+              <picture>
+                <source
+                  media="(min-width: 1024px)"
+                  srcSet="/src/assets/images/userPlaceholderLarge.webp"
+                />
+                <source
+                  media="(min-width: 768px)"
+                  srcSet="/src/assets/images/userPlaceholdermedium.webp"
+                />
+                <img
+                  src="/src/assets/images/userPlaceholderSmall.webp"
+                  alt={`Profile of ${userFullName}`}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </picture>
+            )}
           </div>
         </div>
       </div>
@@ -172,12 +194,33 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
       <div className="lg:hidden relative">
         {/* User image */}
         <div className="w-full sm:h-100 h-90 md:h-130">
-          <img
-            src={profileImageUrl}
-            alt={`Profile of ${userFullName}`}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
+          {hasCustomProfileImage ? (
+            // User has a custom profile image
+            <img
+              src={enhancedUser.profileImage}
+              alt={`Profile of ${userFullName}`}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            // Use responsive placeholder images
+            <picture>
+              <source
+                media="(min-width: 1024px)"
+                srcSet="/src/assets/images/userPlaceholderLarge.webp"
+              />
+              <source
+                media="(min-width: 768px)"
+                srcSet="/src/assets/images/userPlaceholdermedium.webp"
+              />
+              <img
+                src="/src/assets/images/userPlaceholderSmall.webp"
+                alt={`Profile of ${userFullName}`}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </picture>
+          )}
         </div>
         {/* User info */}
         <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10">
