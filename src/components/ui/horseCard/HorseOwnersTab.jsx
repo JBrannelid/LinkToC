@@ -3,6 +3,7 @@ import LoadingSpinner from "../../ui/LoadingSpinner";
 import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 import { getHorseUserRoleName } from "../../../utils/horseProfileUtils";
+import { getProfileImageUrl } from "../../../utils/userUtils";
 
 const HorseOwnersTab = ({ horseId, horseProfile }) => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
   // Extract owners from horseProfile data
   const horseOwners = horseProfile?.userHorseRoles || [];
   const loading = !horseProfile; // Assuming horseProfile is fetched from an API
+  const profilePictureUrl = getProfileImageUrl(user.profilePictureUrl);
 
   const handleUserClick = (userId) => {
     navigate(buildRoute(ROUTES.USER_PROFILE, { userId }));
@@ -49,8 +51,7 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
           const userName =
             `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
             "Unnamed User";
-          const profileImageUrl =
-            user.profileImage || "/src/assets/images/userPlaceholder.jpg";
+
           const roleName = getHorseUserRoleName(ownerRole.userRole);
 
           return (
@@ -61,7 +62,7 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
             >
               <div className="w-full h-50">
                 <img
-                  src={profileImageUrl}
+                  src={profilePictureUrl}
                   alt={`User ${userName}`}
                   className="w-full h-full object-cover"
                 />
