@@ -20,6 +20,7 @@ const MemberCard = ({ member, onClick }) => {
               src={profileImageUrl}
               alt={`Profile picture of ${fullName}`}
               className="w-full h-full object-cover"
+              loading="lazy"
             />
           </div>
         </div>

@@ -65,6 +65,7 @@ const DesktopEventsView = ({
                           src="/src/assets/images/userPlaceholder.jpg"
                           alt="User profile"
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
                     </div>

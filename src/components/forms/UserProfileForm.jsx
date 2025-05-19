@@ -167,6 +167,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       }
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                   <div className="mr-5">
