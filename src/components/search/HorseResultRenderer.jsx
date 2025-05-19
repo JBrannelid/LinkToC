@@ -2,13 +2,12 @@ import React from "react";
 import Card from "../ui/card/index.js";
 import Button from "../ui/Button.jsx";
 
-const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
-  const name = item[config?.labelField || "name"] || "Unnamed horse";
-  const breed = item[config?.secondaryField || "breed"];
-  const imageUrl = item[config?.imageField || "profileImage"];
-  const birthYear = item.birthYear || "";
-  const lineage = item.lineage || "";
-  const owner = item.owner || "";
+const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
+    const name = item[config?.labelField || 'name'] || 'Unnamed horse';
+    const breed = item[config?.secondaryField || 'breed'];
+    const imageUrl = item[config?.imageField || 'profileImage'];
+    const birthYear = item.birthYear || '';
+    const owner = item.owner || '';
 
   const handleClick = () => {
     onSelect(item);
@@ -50,6 +49,7 @@ const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
               {/* Name with text truncation */}
               <div className="font-bold truncate">{name}</div>
 
+<<<<<<< HEAD
               {/* Other details */}
               {birthYear && <div className="text-sm">{birthYear} år</div>}
               {breed && <div className="text-sm turncate">{breed}</div>}
@@ -58,6 +58,16 @@ const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
               )}
             </div>
           </div>
+=======
+                            {/* Other details */}
+                            {birthYear && <div className="text-sm">{birthYear} year</div>}
+                            {breed && <div className="text-sm turncate">{breed}</div>}
+                            {owner && (
+                                <div className="text-xs text-gray-600 truncate">{owner}</div>
+                            )}
+                        </div>
+                    </div>
+>>>>>>> main
 
           {/* Optional explicit button for accessibility */}
           <div className="mt-3 sm:mt-2 hidden">

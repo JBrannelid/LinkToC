@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/routeConstants";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { format } from "date-fns";
 import { useAppContext } from "../../context/AppContext";
 

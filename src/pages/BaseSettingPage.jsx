@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import Button from "../components/ui/Button";
 import ModalHeader from "../components/layout/ModalHeader";
 import LoadingSpinner from "../components/ui/LoadingSpinner";

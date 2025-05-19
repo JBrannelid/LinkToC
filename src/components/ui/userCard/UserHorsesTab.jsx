@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 import { useNavigate } from "react-router";
-import { buildRoute, ROUTES } from "../../../routes/routeConstants";
+import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 
 const UserHorsesTab = ({ userId, userProfile }) => {
   const navigate = useNavigate();

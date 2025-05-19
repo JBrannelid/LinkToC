@@ -8,18 +8,15 @@ import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 
 // Remove comments if we want to display sent invitations
 const StableRequestsList = ({ stableId }) => {
-  // const [activeTab, setActiveTab] = useState("received");
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   const {
     receivedRequests,
-    // sentInvites,
     loading,
     approveRequest,
     rejectRequest,
-    // cancelInvitation,
   } = useStableManagement(stableId);
 
   const handleShowRejectModal = (request) => {

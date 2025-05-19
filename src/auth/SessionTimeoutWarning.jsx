@@ -11,7 +11,7 @@ const SessionTimeoutWarning = ({ onExtend, onLogout }) => {
       <div className="flex  items-start">
         <div className="flex-shrink-0">
           <svg
-            className="h-6 w-6 text-amber-500"
+            className="h-6 w-6 bg-warning-400"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -28,12 +28,11 @@ const SessionTimeoutWarning = ({ onExtend, onLogout }) => {
         </div>
         <div className="ml-3 flex-1">
           <h3 className="text-sm font-medium text-amber-800">
-            Session Varning
+            Session Warning
           </h3>
           <div className=" mt-2 text-sm text-amber-700">
             <p>
-              Din session håller på att löpa ut. Du blir automatiskt utloggad om
-              5 minuter.
+              Your session will expire in 5 minutes. If you do not extend it.
             </p>
           </div>
           <div className="mt-4 flex space-x-3">
@@ -41,17 +40,17 @@ const SessionTimeoutWarning = ({ onExtend, onLogout }) => {
               type="primary"
               size="small"
               onClick={onExtend}
-              aria-label="Förläng sessionen"
+              aria-label="Extenden session"
             >
-              Förläng sessionen
+              Extend Session
             </Button>
             <Button
               type="secondary"
               size="small"
               onClick={onLogout}
-              aria-label="Logga ut"
+              aria-label="Log Out"
             >
-              Logga ut
+              Log Out
             </Button>
           </div>
         </div>

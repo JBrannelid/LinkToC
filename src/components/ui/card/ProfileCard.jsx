@@ -4,6 +4,7 @@ import {
   triggerFileUpload,
   handleImageUpload,
 } from "../../../utils/imagesUtils.js";
+import Button from "../Button.jsx";
 
 const ProfileCard = ({
   id,
@@ -129,7 +130,7 @@ const ProfileCard = ({
                 onClick={() => triggerFileUpload(fileInputRef)}
                 aria-label={`Upload profile picture for ${id.name}`}
               >
-                {profileImage ? "Uppdatera foto" : "Lägg till nytt foto"}
+                {profileImage ? "Update foto" : "Add new photo"}
               </Button>
             </>
           )}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useUserStables } from "../hooks/useUserStables";
 import { useAuth } from "../context/AuthContext";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Card from "../components/ui/card";
 import Button from "../components/ui/Button";
@@ -17,6 +17,7 @@ import {USER_ROLES} from "../utils/userUtils.js";
 import HandRaisedIcon from "../assets/icons/HandRaisedIcon.jsx";
 import ConfirmationModal from "../components/ui/ConfirmationModal.jsx";
 import useStableData from "../hooks/useStableData.js";
+import useScrollToElement from "../hooks/useScrollToElement.js";
 
 const StableSelectionPage = () => {
   const { changeStable } = useAppContext();
@@ -34,7 +35,7 @@ const StableSelectionPage = () => {
   const messageTimeoutRef = useRef(null);
   const [currentView, setCurrentView] = useState(null);
   const [pageMessage, setPageMessage] = useState(null);
-  
+  const { elementRef: formSectionRef, scrollIntoView } = useScrollToElement();
   const [isProcessing, setIsProcessing] = useState(false);
   const [actionConfirmation, setActionConfirmation] = useState({
     isOpen: false,
@@ -86,9 +87,7 @@ const StableSelectionPage = () => {
       closeConfirmation();
     }
   };
-  // Ref for scrolling
-  const exploreButtonsRef = useRef(null);
-
+  
   //Deconstruct onboarding hook
   const {
     loading,
@@ -172,6 +171,19 @@ const StableSelectionPage = () => {
   const handleCancel = () => {
     setCurrentView(null);
   };
+  const handleNewStableClick = () => {
+    setCurrentView("create");
+    
+    setTimeout(() => {
+      scrollIntoView({
+        setFocus: true,
+        block: 'start',
+        behavior: 'smooth',
+        delay: 50, 
+        focusSelector: 'input[name="stableName"]' 
+      });
+    }, 10); 
+  };
 
   if (stablesLoading) {
     return (
@@ -203,7 +215,7 @@ const StableSelectionPage = () => {
         confirmText: "Leave",
         buttonType: "warning",
         iconBg: "bg-warning-500",
-        message: "Are you sure you want to leave this stable? You'll need to be invited back to rejoin."
+        message: "Are you sure you want to leave this stable? You'll need to send another invite to join the stable again."
       };
     }
 
@@ -327,8 +339,8 @@ const StableSelectionPage = () => {
           </div>
         )}
 
-        {/* Action buttom  */}
-        <div ref={exploreButtonsRef} className="mt-10 md:mt-0 max-w-md mx-auto">
+        {/* Action button  */}
+        <div className="mt-10 md:mt-0 max-w-md mx-auto">
           {/* Show buttons if no form is selected */}
           {currentView === null && (
             <div>
@@ -337,7 +349,9 @@ const StableSelectionPage = () => {
                 <Button
                   type="primary"
                   className="w-9/10 max-w-md"
-                  onClick={() => setCurrentView("create")}
+                  onClick={handleNewStableClick} 
+                  aria-controls="create-stable-form"
+                  aria-expanded={currentView === "create"}
                 >
                   New stable
                 </Button>
@@ -355,15 +369,21 @@ const StableSelectionPage = () => {
 
           {/* Show Create Form */}
           {currentView === "create" && (
-            <CreateStableForm
-              formMethods={formMethods}
-              onSubmit={handleStableCreationSuccess}
-              onCancel={handleCancel}
-              isLoading={loading}
-              loadingState={loadingState}
-              error={onboardingError}
-              message={message}
-            />
+              
+              <div
+              ref={formSectionRef}
+              id="create-stable-form"
+              aria-labelledby="create-stable-heading">
+                <CreateStableForm
+                    formMethods={formMethods}
+                    onSubmit={handleStableCreationSuccess}
+                    onCancel={handleCancel}
+                    isLoading={loading}
+                    loadingState={loadingState}
+                    error={onboardingError}
+                    message={message}
+                />
+              </div>
           )}
 
           {/* Show Join Form */}
@@ -391,7 +411,7 @@ const StableSelectionPage = () => {
             <HandRaisedIcon
                 size={70}
                 backgroundColor={confirmProps.iconBg || "bg-primary"}
-                iconColor="text-white"
+                iconColor="text-red-500"
             />
           }
       >

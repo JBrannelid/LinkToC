@@ -90,16 +90,6 @@ export default function WallPost() {
               <div className="mb-2">
                 <p className="font-light text-sm">{post.content}</p>
               </div>
-              <div className="mt-2">
-                {/* <p className="font-light text-xs text-gray">
-                  {post.date ? formatData(post.date) : "No date"}
-                </p> */}
-                {/* {post.posterFirstName && (
-                  <p className="font-light text-xs text-gray">
-                    {post.posterFirstName} {post.posterLastName}
-                  </p>
-                )} */}
-              </div>
             </WallPostCard>
           </div>
         ))}

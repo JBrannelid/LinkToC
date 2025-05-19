@@ -1,25 +1,16 @@
 import {ROUTES} from "../../../routes/index";
 import {
     createStableSearchConfig,
-    createHorseSearchConfig,
-    createUserSearchConfig
 } from './entityBuilder.js';
 
 const stableSearchConfig = createStableSearchConfig();
-const horseSearchConfig = createHorseSearchConfig();
-const userSearchConfig = createUserSearchConfig();
 const routeConfigMap = {
     [ROUTES.STABLE_ONBOARDING]: stableSearchConfig,
 
-    [ROUTES.HORSE_PROFILE]: horseSearchConfig,
-
-    [ROUTES.USER_PROFILE]: userSearchConfig,
 };
 
 export const searchConfigs = {
     stable: stableSearchConfig,
-    horse: horseSearchConfig,
-    user: userSearchConfig,
 };
 
 export const getConfigForRoutes = (route) => {
@@ -33,13 +24,6 @@ export const getConfigForRoutes = (route) => {
         }
     }
 
-    if (route.includes('/horses')) {
-        return searchConfigs.horse;
-    }
-
-    if (route.includes('/users')) {
-        return searchConfigs.user;
-    }
 
     if (route.includes('/stable')) {
         return searchConfigs.stable;

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useLoadingState } from "./useLoadingState";
 import { useNavigate } from "react-router";
 import { getErrorMessage } from "../utils/errorUtils";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import {authService} from "../api/index.js";
 import { useAppContext } from "../context/AppContext";
 
@@ -94,8 +94,6 @@ export const useUserData = (userId, includeProfile = true) => {
         id: currentUserId,
         firstName: data.firstName,
         lastName: data.lastName,
-        // email: data.email,
-        // phoneNumber: data.phoneNumber,
       };
 
       const response = await userService.update(updateData);
@@ -105,10 +103,10 @@ export const useUserData = (userId, includeProfile = true) => {
         await fetchAndUpdateUserData();
         return { success: true };
       } else {
-        throw new Error(response?.message || "Uppdatering misslyckades");
+        throw new Error(response?.message || "Update failed");
       }
     } catch (err) {
-      setError(err.message || "Uppdatering misslyckades");
+      setError(err.message || "Update failed");
       return { success: false, error: err.message };
     } finally {
       setLoading(false);
@@ -130,7 +128,7 @@ export const useUserData = (userId, includeProfile = true) => {
     } catch (error) {
       setError(
         getErrorMessage(error, {
-          defaultMessage: "Kunde inte radera kontot. Försök igen senare.",
+          defaultMessage: "Couldn't delete account. Please try again later.",
         })
       );
       return false;

@@ -14,7 +14,6 @@ const EventsHeader = ({
     return (
       <div className="bg-primary-light pb-5">
         <ModalHeader
-          // title={dayName}
           showCloseBtn={true}
           onCloseClick={onClose}
           className="bg-primary-light"
