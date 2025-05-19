@@ -98,7 +98,7 @@ export const useUserData = (userId, includeProfile = true) => {
         id: currentUserId,
         firstName: data.firstName,
         lastName: data.lastName,
-        ...(data.profileImage && { profilePictureUrl: data.profileImage }),
+        profilePictureUrl: data.profilePictureUrl,
       };
 
       const response = await userService.update(updateData);
