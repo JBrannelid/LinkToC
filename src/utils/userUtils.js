@@ -59,10 +59,26 @@ export const formatUserFullName = (user) => {
 };
 
 export const getProfileImageUrl = (
-  profilePictureUrl,
-  fallbackUrl = "/src/assets/images/userPlaceholder.webp"
+  profileImageUrl,
+  size = "default",
+  fallbackUrl = null
 ) => {
-  return profilePictureUrl || fallbackUrl;
+  // If the user has a custom profile image, return it
+  if (profileImageUrl) return profileImageUrl;
+
+  // Otherwise, return the appropriate placeholder based on size
+  switch (size) {
+    case "small":
+      return "/src/assets/images/userPlaceholderSmall.webp";
+    case "medium":
+      return "/src/assets/images/userPlaceholdermedium.webp";
+    case "large":
+      return "/src/assets/images/userPlaceholderLarge.webp";
+    case "rounded":
+      return "/src/assets/images/userPlaceholderRounded.webp";
+    default:
+      return fallbackUrl || "/src/assets/images/userPlaceholderRounded.webp";
+  }
 };
 
 export const getRoleName = (role) => {
