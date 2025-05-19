@@ -138,6 +138,8 @@ export function useStablePosts(stableId, currentUser) {
             content: comment.content || comment.Content,
             commentDate: comment.commentDate || comment.CommentDate,
             userId: comment.userId || comment.UserId || currentUser?.id,
+            userName: comment.userName,
+            userProfileImage: comment.userProfileImage,
           }))
         : [];
 

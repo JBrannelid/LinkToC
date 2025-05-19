@@ -110,7 +110,7 @@ const CommentsModal = ({
                     >
                       <div className="flex justify-between mb-2">
                         <span className="font-bold">
-                          {comment.userName || formatUserFullName(currentUser)}
+                          {comment.userName || "Unknown User"}
                         </span>
                         <span className="text-sm text-gray">
                           {formatCommentDate(comment.commentDate)}
