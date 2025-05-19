@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { createErrorMessage, createSuccessMessage } from "../utils/errorUtils";
+import { createErrorMessage} from "../utils/errorUtils";
 import axiosInstance from "../api/config/axiosConfig.js";
 import {calculateDistanceUtil, formatDistanceUtil, getDirectionsUrlUtil} from "../utils/locationUtils.js";
 
