@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import ProfilePage from "../components/ui/userPage/HorseProfilePage.jsx";
+import ProfilePage from "../pages/HorseProfilePage.jsx";
 import { useAppContext } from "../context/AppContext.jsx";
 
 const ProfileTester = () => {

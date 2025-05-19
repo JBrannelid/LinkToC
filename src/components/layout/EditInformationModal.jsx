@@ -13,9 +13,9 @@ const EditInformationModal = ({
   fieldName,
   fieldLabel,
   initialValue = "",
-  userId, // This will be userId or horseId depending on context
+  userId, 
   multiline = false,
-  userData, // This will be user data or horse data
+  userData, 
   refreshUserData,
   isHorse = false,
   isCurrentUser = false,
@@ -46,7 +46,6 @@ const EditInformationModal = ({
   }, [isOpen, isHorse, currentUser?.id, userId, onClose, isCurrentUser]);
 
   // Update call directly in handleSubmit sense we handle both user and horse
-  // Don't know if this should be placed in a hook or not
   const handleSubmit = async (data) => {
     // Security check - only proceed if it's the current user
     if (!isCurrentUser && String(currentUser?.id) !== String(userId)) {

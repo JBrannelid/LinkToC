@@ -15,7 +15,7 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
     <div
       className="w-full h-full flex items-start justify-start p-1"
       onClick={(e) => {
-        // Prevent redender from parent elements
+        // Prevent render from parent elements
         e.stopPropagation();
 
         if (onSelectUser && users.length > 0) {

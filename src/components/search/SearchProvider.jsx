@@ -3,8 +3,8 @@ import { useLocation } from 'react-router';
 import { SearchContext } from '../../context/searchContext';
 import { getConfigForRoutes } from './config/searchConfig';
 import { useLoadingState } from '../../hooks/useLoadingState';
-import useSearchState from "../search/hooks/useSearchState.js";
-import { useStableSearchWithDistance} from "./hooks/useStableSearch.js";
+import useSearchState from "../../hooks/useSearchState.js";
+import { useStableSearchWithDistance} from "../../hooks/useStableSearch.js";
 
 const SearchProvider = ({ children, customConfig = null }) => {
     const location = useLocation();

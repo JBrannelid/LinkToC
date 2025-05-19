@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router";
-import { ROUTES } from "../../routes/routeConstants";
+import { ROUTES } from "../../routes/index.jsx";
 import Header from "./Header";
 
 // A wrapper component that applies the appropriate background to the header

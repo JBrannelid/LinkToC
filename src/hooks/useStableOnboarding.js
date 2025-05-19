@@ -106,7 +106,7 @@ export const useStableOnboarding = () => {
         } else {
           const errorMessage = getErrorMessage({
             type: "server",
-            message: response?.message || "Kunde inte skapa stall",
+            message: response?.message || "Unavailable to create stable.",
           }).text;
 
           setError(errorMessage);
@@ -114,7 +114,7 @@ export const useStableOnboarding = () => {
         }
       } catch (error) {
         const errorMessage = getErrorMessage(error, {
-          defaultMessage: "Ett fel inträffade vid skapandet av stallet",
+          defaultMessage: "An error occurred while creating the stable.",
         }).text;
 
         setError(errorMessage);

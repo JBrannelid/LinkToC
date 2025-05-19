@@ -26,7 +26,7 @@ export function useUserStables() {
 
       const userStablesData = await userService.getUserStables(user.id);
 
-      // Hämta fullständig information för varje stall
+      // Get all information for each stable
       const stableResponse = userStablesData.map(async (stableRelation) => {
         try {
           const response = await stableService.getById(

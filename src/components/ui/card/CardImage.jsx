@@ -1,11 +1,12 @@
 import React from 'react';
 
-const CardImage = ({
-                       src,
-                       alt,
-                       className = "",
-                       loading = "lazy"
-                   }) => {
+const CardImage = (
+    {
+        src,
+        alt,
+        className = "",
+        loading = "lazy"
+    }) => {
     if (!alt) {
         console.warn("CardImage: Missing alt text for image accessibility");
     }

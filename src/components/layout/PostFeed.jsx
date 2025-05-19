@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../post/Post";
+import Post from "../posts/Post";
 
 export default function PostFeed() {
   //Post ID

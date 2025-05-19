@@ -23,15 +23,7 @@ export const useUserStableRequests = () => {
       // Fetch requests sent by the user
       const response = await stableService.getUserStableRequests(user.id);
       setSentRequests(Array.isArray(response) ? response : []);
-
-      // Fetch invites received by the user
-      // const receivedResponse = await stableService.getStableInvitesByUserId(
-      //   user.id
-      // );
-      // setReceivedInvites(
-      //   Array.isArray(receivedResponse) ? receivedResponse : []
-      // );
-      setReceivedInvites([]); // Should we implement this function?  Empty array for now
+      setReceivedInvites([]); 
 
       setError(null);
     } catch (error) {

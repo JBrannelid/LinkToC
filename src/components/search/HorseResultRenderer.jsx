@@ -7,7 +7,6 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
     const breed = item[config?.secondaryField || 'breed'];
     const imageUrl = item[config?.imageField || 'profileImage'];
     const birthYear = item.birthYear || '';
-    const lineage = item.lineage || '';
     const owner = item.owner || '';
 
     const handleClick = () => {
@@ -50,7 +49,7 @@ const HorseResultRenderer = ({item, isSelected, onSelect, config}) => {
                             <div className="font-bold truncate">{name}</div>
 
                             {/* Other details */}
-                            {birthYear && <div className="text-sm">{birthYear} år</div>}
+                            {birthYear && <div className="text-sm">{birthYear} year</div>}
                             {breed && <div className="text-sm turncate">{breed}</div>}
                             {owner && (
                                 <div className="text-xs text-gray-600 truncate">{owner}</div>

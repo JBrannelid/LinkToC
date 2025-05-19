@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
-import { ROUTES } from "../../routes/routeConstants";
+import { ROUTES } from "../../routes/index.jsx";
 import SettingIcon from "../../assets/icons/SettingIcon";
 import ChevronLeftIcon from "../../assets/icons/ChevronLeftIcon";
 import NotificationIcon from "../../assets/icons/NotificationIcon";

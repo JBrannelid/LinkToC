@@ -74,27 +74,9 @@ const SearchInput = ({
     wasLoadingRef.current = loading;
   }, [loading, maintainFocus, desktopView]);
 
-  // useEffect(() => {
-  //   if (
-  //     maintainFocus &&
-  //     !desktopView &&
-  //     inputRef.current &&
-  //     document.activeElement !== inputRef.current
-  //   ) {
-  //     setTimeout(() => {
-  //       if (inputRef.current) {
-  //         inputRef.current.focus();
-  //
-  //         const length = inputRef.current.value.length;
-  //         inputRef.current.setSelectionRange(length, length);
-  //       }
-  //     }, 10);
-  //   }
-  // }, [results, maintainFocus, desktopView]);
 
   useEffect(() => {
     // Only auto-focus if:
-    // 1. autoFocus prop is true AND viewport is smaller than lg breakpoint
     if (
       autoFocus &&
       !desktopView &&
