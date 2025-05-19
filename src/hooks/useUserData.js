@@ -5,7 +5,7 @@ import { useLoadingState } from "./useLoadingState";
 import { useNavigate } from "react-router";
 import { getErrorMessage } from "../utils/errorUtils";
 import { ROUTES } from "../routes/index.jsx";
-import {authService} from "../api/index.js";
+import { authService } from "../api/index.js";
 import { useAppContext } from "../context/AppContext";
 
 export const useUserData = (userId, includeProfile = true) => {
@@ -94,6 +94,7 @@ export const useUserData = (userId, includeProfile = true) => {
         id: currentUserId,
         firstName: data.firstName,
         lastName: data.lastName,
+        ...(data.profileImage && { profilePictureUrl: data.profileImage }),
       };
 
       const response = await userService.update(updateData);
