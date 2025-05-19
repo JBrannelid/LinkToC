@@ -1,40 +1,12 @@
 import React from "react";
-import { useStableData } from "../../hooks/useStableData.js";
 import { useAppContext } from "../../context/AppContext.jsx";
-import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import { useLoadingState } from "../../hooks/useLoadingState";
-import { getErrorMessage } from "../../utils/errorUtils.js";
 
-export default function StableName({ currentStableId, className = "" }) {
-  const { currentStable } = useAppContext();
-  const {
-    currentStableData,
-    status: { loading, error },
-  } = useStableData(currentStable?.id);
-
-  const loadingState = useLoadingState(loading, "fetch");
-
-  if (loading)
-    return (
-      <div className="flex items-center py-2">
-        <LoadingSpinner size="small" className="text-gray" />
-        <span>{loadingState.getMessage()}</span>
-      </div>
-    );
-
-  if (error) {
-    const errorMessage = getErrorMessage(error);
-
-    return (
-      <p className="py-2 text-error-500">
-        {errorMessage?.text || "Something went wrong."}
-      </p>
-    );
-  }
+export default function StableName({ className = "" }) {
+  const { currentStable, stableData } = useAppContext();
 
   return (
     <span className={`text-2xl md:text-3xl font-heading ${className}`}>
-      {currentStableData?.name || currentStable?.name || "No stable connected"}
+      {stableData?.name || currentStable?.name || "No stable connected"}
     </span>
   );
 }
