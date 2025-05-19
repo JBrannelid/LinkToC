@@ -36,6 +36,10 @@ export const useUserData = (userId, includeProfile = true) => {
       const response = await userService.getById(currentUserId);
       const responseUserData = extractUserData(response);
 
+      if (responseUserData.profilePictureUrl) {
+        responseUserData.profileImage = responseUserData.profilePictureUrl;
+      }
+
       setUserData(responseUserData);
       return true;
     } catch (err) {
