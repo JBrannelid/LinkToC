@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/routeConstants";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { useAppContext } from "../../context/AppContext";
 import { isRouteActive } from "../../routes/routeUtils";
 import FeedIcon from "../../assets/icons/FeedIcon";

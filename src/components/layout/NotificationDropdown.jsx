@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router";
-import { ROUTES } from "../../routes/routeConstants";
+import { ROUTES } from "../../routes/index.jsx";
 import NotificationIcon from "../../assets/icons/NotificationIcon";
 import Button from "../ui/Button";
 import mockNotificationsData from "../../testing/mockNotifications.json";

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useAppContext } from "../context/AppContext";
 import { useUserStables } from "../hooks/useUserStables";
 import { useAuth } from "../context/AuthContext";
-import { ROUTES } from "../routes/routeConstants";
+import { ROUTES } from "../routes/index.jsx";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Card from "../components/ui/card";
 import Button from "../components/ui/Button";
