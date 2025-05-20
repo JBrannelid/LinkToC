@@ -1,45 +1,82 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
 import { USER_ROLES } from "../utils/userUtils";
-import SettingsRouter from "../components/settings/SettingsRouter";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
-// Pages components
-import HomePage from "../pages/HomePage";
+// Regular imports
 import LoginPage from "../pages/LoginPage";
-import RegistrationPage from "../pages/RegistrationPage";
-import StableSelectionPage from "../pages/StableSelectionPage";
-import HorseProfilePage from "../pages/HorseProfilePage";
+import HomePage from "../pages/HomePage";
 import ErrorPage from "../pages/ErrorPage";
-import StablePostPage from "../pages/StablePostPage";
-import ListUserStablePage from "../pages/ListUserStablePage";
-import ResetPasswordPage from "../pages/ResetPasswordPage";
-import ForgotPasswordPage from "../pages/ForgotPasswordPage";
-import StableOnboardingPage from "../pages/StableOnboardingPage.jsx";
-import NotificationPage from "../pages/NotificationPage";
-import StableManagementPage from "../pages/StableManagementPage";
-import StableRequestsPage from "../pages/StableRequestsPage.jsx";
-import StableHorsePage from "../pages/StableHorsePage.jsx";
-import UserProfilePage from "../pages/UserProfilePage.jsx";
-import HorseManagementPage from "../pages/HorseManagementPage";
+
+// Pages import with lazy loading
+const RegistrationPage = React.lazy(() => import("../pages/RegistrationPage"));
+const StableSelectionPage = React.lazy(() =>
+  import("../pages/StableSelectionPage")
+);
+const HorseProfilePage = React.lazy(() => import("../pages/HorseProfilePage"));
+const StablePostPage = React.lazy(() => import("../pages/StablePostPage"));
+const ListUserStablePage = React.lazy(() =>
+  import("../pages/ListUserStablePage")
+);
+const ResetPasswordPage = React.lazy(() =>
+  import("../pages/ResetPasswordPage")
+);
+const ForgotPasswordPage = React.lazy(() =>
+  import("../pages/ForgotPasswordPage")
+);
+const StableOnboardingPage = React.lazy(() =>
+  import("../pages/StableOnboardingPage.jsx")
+);
+const NotificationPage = React.lazy(() => import("../pages/NotificationPage"));
+const StableManagementPage = React.lazy(() =>
+  import("../pages/StableManagementPage")
+);
+const StableRequestsPage = React.lazy(() =>
+  import("../pages/StableRequestsPage.jsx")
+);
+const StableHorsePage = React.lazy(() =>
+  import("../pages/StableHorsePage.jsx")
+);
+const UserProfilePage = React.lazy(() =>
+  import("../pages/UserProfilePage.jsx")
+);
+const HorseManagementPage = React.lazy(() =>
+  import("../pages/HorseManagementPage")
+);
+const SettingsRouter = React.lazy(() =>
+  import("../components/settings/SettingsRouter")
+);
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="flex justify-center items-center h-screen">
+    <LoadingSpinner size="large" className="text-primary" />
+  </div>
+);
+
+// Wrap component with React-Suspense
+const withSuspense = (Component) => (
+  <Suspense fallback={<PageLoader />}>{Component}</Suspense>
+);
 
 // Public Routes
 export const publicRoutes = [
   {
     path: ROUTES.LOGIN,
-    element: <LoginPage />,
+    element: withSuspense(<LoginPage />),
   },
   {
     path: ROUTES.REGISTER,
-    element: <RegistrationPage />,
+    element: withSuspense(<RegistrationPage />),
   },
   {
     path: ROUTES.RESET_PASSWORD,
-    element: <ResetPasswordPage />,
+    element: withSuspense(<ResetPasswordPage />),
   },
   {
     path: ROUTES.FORGOT_PASSWORD,
-    element: <ForgotPasswordPage />,
+    element: withSuspense(<ForgotPasswordPage />),
   },
   {
     path: "/",
@@ -51,79 +88,71 @@ export const publicRoutes = [
 export const protectedRoutes = [
   {
     path: ROUTES.HOME,
-    element: <HomePage />,
+    element: withSuspense(<HomePage />),
     requiresStable: true,
   },
   {
     path: ROUTES.SELECT_STABLE,
-    element: <StableSelectionPage />,
+    element: withSuspense(<StableSelectionPage />),
     requiresStable: false,
   },
   {
     path: ROUTES.STABLE_POST,
-    element: <StablePostPage />,
+    element: withSuspense(<StablePostPage />),
     requiresStable: true,
   },
   {
     path: ROUTES.STABLE_MEMBERS,
-    element: <ListUserStablePage />,
+    element: withSuspense(<ListUserStablePage />),
     requiresStable: true,
   },
   {
     path: ROUTES.NOTIFICATIONS,
-    element: <NotificationPage />,
+    element: withSuspense(<NotificationPage />),
     requiresStable: true,
   },
   {
     path: ROUTES.SETTINGS,
-    element: <SettingsRouter />,
+    element: withSuspense(<SettingsRouter />),
     requiresStable: false,
   },
   {
     path: ROUTES.STABLE_ONBOARDING,
-    element: <StableOnboardingPage />,
+    element: withSuspense(<StableOnboardingPage />),
     requiresStable: false,
   },
   {
     path: ROUTES.STABLE_HORSES,
-    element: <StableHorsePage />,
+    element: withSuspense(<StableHorsePage />),
     requiresStable: true,
   },
   {
     path: ROUTES.MANAGE_STABLE,
-    element: <StableManagementPage />,
+    element: withSuspense(<StableManagementPage />),
     requiresStable: true,
     requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
   },
   {
     path: ROUTES.MANAGE_HORSES,
-    element: <HorseManagementPage />,
+    element: withSuspense(<HorseManagementPage />),
     requiresStable: true,
     requiredRoles: [USER_ROLES.ADMIN, USER_ROLES.MANAGER],
   },
   {
     path: ROUTES.STABLE_REQUESTS,
-    element: <StableRequestsPage />,
+    element: withSuspense(<StableRequestsPage />),
     requiresStable: false,
   },
-  {
-    path: ROUTES.NOTIFICATIONS,
-    element: <NotificationPage />,
-    requiresStable: true,
-  },
+  // Remove duplicate NOTIFICATIONS route
   {
     path: ROUTES.USER_PROFILE,
-    element: <UserProfilePage />,
+    element: withSuspense(<UserProfilePage />),
     requiresStable: true,
   },
-  {
-    path: ROUTES.USER_PROFILE,
-    element: <UserProfilePage />,
-    requiresStable: true,
-  },
+  // Remove duplicate USER_PROFILE route
   {
     path: ROUTES.HORSE_PROFILE,
-    element: <HorseProfilePage />,
+    element: withSuspense(<HorseProfilePage />),
     requiresStable: true,
   },
 ];
@@ -131,5 +160,5 @@ export const protectedRoutes = [
 // Error handling
 export const errorRoute = {
   path: "*",
-  element: <ErrorPage />,
+  element: withSuspense(<ErrorPage />),
 };
