@@ -9,7 +9,7 @@ const ResetPasswordPage = () => {
   return (
     <WelcomeLayout>
       {/* Mobile layout */}
-      <div className="flex flex-col min-h-screen lg:hidden">
+      <div className="flex flex-col lg:hidden">
         {/* Form Section */}
         <div className="flex-1 bg-transparent overflow-y-auto">
           <div className="w-full max-w-md mx-auto">

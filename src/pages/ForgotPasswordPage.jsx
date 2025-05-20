@@ -22,7 +22,7 @@ const ForgotPasswordPage = () => {
   return (
     <WelcomeLayout>
       {/* Mobile layout */}
-      <div className="flex flex-col min-h-screen lg:hidden">
+      <div className="flex flex-col lg:hidden">
         {/* Form Section */}
         <div className="flex-1 bg-transparent flex justify-center">
           <div className="w-full max-w-md">
@@ -45,7 +45,7 @@ const ForgotPasswordPage = () => {
               </div>
             ) : (
               <div className="mt-10 ">
-                <h2 className=" pl-4 mb-10 text-center">
+                <h2 className=" pl-4 text-center">
                   Enter your email address to receive a password reset link
                 </h2>
                 <ForgotPasswordForm

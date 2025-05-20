@@ -5,7 +5,7 @@ const RegistrationPage = () => {
   return (
     <WelcomeLayout>
       {/* Mobile layout */}
-      <div className="flex flex-col min-h-screen lg:hidden">
+      <div className="flex flex-col lg:hidden">
         {/* Registration Section for mobile */}
         <section className="flex-1 py-2 bg-transparent overflow-y-auto">
           <RegistrationForm />

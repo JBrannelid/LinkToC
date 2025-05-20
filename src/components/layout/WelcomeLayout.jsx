@@ -37,7 +37,7 @@ const WelcomeLayout = ({ children }) => {
       </div>
 
       {/* Desktop  */}
-      <div className="hidden md:block md:min-h-screen relative overflow-hidden">
+      <div className="hidden md:block md:max-h-screen relative overflow-hidden">
         {/* Background  */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/10 to-transparent z-10"></div>
