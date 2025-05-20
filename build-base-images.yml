@@ -1,0 +1,50 @@
+# This pipeline only exists to generate base images on a new MR when someone only pushes changes to
+# one part of the program. To prevent missing imagetags not being generated
+
+stages:
+  - check
+  - build
+
+variables:
+  CI_DEBUG_TRACE: "true"  # Enable debug mode
+  PIPELINE_ROOT: "/builds/cc25group-10/frontend"
+
+# Template for all build jobs
+.build_image_template: &build_image_template
+  stage: build
+  image: docker:latest
+  variables:
+    REGISTRY_PATH: "$CI_REGISTRY/cc25group-10/frontend"
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    - export CI_COMMIT_REF_NAME=$(echo "$CI_COMMIT_REF_NAME" | tr '[:upper:]' '[:lower:]')
+    - if [[ $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=$CI_COMMIT_REF_NAME; fi
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+
+# Uses docker manifest to check if specific tag for an image exists
+# Triggers all build jobs on failure, else fails and quits back to main pipeline
+check-docker-images:
+  <<: *build_image_template
+  # Override stage
+  stage: check
+  script:
+    - echo "Checking if docker images have already been built"
+    - |
+      if \
+        docker manifest inspect "$REGISTRY_PATH:$DOCKER_TAG"; then
+        echo "Images exist, don't build"
+        exit 0
+      else
+        echo "Images do not exist, running build jobs"
+        exit 1
+      fi
+
+# Generate and publish a new Dockerimage of our React-application
+build-react-image:
+  <<: *build_image_template
+  script:
+    - export IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_TAG"
+    - echo "Building $IMAGE_NAME"
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
+  when: on_failure
