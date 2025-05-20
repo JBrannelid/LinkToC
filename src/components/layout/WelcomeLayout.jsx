@@ -7,7 +7,7 @@ const WelcomeLayout = ({ children }) => {
   return (
     <>
       {/* Main layout */}
-      <div className="md:hidden max-h-screen relative overflow-hidden">
+      <div className="md:hidden min-h-screen relative overflow-hidden">
         {/* Full-size background image container */}
         <div className="absolute inset-0 z-0">
           {/* Vertical overlay for mobile */}
@@ -30,14 +30,14 @@ const WelcomeLayout = ({ children }) => {
           </div>
 
           {/* Form content area */}
-          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-t-3xl shadow-lg px-6 py-8">
+          <div className="flex-1 bg-white/70 backdrop-blur-sm rounded-t-3xl shadow-lg px-4 py-4">
             <div className="w-full max-w-md mx-auto">{children}</div>
           </div>
         </div>
       </div>
 
       {/* Desktop  */}
-      <div className="hidden md:block md:min-h-screen relative overflow-hidden">
+      <div className="hidden md:block md:max-h-screen relative overflow-hidden">
         {/* Background  */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/10 to-transparent z-10"></div>
