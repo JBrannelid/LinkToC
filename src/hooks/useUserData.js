@@ -42,11 +42,12 @@ export const useUserData = (userId, includeProfile = true) => {
         responseUserData.profilePictureUrl = responseUserData.profilePicture;
       }
 
-      console.log(
-        "Updated user data with profile picture:",
-        responseUserData.profilePicture
-      );
-      setUserData(responseUserData);
+      // Force a state update to trigger re-renders
+      setUserData(null); // Clear first to force re-render
+      setTimeout(() => {
+        setUserData(responseUserData); // Set with new data
+      }, 10);
+
       return true;
     } catch (err) {
       setError(err.message || "Failed to fetch user data");

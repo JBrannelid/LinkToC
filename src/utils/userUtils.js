@@ -68,7 +68,6 @@ export const constructProfileImageUrl = (profilePicture) => {
   const baseUrl = "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
 
   // Always construct the full path using user ID from localStorage
-  // The backend only stores the filename, so we need to add the path structure
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const userId = currentUser?.id || "1";
 
@@ -78,6 +77,7 @@ export const constructProfileImageUrl = (profilePicture) => {
 
   return fullUrl;
 };
+
 export const getProfileImageUrl = (
   user,
   size = "default",

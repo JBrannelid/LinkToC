@@ -22,8 +22,29 @@ const fileService = {
   },
 
   // Get URL to read a file
-  getReadSasUrl: async (blobName) => {
+  getReadSasUrl: async (blobName, userId = null) => {
     try {
+      // If blobName is just a filename (doesn't contain a slash)
+      if (blobName && !blobName.includes("/")) {
+        // Try to get userId from parameter first, then fallback to localStorage
+        let userIdToUse = userId;
+
+        if (!userIdToUse) {
+          const currentUser = JSON.parse(
+            localStorage.getItem("currentUser") || "{}"
+          );
+          userIdToUse = currentUser?.id;
+        }
+
+        if (!userIdToUse) {
+          console.warn("Cannot get read URL without user ID");
+          throw new Error("User ID is required to get read URL");
+        } else {
+          blobName = `profile-pictures/${userIdToUse}/${blobName}`;
+        }
+      }
+
+      console.log(`Getting read SAS URL for: ${blobName}`);
       const response = await axiosInstance.get(
         `/api/blob-storage/get-read-uri?blobName=${encodeURIComponent(
           blobName
@@ -31,6 +52,7 @@ const fileService = {
       );
 
       if (response && response.isSuccess) {
+        console.log(`Got SAS URL: ${response.value}`);
         return response.value;
       }
 
@@ -42,28 +64,41 @@ const fileService = {
   },
 
   // Delete a file from blob storage
-  deleteFile: async (blobName) => {
+  deleteFile: async (blobName, userId = null) => {
     try {
+      // If blobName is just a filename (doesn't contain a slash)
       if (!blobName.includes("/")) {
-        const currentUser = JSON.parse(
-          localStorage.getItem("currentUser") || "{}"
-        );
-        const userId = currentUser?.id || "1";
-        blobName = `profile-pictures/${userId}/${blobName}`;
+        // Try to get userId from parameter first, then fallback to localStorage
+        let userIdToUse = userId;
+
+        if (!userIdToUse) {
+          const currentUser = JSON.parse(
+            localStorage.getItem("currentUser") || "{}"
+          );
+          userIdToUse = currentUser?.id;
+        }
+
+        if (!userIdToUse) {
+          console.warn(
+            "Cannot delete file without user ID, attempting direct deletion"
+          );
+          // Try to delete with just the filename
+        } else {
+          blobName = `profile-pictures/${userIdToUse}/${blobName}`;
+        }
       }
+
+      console.log(`Attempting to delete blob: ${blobName}`);
 
       const response = await axiosInstance.delete(
         `/api/blob-storage/delete-blob?blobName=${encodeURIComponent(blobName)}`
       );
 
-      if (response && response.isSuccess) {
-        return { success: true };
-      }
-
-      throw new Error(response?.message || "Failed to delete file");
+      return { success: true };
     } catch (error) {
       console.error("Error deleting file:", error);
-      throw error;
+      // Don't throw, just return failure
+      return { success: false, error: error.message };
     }
   },
 };

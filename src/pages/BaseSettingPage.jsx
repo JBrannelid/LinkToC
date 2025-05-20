@@ -106,6 +106,10 @@ const BaseSettingsPage = ({
               src={profilePictureUrl}
               alt={`Profile image of ${userFullName}`}
               className="w-full h-full object-cover"
+              onError={(e) => {
+                console.log("Profile image failed to load, using placeholder");
+                e.target.src = "/src/assets/images/userPlaceholderRounded.webp";
+              }}
             />
           </div>
           <div className="flex-1">
