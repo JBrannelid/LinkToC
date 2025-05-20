@@ -40,19 +40,39 @@ export default defineConfig({
     hmr: true,
     compress: true,
   },
-  define: {
-    "process.env": process.env,
-  },
   build: {
     rollupOptions: {
-      manualChunks: {
-        vendor: ["react", "react-router", "react-hook-form"],
-        ui: ["../components/ui/"],
+      output: {
+        manualChunks: (id) => {
+          // Group React and core dependencies
+          if (
+            id.includes("node_modules/react") ||
+            id.includes("node_modules/react-dom") ||
+            id.includes("node_modules/react-router")
+          ) {
+            return "vendor-react";
+          }
+
+          // Group form-related dependencies
+          if (id.includes("node_modules/react-hook-form")) {
+            return "vendor-forms";
+          }
+
+          // Group UI components
+          if (id.includes("/components/ui/")) {
+            return "ui-components";
+          }
+
+          // Group form components
+          if (id.includes("/components/forms/")) {
+            return "form-components";
+          }
+        },
       },
     },
     cssCodeSplit: true,
     reportCompressedSize: false,
-    chunkSizeWarningLimit: 800,
+    chunkSizeWarningLimit: 1000,
     minify: "terser",
     terserOptions: {
       // Remove console message in production
