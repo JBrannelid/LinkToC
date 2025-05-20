@@ -2,10 +2,12 @@ import axiosInstance from "../config/axiosConfig";
 
 const fileService = {
   // Get SAS URL for uploading files
-  getUploadSasUrl: async (fileType = "image", container = "images") => {
+  getUploadSasUrl: async (blobName) => {
     try {
       const response = await axiosInstance.get(
-        `/api/storage/sas-upload-url?fileType=${fileType}&container=${container}`
+        `/api/blob-storage/get-upload-uri?blobName=${encodeURIComponent(
+          blobName
+        )}`
       );
 
       if (response && response.isSuccess) {
@@ -19,11 +21,39 @@ const fileService = {
     }
   },
 
-  // Delete a file from blob storage
-  deleteFile: async (blobName, container = "images") => {
+  // Get URL to read a file
+  getReadSasUrl: async (blobName) => {
     try {
+      const response = await axiosInstance.get(
+        `/api/blob-storage/get-read-uri?blobName=${encodeURIComponent(
+          blobName
+        )}`
+      );
+
+      if (response && response.isSuccess) {
+        return response.value;
+      }
+
+      throw new Error(response?.message || "Failed to get read URL");
+    } catch (error) {
+      console.error("Error getting read URL:", error);
+      throw error;
+    }
+  },
+
+  // Delete a file from blob storage
+  deleteFile: async (blobName) => {
+    try {
+      if (!blobName.includes("/")) {
+        const currentUser = JSON.parse(
+          localStorage.getItem("currentUser") || "{}"
+        );
+        const userId = currentUser?.id || "1";
+        blobName = `profile-pictures/${userId}/${blobName}`;
+      }
+
       const response = await axiosInstance.delete(
-        `/api/storage/delete-blob?blobName=${blobName}&container=${container}`
+        `/api/blob-storage/delete-blob?blobName=${encodeURIComponent(blobName)}`
       );
 
       if (response && response.isSuccess) {
@@ -38,6 +68,11 @@ const fileService = {
   },
 };
 
+export const extractFilenameFromBlobPath = (blobPath) => {
+  if (!blobPath) return null;
+  return blobPath.split("/").pop();
+};
+
 export default fileService;
 
-export const { getUploadSasUrl, deleteFile } = fileService;
+export const { getUploadSasUrl, getReadSasUrl, deleteFile } = fileService;

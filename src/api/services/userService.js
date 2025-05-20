@@ -14,7 +14,6 @@ const userService = {
       );
       return response.value || [];
     } catch (error) {
-      // Handel expected 404 error when user has no stables yet
       if (
         error.statusCode === 404 ||
         (error.message && error.message.includes("User has no stables yet")) ||
@@ -74,6 +73,22 @@ const userService = {
       return response;
     } catch (error) {
       console.error("Error fetching user profile:", error);
+      throw error;
+    }
+  },
+
+  setProfilePicture: async (userId, blobName) => {
+    try {
+      const response = await axiosInstance.post(
+        "/api/user/set-profile-picture",
+        {
+          userId,
+          blobName,
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error setting profile picture:", error);
       throw error;
     }
   },

@@ -8,12 +8,14 @@ import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
 import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { handleProfileUpdate, formatUserFullName } from "../../utils/userUtils";
+import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import ImageUploader from "../fileUpload/ImageUploader";
+import { deleteFile } from "../../api/services/fileService";
+import userService from "../../api/services/userService";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -30,11 +32,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     loading,
     loadingState,
     updateUserData,
+    fetchAndUpdateUserData,
   } = useUserData(userId);
 
   // Use either passed userData or fetched userData
   const userData = initialUserData || fetchedUserData || user;
-
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -76,34 +78,98 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       setSubmitting(true);
       setMessage({ type: "", text: "" });
 
-      // Include profile image data if available
-      const updateData = {
-        ...data,
-        profilePictureUrl: profileImageData ? profileImageData.url : undefined,
-      };
+      // Handle profile image if it was changed
+      if (profileImageData) {
+        try {
+          // Step 1: Extract ONLY the filename part from the blob path
+          // This is crucial for the backend DTO
+          const filename = profileImageData.blobName.split("/").pop();
+          console.log("Raw blob path:", profileImageData.blobName);
+          console.log("Extracted filename for backend:", filename);
 
-      // Use the extracted utility function
-      const result = await handleProfileUpdate(
-        updateData,
-        updateUserData,
-        verifyToken
-      );
+          // Step 2: Delete old profile picture if it exists
+          const oldBlobName = userData?.profilePicture;
+          if (oldBlobName) {
+            console.log("Deleting old profile image:", oldBlobName);
+            try {
+              await deleteFile(oldBlobName);
+            } catch (error) {
+              console.error("Error deleting old profile image:", error);
+            }
+          }
 
-      if (!result.success) {
-        throw new Error(result.error || "Updating profile failed");
+          // Step 3: Send ONLY the filename to the backend
+          console.log(
+            `Sending profile picture update to backend: userId=${userId}, blobName=${filename}`
+          );
+          const result = await userService.setProfilePicture(userId, filename);
+          console.log("Profile picture update result:", result);
+
+          if (!result || !result.isSuccess) {
+            throw new Error("Failed to update profile picture");
+          }
+
+          // Step 4: Explicitly update the local user data
+          if (userData) {
+            userData.profilePicture = filename;
+            userData.profileImage = filename;
+            userData.profilePictureUrl = filename;
+          }
+
+          console.log(
+            "Updated local user data with new profile picture:",
+            filename
+          );
+        } catch (error) {
+          console.error("Error updating profile picture:", error);
+          setMessage(
+            getErrorMessage(error, {
+              defaultMessage: "Failed to update profile picture",
+            })
+          );
+          setSubmitting(false);
+          return;
+        }
       }
 
-      setMessage(createSuccessMessage("Profile is updated."));
+      // Regular user data update
+      try {
+        const updateData = {
+          id: userId,
+          ...data,
+        };
+        console.log("Sending profile update:", updateData);
 
-      if (onSuccess) {
-        onSuccess();
+        const result = await updateUserData(updateData);
+        console.log("Profile update result:", result);
+
+        if (!result.success) {
+          throw new Error(result.error || "Profile update failed");
+        }
+
+        // Force complete refresh of user data
+        // console.log("Forcing user data refresh...");
+        // await fetchAndUpdateUserData();
+        await verifyToken();
+
+        setMessage(createSuccessMessage("Profile successfully updated"));
+
+        if (onSuccess) {
+          onSuccess();
+        }
+
+        // Force page refresh to ensure all components reflect the changes
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        setMessage(
+          getErrorMessage(error, {
+            defaultMessage: "Could not update profile",
+          })
+        );
       }
-    } catch (error) {
-      setMessage(
-        getErrorMessage(error, {
-          defaultMessage: "Could not update profile. Please try again later.",
-        })
-      );
     } finally {
       setSubmitting(false);
     }
@@ -131,7 +197,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profileImageUrl = displayUser?.profileImage;
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
@@ -153,7 +218,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                     <img
-                      src={previewImageUrl || profileImageUrl}
+                      src={previewImageUrl || getProfileImageUrl(displayUser)}
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
@@ -170,6 +235,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       onError={setUploadError}
                       label="Choose image"
                       displayImagePreview={true}
+                      userId={userId}
                     />
                   </div>
                 </div>

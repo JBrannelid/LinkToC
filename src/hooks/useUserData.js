@@ -36,10 +36,16 @@ export const useUserData = (userId, includeProfile = true) => {
       const response = await userService.getById(currentUserId);
       const responseUserData = extractUserData(response);
 
-      if (responseUserData.profilePictureUrl) {
-        responseUserData.profileImage = responseUserData.profilePictureUrl;
+      // Ensure consistent naming of profile image fields
+      if (responseUserData.profilePicture) {
+        responseUserData.profileImage = responseUserData.profilePicture;
+        responseUserData.profilePictureUrl = responseUserData.profilePicture;
       }
 
+      console.log(
+        "Updated user data with profile picture:",
+        responseUserData.profilePicture
+      );
       setUserData(responseUserData);
       return true;
     } catch (err) {
@@ -62,11 +68,7 @@ export const useUserData = (userId, includeProfile = true) => {
     setError(null);
 
     try {
-      console.log(
-        `🔍 Fetching user profile API: /api/user/${userId}/stable/${stableId}`
-      );
       const response = await userService.getUserProfile(userId, stableId);
-      console.log("📊 User Profile API Response:", response);
 
       if (response && (response.isSuccess || response.statusCode === 200)) {
         const profileData = response.value;
@@ -94,11 +96,16 @@ export const useUserData = (userId, includeProfile = true) => {
       setOperationType("update");
       setError(null);
 
+      // This is the problem - you're not including all required fields
       const updateData = {
-        id: currentUserId,
+        id: parseInt(currentUserId, 10), // Convert to integer
         firstName: data.firstName,
         lastName: data.lastName,
-        profilePictureUrl: data.profilePictureUrl,
+        email: data.email, // This is required but missing!
+        phoneNumber: data.phoneNumber || null,
+        emergencyContact: data.emergencyContact || null,
+        coreInformation: data.coreInformation || null,
+        description: data.description || null,
       };
 
       const response = await userService.update(updateData);

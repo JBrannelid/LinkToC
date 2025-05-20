@@ -28,8 +28,8 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const userStableRole = userProfile?.userStableRole;
   const enhancedUser = userStableRole?.user || user;
   const userFullName = formatUserFullName(enhancedUser);
-  const profileImageUrl = getProfileImageUrl(enhancedUser?.profileImage);
-  const hasCustomProfileImage = !!enhancedUser?.profileImage;
+  const profileImageUrl = getProfileImageUrl(enhancedUser);
+  const hasCustomProfileImage = !!enhancedUser?.profileImageUrl;
 
   // Permissions check for editing user data
   const isCurrentUser = String(currentUser.id) === String(enhancedUser.id);

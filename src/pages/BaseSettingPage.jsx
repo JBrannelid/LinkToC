@@ -89,7 +89,7 @@ const BaseSettingsPage = ({
   // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
+  const profilePictureUrl = getProfileImageUrl(displayUser);
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">

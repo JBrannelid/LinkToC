@@ -11,7 +11,8 @@ export function triggerFileUpload(fileInputRef) {
 export async function handleImageUpload(
   event,
   setProfileImage,
-  onUploadComplete = null
+  onUploadComplete = null,
+  userId = null // Add userId parameter
 ) {
   const file = event.target.files[0];
   if (!file) return;
@@ -37,8 +38,9 @@ export async function handleImageUpload(
       );
     }
 
-    // Upload to blob storage
-    const result = await uploadFile(file, "image");
+    // Upload to blob storage with userId if it's a profile picture
+    const fileType = userId ? "profile-picture" : "image";
+    const result = await uploadFile(file, fileType, userId);
 
     if (!result.success) {
       throw new Error(result.error || "Failed to upload image");
