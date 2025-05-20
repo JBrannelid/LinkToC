@@ -15,9 +15,9 @@ export default defineConfig({
       algorithm: "gzip",
       ext: ".gz",
       filter: /\.(js|css|html|svg)$/i,
-      threshold: 1024, // Only compress files larger than 1KB
+      threshold: 1024,
       deleteOriginFile: false,
-      compressionOptions: { level: 9 }, // Maximum compression level
+      compressionOptions: { level: 6 }, // compression level 6 out of 9
       verbose: true,
       disable: false,
     }),
@@ -26,8 +26,8 @@ export default defineConfig({
       algorithm: "brotliCompress",
       ext: ".br",
       filter: /\.(js|css|html|svg|json)$/i,
-      compressionOptions: { level: 11 }, // Maximum compression level
-      threshold: 1024, // Only compress files larger than 1KB
+      compressionOptions: { level: 4 }, // Compression level 4 out of 11
+      threshold: 1024,
       deleteOriginFile: false,
       verbose: true,
       disable: false,
@@ -45,14 +45,9 @@ export default defineConfig({
   },
   build: {
     rollupOptions: {
-      output: {
-        // Codesplit React and Lucide-icons reduce initial loading time
-        manualChunks: {
-          // Core React dependencies
-          "react-core": ["react", "react-dom"],
-          // Icons
-          "lucide-icons": ["lucide-react"],
-        },
+      manualChunks: {
+        vendor: ["react", "react-router", "react-hook-form"],
+        ui: ["../components/ui/"],
       },
     },
     cssCodeSplit: true,
