@@ -1,6 +1,7 @@
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import * as calendarUtils from "../../../utils/calendarUtils";
+import ChevronLeftIcon from "../../../assets/icons/ChevronLeftIcon";
+import ChevronRightIcon from "../../../assets/icons/ChevronRightIcon";
 
 const CalendarHeader = ({
   firstDayCurrentMonth,
@@ -24,7 +25,7 @@ const CalendarHeader = ({
           className="text-primary"
           aria-label="Previous month"
         >
-          <ChevronLeft className="w-7 h-7 lg:block hidden" />
+          <ChevronLeftIcon className="w-5 h-5 lg:block hidden" />
         </button>
         <h2 className="text-sm md:text-lg lg:text-xl font-normal font-heading">
           {calendarUtils.formatMonth(firstDayCurrentMonth, locale)}
@@ -48,7 +49,7 @@ const CalendarHeader = ({
           className="text-primary"
           aria-label="Next month"
         >
-          <ChevronRight className="w-7 h-7 lg:block hidden" />
+          <ChevronRightIcon className="w-5 h-5 lg:block hidden" />
         </button>
         <button
           type="button"
@@ -84,7 +85,7 @@ const CalendarHeader = ({
           className="text-primary ml-auto"
           aria-label="Previous month"
         >
-          <ChevronLeft className="lg:hidden mr-2 md:w-7 md:h-7" />
+          <ChevronLeftIcon className="lg:hidden mr-2 w-5 h-5 " />
         </button>
         <button
           type="button"
@@ -100,7 +101,7 @@ const CalendarHeader = ({
           className="text-primary"
           aria-label="Next month"
         >
-          <ChevronRight className="lg:hidden ml-2 md:w-8 md:h-8" />
+          <ChevronRightIcon className="lg:hidden ml-2 w-5 h-5 " />
         </button>
       </div>
     </header>
