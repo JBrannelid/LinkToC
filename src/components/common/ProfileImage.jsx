@@ -10,7 +10,6 @@ const ProfileImage = ({
   alt = "",
   fallbackUrl = null,
 }) => {
-  // Fallback image with s,m,l,rounded sizes
   const getFallbackImage = () => {
     if (fallbackUrl) return fallbackUrl;
 
@@ -36,7 +35,13 @@ const ProfileImage = ({
 
     const fetchImageUrl = async () => {
       try {
-        // Try all possible profile image field names
+        const ownerId = user.userId || user.id;
+
+        if (!ownerId) {
+          setImageUrl(getFallbackImage());
+          return;
+        }
+
         const profilePicture =
           user.profilePicture ||
           user.ProfilePicture ||
@@ -45,80 +50,51 @@ const ProfileImage = ({
           user.userProfileImage ||
           user.image;
 
-        // Determine user ID from all possible fields
-        const userId =
-          user.id ||
-          user.userId ||
-          (profilePicture &&
-          typeof profilePicture === "string" &&
-          profilePicture.match(/\/(\d+)\//)
-            ? profilePicture.match(/\/(\d+)\//)[1]
-            : null);
-
-        if (!profilePicture || !userId) {
+        if (!profilePicture) {
+          setImageUrl(getFallbackImage());
           return;
         }
 
-        // Try to get full URL with SAS
+        const blobPath = `profile-pictures/${ownerId}/${profilePicture}`;
+
         try {
-          const sasUrl = await getReadSasUrl(profilePicture, userId);
+          const sasUrl = await getReadSasUrl(blobPath);
           if (sasUrl) {
-            setImageUrl(`${sasUrl}&t=${Date.now()}`);
-            return;
+            const imageUrlWithCache = `${sasUrl}&t=${Date.now()}`;
+            setImageUrl(imageUrlWithCache);
+          } else {
+            setImageUrl(getFallbackImage());
           }
         } catch (sasError) {
-          console.warn("Could not get SAS URL:", sasError);
-        }
-
-        // Fallback: Try direct URL construction
-        try {
-          // If profilePicture already has a full URL format, use it directly
-          if (profilePicture.startsWith("http")) {
-            setImageUrl(`${profilePicture}?t=${Date.now()}`);
-            return;
-          }
-
-          // Otherwise try to construct the Blob Storage URL
-          const baseUrl =
-            "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
-
-          // Handle profile picture being a full path or just a filename
-          const picturePath = profilePicture.includes("/")
-            ? profilePicture
-            : `profile-pictures/${userId}/${profilePicture}`;
-
-          const directUrl = `${baseUrl}/${picturePath}?t=${Date.now()}`;
-          setImageUrl(directUrl);
-        } catch (directUrlError) {
-          console.warn("Could not construct direct URL:", directUrlError);
-          setHasError(true);
+          console.warn("SAS URL error:", sasError);
+          setImageUrl(getFallbackImage());
         }
       } catch (error) {
-        console.error("Profile image processing error:", error);
+        console.error("Profile image error:", error);
         setHasError(true);
+        setImageUrl(getFallbackImage());
       }
     };
 
-    fetchImageUrl();
-  }, [user, size, fallbackUrl]);
+    if (user && !hasError) {
+      fetchImageUrl();
+    }
+  }, [user, hasError]);
 
   const userFullName = user
     ? `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User"
     : "User";
 
-  // Add a null check to prevent empty string src
-  const imageSrc = imageUrl || getFallbackImage() || DEFAULT_FALLBACK;
-
   return (
     <img
-      src={imageSrc}
+      src={imageUrl || getFallbackImage()}
       alt={alt || `Profile of ${userFullName}`}
       className={`object-cover ${className}`}
       loading="lazy"
-      onError={(e) => {
+      onError={() => {
         if (!hasError) {
           setHasError(true);
-          setImageUrl(getFallbackImage() || DEFAULT_FALLBACK);
+          setImageUrl(getFallbackImage());
         }
       }}
     />
