@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../utils/userUtils";
-import ProfileImage from "../ui/ProfileImage";
+import ProfileImage from "../common/ProfileImage";
 import CheckIcon from "../../assets/icons/CheckIcon";
 import PermissionGate from "../../components/settings/PermissionGate";
 
