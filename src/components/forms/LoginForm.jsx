@@ -19,8 +19,8 @@ const LoginForm = () => {
 
   const methods = useForm({
     defaultValues: {
-      email: "test@example.com",
-      password: "Password123!",
+      email: "",
+      password: "",
     },
   });
 
