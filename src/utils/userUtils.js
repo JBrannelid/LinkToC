@@ -54,8 +54,8 @@ export const handleProfileUpdate = async (
 };
 
 export const formatUserFullName = (user) => {
-  if (!user) return "Okänd";
-  return `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Okänd";
+  if (!user) return "Unknown";
+  return `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Unknown";
 };
 
 export const constructProfileImageUrl = (profilePicture) => {

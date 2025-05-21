@@ -94,8 +94,10 @@ const authService = {
     try {
       const accessToken = tokenStorage.getAccessToken();
       await authService.logout();
-
-      const result = await axiosInstance.delete(`${ENDPOINTS.USERS}/delete/${userId}`, {
+      console.log("accessToken", accessToken)
+      console.log("userId", userId)
+      const result = await axiosInstance.delete(`/api/user/delete/composition/${userId}`, {
+       
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
