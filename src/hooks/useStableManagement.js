@@ -34,6 +34,7 @@ export const useStableManagement = (stableId) => {
             firstName: member.firstName,
             lastName: member.lastName,
             role: member.role,
+            profilePicture: member.profilePicture,
           }))
         : [];
 
