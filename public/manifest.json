@@ -1,6 +1,11 @@
 {
   "name": "Equilog",
   "short_name": "Equilog",
+  "description": "Digital stable management solution",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f4f4",
+  "theme_color": "#027a48",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +20,8 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "orientation": "portrait",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["productivity"]
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equilog - Offline</title>
+    <style>
+        body {
+            font-family: 'Nunito Sans', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #027a48;
+            font-family: 'Besley', serif;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .button {
+            background-color: #027a48;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <img src="/icons/icon-192x192.png" alt="Equilog Logo" class="logo">
+    <h1>You're Offline</h1>
+    <p>Equilog needs an internet connection to access new stable information.</p>
+    <p>You can still view previously loaded data.</p>
+    <button class="button" onclick="window.location.reload()">Try Again</button>
+</div>
+</body>
+</html>
