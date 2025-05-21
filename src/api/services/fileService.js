@@ -26,9 +26,9 @@ const fileService = {
     try {
       // If blobName is just a filename (doesn't contain a slash)
       if (blobName && !blobName.includes("/")) {
-        // Try to get userId from parameter first, then fallback to localStorage
+        // Try to get userId from parameter first
         let userIdToUse = userId;
-
+        // fallback to localStorage
         if (!userIdToUse) {
           const currentUser = JSON.parse(
             localStorage.getItem("currentUser") || "{}"
@@ -68,7 +68,7 @@ const fileService = {
     try {
       // If blobName is just a filename (doesn't contain a slash)
       if (!blobName.includes("/")) {
-        // Try to get userId from parameter first, then fallback to localStorage
+        // Try to get userId from parameter first
         let userIdToUse = userId;
 
         if (!userIdToUse) {
