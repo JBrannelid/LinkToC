@@ -6,14 +6,18 @@ const MemberCard = ({ member, onClick }) => {
   const fullName = formatUserFullName(member);
   const roleName = getRoleName(member.role);
 
+  // Debug the incoming member data
+  console.log("MemberCard received:", member);
+
   // Ensure member object has the expected structure for ProfileImage
   const ensuredUser = {
     id: member.userId || member.id,
     firstName: member.firstName || "",
     lastName: member.lastName || "",
-    profilePicture:
-      member.profilePicture || member.profileImage || member.userProfileImage,
+    profilePicture: member.profilePicture,
   };
+
+  console.log("MemberCard passing to ProfileImage:", ensuredUser);
 
   return (
     <Card.Container className="cursor-pointer" onClick={onClick}>
