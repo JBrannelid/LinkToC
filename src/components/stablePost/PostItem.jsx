@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { getProfileImageUrl } from "../../utils/userUtils";
 import { useAuth } from "../../context/AuthContext";
 import { useAppContext } from "../../context/AppContext";
 import PinIcon from "../../assets/icons/PinIcon";
@@ -92,9 +91,6 @@ const PostItem = ({
     );
   }
 
-  // Until we have solved image handling all post is display with a default user image
-  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
-
   // Comment count - placeholder for now
   const commentCount =
     comments && comments[post.id]
@@ -117,10 +113,17 @@ const PostItem = ({
         <div className="bg-white w-full rounded-lg px-6 py-2 pt-3 mb-2 shadow-lg md:hidden">
           <div className="flex justify-between pb-4">
             <div className="w-10 h-10 md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden">
-              <img
-                src={profilePictureUrl}
+              <ProfileImage
+                user={{
+                  id: post.userId,
+                  profilePicture: post.posterProfileImage,
+                  firstName: post.posterFirstName,
+                  lastName: post.posterLastName,
+                }}
+                className="w-full h-full"
                 alt={`Profile image of ${userFullName}`}
-                className="w-full h-full object-cover"
+                fallbackUrl="/src/assets/images/userPlaceholderRounded.webp"
+                size="small"
               />
             </div>
             {/* Pin icon */}
