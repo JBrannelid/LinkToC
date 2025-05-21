@@ -71,6 +71,8 @@ const PostItem = ({
     profilePictureUrl: post.posterProfileImage,
   };
 
+  console.log("Comments:", comments);
+
   const userFullName =
     `${displayUser.firstName} ${displayUser.lastName}`.trim() || "Unknown User";
 
@@ -140,8 +142,8 @@ const PostItem = ({
           <p className="max-w-9/10 text-lg">{post.content}</p>
           <p className="text-lg text-grey opacity-80 pt-5">{userFullName}</p>
           {/* Edit button - Display for admins and creators */}
-          {canEditPost && (
-            <div className="flex justify-end">
+          <div className="flex justify-end">
+            {canEditPost && (
               <Button
                 type="icon"
                 className="text-primary"
@@ -149,15 +151,15 @@ const PostItem = ({
               >
                 <PenIcon size={32} />
               </Button>
-              <Button
-                type="icon"
-                className="text-primary border-none shadow-none"
-                onClick={() => handleShowComments(post)}
-              >
-                <MessageIcon size={32} />
-              </Button>
-            </div>
-          )}
+            )}
+            <Button
+              type="icon"
+              className="text-primary border-none shadow-none"
+              onClick={() => handleShowComments(post)}
+            >
+              <MessageIcon size={32} />
+            </Button>
+          </div>
         </div>
       </div>
 
