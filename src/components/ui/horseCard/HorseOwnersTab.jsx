@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 import { getHorseUserRoleName } from "../../../utils/horseProfileUtils";
 import { getProfileImageUrl } from "../../../utils/userUtils";
+import ProfileImage from "../../common/ProfileImage";
 
 const HorseOwnersTab = ({ horseId, horseProfile }) => {
   const navigate = useNavigate();
@@ -62,11 +63,11 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
               onClick={() => handleUserClick(userData.id)}
             >
               <div className="flex justify-center items-center overflow-hidden">
-                <img
-                  src={profileImageUrl}
-                  alt={`User ${userName}`}
+                <ProfileImage
+                  user={userData}
                   className="scale-70 w-35 h-35 sm:w-45 sm:h-45 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover border-2 border-primary rounded-full"
-                  loading="lazy"
+                  size="large"
+                  alt={`User ${userName}`}
                 />
               </div>
               <div className="p-3 text-center">
