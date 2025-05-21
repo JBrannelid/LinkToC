@@ -125,15 +125,12 @@ const stableService = {
       },
     };
 
-    console.log("Creating stable with data:", createData);
-
     try {
       const response = await axiosInstance.post(
         `${ENDPOINTS.STABLE}/create`,
         createData
       );
 
-      console.log("Stable creation successful, response:", response);
       return response;
     } catch (error) {
       console.error("Stable creation error:", error);

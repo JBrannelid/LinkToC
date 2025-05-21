@@ -26,7 +26,7 @@ export const useStableHorses = (stableId) => {
     } catch (error) {
       // Handle 404 as an empty result, not an error
       if (error.status === 404 || error.message?.includes("NOT FOUND_404")) {
-        console.log("No horses found for this stable - setting empty array");
+        console.warn("No horses found for this stable - setting empty array");
         setHorses([]);
         setError(null);
       } else {

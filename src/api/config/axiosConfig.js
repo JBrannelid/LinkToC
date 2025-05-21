@@ -26,8 +26,6 @@ axiosInstance.interceptors.request.use(
 
       originalRequest._retry = true;
 
-      console.log("Retrying failed request due to network error...");
-
       try {
         // Wait before retrying
         await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -46,7 +44,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   // Success (status 2xx): Return response data
   (response) => {
-    console.log(response.data);
     return response.data;
   },
 

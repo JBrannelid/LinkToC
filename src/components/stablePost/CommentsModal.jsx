@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";
 import { useAppContext } from "../../context/AppContext";
-import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
 import { parseISO, format } from "../../utils/calendarUtils";
 import { USER_ROLES } from "../../utils/userUtils";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import CloseIcon from "../../assets/icons/CloseIcon";
+import ProfileImage from "../common/ProfileImage";
 
 const CommentsModal = ({
   isOpen,
@@ -92,11 +92,25 @@ const CommentsModal = ({
                   <div key={index} className="relative pl-16">
                     {/* Profile image positioned absolutely */}
                     <div className="absolute left-0 top-2">
-                      <img
-                        src={getProfileImageUrl(comment.userProfileImage)}
-                        alt={`${comment.userName || "User"}'s avatar`}
+                      <ProfileImage
+                        user={{
+                          id: comment.userId,
+                          profilePicture: comment.profilePicture,
+                          firstName: comment.firstName || "",
+                          lastName: comment.lastName || "",
+                        }}
                         className="w-12 h-12 rounded-full object-cover border border-light"
+                        alt={`${comment.firstName || "User"} ${
+                          comment.lastName || ""
+                        }'s avatar`}
+                        size="small"
                       />
+                    </div>
+                    {/* Display date format outside main border/container */}
+                    <div className="text-right">
+                      <span className="text-sm text-gray">
+                        {formatCommentDate(comment.commentDate)}
+                      </span>
                     </div>
 
                     {/* Comment content with border */}
@@ -108,13 +122,10 @@ const CommentsModal = ({
                       }`}
                       onClick={() => handleShowDeleteConfirm(comment)}
                     >
-                      <div className="flex justify-between mb-2">
-                        <span className="font-bold">
-                          {comment.userName || "Unknown User"}
-                        </span>
-                        <span className="text-sm text-gray">
-                          {formatCommentDate(comment.commentDate)}
-                        </span>
+                      <div className="flex mb-2">
+                        <p className="font-bold">
+                          {comment.firstName} {comment.lastName}
+                        </p>
                       </div>
                       <p className="text-black break-words">
                         {comment.content}
@@ -145,7 +156,6 @@ const CommentsModal = ({
               className="rounded-lg px-6 py-3"
               disabled={loading || !newComment.trim()}
             >
-              {/* Visa "+" på mobil, "Comment" på större skärmar */}
               <span className="block md:hidden">+</span>
               <span className="hidden md:block">Comment</span>
             </Button>

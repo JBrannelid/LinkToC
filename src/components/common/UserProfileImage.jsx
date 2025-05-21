@@ -89,7 +89,6 @@ const UserProfileImage = ({
           className={`${sizeClass} rounded-full object-cover`}
           loading="lazy"
           onError={(e) => {
-            console.log("Image failed to load:", user.profilePictureUrl);
             setImageError(true);
           }}
         />

@@ -27,7 +27,6 @@ const HorseProfilePage = () => {
         await fetchHorseProfile(horseId);
         // Force component re-render by incrementing counter
         setRefreshCounter((prev) => prev + 1);
-        console.log("Horse data refreshed, counter:", refreshCounter + 1);
       } catch (error) {
         console.error("Error refreshing horse profile:", error);
       }

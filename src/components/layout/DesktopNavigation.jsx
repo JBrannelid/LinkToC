@@ -4,12 +4,12 @@ import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { useAppContext } from "../../context/AppContext";
 import { isRouteActive } from "../../routes/routeUtils";
 import SettingIcon from "../../assets/icons/SettingIcon";
-import { getProfileImageUrl, formatUserFullName } from "../../utils/userUtils";
 import { useUserData } from "../../hooks/useUserData";
 import { useAuth } from "../../context/AuthContext";
 import NotificationDropdown from "../layout/NotificationDropdown";
 import StableDropdown from "./StableDropdown";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
+import ProfileImage from "../../components/common/ProfileImage.jsx";
 
 const DesktopNavigation = () => {
   const { currentUser, currentStable } = useAppContext();
@@ -30,8 +30,6 @@ const DesktopNavigation = () => {
   const isActive = (path) => isRouteActive(path, currentPath);
   const displayUser = userData || user;
   const userId = displayUser?.id;
-  const userFullName = formatUserFullName(displayUser);
-  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   // Hide notification icon on certain routes
   const notificationHiddenRoutes = ["/stable-onboarding", "/select-stable"];
@@ -126,12 +124,7 @@ const DesktopNavigation = () => {
             className="text-primary"
           >
             <div className="w-9 h-9 rounded-full overflow-hidden mr-4">
-              <img
-                src={profilePictureUrl}
-                alt={`Profile of ${userFullName}`}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
+              <ProfileImage user={displayUser} className="w-full h-full" />
             </div>
           </Link>
         </div>

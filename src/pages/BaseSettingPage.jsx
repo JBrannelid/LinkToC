@@ -9,13 +9,10 @@ import { useUserData } from "../hooks/useUserData";
 import PenIcon from "../assets/icons/PenIcon";
 import { useAppContext } from "../context/AppContext";
 import UserProfileForm from "../components/forms/UserProfileForm";
-import {
-  handleSwitchStable,
-  formatUserFullName,
-  getProfileImageUrl,
-} from "../utils/userUtils";
+import { handleSwitchStable, formatUserFullName } from "../utils/userUtils";
 import ConfirmationModal from "../components/ui/ConfirmationModal";
 import LogoutIcon from "../assets/icons/LogoutIcon";
+import ProfileImage from "../components/common/ProfileImage.jsx";
 
 // Reusable menu item component
 export const SettingsMenuItem = ({ label, onClick, icon }) => (
@@ -89,7 +86,6 @@ const BaseSettingsPage = ({
   // Get data from database (userData) or JWT (user)
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   return (
     <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">
@@ -102,10 +98,10 @@ const BaseSettingsPage = ({
         {/* User profile section */}
         <div className="bg-white rounded-lg p-4 flex items-center drop-shadow-lg">
           <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
-            <img
-              src={profilePictureUrl}
-              alt={`Profile image of ${userFullName}`}
-              className="w-full h-full object-cover"
+            <ProfileImage
+              user={displayUser}
+              className="w-full h-full"
+              size="rounded"
             />
           </div>
           <div className="flex-1">

@@ -141,14 +141,14 @@ export default function StablePostPage() {
         {/* Right sidebar - visible on md display*/}
         <div className="hidden md:flex md:flex-col md:w-4/10 lg:3/10 p-4 space-y-5 mt-22">
           <div className="bg-white rounded-xl shadow-md p-4">
-            <h3 className="font-medium text-md mb-3">Stable Info</h3>
-            <p className="text-xs lg:text-sm mb-2">
+            <h3 className="font-medium text-lg mb-3">Stable Info</h3>
+            <p className="text-sm lg:text-lg ">
               Stable:{" "}
               <span className="text-primary">
                 {currentStable?.name || "Your Stable"}
               </span>
             </p>
-            <p className="text-xs lg:text-sm ">
+            <p className="text-sm lg:text-lg ">
               Your role: {""}
               {currentRole === USER_ROLES.USER ? (
                 <span className="text-primary">User</span>
@@ -161,13 +161,13 @@ export default function StablePostPage() {
               )}
             </p>
           </div>
-          <div className="bg-white rounded-xl shadow-md p-4">
+          <div className="bg-white rounded-xl shadow-xl p-4">
             <h3 className="font-medium text-md mb-3">Quick Stats</h3>
-            <p className="text-xs lg:text-sm">
+            <p className="text-sm lg:text-lg ">
               Total posts:{" "}
               <span className="text-primary">{posts?.length || 0}</span>
             </p>
-            <p className="text-xs lg:text-sm">
+            <p className="text-sm lg:text-lg ">
               Pinned:{" "}
               <span className="text-primary">
                 {posts?.filter((p) => p.isPinned).length || 0}

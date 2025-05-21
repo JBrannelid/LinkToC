@@ -58,15 +58,42 @@ export const formatUserFullName = (user) => {
   return `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Unknown";
 };
 
+export const constructProfileImageUrl = (profilePicture) => {
+  if (!profilePicture) return null;
+
+  // Check if it's already a full URL
+  if (profilePicture.startsWith("http")) return profilePicture;
+
+  const baseUrl = "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
+
+  // Always construct the full path using user ID from localStorage
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  const userId = currentUser?.id;
+
+  // Log the full constructed URL for debugging
+  const fullUrl = `${baseUrl}/profile-pictures/${userId}/${profilePicture}`;
+  console.log("constructProfileImageUrl - building full URL:", fullUrl);
+
+  return fullUrl;
+};
+
 export const getProfileImageUrl = (
-  profileImageUrl,
+  user,
   size = "default",
   fallbackUrl = null
 ) => {
-  // If the user has a custom profile image, return it
-  if (profileImageUrl) return profileImageUrl;
+  const profileImage = user?.profilePicture;
 
-  // Otherwise, return the appropriate placeholder based on size
+  // If user has a custom profile image, construct the full URL
+  if (profileImage) {
+    const url = constructProfileImageUrl(profileImage);
+    // cache-busting with a random value
+    return `${url}?t=${Date.now()}-${Math.random()
+      .toString(36)
+      .substring(2, 10)}`;
+  }
+
+  // Return the appropriate placeholder
   switch (size) {
     case "small":
       return "/src/assets/images/userPlaceholderSmall.webp";

@@ -36,7 +36,12 @@ export const useHorseProfile = (horseId) => {
 
   useEffect(() => {
     if (horseId) {
+      // Only fetch if horseId exists
       fetchHorseProfile(horseId);
+    } else {
+      setHorseProfile(null);
+      setLoading(false);
+      setError(null);
     }
   }, [horseId, fetchHorseProfile]);
 

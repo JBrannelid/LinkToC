@@ -46,9 +46,6 @@ const horseService = {
           "";
 
         if (errorMessage.includes("No horses")) {
-          console.log(
-            "No horses found for this stable - returning empty array"
-          );
           return [];
         }
       }
@@ -63,6 +60,11 @@ const horseService = {
 
   getHorseProfile: async (horseId) => {
     try {
+      if (!horseId) {
+        console.warn("Horse ID is required to fetch profile");
+        return { isSuccess: false, message: "Horse ID is required" };
+      }
+
       return await axiosInstance.get(`/api/horse/${horseId}/profile`);
     } catch (error) {
       console.error("Error fetching horse profile:", error);
@@ -75,7 +77,6 @@ const horseService = {
       const response = await axiosInstance.get(
         `/api/stable-horses/${stableId}`
       );
-      console.log("Raw API response:", response);
 
       let horses = [];
 
@@ -90,10 +91,6 @@ const horseService = {
         return [];
       }
 
-      console.log(
-        `Extracted ${horses.length} horses from API response:`,
-        horses
-      );
       return horses;
     } catch (error) {
       console.error(`Error fetching horses for stable ${stableId}:`, error);

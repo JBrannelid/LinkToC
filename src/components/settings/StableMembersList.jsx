@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "../ui/Button";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../utils/userUtils";
-
+import ProfileImage from "../common/ProfileImage";
 import CheckIcon from "../../assets/icons/CheckIcon";
 import PermissionGate from "../../components/settings/PermissionGate";
 
@@ -38,7 +38,6 @@ const StableMembersList = ({ stableId }) => {
     ) {
       const success = await updateMemberRole(selectedMember.id, selectedRole);
       if (success) {
-        console.log("Role updated successfully");
       } else {
         console.error("Failed to update role");
       }
@@ -104,7 +103,16 @@ const StableMembersList = ({ stableId }) => {
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
+                      <ProfileImage
+                        user={member}
+                        className="w-full h-full"
+                        size="small"
+                      />
+                    </div>
+                    <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  </div>
                 </article>
               </PermissionGate>
             ))}
@@ -128,7 +136,16 @@ const StableMembersList = ({ stableId }) => {
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
+                      <ProfileImage
+                        user={member}
+                        className="w-full h-full"
+                        size="small"
+                      />
+                    </div>
+                    <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  </div>
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>
@@ -153,7 +170,16 @@ const StableMembersList = ({ stableId }) => {
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
                   onClick={() => handleClickMember(member)}
                 >
-                  <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 rounded-full overflow-hidden mr-3">
+                      <ProfileImage
+                        user={member}
+                        className="w-full h-full"
+                        size="small"
+                      />
+                    </div>
+                    <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
+                  </div>
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>

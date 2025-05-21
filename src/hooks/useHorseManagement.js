@@ -22,7 +22,7 @@ export const useHorseManagement = (stableId) => {
     if (!stableId) return;
 
     if (emptyStablesCache.has(stableId)) {
-      console.log(
+      console.warn(
         `Stable ${stableId} is known to be empty - skipping API call`
       );
       setHorses([]);
@@ -68,9 +68,7 @@ export const useHorseManagement = (stableId) => {
         const errorMessage = error.message || error.details?.message || "";
         if (errorMessage.includes("No horses")) {
           emptyStablesCache.add(stableId);
-          console.log(
-            "Caught 'No horses' error in hook - setting horses to empty array"
-          );
+
           setHorses([]);
           setError(null);
           setLoading(false);
@@ -89,9 +87,6 @@ export const useHorseManagement = (stableId) => {
     setOperationType("create");
 
     try {
-      console.log(
-        `Adding horse to stable ID: ${stableId} for user ID: ${userId}`
-      );
       // Format the data according to HorseCompositionCreateDto
       const compositionData = {
         horse: {
@@ -106,7 +101,6 @@ export const useHorseManagement = (stableId) => {
 
       // Call the composition endpoint
       await horseService.createHorseComposition(compositionData);
-      console.log("Horse created successfully");
 
       // Refresh the horses list
       await fetchHorses();
@@ -126,7 +120,6 @@ export const useHorseManagement = (stableId) => {
     setOperationType("update");
 
     try {
-      console.log(`Updating horse ${horseId} with data:`, horseData);
       // Format the horse data to match HorseUpdateDto
       const updateData = {
         id: horseId,
@@ -137,7 +130,7 @@ export const useHorseManagement = (stableId) => {
       };
 
       const response = await horseService.update(updateData);
-      console.log("Update response:", response);
+
       // Extract data from response
       let updatedHorseData;
       if (response?.data) {

@@ -137,9 +137,10 @@ export function useStablePosts(stableId, currentUser) {
             id: comment.id,
             content: comment.content || comment.Content,
             commentDate: comment.commentDate || comment.CommentDate,
-            userId: comment.userId || comment.UserId || currentUser?.id,
-            userName: comment.userName,
-            userProfileImage: comment.userProfileImage,
+            userId: comment.userId || comment.UserId,
+            firstName: comment.firstName,
+            lastName: comment.lastName,
+            profilePicture: comment.profilePicture,
           }))
         : [];
 
@@ -175,7 +176,6 @@ export function useStablePosts(stableId, currentUser) {
       };
 
       await stablePostService.createComment(commentData);
-
       await fetchComments(postId);
       await fetchAndUpdatePosts();
 
@@ -196,10 +196,6 @@ export function useStablePosts(stableId, currentUser) {
     setCommentError(null);
 
     try {
-      console.log(
-        `Deleting comment with ID: ${commentId} from post: ${postId}`
-      );
-
       // Call the API to delete the comment
       const result = await stablePostService.deleteComment(commentId);
 

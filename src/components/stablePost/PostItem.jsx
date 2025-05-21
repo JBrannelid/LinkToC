@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { getProfileImageUrl } from "../../utils/userUtils";
 import { useAuth } from "../../context/AuthContext";
 import { useAppContext } from "../../context/AppContext";
 import PinIcon from "../../assets/icons/PinIcon";
@@ -12,6 +11,7 @@ import CommentInput from "../stablePost/CommentInput";
 import CommentCount from "../stablePost/CommentCount";
 import CommentsModal from "../stablePost/CommentsModal";
 import MessageIcon from "../../assets/icons/MessageIcon";
+import ProfileImage from "../common/ProfileImage";
 
 const PostItem = ({
   post,
@@ -70,6 +70,8 @@ const PostItem = ({
     profilePictureUrl: post.posterProfileImage,
   };
 
+  console.log("Comments:", comments);
+
   const userFullName =
     `${displayUser.firstName} ${displayUser.lastName}`.trim() || "Unknown User";
 
@@ -88,9 +90,6 @@ const PostItem = ({
       </div>
     );
   }
-
-  // Until we have solved image handling all post is display with a default user image
-  const profilePictureUrl = getProfileImageUrl(displayUser?.profilePictureUrl);
 
   // Comment count - placeholder for now
   const commentCount =
@@ -114,10 +113,17 @@ const PostItem = ({
         <div className="bg-white w-full rounded-lg px-6 py-2 pt-3 mb-2 shadow-lg md:hidden">
           <div className="flex justify-between pb-4">
             <div className="w-10 h-10 md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden">
-              <img
-                src={profilePictureUrl}
+              <ProfileImage
+                user={{
+                  id: post.userId,
+                  profilePicture: post.posterProfileImage,
+                  firstName: post.posterFirstName,
+                  lastName: post.posterLastName,
+                }}
+                className="w-full h-full"
                 alt={`Profile image of ${userFullName}`}
-                className="w-full h-full object-cover"
+                fallbackUrl="/src/assets/images/userPlaceholderRounded.webp"
+                size="small"
               />
             </div>
             {/* Pin icon */}
@@ -139,8 +145,8 @@ const PostItem = ({
           <p className="max-w-9/10 text-lg">{post.content}</p>
           <p className="text-lg text-grey opacity-80 pt-5">{userFullName}</p>
           {/* Edit button - Display for admins and creators */}
-          {canEditPost && (
-            <div className="flex justify-end">
+          <div className="flex justify-end">
+            {canEditPost && (
               <Button
                 type="icon"
                 className="text-primary"
@@ -148,15 +154,15 @@ const PostItem = ({
               >
                 <PenIcon size={32} />
               </Button>
-              <Button
-                type="icon"
-                className="text-primary border-none shadow-none"
-                onClick={() => handleShowComments(post)}
-              >
-                <MessageIcon size={32} />
-              </Button>
-            </div>
-          )}
+            )}
+            <Button
+              type="icon"
+              className="text-primary border-none shadow-none"
+              onClick={() => handleShowComments(post)}
+            >
+              <MessageIcon size={32} />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -166,11 +172,16 @@ const PostItem = ({
         <div className="px-5 pt-4 pb-4 flex justify-between items-center">
           <div className="flex items-center">
             <div className="w-10 h-10 border border-primary rounded-full overflow-hidden">
-              <img
-                src={profilePictureUrl}
-                alt={`Profile image of ${userFullName}`}
+              <ProfileImage
+                user={{
+                  id: post.userId || post.userIdFk,
+                  profilePicture: post.posterProfileImage,
+                  firstName: post.posterFirstName,
+                  lastName: post.posterLastName,
+                }}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                alt={`Profile of ${userFullName}`}
+                size="small"
               />
             </div>
             <div className="ml-3">

@@ -8,12 +8,13 @@ import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
 import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { handleProfileUpdate, formatUserFullName } from "../../utils/userUtils";
+import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import PenIcon from "../../assets/icons/PenIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import ImageUploader from "../fileUpload/ImageUploader";
+import { getReadSasUrl } from "../../api/services/fileService";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -30,26 +31,24 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     loading,
     loadingState,
     updateUserData,
+    fetchAndUpdateUserData,
   } = useUserData(userId);
 
   // Use either passed userData or fetched userData
   const userData = initialUserData || fetchedUserData || user;
-
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const [profileImageData, setProfileImageData] = useState(null);
   const [uploadError, setUploadError] = useState("");
   const [previewImageUrl, setPreviewImageUrl] = useState(null);
 
   const methods = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      current_password: "",
-      new_password: "",
-      confirm_password: "",
+      firstName: userData?.firstName || "",
+      lastName: userData?.lastName || "",
+      email: userData?.email || "",
+      phoneNumber: userData?.phoneNumber || "",
     },
   });
 
@@ -65,43 +64,56 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     }
   }, [userData, methods]);
 
+  // Fetch the SAS URL for the profile image if available
   useEffect(() => {
-    if (deleteError) {
-      setMessage(getErrorMessage(deleteError));
-    }
-  }, [deleteError]);
+    const fetchProfileImageSasUrl = async () => {
+      if (userData?.profilePicture) {
+        try {
+          // Get a SAS URL for the profile image
+          const sasUrl = await getReadSasUrl(userData.profilePicture, userId);
+          if (sasUrl) {
+            // Add cache busting parameter
+            setPreviewImageUrl(`${sasUrl}&t=${Date.now()}`);
+          }
+        } catch (error) {
+          console.warn("Could not get SAS URL for profile image:", error);
+        }
+      }
+    };
+
+    fetchProfileImageSasUrl();
+  }, [userData?.profilePicture, userId]);
 
   const onSubmit = async (data) => {
     try {
       setSubmitting(true);
       setMessage({ type: "", text: "" });
 
-      // Include profile image data if available
       const updateData = {
+        id: userId,
         ...data,
-        profilePictureUrl: profileImageData ? profileImageData.url : undefined,
       };
 
-      // Use the extracted utility function
-      const result = await handleProfileUpdate(
-        updateData,
-        updateUserData,
-        verifyToken
-      );
+      const result = await updateUserData(updateData);
 
       if (!result.success) {
-        throw new Error(result.error || "Updating profile failed");
+        throw new Error(result.error || "Profile update failed");
       }
 
-      setMessage(createSuccessMessage("Profile is updated."));
+      // Force complete refresh of user data
+      await fetchAndUpdateUserData();
+      await verifyToken();
+
+      setMessage(createSuccessMessage("Profile successfully updated"));
 
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
+      console.error("Error updating profile:", error);
       setMessage(
         getErrorMessage(error, {
-          defaultMessage: "Could not update profile. Please try again later.",
+          defaultMessage: "Could not update profile",
         })
       );
     } finally {
@@ -123,7 +135,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     return (
       <div className="py-2 text-gray flex items-center justify-center">
         <LoadingSpinner size="medium" className="text-gray" />
-
         <p>{loadingState.getMessage()}</p>
       </div>
     );
@@ -131,7 +142,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  const profileImageUrl = displayUser?.profileImage;
+  // Use the SAS URL if available, otherwise fall back to the standard URL construction
+  const profileImageUrl = previewImageUrl || getProfileImageUrl(displayUser);
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
@@ -153,26 +165,59 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                     <img
-                      src={previewImageUrl || profileImageUrl}
+                      src={profileImageUrl}
                       alt={`Profile image of ${userFullName}`}
                       className="w-full h-full object-cover"
                       loading="lazy"
                     />
                   </div>
-                  <div className="mr-5">
+                  <div className="mr-5 ">
                     <ImageUploader
-                      initialImageUrl={displayUser?.profileImage}
-                      onImageUploaded={(fileData) => {
-                        setProfileImageData(fileData);
-                        // Update image preview
-                        setPreviewImageUrl(fileData.url);
+                      initialImageUrl={profileImageUrl}
+                      onImageUploaded={async (fileData) => {
+                        // Try to get a SAS URL for the new image
+                        try {
+                          const sasUrl = await getReadSasUrl(
+                            fileData.fileName,
+                            userId
+                          );
+                          if (sasUrl) {
+                            // Update image preview immediately with cache busting
+                            setPreviewImageUrl(`${sasUrl}&t=${Date.now()}`);
+                          } else {
+                            // Fall back to direct URL if SAS fails
+                            setPreviewImageUrl(
+                              `${fileData.url}?t=${Date.now()}`
+                            );
+                          }
+                        } catch (error) {
+                          console.warn(
+                            "Could not get SAS URL for uploaded image:",
+                            error
+                          );
+                          // Use the URL from the upload result
+                          setPreviewImageUrl(`${fileData.url}?t=${Date.now()}`);
+                        }
+
+                        // Force refresh user data to get updated image
+                        await fetchAndUpdateUserData();
+                        await verifyToken();
+
+                        // Show success message
+                        setMessage(
+                          createSuccessMessage(
+                            "Profile picture successfully updated"
+                          )
+                        );
                       }}
                       onError={setUploadError}
                       label="Choose image"
                       displayImagePreview={true}
+                      userId={userId}
                     />
                   </div>
                 </div>
+                <FormMessage message={message} />
 
                 {uploadError && (
                   <p className="text-sm text-error-500 text-end mr-5">
@@ -181,13 +226,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 )}
               </div>
 
+              {/* Rest of the component remains the same */}
               {/* Personal Info Section */}
               <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
                 <div className="flex justify-between items-center mb-5">
                   <h2 className="font-bold">Personal Information</h2>
-                  {/* <Button type="icon" aria-label="Edit personal information">
-                    <PenIcon className="w-7 h-7 text-primary" />
-                  </Button> */}
                 </div>
                 <div className="space-y-5">
                   <div className="grid grid-cols-2 gap-4">
@@ -222,7 +265,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                         required: "Email is required",
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: "Ogiltig email adress",
+                          message: "Invalid email address",
                         },
                       }}
                     />
@@ -240,7 +283,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                         pattern: {
                           value:
                             /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
-                          message: "Ogiltigt telefonnummer format",
+                          message: "Invalid phone number format",
                         },
                       }}
                     />
@@ -269,14 +312,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                     user={userData || user}
                     onSuccess={() => {
                       setShowPasswordForm(false);
-                      setMessage(createSuccessMessage("Lösenord uppdaterat"));
+                      setMessage(createSuccessMessage("Password updated"));
                     }}
                   />
                 )}
               </div>
-
-              <FormMessage message={message} />
-
               {/* Action Buttons */}
               <div className="flex justify-center">
                 <div className=" w-9/10 sm:w-8/10">
@@ -303,7 +343,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
             </div>
           </FormProvider>
         </div>
-        {/* Delete modual */}
+        {/* Delete modal */}
         <ConfirmationModal
           isOpen={showDeleteConfirm}
           onClose={() => setShowDeleteConfirm(false)}
@@ -322,4 +362,5 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     </div>
   );
 };
+
 export default UserProfileForm;

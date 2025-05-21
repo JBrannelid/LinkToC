@@ -56,7 +56,6 @@ const JoinStableForm = ({
     if (!selectedStable) return;
 
     const result = await sendJoinRequest(selectedStable);
-    console.log("Join request result:", result);
 
     if (result.success) {
       setShowConfirmModal(false);
@@ -97,7 +96,7 @@ const JoinStableForm = ({
           <ModalHeader title="Join a Stable" />
         </div>
       )}
-      
+
       <FormProvider methods={formMethods} className="w-full">
         <div {...ariaAttributes}>
           {/* The SearchProvider encapsulates all search functionality */}

@@ -36,11 +36,18 @@ export const useUserData = (userId, includeProfile = true) => {
       const response = await userService.getById(currentUserId);
       const responseUserData = extractUserData(response);
 
-      if (responseUserData.profilePictureUrl) {
-        responseUserData.profileImage = responseUserData.profilePictureUrl;
+      // Ensure consistent naming of profile image fields
+      if (responseUserData.profilePicture) {
+        responseUserData.profileImage = responseUserData.profilePicture;
+        responseUserData.profilePictureUrl = responseUserData.profilePicture;
       }
 
-      setUserData(responseUserData);
+      // Force a state update to trigger re-renders
+      setUserData(null); // Clear first to force re-render
+      setTimeout(() => {
+        setUserData(responseUserData); // Set with new data
+      }, 10);
+
       return true;
     } catch (err) {
       setError(err.message || "Failed to fetch user data");
@@ -62,11 +69,7 @@ export const useUserData = (userId, includeProfile = true) => {
     setError(null);
 
     try {
-      console.log(
-        `🔍 Fetching user profile API: /api/user/${userId}/stable/${stableId}`
-      );
       const response = await userService.getUserProfile(userId, stableId);
-      console.log("📊 User Profile API Response:", response);
 
       if (response && (response.isSuccess || response.statusCode === 200)) {
         const profileData = response.value;
@@ -95,10 +98,14 @@ export const useUserData = (userId, includeProfile = true) => {
       setError(null);
 
       const updateData = {
-        id: currentUserId,
+        id: parseInt(currentUserId, 10), // Convert to integer
         firstName: data.firstName,
         lastName: data.lastName,
-        profilePictureUrl: data.profilePictureUrl,
+        email: data.email,
+        phoneNumber: data.phoneNumber || null,
+        emergencyContact: data.emergencyContact || null,
+        coreInformation: data.coreInformation || null,
+        description: data.description || null,
       };
 
       const response = await userService.update(updateData);
