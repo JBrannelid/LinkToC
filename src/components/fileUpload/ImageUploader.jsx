@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { validateFile, VALID_IMAGE_TYPES } from "../../utils/fileUploadUtils";
 import Button from "../ui/Button";
-import PenIcon from "../../assets/icons/PenIcon";
 import userService from "../../api/services/userService";
 import { deleteFile, getReadSasUrl } from "../../api/services/fileService";
 
@@ -13,11 +12,10 @@ const ImageUploader = ({
   className = "",
   imageClassName = "w-32 h-32",
   placeholder = "/src/assets/images/profilePlaceholder.jpg",
-  displayImagePreview = true,
+  displayImagePreview = false,
   userId = null,
 }) => {
   const [imageUrl, setImageUrl] = useState(initialImageUrl || placeholder);
-  const [isEditing, setIsEditing] = useState(!initialImageUrl);
   const [loading, setLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const fileInputRef = useRef(null);
@@ -158,10 +156,6 @@ const ImageUploader = ({
           size: file.size,
         });
       }
-
-      // Hide editing UI after successful upload
-      setIsEditing(false);
-
       return result;
     } catch (error) {
       console.error("Upload error:", error);
@@ -174,66 +168,33 @@ const ImageUploader = ({
 
   return (
     <div className={`${className}`}>
-      {isEditing || !displayImagePreview ? (
-        <div className="space-y-3">
-          <Button
-            type="secondary"
-            onClick={handleClick}
-            disabled={loading}
-            loading={loading}
-            className="text-sm"
-          >
-            {loading ? "Uploading..." : label}
-          </Button>
+      {/* {isEditing || !displayImagePreview ? ( */}
+      <div className="space-y-3">
+        <Button
+          type="secondary"
+          onClick={handleClick}
+          disabled={loading}
+          loading={loading}
+          className="text-sm"
+        >
+          {loading ? "Uploading..." : label}
+        </Button>
 
-          {uploadSuccess && (
-            <div className="text-green-600 text-sm font-medium">
-              Image updated successfully!
-            </div>
-          )}
-
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileChange}
-            accept={VALID_IMAGE_TYPES.join(",")}
-            className="hidden"
-          />
-
-          {initialImageUrl && displayImagePreview && (
-            <Button
-              type="secondary"
-              className="w-full"
-              onClick={() => setIsEditing(false)}
-            >
-              Cancel
-            </Button>
-          )}
-        </div>
-      ) : (
-        <div className="relative">
-          <div
-            className={`overflow-hidden rounded-full border-2 border-light ${imageClassName}`}
-          >
-            <img
-              src={imageUrl}
-              alt="Uploaded image"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
+        {uploadSuccess && (
+          <div className="text-green-600 text-sm font-medium">
+            Image updated successfully!
           </div>
+        )}
 
-          <Button
-            type="icon"
-            variant="icon"
-            className="absolute bottom-0 right-0 bg-white rounded-full shadow-md border border-light p-1"
-            onClick={() => setIsEditing(true)}
-            aria-label="Edit image"
-          >
-            <PenIcon className="w-5 h-5 text-primary" />
-          </Button>
-        </div>
-      )}
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept={VALID_IMAGE_TYPES.join(",")}
+          className="hidden"
+        />
+      </div>
+      <div className="relative"></div>
     </div>
   );
 };
