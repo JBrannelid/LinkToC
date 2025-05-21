@@ -137,7 +137,7 @@ export function useStablePosts(stableId, currentUser) {
             id: comment.id,
             content: comment.content || comment.Content,
             commentDate: comment.commentDate || comment.CommentDate,
-            userId: comment.userId || comment.UserId || currentUser?.id,
+            userId: comment.userId || comment.UserId,
             firstName: comment.firstName,
             lastName: comment.lastName,
             profilePicture: comment.profilePicture,
@@ -176,7 +176,6 @@ export function useStablePosts(stableId, currentUser) {
       };
 
       await stablePostService.createComment(commentData);
-
       await fetchComments(postId);
       await fetchAndUpdatePosts();
 
