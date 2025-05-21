@@ -8,15 +8,16 @@ import {
 import { useHorseProfile } from "../../hooks/useHorseProfile";
 
 const StableHorseCard = ({ horse, onClick }) => {
-  const horseId = horse.id || horse.horseId || horse.HorseId;
-  const { horse: horseProfile, loading } = useHorseProfile(horseId);
-
+  const horseId = horse?.id || horse?.horseId || horse?.HorseId;
+  const { horse: horseProfile, loading } = horseId
+    ? useHorseProfile(horseId)
+    : { horse: null, loading: false };
   const displayHorse = horseProfile || horse;
-  const horseName = displayHorse.name || "Unknown Horse";
+  const horseName = displayHorse?.name || "Unknown Horse";
   const horseProfileImageUrl = getHorseProfileImageUrl(displayHorse);
-  const horseColor = displayHorse.color || "";
-  const horseBreed = displayHorse.breed || "";
-  const ageValue = displayHorse.age || "";
+  const horseColor = displayHorse?.color || "";
+  const horseBreed = displayHorse?.breed || "";
+  const ageValue = displayHorse?.age || "";
   const horseAge = ageValue ? formatHorseAge(ageValue) : "";
 
   return (
