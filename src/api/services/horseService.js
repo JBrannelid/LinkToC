@@ -63,6 +63,11 @@ const horseService = {
 
   getHorseProfile: async (horseId) => {
     try {
+      if (!horseId) {
+        console.warn("Horse ID is required to fetch profile");
+        return { isSuccess: false, message: "Horse ID is required" };
+      }
+
       return await axiosInstance.get(`/api/horse/${horseId}/profile`);
     } catch (error) {
       console.error("Error fetching horse profile:", error);
