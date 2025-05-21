@@ -97,12 +97,11 @@ export const useUserData = (userId, includeProfile = true) => {
       setOperationType("update");
       setError(null);
 
-      // This is the problem - you're not including all required fields
       const updateData = {
         id: parseInt(currentUserId, 10), // Convert to integer
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email, // This is required but missing!
+        email: data.email,
         phoneNumber: data.phoneNumber || null,
         emergencyContact: data.emergencyContact || null,
         coreInformation: data.coreInformation || null,
