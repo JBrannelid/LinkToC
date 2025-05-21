@@ -95,14 +95,22 @@ const CommentsModal = ({
                       <ProfileImage
                         user={{
                           id: comment.userId,
-                          profilePicture: comment.userProfileImage,
-                          firstName: comment.userName?.split(" ")[0] || "",
-                          lastName: comment.userName?.split(" ")[1] || "",
+                          profilePicture: comment.profilePicture,
+                          firstName: comment.firstName || "",
+                          lastName: comment.lastName || "",
                         }}
                         className="w-12 h-12 rounded-full object-cover border border-light"
-                        alt={`${comment.userName || "User"}'s avatar`}
+                        alt={`${comment.firstName || "User"} ${
+                          comment.lastName || ""
+                        }'s avatar`}
                         size="small"
                       />
+                    </div>
+                    {/* Display date format outside main border/container */}
+                    <div className="text-right">
+                      <span className="text-sm text-gray">
+                        {formatCommentDate(comment.commentDate)}
+                      </span>
                     </div>
 
                     {/* Comment content with border */}
@@ -114,13 +122,10 @@ const CommentsModal = ({
                       }`}
                       onClick={() => handleShowDeleteConfirm(comment)}
                     >
-                      <div className="flex justify-between mb-2">
-                        <span className="font-bold">
-                          {comment.userName || "Unknown User"}
-                        </span>
-                        <span className="text-sm text-gray">
-                          {formatCommentDate(comment.commentDate)}
-                        </span>
+                      <div className="flex mb-2">
+                        <p className="font-bold">
+                          {comment.firstName} {comment.lastName}
+                        </p>
                       </div>
                       <p className="text-black break-words">
                         {comment.content}
