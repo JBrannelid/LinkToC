@@ -20,7 +20,7 @@ const ModalHeader = ({
   // chevron btn
   showChevronLeftBtn = false,
   goBackBtn = (
-    <ChevronLeftIcon className="w-5 h-5 md:w-8 md:h-8 text-primary" />
+    <ChevronLeftIcon className="w-5 h-5 lg:w-6 lg:h-6 text-primary" />
   ),
   chevronAriaLabel = "Go back",
   onChevronClick,
