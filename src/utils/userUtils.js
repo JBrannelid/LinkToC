@@ -64,12 +64,11 @@ export const constructProfileImageUrl = (profilePicture) => {
   // Check if it's already a full URL
   if (profilePicture.startsWith("http")) return profilePicture;
 
-  // Base URL for your Azure Blob Storage
   const baseUrl = "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
 
   // Always construct the full path using user ID from localStorage
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-  const userId = currentUser?.id || "1";
+  const userId = currentUser?.id;
 
   // Log the full constructed URL for debugging
   const fullUrl = `${baseUrl}/profile-pictures/${userId}/${profilePicture}`;
@@ -83,20 +82,18 @@ export const getProfileImageUrl = (
   size = "default",
   fallbackUrl = null
 ) => {
-  // Check if user has a profile picture in any of the possible field names
-  const profileImage =
-    user?.profilePicture || user?.profileImage || user?.profilePictureUrl;
+  const profileImage = user?.profilePicture;
 
   // If user has a custom profile image, construct the full URL
   if (profileImage) {
     const url = constructProfileImageUrl(profileImage);
-    // Add more robust cache-busting with a random value
+    // cache-busting with a random value
     return `${url}?t=${Date.now()}-${Math.random()
       .toString(36)
       .substring(2, 10)}`;
   }
 
-  // Otherwise, return the appropriate placeholder
+  // Return the appropriate placeholder
   switch (size) {
     case "small":
       return "/src/assets/images/userPlaceholderSmall.webp";
