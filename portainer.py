@@ -22,7 +22,7 @@ STACK_NAME = ""
 CI_REGISTRY = ""
 CI_PROJECT_NAMESPACE = ""
 CI_PROJECT_NAME = ""
-CI_COMMIT_REF_NAME = ""
+# CI_COMMIT_REF_NAME = ""
 CI_DEFAULT_BRANCH = ""
 
 # Get flags for what we are doing
@@ -190,13 +190,13 @@ def deploy():
     global response, request_endpoint, request_data, request_header, request_files, request_json
 
     # Check if pipeline is running on branch
-    if CI_COMMIT_REF_NAME == CI_DEFAULT_BRANCH:
+    if CI_DEFAULT_BRANCH == CI_DEFAULT_BRANCH:
         # On main branch
         print(f"On branch: {CI_DEFAULT_BRANCH}, dockertag: latest")
         os.environ["DOCKER_TAG"] = "latest"
     else:
-        print(f"On branch: {CI_COMMIT_REF_NAME}, dockertag: {CI_COMMIT_REF_NAME}")
-        os.environ["DOCKER_TAG"] = CI_COMMIT_REF_NAME
+        print(f"On branch: {CI_DEFAULT_BRANCH}, dockertag: {CI_DEFAULT_BRANCH}")
+        os.environ["DOCKER_TAG"] = CI_DEFAULT_BRANCH
 
     swarm_config = parseDockerCompose()
 
@@ -285,7 +285,7 @@ getEnvironmentVars(
     [
         "CI_PROJECT_NAMESPACE",
         "CI_PROJECT_NAME",
-        "CI_COMMIT_REF_NAME",
+        # "CI_COMMIT_REF_NAME",
         "CI_DEFAULT_BRANCH",
         "STACK_NAME",
     ]
