@@ -29,7 +29,6 @@ const UserProfilePage = () => {
         await fetchUserProfile(userId, currentStable.id);
         // Force component re-render by incrementing counter
         setRefreshCounter((prev) => prev + 1);
-        console.log("Profile data refreshed, counter:", refreshCounter + 1);
       } catch (error) {
         console.error("Error refreshing profile:", error);
       }

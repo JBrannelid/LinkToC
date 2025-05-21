@@ -34,7 +34,6 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
 
     if (tokenFromUrl) {
       setToken(tokenFromUrl);
-      console.log("Token found in URL:", tokenFromUrl);
     } else {
       console.error("No token found in URL");
       setMessage(
@@ -82,10 +81,8 @@ const ResetPasswordForm = ({ setParentLoading = null }) => {
         newPassword: data.password,
         confirmPassword: data.confirmPassword,
       };
-      console.log("Sending reset data:", resetData);
 
       const response = await authService.resetPassword(resetData);
-      console.log("Reset password response:", response);
 
       if (response && response.isSuccess) {
         setMessage(

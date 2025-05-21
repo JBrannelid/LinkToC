@@ -48,10 +48,6 @@ const ImageUploader = ({
           const userResponse = await userService.getById(userId);
           if (userResponse?.value?.profilePicture) {
             oldProfilePicture = userResponse.value.profilePicture;
-            console.log(
-              "Found old profile picture to delete later:",
-              oldProfilePicture
-            );
           }
         } catch (e) {
           console.warn("Couldn't retrieve old profile picture:", e);
@@ -73,8 +69,6 @@ const ImageUploader = ({
 
       // Upload to blob storage
       const fileType = userId ? "profile-picture" : "image";
-      console.log(`Uploading ${fileType} for user ${userId || "unknown"}`);
-
       const result = await uploadFile(file, fileType, userId);
 
       if (!result.success) {
@@ -83,7 +77,6 @@ const ImageUploader = ({
 
       // Extract filename from blobName
       const filename = result.blobName.split("/").pop();
-      console.log("New profile picture filename:", filename);
 
       // Immediately update user profile with new image
       if (userId) {
@@ -99,11 +92,8 @@ const ImageUploader = ({
         // Delete old profile picture if it exists and is different
         if (oldProfilePicture && oldProfilePicture !== filename) {
           try {
-            console.log("Deleting old profile picture:", oldProfilePicture);
             const deleteResult = await deleteFile(oldProfilePicture, userId);
-            console.log("Result of delete operation:", deleteResult);
             if (deleteResult.success) {
-              console.log("Successfully deleted old profile picture");
             } else {
               console.warn(
                 "Failed to delete old profile picture:",

@@ -80,10 +80,6 @@ const stablePostService = {
       // Avoid 404 errors not found
       return [];
     } catch (error) {
-      // Silently handle the "no comments" case
-      console.log(
-        `No comments found for post ID ${postId} - returning empty array`
-      );
       return [];
     }
   },

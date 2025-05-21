@@ -46,9 +46,6 @@ const horseService = {
           "";
 
         if (errorMessage.includes("No horses")) {
-          console.log(
-            "No horses found for this stable - returning empty array"
-          );
           return [];
         }
       }
@@ -80,7 +77,6 @@ const horseService = {
       const response = await axiosInstance.get(
         `/api/stable-horses/${stableId}`
       );
-      console.log("Raw API response:", response);
 
       let horses = [];
 
@@ -95,10 +91,6 @@ const horseService = {
         return [];
       }
 
-      console.log(
-        `Extracted ${horses.length} horses from API response:`,
-        horses
-      );
       return horses;
     } catch (error) {
       console.error(`Error fetching horses for stable ${stableId}:`, error);

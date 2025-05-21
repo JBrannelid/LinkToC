@@ -17,7 +17,6 @@ const wallPostService = {
       title: "",
       body: "",
     };
-    console.log("Sending to Backend", createData);
     return await axiosInstance.post(
       `${ENDPOINTS.WALLPOST}/create?stableId=${data.stableIdFk}`,
       createData

@@ -28,7 +28,6 @@ const eventService = {
       userIdFk: data.userIdFk,
     };
 
-    console.log("Creating event with data:", createData);
     return await baseService.create(createData);
   },
 
@@ -41,7 +40,6 @@ const eventService = {
       userIdFk: data.userIdFk,
     };
 
-    console.log("Updating event with data:", updateData);
     return await baseService.update(updateData);
   },
 };

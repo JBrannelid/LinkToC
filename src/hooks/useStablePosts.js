@@ -196,10 +196,6 @@ export function useStablePosts(stableId, currentUser) {
     setCommentError(null);
 
     try {
-      console.log(
-        `Deleting comment with ID: ${commentId} from post: ${postId}`
-      );
-
       // Call the API to delete the comment
       const result = await stablePostService.deleteComment(commentId);
 

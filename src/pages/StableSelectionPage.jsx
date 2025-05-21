@@ -13,7 +13,7 @@ import { CreateStableForm, JoinStableForm } from "../components/forms";
 import { useStableOnboarding } from "../hooks/useStableOnboarding";
 import { createSuccessMessage } from "../utils/errorUtils";
 import FormMessage from "../components/forms/formBuilder/FormMessage";
-import {USER_ROLES} from "../utils/userUtils.js";
+import { USER_ROLES } from "../utils/userUtils.js";
 import HandRaisedIcon from "../assets/icons/HandRaisedIcon.jsx";
 import ConfirmationModal from "../components/ui/ConfirmationModal.jsx";
 import useStableData from "../hooks/useStableData.js";
@@ -28,7 +28,7 @@ const StableSelectionPage = () => {
     loading: stablesLoading,
     error,
     loadingState: stablesLoadingState,
-      refetch: refetchUserStables,
+    refetch: refetchUserStables,
   } = useUserStables();
 
   const { deleteStable, leaveStable } = useStableData();
@@ -40,7 +40,7 @@ const StableSelectionPage = () => {
   const [actionConfirmation, setActionConfirmation] = useState({
     isOpen: false,
     stable: null,
-    action: null // 'delete' or 'leave'
+    action: null, // 'delete' or 'leave'
   });
 
   const handleStableAction = async () => {
@@ -52,9 +52,9 @@ const StableSelectionPage = () => {
       let success = false;
 
       // Handle different actions using the hook methods
-      if (action === 'delete') {
+      if (action === "delete") {
         success = await deleteStable(stable.id);
-      } else if (action === 'leave') {
+      } else if (action === "leave") {
         // Use leaveStable from useStableData instead of direct API call
         success = await leaveStable(stable.id);
       }
@@ -64,11 +64,13 @@ const StableSelectionPage = () => {
         if (messageTimeoutRef.current) {
           clearTimeout(messageTimeoutRef.current);
         }
-        setPageMessage(createSuccessMessage(
-            action === 'delete'
-                ? `Stable "${stable.name}" was successfully deleted.`
-                : `You have successfully left "${stable.name}".`
-        ));
+        setPageMessage(
+          createSuccessMessage(
+            action === "delete"
+              ? `Stable "${stable.name}" was successfully deleted.`
+              : `You have successfully left "${stable.name}".`
+          )
+        );
         messageTimeoutRef.current = setTimeout(() => {
           setPageMessage(null);
           messageTimeoutRef.current = null;
@@ -80,14 +82,14 @@ const StableSelectionPage = () => {
       console.error(`Error ${actionConfirmation.action} stable:`, err);
       setPageMessage({
         type: "error",
-        text: err.message || `Failed to ${actionConfirmation.action} stable`
+        text: err.message || `Failed to ${actionConfirmation.action} stable`,
       });
     } finally {
       setIsProcessing(false);
       closeConfirmation();
     }
   };
-  
+
   //Deconstruct onboarding hook
   const {
     loading,
@@ -121,7 +123,7 @@ const StableSelectionPage = () => {
     setActionConfirmation({
       isOpen: true,
       stable,
-      action
+      action,
     });
   };
 
@@ -130,7 +132,7 @@ const StableSelectionPage = () => {
     setActionConfirmation({
       isOpen: false,
       stable: null,
-      action: null
+      action: null,
     });
   };
   const handleSelectStable = (stable) => {
@@ -153,10 +155,6 @@ const StableSelectionPage = () => {
     const result = await handleCreateStable(data);
 
     if (result.success && result.stable) {
-      console.log(
-        "Stable created successfully. Setting bypass flag and redirecting..."
-      );
-
       // Clear first-time flag
       sessionStorage.removeItem("isFirstLogin");
 
@@ -173,16 +171,16 @@ const StableSelectionPage = () => {
   };
   const handleNewStableClick = () => {
     setCurrentView("create");
-    
+
     setTimeout(() => {
       scrollIntoView({
         setFocus: true,
-        block: 'start',
-        behavior: 'smooth',
-        delay: 50, 
-        focusSelector: 'input[name="stableName"]' 
+        block: "start",
+        behavior: "smooth",
+        delay: 50,
+        focusSelector: 'input[name="stableName"]',
       });
-    }, 10); 
+    }, 10);
   };
 
   if (stablesLoading) {
@@ -201,25 +199,27 @@ const StableSelectionPage = () => {
   const getConfirmationProps = () => {
     const { stable, action } = actionConfirmation;
 
-    if (action === 'delete') {
+    if (action === "delete") {
       return {
-        title: `Delete stable "${stable?.name || ''}"?`,
+        title: `Delete stable "${stable?.name || ""}"?`,
         confirmText: "Delete",
         buttonType: "danger",
         iconBg: "bg-error-500",
-        message: "This action cannot be undone. All data associated with this stable will be permanently deleted."
+        message:
+          "This action cannot be undone. All data associated with this stable will be permanently deleted.",
       };
-    } else if (action === 'leave') {
+    } else if (action === "leave") {
       return {
-        title: `Leave stable "${stable?.name || ''}"?`,
+        title: `Leave stable "${stable?.name || ""}"?`,
         confirmText: "Leave",
         buttonType: "warning",
         iconBg: "bg-warning-500",
-        message: "Are you sure you want to leave this stable? You'll need to send another invite to join the stable again."
+        message:
+          "Are you sure you want to leave this stable? You'll need to send another invite to join the stable again.",
       };
     }
 
-    return {}; 
+    return {};
   };
 
   const confirmProps = getConfirmationProps();
@@ -292,38 +292,38 @@ const StableSelectionPage = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex flex-col justify-center items-center gap-2">
                     <Button
-                        type="primary"
-                        className="w-full"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSelectStable(stable);
-                        }}
+                      type="primary"
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectStable(stable);
+                      }}
                     >
                       Select this stable
                     </Button>
 
                     {stable.userRole !== USER_ROLES.MANAGER && (
-                        <Button
-                            type="warning"
-                            className="w-full mt-2"
-                            onClick={(e) => openConfirmation(stable,'leave', e)}
-                            disabled={isProcessing}
-                        >
-                          Leave stable
-                        </Button>
+                      <Button
+                        type="warning"
+                        className="w-full mt-2"
+                        onClick={(e) => openConfirmation(stable, "leave", e)}
+                        disabled={isProcessing}
+                      >
+                        Leave stable
+                      </Button>
                     )}
                     {stable.userRole === USER_ROLES.MANAGER && (
-                        <Button
-                            type="danger"
-                            className="w-full mt-2"
-                            onClick={(e) => openConfirmation(stable,'delete', e)}
-                            disabled={isProcessing}
-                        >
-                          Delete stable
-                        </Button>
+                      <Button
+                        type="danger"
+                        className="w-full mt-2"
+                        onClick={(e) => openConfirmation(stable, "delete", e)}
+                        disabled={isProcessing}
+                      >
+                        Delete stable
+                      </Button>
                     )}
                   </div>
                 </Card.Body>
@@ -349,7 +349,7 @@ const StableSelectionPage = () => {
                 <Button
                   type="primary"
                   className="w-9/10 max-w-md"
-                  onClick={handleNewStableClick} 
+                  onClick={handleNewStableClick}
                   aria-controls="create-stable-form"
                   aria-expanded={currentView === "create"}
                 >
@@ -369,21 +369,21 @@ const StableSelectionPage = () => {
 
           {/* Show Create Form */}
           {currentView === "create" && (
-              
-              <div
+            <div
               ref={formSectionRef}
               id="create-stable-form"
-              aria-labelledby="create-stable-heading">
-                <CreateStableForm
-                    formMethods={formMethods}
-                    onSubmit={handleStableCreationSuccess}
-                    onCancel={handleCancel}
-                    isLoading={loading}
-                    loadingState={loadingState}
-                    error={onboardingError}
-                    message={message}
-                />
-              </div>
+              aria-labelledby="create-stable-heading"
+            >
+              <CreateStableForm
+                formMethods={formMethods}
+                onSubmit={handleStableCreationSuccess}
+                onCancel={handleCancel}
+                isLoading={loading}
+                loadingState={loadingState}
+                error={onboardingError}
+                message={message}
+              />
+            </div>
           )}
 
           {/* Show Join Form */}
@@ -400,23 +400,24 @@ const StableSelectionPage = () => {
         </div>
       </div>
       <ConfirmationModal
-          isOpen={actionConfirmation.isOpen}
-          onClose={closeConfirmation}
-          onConfirm={handleStableAction}
-          loading={isProcessing}
-          title={confirmProps.title || ""}
-          confirmButtonText={confirmProps.confirmText || "Confirm"}
-          confirmButtonType={confirmProps.buttonType || "primary"}
-          icon={
-            <HandRaisedIcon
-                size={70}
-                backgroundColor={confirmProps.iconBg || "bg-primary"}
-                iconColor="text-red-500"
-            />
-          }
+        isOpen={actionConfirmation.isOpen}
+        onClose={closeConfirmation}
+        onConfirm={handleStableAction}
+        loading={isProcessing}
+        title={confirmProps.title || ""}
+        confirmButtonText={confirmProps.confirmText || "Confirm"}
+        confirmButtonType={confirmProps.buttonType || "primary"}
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor={confirmProps.iconBg || "bg-primary"}
+            iconColor="text-red-500"
+          />
+        }
       >
         <p className="text-center mb-4">
-          {confirmProps.message || "Are you sure you want to perform this action?"}
+          {confirmProps.message ||
+            "Are you sure you want to perform this action?"}
         </p>
       </ConfirmationModal>
     </div>

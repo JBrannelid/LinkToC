@@ -42,8 +42,6 @@ const RegistrationForm = () => {
       setOperationType("create");
       setServerError("");
 
-      console.log("Submitting registration data:", data);
-
       // Submit registration data and get response
       const response = await authService.register(data);
 

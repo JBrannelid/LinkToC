@@ -88,7 +88,6 @@ export const useStableOnboarding = () => {
         };
 
         const response = await stableService.createStable(stableData);
-        console.log("Full response:", response);
 
         if (response && response.isSuccess) {
           const createdStable = response.value;

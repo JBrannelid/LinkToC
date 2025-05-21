@@ -94,7 +94,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
         ...data,
       };
 
-      console.log("Sending profile update:", updateData);
       const result = await updateUserData(updateData);
 
       if (!result.success) {

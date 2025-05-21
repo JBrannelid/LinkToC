@@ -56,7 +56,6 @@ const StableOnboardingContainer = () => {
     const result = await handleCreateStable(data);
 
     if (result.success && result.stable) {
-      console.log("Success, refreshing token...");
       await verifyToken();
 
       sessionStorage.removeItem("isFirstLogin");

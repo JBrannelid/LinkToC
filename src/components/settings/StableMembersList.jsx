@@ -38,7 +38,6 @@ const StableMembersList = ({ stableId }) => {
     ) {
       const success = await updateMemberRole(selectedMember.id, selectedRole);
       if (success) {
-        console.log("Role updated successfully");
       } else {
         console.error("Failed to update role");
       }

@@ -86,32 +86,33 @@ const authService = {
       return true;
     }
   },
-  
+
   logoutAndDeleteUser: async (userId) => {
-    if(!userId) {
+    if (!userId) {
       throw new Error("User ID is required");
     }
     try {
       const accessToken = tokenStorage.getAccessToken();
       await authService.logout();
-      console.log("accessToken", accessToken)
-      console.log("userId", userId)
-      const result = await axiosInstance.delete(`/api/user/delete/composition/${userId}`, {
-       
-        headers: {
-          Authorization: `Bearer ${accessToken}`
+
+      const result = await axiosInstance.delete(
+        `/api/user/delete/composition/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-      });
-      
-      sessionStorage.removeItem("currentUser")
-      localStorage.removeItem("currentStable")
-      
+      );
+
+      sessionStorage.removeItem("currentUser");
+      localStorage.removeItem("currentStable");
+
       return result;
     } catch (error) {
       console.error("Logout and delete user request failed:", error);
-      
+
       tokenStorage.clearTokens();
-      
+
       throw error;
     }
   },

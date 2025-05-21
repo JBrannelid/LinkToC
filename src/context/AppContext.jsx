@@ -1,6 +1,12 @@
-import React, {createContext, useCallback, useContext, useEffect, useState,} from "react";
-import {useAuth} from "./AuthContext";
-import {USER_ROLES} from "../utils/userUtils";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useAuth } from "./AuthContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 const AppContext = createContext();
 
@@ -43,7 +49,6 @@ export const AppProvider = ({ children }) => {
 
     // This bypass will not copremise security, as it is only used for newly created stables
     if (isNewStable) {
-      console.log("Bypassing security check for newly created stable");
       sessionStorage.removeItem("newStableCreated");
     }
 

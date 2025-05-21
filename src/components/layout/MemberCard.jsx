@@ -6,18 +6,12 @@ const MemberCard = ({ member, onClick }) => {
   const fullName = formatUserFullName(member);
   const roleName = getRoleName(member.role);
 
-  // Debug the incoming member data
-  console.log("MemberCard received:", member);
-
-  // Ensure member object has the expected structure for ProfileImage
-  const ensuredUser = {
+  const validatedUser = {
     id: member.userId || member.id,
     firstName: member.firstName || "",
     lastName: member.lastName || "",
     profilePicture: member.profilePicture,
   };
-
-  console.log("MemberCard passing to ProfileImage:", ensuredUser);
 
   return (
     <Card.Container className="cursor-pointer" onClick={onClick}>
@@ -25,7 +19,7 @@ const MemberCard = ({ member, onClick }) => {
         <div className="flex justify-center">
           <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-30 lg:rounded-md">
             <ProfileImage
-              user={ensuredUser}
+              user={validatedUser}
               className="w-full h-full object-cover"
               alt={`Profile picture of ${fullName}`}
               size="medium"
