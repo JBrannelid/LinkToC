@@ -10,9 +10,7 @@ const ImageUploader = ({
   onError,
   label = "Choose Image",
   className = "",
-  imageClassName = "w-32 h-32",
   placeholder = "/src/assets/images/profilePlaceholder.jpg",
-  displayImagePreview = false,
   userId = null,
 }) => {
   const [imageUrl, setImageUrl] = useState(initialImageUrl || placeholder);
@@ -136,7 +134,9 @@ const ImageUploader = ({
           console.warn("Could not get SAS URL for image preview:", sasError);
           // Fallback to direct URL construction
           const baseUrl =
+            import.meta.env.VITE_AZURE_STORAGE_URL ||
             "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
+
           setImageUrl(
             `${baseUrl}/profile-pictures/${userId}/${filename}?t=${Date.now()}`
           );
