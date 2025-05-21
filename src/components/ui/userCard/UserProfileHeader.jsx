@@ -12,6 +12,7 @@ import PhoneIcon from "../../../assets/icons/PhoneIcon";
 import PenIcon from "../../../assets/icons/PenIcon";
 import EditInformationModal from "../../layout/EditInformationModal";
 import { useAuth } from "../../../context/AuthContext";
+import ProfileImage from "../../../components/common/ProfileImage";
 
 const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const { currentStable } = useAppContext();
@@ -161,11 +162,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
           <div className="w-full h-55 relative">
             {hasCustomProfileImage ? (
               // User has a custom profile image
-              <img
-                src={enhancedUser.profileImage}
-                alt={`Profile of ${userFullName}`}
+              <ProfileImage
+                user={enhancedUser}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                size="large"
+                alt={`Profile of ${userFullName}`}
               />
             ) : (
               // Use responsive placeholder images
@@ -178,11 +179,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   media="(min-width: 768px)"
                   srcSet="/src/assets/images/userPlaceholdermedium.webp"
                 />
-                <img
-                  src="/src/assets/images/userPlaceholderSmall.webp"
-                  alt={`Profile of ${userFullName}`}
+                <ProfileImage
+                  user={enhancedUser}
                   className="w-full h-full object-cover"
-                  loading="lazy"
+                  size="large"
+                  alt={`Profile of ${userFullName}`}
                 />
               </picture>
             )}
@@ -195,12 +196,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
         {/* User image */}
         <div className="w-full sm:h-100 h-90 md:h-130">
           {hasCustomProfileImage ? (
-            // User has a custom profile image
-            <img
-              src={enhancedUser.profileImage}
-              alt={`Profile of ${userFullName}`}
+            <ProfileImage
+              user={enhancedUser}
               className="w-full h-full object-cover"
-              loading="lazy"
+              size="large" // Use consistent size with desktop
+              alt={`Profile of ${userFullName}`}
             />
           ) : (
             // Use responsive placeholder images
@@ -213,11 +213,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                 media="(min-width: 768px)"
                 srcSet="/src/assets/images/userPlaceholdermedium.webp"
               />
-              <img
-                src="/src/assets/images/userPlaceholderSmall.webp"
-                alt={`Profile of ${userFullName}`}
+              <ProfileImage
+                user={enhancedUser}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                size="small"
+                alt={`Profile of ${userFullName}`}
               />
             </picture>
           )}
