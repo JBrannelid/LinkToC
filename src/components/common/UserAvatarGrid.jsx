@@ -1,5 +1,5 @@
 import React from "react";
-import ProfileImage from "./ProfileImage";
+import UserProfileImage from "./UserProfileImage";
 
 const UserAvatarGrid = ({ users, onSelectUser }) => {
   const MAX_VISIBLE_USERIMAGE = 4;
@@ -25,20 +25,22 @@ const UserAvatarGrid = ({ users, onSelectUser }) => {
     >
       <div className="flex flex-wrap gap-0.5 justify-evenly sm:gap-1 sm:justify-start lg:pl-2">
         {displayUsers.map((user, index) => (
-          <div
-            key={index}
-            className="border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5"
-          >
-            <ProfileImage user={user} size="small" className="h-full w-full" />
+          <div key={index}>
+            <UserProfileImage
+              user={user}
+              size="small"
+              className="border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5"
+            />
           </div>
         ))}
 
         {exceedsMaximumUserImage && (
-          <div className="flex items-center justify-center bg-gray-300 rounded-full border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5">
-            <span className="text-mini lg:text-[8px] font-normal text-white">
-              +{remainingUsersCount}
-            </span>
-          </div>
+          <UserProfileImage
+            user={{ id: "counter" }}
+            size="small"
+            className="border border-background md:h-4.2 md:w-4.2 lg:h-4 lg:w-4 xl:h-5 xl:w-5"
+            customContent={`+${remainingUsersCount}`}
+          />
         )}
       </div>
     </div>
