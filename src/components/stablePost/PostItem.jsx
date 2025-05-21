@@ -12,6 +12,7 @@ import CommentInput from "../stablePost/CommentInput";
 import CommentCount from "../stablePost/CommentCount";
 import CommentsModal from "../stablePost/CommentsModal";
 import MessageIcon from "../../assets/icons/MessageIcon";
+import ProfileImage from "../common/ProfileImage";
 
 const PostItem = ({
   post,
@@ -166,11 +167,16 @@ const PostItem = ({
         <div className="px-5 pt-4 pb-4 flex justify-between items-center">
           <div className="flex items-center">
             <div className="w-10 h-10 border border-primary rounded-full overflow-hidden">
-              <img
-                src={profilePictureUrl}
-                alt={`Profile image of ${userFullName}`}
+              <ProfileImage
+                user={{
+                  id: post.userId || post.userIdFk,
+                  profilePicture: post.posterProfileImage,
+                  firstName: post.posterFirstName,
+                  lastName: post.posterLastName,
+                }}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                alt={`Profile of ${userFullName}`}
+                size="small"
               />
             </div>
             <div className="ml-3">
