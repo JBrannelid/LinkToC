@@ -15,9 +15,9 @@ const MemberCard = ({ member, onClick }) => {
 
   return (
     <Card.Container className="cursor-pointer" onClick={onClick}>
-      <div className="p-2 flex flex-col">
-        <div className="flex justify-center">
-          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-40 xl:h-45 lg:rounded-md bg-gradient-to-b from-primary-light to-white">
+      <div className="p-2 flex flex-col bg-gradient-to-b from-primary-light to-white">
+        <div className="flex justify-center bg-background">
+          <div className="w-24 h-24 mb-2 rounded-full overflow-hidden border-2 border-primary lg:w-full lg:h-40 xl:h-45 lg:rounded-md">
             <ProfileImage
               user={validatedUser}
               className="w-full h-full lg:h-50 lg:w-50 lg:aspect-ratio mx-auto"

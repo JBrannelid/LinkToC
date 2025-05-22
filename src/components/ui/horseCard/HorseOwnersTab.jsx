@@ -59,20 +59,20 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
           return (
             <div
               key={`user-${userData.id || index}`}
-              className="border border-primary rounded-lg overflow-hidden cursor-pointer mx-auto max-w-xs"
+              className="border border-primary rounded-lg overflow-hidden cursor-pointer mx-auto max-w-xs bg-gradient-to-b from-primary-light to-white"
               onClick={() => handleUserClick(userData.id)}
             >
-              <div className="flex justify-center items-center overflow-hidden">
+              <div className="flex justify-center items-center overflow-hidden ">
                 <ProfileImage
                   user={userData}
-                  className="scale-70 w-35 h-35 sm:w-45 sm:h-45 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover border-2 border-primary rounded-full"
+                  className="scale-70 w-35 h-35 sm:w-45 sm:h-45 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover border-2 border-primary rounded-full bg-background"
                   size="large"
                   alt={`User ${userName}`}
                 />
               </div>
               <div className="p-3 text-center">
                 <h3 className="font-bold">{userName}</h3>
-                <p className="text-gray text-sm">
+                <p className=" text-sm">
                   Role: {roleName || "Connected"}
                   <br />
                   {userData.phoneNumber && `Phone: ${userData.phoneNumber}`}
