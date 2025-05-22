@@ -193,39 +193,22 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
 
       {/* Mobile header */}
       <div className="lg:hidden relative">
-        {/* User image */}
-        <div className="w-full sm:h-100 h-90 md:h-130">
-          {hasCustomProfileImage ? (
+        {/* User image with fixed height and rounded corners */}
+        <div className="relative overflow-hidden mt-2">
+          <div className="w-full h-90 sm:h-120 md:h-150">
             <ProfileImage
               user={enhancedUser}
-              className="w-full h-full object-cover"
-              size="large" // Use consistent size with desktop
+              className="w-full h-full object-cover object-[center_25%]"
+              size="large"
               alt={`Profile of ${userFullName}`}
             />
-          ) : (
-            // Use responsive placeholder images
-            <picture>
-              <source
-                media="(min-width: 1024px)"
-                srcSet="/src/assets/images/userPlaceholderLarge.webp"
-              />
-              <source
-                media="(min-width: 768px)"
-                srcSet="/src/assets/images/userPlaceholdermedium.webp"
-              />
-              <ProfileImage
-                user={enhancedUser}
-                className="w-full h-full object-cover"
-                size="small"
-                alt={`Profile of ${userFullName}`}
-              />
-            </picture>
-          )}
+          </div>
         </div>
+
         {/* User info */}
-        <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10">
-          <div className="flex flex-col gap-1 relative group">
-            <h1 className="text-3xl font-heading font-semibold pr-8">
+        <div className="px-4 sm:px-6 md:px-8 py-6 bg-background rounded-t-3xl -mt-8 relative z-10 border-light border-t-2">
+          <div className="flex flex-col gap-1 relative group ">
+            <h1 className="text-3xl font-heading font-semibold pr-8 ">
               {userFullName}
             </h1>
             {/* RoleName */}
@@ -234,7 +217,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             </p>
           </div>
           <div className="flex justify-start gap-2 mt-6 md:justify-center md:px-20">
-            {/* Contact buttons */}
+            {/* Contact buttons remain the same */}
             <div className="flex flex-col items-center w-full md:w-9/10 relative group">
               {/* PhoneNumber - show number if pressed */}
               <Button
@@ -254,7 +237,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <span className="mt-1 text-xs text-center text-primary">
                 Number
               </span>
-              {/* Permission controll */}
+              {/* Permission control */}
               {isCurrentUser && (
                 <button
                   className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
@@ -293,7 +276,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
               <span className="mt-1 text-xs text-center text-primary">
                 Emergency contact
               </span>
-              {/* Permission controll */}
+              {/* Permission control */}
               {isCurrentUser && (
                 <button
                   className="absolute -right-1 -top-1 transition-opacity bg-white rounded-full p-1"
