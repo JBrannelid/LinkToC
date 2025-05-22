@@ -15,6 +15,7 @@ import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import ConfirmationModal from "../ui/ConfirmationModal";
 import ImageUploader from "../fileUpload/ImageUploader";
 import { getReadSasUrl } from "../../api/services/fileService";
+import ProfileImage from "../common/ProfileImage";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
@@ -164,11 +165,11 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
               <div className="bg-white rounded-lg p-2 mb-4 flex flex-col border-light border-2 shadow-md">
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
-                    <img
+                    <ProfileImage
                       src={profileImageUrl}
+                      className="w-full h-full"
+                      size="rounded"
                       alt={`Profile image of ${userFullName}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
                     />
                   </div>
                   <div className="mr-5 ">
@@ -226,7 +227,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 )}
               </div>
 
-              {/* Rest of the component remains the same */}
               {/* Personal Info Section */}
               <div className="bg-white rounded-lg p-4 mb-4 border-primary-light border-1 shadow-md">
                 <div className="flex justify-between items-center mb-5">
@@ -259,8 +259,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       label="Email"
                       name="email"
                       labelPosition="above"
-                      readOnly={true} // Change to false when BE allow us to edit
-                      inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
+                      readOnly={true}
+                      inputClassName="bg-gray-100 cursor-not-allowed"
                       validation={{
                         required: "Email is required",
                         pattern: {
@@ -277,8 +277,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       label="Phone number"
                       name="phoneNumber"
                       labelPosition="above"
-                      readOnly={true} // Change to false when BE allow us to edit
-                      inputClassName="bg-gray-100 cursor-not-allowed" // Remove when BE allow us to edit
+                      readOnly={true}
+                      inputClassName="bg-gray-100 cursor-not-allowed"
                       validation={{
                         pattern: {
                           value:
