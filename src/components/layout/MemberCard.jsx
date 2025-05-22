@@ -22,7 +22,7 @@ const MemberCard = ({ member, onClick }) => {
               user={validatedUser}
               className="w-30 h-30 lg:h-50 lg:w-50 lg:aspect-ratio mx-auto"
               alt={`Profile picture of ${fullName}`}
-              size="medium"
+              size="rounded"
               fallbackUrl={null}
             />
           </div>

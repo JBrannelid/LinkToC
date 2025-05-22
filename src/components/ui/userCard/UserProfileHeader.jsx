@@ -163,7 +163,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             <ProfileImage
               user={enhancedUser}
               className="w-full h-full object-cover scale-100 object-center"
-              size="large"
+              size="rounded"
               alt={`Profile of ${userFullName}`}
             />
           </div>
@@ -178,7 +178,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             <ProfileImage
               user={enhancedUser}
               className="w-full h-full object-cover object-[center_25%]"
-              size="large"
+              size="small"
               alt={`Profile of ${userFullName}`}
             />
           </div>
