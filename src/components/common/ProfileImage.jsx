@@ -15,11 +15,11 @@ const ProfileImage = ({
 
     switch (size) {
       case "small":
-        return "/src/assets/images/userPlaceholderSmall.webp";
+        return "/src/assets/images/userPlaceholderSmall_NoLogo.webp";
       case "medium":
-        return "/src/assets/images/userPlaceholdermedium.webp";
+        return "/src/assets/images/userPlaceholdermedium_NoLogo.webp";
       case "large":
-        return "/src/assets/images/userPlaceholderLarge.webp";
+        return "/src/assets/images/userPlaceholderLarge_NoLogo.webp";
       case "rounded":
         return "/src/assets/images/userPlaceholderRounded.webp";
       default:
