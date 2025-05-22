@@ -158,35 +158,14 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
         </div>
 
         {/* Image carousel */}
-        <div className="relative mt-4 border-2 border-primary rounded-lg overflow-hidden">
-          <div className="w-full h-55 relative">
-            {hasCustomProfileImage ? (
-              // User has a custom profile image
-              <ProfileImage
-                user={enhancedUser}
-                className="w-full h-full object-cover"
-                size="large"
-                alt={`Profile of ${userFullName}`}
-              />
-            ) : (
-              // Use responsive placeholder images
-              <picture>
-                <source
-                  media="(min-width: 1024px)"
-                  srcSet="/src/assets/images/userPlaceholderLarge.webp"
-                />
-                <source
-                  media="(min-width: 768px)"
-                  srcSet="/src/assets/images/userPlaceholdermedium.webp"
-                />
-                <ProfileImage
-                  user={enhancedUser}
-                  className="w-full h-full object-cover"
-                  size="large"
-                  alt={`Profile of ${userFullName}`}
-                />
-              </picture>
-            )}
+        <div className="relative mt-4 border-2 border-primary rounded-lg overflow-hidden flex justify-center bg-gradient-to-b from-primary-light to-white">
+          <div className="w-60 h-60 relative overflow-hidden">
+            <ProfileImage
+              user={enhancedUser}
+              className="w-full h-full object-cover scale-100 object-center"
+              size="large"
+              alt={`Profile of ${userFullName}`}
+            />
           </div>
         </div>
       </div>
@@ -195,7 +174,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
       <div className="lg:hidden relative">
         {/* User image with fixed height and rounded corners */}
         <div className="relative overflow-hidden mt-2">
-          <div className="w-full h-90 sm:h-120 md:h-150">
+          <div className="w-full h-90 sm:h-120 md:h-150 bg-gradient-to-b from-primary-light to-white">
             <ProfileImage
               user={enhancedUser}
               className="w-full h-full object-cover object-[center_25%]"
