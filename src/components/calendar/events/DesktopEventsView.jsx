@@ -62,7 +62,7 @@ const DesktopEventsView = ({
                     <div className="flex-shrink-0 mr-1 md:mr-2 z-20">
                       <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-14 lg:h-14 rounded-full border border-primary overflow-hidden flex items-center justify-center bg-white">
                         <img
-                          src="/src/assets/images/userPlaceholder.webp"
+                          src="/src/assets/images/userPlaceholderRounded.webp"
                           alt="User profile"
                           className="w-full h-full object-cover"
                           loading="lazy"
