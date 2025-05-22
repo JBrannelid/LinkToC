@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { useAppContext } from "../../../context/AppContext";
-import {
-  formatUserFullName,
-  getProfileImageUrl,
-  getRoleName,
-} from "../../../utils/userUtils";
+import { formatUserFullName, getRoleName } from "../../../utils/userUtils";
 import Button from "../../ui/Button";
 import MessageIcon from "../../../assets/icons/MessageIcon";
 import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
@@ -29,8 +25,6 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const userStableRole = userProfile?.userStableRole;
   const enhancedUser = userStableRole?.user || user;
   const userFullName = formatUserFullName(enhancedUser);
-  const profileImageUrl = getProfileImageUrl(enhancedUser);
-  const hasCustomProfileImage = !!enhancedUser?.profileImageUrl;
 
   // Permissions check for editing user data
   const isCurrentUser = String(currentUser.id) === String(enhancedUser.id);
@@ -159,11 +153,11 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
 
         {/* Image carousel */}
         <div className="relative mt-4 border-2 border-primary rounded-lg overflow-hidden flex justify-center bg-gradient-to-b from-primary-light to-white">
-          <div className="w-60 h-60 relative overflow-hidden">
+          <div className="w-full h-90 relative overflow-hidden ">
             <ProfileImage
               user={enhancedUser}
-              className="w-full h-full object-cover scale-100 object-center"
-              size="rounded"
+              className="w-full h-160 object-contain object-[center_40%]"
+              size="small"
               alt={`Profile of ${userFullName}`}
             />
           </div>
@@ -173,7 +167,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
       {/* Mobile header */}
       <div className="lg:hidden relative">
         {/* User image with fixed height and rounded corners */}
-        <div className="relative overflow-hidden mt-2">
+        <div className="relative overflow-hidden">
           <div className="w-full h-90 sm:h-120 md:h-150 bg-gradient-to-b from-primary-light to-white">
             <ProfileImage
               user={enhancedUser}
