@@ -55,17 +55,11 @@ export const useStableSearchWithDistance = (options = {}) => {
       // If stable doesn't have postcode, get the full stable details
       else {
         try {
-          console.log("Fetching details for stable ID:", stable.id);
-
           // Use the correct endpoint path from your backend
           const response = await axiosInstance.get(`/api/stable/${stable.id}`);
 
           if (response.isSuccess && response.value?.postCode) {
             const fullStable = response.value;
-            console.log(
-              "Got stable details with postcode:",
-              fullStable.postCode
-            );
 
             // Now get the location data
             const locationResponse = await axiosInstance.get(
@@ -76,11 +70,6 @@ export const useStableSearchWithDistance = (options = {}) => {
               const locationData = locationResponse.value;
 
               if (locationData.latitude && locationData.longitude) {
-                console.log(
-                  "Got location data with coordinates:",
-                  locationData
-                );
-
                 const distance = calculateDistance(
                   userLocation.latitude,
                   userLocation.longitude,
@@ -98,7 +87,7 @@ export const useStableSearchWithDistance = (options = {}) => {
               }
             }
           } else {
-            console.log(
+            console.warn(
               "Stable details missing postcode or request failed:",
               response
             );
@@ -125,7 +114,6 @@ export const useStableSearchWithDistance = (options = {}) => {
       // Override the search function to add distance data
       searchFn: async (query) => {
         const results = await baseConfig.searchFn(query);
-        console.log("Search results:", results);
 
         // Add distance to results if we have user location
         if (results.success && userLocation) {
@@ -135,7 +123,6 @@ export const useStableSearchWithDistance = (options = {}) => {
               addDistanceToStable(stable, userLocation)
             )
           );
-          console.log("Enhanced stables with distance:", enhancedStables);
           results.data = enhancedStables;
         }
         return results;

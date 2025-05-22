@@ -7,15 +7,15 @@ export const handleStableRequests = (navigate, ROUTES) => {
 };
 
 export const handleTermsOfService = () => {
-  console.log("Terms of service clicked");
+  window.open("/terms-of-service");
 };
 
 export const handleSupport = () => {
-  console.log("Support clicked");
+  window.open("/support");
 };
 
 export const handleCookieSettings = () => {
-  console.log("Cookie settings clicked");
+  window.open("/coockie_settings");
 };
 
 export const handleSwitchStable = (navigate, ROUTES) => {
