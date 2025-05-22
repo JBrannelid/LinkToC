@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { AlertCircle } from "lucide-react";
+import AlertCircleIcon from "../../assets/icons/AlertCircleIcon.jsx";
 import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
 import authService from "../../api/services/authService";
@@ -159,7 +159,10 @@ const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
 
       {message.type === "warning" && (
         <div className="mt-3 p-3 bg-amber-50 border border-b-warning-300 rounded-md flex items-start">
-          <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5 mr-2 flex-shrink-0" />
+          <AlertCircleIcon
+            size={20}
+            className="text-amber-500 mt-0.5 mr-2 flex-shrink-0"
+          />
           <span className="text-sm text-error-600">{message.text}</span>
         </div>
       )}
