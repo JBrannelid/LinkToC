@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../ui/Button";
 import { formatTimeOnly } from "../../../utils/calendarUtils";
 import CloseIcon from "../../../assets/icons/CloseIcon";
+import ProfileImage from "../../common/ProfileImage";
 
 const DesktopEventsView = ({
   selectedDay,
@@ -61,11 +62,17 @@ const DesktopEventsView = ({
                     {/* Profile image */}
                     <div className="flex-shrink-0 mr-1 md:mr-2 z-20">
                       <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 lg:w-14 lg:h-14 rounded-full border border-primary overflow-hidden flex items-center justify-center bg-white">
-                        <img
-                          src="/src/assets/images/userPlaceholderRounded.webp"
-                          alt="User profile"
+                        <ProfileImage
+                          user={event.user}
                           className="w-full h-full object-cover"
-                          loading="lazy"
+                          alt={`Profile of ${
+                            event.user
+                              ? `${event.user.firstName || ""} ${
+                                  event.user.lastName || ""
+                                }`.trim()
+                              : "Unknown user"
+                          }`}
+                          size="rounded"
                         />
                       </div>
                     </div>
