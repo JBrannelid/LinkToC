@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { Eye, EyeOff, Mail } from "lucide-react";
+import EyeIcon from "../../../assets/icons/EyeIcon";
+import EyeOffIcon from "../../../assets/icons//EyeOffIcon";
+import MailIcon from "../../../assets/icons/MailIcon";
 
 // A form input component that integrates with React Hook Form
 const FormInput = ({
@@ -104,7 +106,7 @@ const FormInput = ({
             {/* Email icon */}
             {shouldShowEmailIcon && (
               <div className="absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-500">
-                <Mail className="h-5 w-5" />
+                <MailIcon size={20} />
               </div>
             )}
             {/* Eye/toggle icons */}
@@ -116,9 +118,9 @@ const FormInput = ({
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
-                  <EyeOff className="h-5 w-5" />
+                  <EyeOffIcon size={20} />
                 ) : (
-                  <Eye className="h-5 w-5" />
+                  <EyeIcon size={20} />
                 )}
               </button>
             )}

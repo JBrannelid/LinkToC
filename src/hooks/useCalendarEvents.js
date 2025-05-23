@@ -1,13 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import eventService from "../api/services/eventService";
-import userService from "../api/services/userService";
 import { parseISO, isSameDay } from "../utils/calendarUtils";
 import { useAppContext } from "../context/AppContext.jsx";
 import { useLoadingState } from "./useLoadingState";
 
 export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -23,35 +21,18 @@ export function useCalendarEvents(stableId) {
       setLoading(true);
       setError(null);
 
-      // Get Users
-      const userResponse = await userService.getAll();
-      const userList = Array.isArray(userResponse) ? userResponse : [];
-      setUsers(userList);
-
       // Get events for the specified stable and convert object into a array of events
       const eventsResponse = await eventService.getStableEvents(stableId);
       const eventList = Array.isArray(eventsResponse) ? eventsResponse : [];
-
-      // Find current user from the user list
-      const currentUser = userList.find((user) => user.id === currentUserId);
-
-      // Process events to ensure they have user references
-      const processedEvents = eventList.map((event) => {
-        let eventUser = null;
-
-        // If the event has a userIdFk, look up the user
-        if (event.userIdFk) {
-          eventUser = userList.find((user) => user.id === event.userIdFk);
-        }
-
-        // Return the event with user information
-        return {
-          ...event,
-          user: eventUser || currentUser,
-          userIdFk:
-            event.userIdFk || (eventUser ? eventUser.id : currentUserId),
-        };
-      });
+      const processedEvents = eventList.map((event) => ({
+        ...event,
+        user: {
+          id: event.userId,
+          firstName: event.firstName,
+          lastName: event.lastName,
+          profilePicture: event.profilePicture,
+        },
+      }));
 
       setEvents(processedEvents);
 
@@ -149,7 +130,6 @@ export function useCalendarEvents(stableId) {
 
   return {
     events,
-    users,
     calendarStatus: { loading, error },
     loadingState,
     createEvent,

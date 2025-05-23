@@ -116,7 +116,6 @@ export const AuthProvider = ({ children }) => {
           lastName: userData.lastName,
           email: userData.email,
           phoneNumber: userData.phoneNumber,
-          userName: userData.userName,
           token: token,
         };
         sessionStorage.setItem("currentUser", JSON.stringify(basicUserInfo));

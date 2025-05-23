@@ -19,7 +19,7 @@ const UserSettingsPage = () => {
         label="Edit Profile"
         onClick={() => setShowUserEditProfileForm(true)}
       />
-      <SettingsMenuItem label="Manage Horses" onClick={handleManageHorses} />
+      {/* <SettingsMenuItem label="Manage Horses" onClick={handleManageHorses} /> */}
 
       <SettingsMenuItem
         label="Stable Requests"

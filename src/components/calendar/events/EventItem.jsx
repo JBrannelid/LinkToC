@@ -1,6 +1,6 @@
 import React from "react";
 import { formatTimeOnly } from "../../../utils/calendarUtils";
-import UserProfileImage from "../../common/UserProfileImage";
+import ProfileImage from "../../common/ProfileImage";
 
 const EventItem = ({ event, index, onUpdate }) => {
   // Background for even/odd events rows
@@ -19,6 +19,8 @@ const EventItem = ({ event, index, onUpdate }) => {
     }
   };
 
+  console.log("EventItem", event);
+
   return (
     <li
       className={`flex items-center px-2 py-5 ${bgColor}`}
@@ -26,15 +28,19 @@ const EventItem = ({ event, index, onUpdate }) => {
     >
       {/* User image */}
       <div className="flex-shrink-0 mr-6">
-        <UserProfileImage user={event.user} size="medium" />
+        <ProfileImage
+          user={event.user}
+          size="rounded"
+          className="w-11 h-11 rounded-full object-cover border border-primary"
+        />
       </div>
 
       {/* Event Title */}
       <div className="flex-1">
-        <p className="font-normal">{event.title}</p>
+        <h2 className="text-lg">{event.title}</h2>
 
         {/* Display user name */}
-        <p className="text-gray text-xs truncate">{userFullName}</p>
+        <p className="text-gray text-sm truncate">{userFullName}</p>
       </div>
 
       {/* Display time */}

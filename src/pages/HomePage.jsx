@@ -31,7 +31,6 @@ export default function HomePage() {
 
   const {
     events,
-    users,
     calendarStatus,
     loadingState: calendarLoadingState,
     createEvent,
@@ -172,7 +171,6 @@ export default function HomePage() {
           title={currentEvent ? "Edit Activity" : "New Activity"}
           date={selectedDay}
           stables={stableId}
-          users={users}
         />
       )}
 
@@ -182,7 +180,6 @@ export default function HomePage() {
           key={refreshKey} // Force full remount on refresh
           stableId={stableId || currentStable.id}
           events={events}
-          users={users}
           locale={enUS}
           noEventsMessage="No scheduled events"
           onAddEvent={handleOpenEventForm}

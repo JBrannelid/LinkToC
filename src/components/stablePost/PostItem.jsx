@@ -45,7 +45,7 @@ const PostItem = ({
   const canEditPost = isPostCreator || isAdmin;
   const canPinPost = isAdmin;
 
-  // Not implemented in current HiFi-Mockup
+  // Format post date
   const formatPostDate = (dateString) => {
     try {
       return format(parseISO(dateString), "yyyy-MM-dd");
@@ -63,17 +63,16 @@ const PostItem = ({
     }
   };
 
-  // Create a user object from the post DTO
-  const displayUser = {
+  // User object from the post data
+  const postUser = {
+    id: post.userId,
     firstName: post.posterFirstName || "Unknown",
     lastName: post.posterLastName || "",
-    profilePictureUrl: post.posterProfileImage,
+    profilePicture: post.profilePicture,
   };
 
-  console.log("Comments:", comments);
-
   const userFullName =
-    `${displayUser.firstName} ${displayUser.lastName}`.trim() || "Unknown User";
+    `${postUser.firstName} ${postUser.lastName}`.trim() || "Unknown User";
 
   const handleTogglePin = () => {
     if (onTogglePin) {
@@ -81,7 +80,7 @@ const PostItem = ({
     }
   };
 
-  // If component is still loading auth data
+  // If component is still loading
   if (isLoading) {
     return (
       <div className="flex justify-center p-4">
@@ -91,7 +90,7 @@ const PostItem = ({
     );
   }
 
-  // Comment count - placeholder for now
+  // Comment count
   const commentCount =
     comments && comments[post.id]
       ? comments[post.id].length
@@ -103,7 +102,7 @@ const PostItem = ({
       <div className="lg:hidden">
         <div className="flex justify-between">
           <p className="text-sm text-grey opacity-80 md:text-sm">
-            {/* {formatPostDate(post.date)} */}
+            {formatPostDate(post.date)}
           </p>
           <p className="text-xs text-grey opacity-80 md:text-sm">
             kl {formatPostTime(post.date)}
@@ -114,12 +113,7 @@ const PostItem = ({
           <div className="flex justify-between pb-4">
             <div className="w-10 h-10 md:w-13 md:h-13 lg:w-17 lg:h-17 border-1 border-primary rounded-full overflow-hidden">
               <ProfileImage
-                user={{
-                  id: post.userId,
-                  profilePicture: post.posterProfileImage,
-                  firstName: post.posterFirstName,
-                  lastName: post.posterLastName,
-                }}
+                user={postUser}
                 className="w-full h-full"
                 alt={`Profile image of ${userFullName}`}
                 fallbackUrl="/src/assets/images/userPlaceholderRounded.webp"
@@ -173,12 +167,7 @@ const PostItem = ({
           <div className="flex items-center">
             <div className="w-10 h-10 border border-primary rounded-full overflow-hidden">
               <ProfileImage
-                user={{
-                  id: post.userId || post.userIdFk,
-                  profilePicture: post.posterProfileImage,
-                  firstName: post.posterFirstName,
-                  lastName: post.posterLastName,
-                }}
+                user={postUser}
                 className="w-full h-full object-cover"
                 alt={`Profile of ${userFullName}`}
                 size="small"
@@ -232,8 +221,8 @@ const PostItem = ({
             <div className="w-full mb-4">
               <img
                 src={post.image}
-                alt="Post attachment"
-                className="w-full rounded-lg"
+                alt="Post image"
+                className="w-full h-auto object-cover rounded-lg"
               />
             </div>
           )}
@@ -244,7 +233,7 @@ const PostItem = ({
           {/* Comment input component */}
           <CommentInput
             onSubmit={onCreateComment}
-            user={displayUser}
+            user={postUser}
             postId={post.id}
             disabled={!onCreateComment}
           />

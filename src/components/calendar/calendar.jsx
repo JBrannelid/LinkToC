@@ -51,7 +51,7 @@ const Calendar = ({
   // Get unique users with events on a specific day
   const findUsersWithEventsOnDay = (day) => {
     const events = getEventsForDay?.(day);
-    if (!users?.length || !events?.length) return [];
+    if (!events?.length) return [];
 
     const uniqueUsers = new Map(
       events

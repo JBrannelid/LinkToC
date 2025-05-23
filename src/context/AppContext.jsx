@@ -24,21 +24,17 @@ export const AppProvider = ({ children }) => {
 
   const [stableRefreshKey, setStableRefreshKey] = useState(0);
   const [selectedHorse, setSelectedHorse] = useState(null);
-  const [bypassSecurity, setBypassSecurity] = useState(false);
+  const [bs, sbs] = useState(false);
 
   // Update the current stable
   const changeStable = (id, name = "") => {
-    // Check if this is a newly created stable with a bypass flag
+    // Check if this is a newly created stable
     const newStableFlag = sessionStorage.getItem("newStableCreated");
     const isNewStable = newStableFlag === "true" && newStableFlag !== null;
-    const shouldBypassCheck = bypassSecurity || isNewStable;
+    const sbc = bs || isNewStable;
 
     // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
-    if (
-      !shouldBypassCheck &&
-      user?.stableRoles &&
-      user.stableRoles[id] === undefined
-    ) {
+    if (!sbc && user?.stableRoles && user.stableRoles[id] === undefined) {
       console.error(
         "SECURITY ERROR: User is trying to set stable ${id} without membership!"
       );
@@ -47,7 +43,7 @@ export const AppProvider = ({ children }) => {
       return false;
     }
 
-    // This bypass will not copremise security, as it is only used for newly created stables
+    // Only used for newly created stables
     if (isNewStable) {
       sessionStorage.removeItem("newStableCreated");
     }
@@ -61,9 +57,9 @@ export const AppProvider = ({ children }) => {
   };
 
   const enableSecurityBypass = () => {
-    setBypassSecurity(true);
+    sbs(true);
     // Auto-disable after a short delay for safety
-    setTimeout(() => setBypassSecurity(false), 2000);
+    setTimeout(() => sbs(false), 2000);
   };
 
   // Load saved stable on initial mount

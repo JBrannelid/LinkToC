@@ -93,13 +93,8 @@ const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
 };
 
 // Info tab content with clickable fields
-const InfoTabContent = ({
-  user,
-  userProfile,
-  openEditModal,
-  isCurrentUser,
-}) => {
-  const bio = user?.description || "💬 No status update";
+const InfoTabContent = ({ user, openEditModal, isCurrentUser }) => {
+  const bio = user?.description || "📜 No current bio";
   const currentStatus =
     user?.coreInformation || "🤫 This user's keeping it mysterious...";
 

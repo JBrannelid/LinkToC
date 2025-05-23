@@ -18,7 +18,6 @@ function CalendarDisplay() {
 
   const {
     events,
-    users,
     calendarStatus,
     loadingState: calendarLoadingState,
     getEventsForDay,

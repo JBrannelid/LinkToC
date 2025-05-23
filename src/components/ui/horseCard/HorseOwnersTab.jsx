@@ -53,7 +53,6 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
             `${userData.firstName || ""} ${userData.lastName || ""}`.trim() ||
             "Unnamed User";
 
-          const profileImageUrl = getProfileImageUrl(userData.profileImage);
           const roleName = getHorseUserRoleName(ownerRole.userRole);
 
           return (
@@ -66,7 +65,7 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
                 <ProfileImage
                   user={userData}
                   className="scale-70 w-35 h-35 sm:w-45 sm:h-45 md:w-40 md:h-40 lg:w-48 lg:h-48 object-cover border-2 border-primary rounded-full bg-background"
-                  size="large"
+                  size="rounded"
                   alt={`User ${userName}`}
                 />
               </div>

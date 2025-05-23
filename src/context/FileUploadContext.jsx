@@ -46,8 +46,6 @@ export const FileUploadProvider = ({ children }) => {
         blobName = generateUniqueFilename(file);
       }
 
-      console.log("Generated blob name:", blobName);
-
       // Get SAS URL from API
       const sasUrlResponse = await getUploadSasUrl(blobName);
 
