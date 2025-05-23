@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { FormProvider, FormInput, FormMessage } from "./index.js";
 import Button from "../ui/Button.jsx";
 import { createErrorMessage } from "../../utils/errorUtils.js";
 import ModalHeader from "../../components/layout/ModalHeader.jsx";
-import { useStableLocation} from "../../hooks/useStableLocation.js";
+import { useStableLocation } from "../../hooks/useStableLocation.js";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 
 const CreateStableForm = ({
@@ -19,8 +19,13 @@ const CreateStableForm = ({
   hideLabel = false,
 }) => {
   const [formError, setFormError] = useState(null);
-  const { locationData, isLoading: isLoadingLocation, message: locationMessage, fetchLocationData } = useStableLocation();
-  
+  const {
+    locationData,
+    isLoading: isLoadingLocation,
+    message: locationMessage,
+    fetchLocationData,
+  } = useStableLocation();
+
   const handleSubmit = formMethods.handleSubmit((data) => {
     setFormError(null);
 
@@ -45,15 +50,18 @@ const CreateStableForm = ({
 
   useEffect(() => {
     if (locationData) {
-      formMethods.setValue("county", locationData.countyName, { shouldValidate: true });
+      formMethods.setValue("county", locationData.countyName, {
+        shouldValidate: true,
+      });
       formMethods.clearErrors("county");
     }
   }, [locationData, formMethods]);
   const inputClass = `bg-white w-1/3 px-2 py-3 border-2 w-full rounded-md !border-primary focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary ${inputClassName}`;
 
   const displayError =
-    formError ||  (locationMessage?.type === 'error' ? locationMessage : null) ||
-      (error ? { type: "error", text: error } : null);
+    formError ||
+    (locationMessage?.type === "error" ? locationMessage : null) ||
+    (error ? { type: "error", text: error } : null);
   return (
     <div>
       {!desktopView && (
@@ -110,56 +118,54 @@ const CreateStableForm = ({
             />
 
             <div className="grid grid-cols-2 gap-2">
-
               <div className="relative">
                 <FormInput
-                    id="postCode"
-                    name="postCode"
-                    placeholder="Postcode..."
-                    inputClassName={inputClass}
-                    onBlur={handlePostcodeBlur}
-                    aria-describedby="postcode-info"
+                  id="postCode"
+                  name="postCode"
+                  placeholder="Postcode..."
+                  inputClassName={inputClass}
+                  onBlur={handlePostcodeBlur}
+                  aria-describedby="postcode-info"
                 />
                 {isLoadingLocation && (
-                    <div className="absolute right-3 top-3">
-                      <LoadingSpinner size="small" withMargin={false} />
-                    </div>
+                  <div className="absolute right-3 top-3">
+                    <LoadingSpinner size="small" withMargin={false} />
+                  </div>
                 )}
               </div>
               <div className="relative">
                 <FormInput
-                    id="county"
-                    name="county"
-                    placeholder="County..."
-                    validation={{
-                      required: "County is mandatory",
-                    }}
-                    inputClassName={inputClass}
-                    disabled={isLoading}
-                    aria-required="true"
-                    aria-autocomplete="list"
-                    aria-describedby="county-info"
+                  id="county"
+                  name="county"
+                  placeholder="County..."
+                  validation={{
+                    required: "County is mandatory",
+                  }}
+                  inputClassName={inputClass}
+                  disabled={isLoading}
+                  aria-required="true"
+                  aria-autocomplete="list"
+                  aria-describedby="county-info"
                 />
                 {isLoadingLocation && (
-                    <div className="absolute right-3 top-3">
-                      <LoadingSpinner size="small" withMargin={false} />
-                    </div>
+                  <div className="absolute right-3 top-3">
+                    <LoadingSpinner size="small" withMargin={false} />
+                  </div>
                 )}
               </div>
             </div>
-            {locationMessage?.type === 'error' && (
-                <div
-                    id="postcode-info"
-                    className="text-sm text-red-500"
-                    aria-live="polite"
-                >
-                  {locationMessage.text}
-                </div>
+            {locationMessage?.type === "error" && (
+              <div
+                id="postcode-info"
+                className="text-sm text-red-500"
+                aria-live="polite"
+              >
+                {locationMessage.text}
+              </div>
             )}
-            
           </div>
 
-          {/* Stable Type Field */}
+          {/* Stable Type selector */}
           <div>
             {!hideLabel && (
               <label
@@ -169,12 +175,24 @@ const CreateStableForm = ({
                 Type of stable
               </label>
             )}
-            <FormInput
+            <select
               id="typeOfStable"
               name="typeOfStable"
-              placeholder="ex. Private stable"
-              inputClassName={inputClass}
-            />
+              className={inputClass}
+              disabled={isLoading}
+              {...formMethods.register("typeOfStable", {
+                required: "Please select a stable type",
+              })}
+            >
+              <option value="">Select stable type...</option>
+              <option value="Private stable">Private stable</option>
+              <option value="Commercial stable">Commercial stable</option>
+            </select>
+            {formMethods.formState.errors.typeOfStable && (
+              <p className="text-sm text-red-500 mt-1">
+                {formMethods.formState.errors.typeOfStable.message}
+              </p>
+            )}
           </div>
 
           {/* Stable Boxes Field */}
@@ -203,9 +221,9 @@ const CreateStableForm = ({
         </div>
 
         {displayError && <FormMessage message={displayError} />}
-        
-        {!displayError && locationMessage?.type === 'success' && !message && (
-            <FormMessage message={locationMessage} />
+
+        {!displayError && locationMessage?.type === "success" && !message && (
+          <FormMessage message={locationMessage} />
         )}
         {message && message.text && !displayError && (
           <FormMessage message={message} />
