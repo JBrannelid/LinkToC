@@ -31,7 +31,6 @@ export default function HomePage() {
 
   const {
     events,
-    users,
     calendarStatus,
     loadingState: calendarLoadingState,
     createEvent,
