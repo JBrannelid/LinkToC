@@ -6,7 +6,6 @@ import { useLoadingState } from "./useLoadingState";
 
 export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);
-  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
