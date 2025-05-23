@@ -80,7 +80,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
           {/* Contact buttons */}
           <div className="flex flex-row gap-2 mr-5 mt-10">
             {enhancedUser.phoneNumber && (
-              <div className="relative group">
+              <div className="flex flex-col items-center relative group">
                 <Button
                   type="secondary"
                   className="rounded-lg !border-primary flex flex-col max-h-20 min-h-19 min-w-25"
@@ -91,6 +91,9 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                     {enhancedUser.phoneNumber}
                   </span>
                 </Button>
+                <span className="mt-1 text-xs text-center text-primary">
+                  Number
+                </span>
 
                 {/* Permission controll */}
                 {isCurrentUser && (
@@ -111,7 +114,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             )}
 
             {/* Emergency contact */}
-            <div className="relative group">
+            <div className="flex flex-col items-center relative group">
               <Button
                 type="secondary"
                 className="rounded-lg !border-primary flex flex-col max-h-20 min-h-19 min-w-25"
@@ -122,6 +125,9 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   {emergencyContact}
                 </span>
               </Button>
+              <span className="mt-1 text-xs text-center text-primary">
+                Emergency contact
+              </span>
               {/* Permission controll */}
               {isCurrentUser && (
                 <button
@@ -140,14 +146,18 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
             </div>
 
             {/* Messenger */}
-            <Button
-              type="secondary"
-              className="rounded-lg !border-primary flex flex-col opacity-40 max-h-20 min-h-19 min-w-25"
-              aria-label="Messenger"
-            >
-              <MessageIcon className="text-primary mb-1" size={20} />
-              <span className="text-xs">Messenger</span>
-            </Button>
+            <div className="flex flex-col items-center relative group">
+              <Button
+                type="secondary"
+                className="rounded-lg !border-primary flex flex-col opacity-40 max-h-20 min-h-19 min-w-25"
+                aria-label="Messenger"
+              >
+                <MessageIcon className="text-primary mb-1" size={25} />
+              </Button>
+              <span className="mt-1 text-xs text-center text-primary">
+                Messenger
+              </span>
+            </div>
           </div>
         </div>
 
