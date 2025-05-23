@@ -44,7 +44,6 @@ const fileService = {
         }
       }
 
-      console.log(`Getting read SAS URL for: ${blobName}`);
       const response = await axiosInstance.get(
         `/api/blob-storage/get-read-uri?blobName=${encodeURIComponent(
           blobName
@@ -52,7 +51,6 @@ const fileService = {
       );
 
       if (response && response.isSuccess) {
-        console.log(`Got SAS URL: ${response.value}`);
         return response.value;
       }
 
@@ -87,8 +85,6 @@ const fileService = {
           blobName = `profile-pictures/${userIdToUse}/${blobName}`;
         }
       }
-
-      console.log(`Attempting to delete blob: ${blobName}`);
 
       const response = await axiosInstance.delete(
         `/api/blob-storage/delete-blob?blobName=${encodeURIComponent(blobName)}`

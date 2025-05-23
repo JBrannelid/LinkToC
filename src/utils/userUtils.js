@@ -72,7 +72,6 @@ export const constructProfileImageUrl = (profilePicture) => {
 
   // Log the full constructed URL for debugging
   const fullUrl = `${baseUrl}/profile-pictures/${userId}/${profilePicture}`;
-  console.log("constructProfileImageUrl - building full URL:", fullUrl);
 
   return fullUrl;
 };
