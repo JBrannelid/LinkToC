@@ -114,7 +114,7 @@ const HorseList = ({ stableId, showOwners = true }) => {
             : "🏇 Horse trotted away from the stable!"
         );
         setActionSuccess("🐎 Message cleared. Back to the stables!");
-        setTimeout(() => handleCloseModal(), 1500);
+        handleCloseModal();
       } else if (result && !result.success) {
         setActionError(
           result.error?.message || result.message || "Operation failed"
@@ -318,11 +318,6 @@ const HorseList = ({ stableId, showOwners = true }) => {
                   Are you sure you want to delete {selectedHorse?.name}? This
                   action will completely remove the horse from the system and
                   cannot be undone.
-                </p>
-                <p className="text-red-500 text-sm mb-4">
-                  Note: If you only want to remove the horse from this stable
-                  but keep it in the system, use the "Remove from stable" option
-                  instead.
                 </p>
               </div>
             ) : actionType === "remove" ? (
