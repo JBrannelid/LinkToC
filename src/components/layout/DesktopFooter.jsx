@@ -31,20 +31,16 @@ function DesktopFooter() {
             About
           </Link>
           <Link
-            to={buildRoute(ROUTES.STABLE_HORSES, {
-              stableId: currentStable?.id,
-            })}
+            to={ROUTES.SETTINGS}
             className="text-primary text-sm hover:text-primary "
           >
-            Horses
+            Terms of service
           </Link>
           <Link
-            to={buildRoute(ROUTES.STABLE_MEMBERS, {
-              stableId: currentStable?.id,
-            })}
+            to={ROUTES.SETTINGS}
             className="text-primary text-sm hover:text-primary "
           >
-            Members
+            Privacy policy
           </Link>
         </div>
       </div>
