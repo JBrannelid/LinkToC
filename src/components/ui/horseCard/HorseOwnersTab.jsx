@@ -53,7 +53,6 @@ const HorseOwnersTab = ({ horseId, horseProfile }) => {
             `${userData.firstName || ""} ${userData.lastName || ""}`.trim() ||
             "Unnamed User";
 
-          const profileImageUrl = getProfileImageUrl(userData.profileImage);
           const roleName = getHorseUserRoleName(ownerRole.userRole);
 
           return (
