@@ -48,7 +48,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
     defaultValues: {
       firstName: userData?.firstName || "",
       lastName: userData?.lastName || "",
-      email: userData?.email || "",
       phoneNumber: userData?.phoneNumber || "",
     },
   });
@@ -253,6 +252,21 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                       />
                     </div>
                   </div>
+                  {/* Phone number field */}
+                  <div className="space-y-2">
+                    <FormInput
+                      label="Phone number"
+                      name="phoneNumber"
+                      labelPosition="above"
+                      validation={{
+                        pattern: {
+                          value:
+                            /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
+                          message: "Invalid phone number format",
+                        },
+                      }}
+                    />
+                  </div>
                   {/* Email field */}
                   <div className="space-y-2">
                     <FormInput
@@ -266,24 +280,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                         pattern: {
                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                           message: "Invalid email address",
-                        },
-                      }}
-                    />
-                  </div>
-
-                  {/* Phone number field */}
-                  <div className="space-y-2">
-                    <FormInput
-                      label="Phone number"
-                      name="phoneNumber"
-                      labelPosition="above"
-                      readOnly={true}
-                      inputClassName="bg-gray-100 cursor-not-allowed"
-                      validation={{
-                        pattern: {
-                          value:
-                            /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/i,
-                          message: "Invalid phone number format",
                         },
                       }}
                     />
