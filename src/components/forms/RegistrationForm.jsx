@@ -26,7 +26,6 @@ const RegistrationForm = () => {
     defaultValues: {
       firstName: "",
       lastName: "",
-      userName: "",
       email: "",
       password: "",
       phoneNumber: "",
@@ -120,29 +119,6 @@ const RegistrationForm = () => {
           }}
           inputClassName={`w-full px-3 py-4 border ${
             methods.formState.errors.lastName
-              ? "border-error-400"
-              : "border-gray"
-          } rounded-md !border-gray focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
-          disabled={isSubmitting}
-          className="mb-2"
-        />
-
-        {/* Username */}
-        <FormInput
-          name="userName"
-          type="text"
-          placeholder="Username..."
-          id={`${uniqueId}-userName`}
-          autoComplete="username"
-          validation={{
-            required: "Username is required",
-            minLength: {
-              value: 3,
-              message: "Username must be at least 3 characters",
-            },
-          }}
-          inputClassName={`w-full px-3 py-4 border ${
-            methods.formState.errors.userName
               ? "border-error-400"
               : "border-gray"
           } rounded-md !border-gray focus:outline-none focus:ring-primary focus:ring-1 focus:border-primary`}
