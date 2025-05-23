@@ -24,14 +24,13 @@ export function useCalendarEvents(stableId) {
       // Get events for the specified stable and convert object into a array of events
       const eventsResponse = await eventService.getStableEvents(stableId);
       const eventList = Array.isArray(eventsResponse) ? eventsResponse : [];
-
       const processedEvents = eventList.map((event) => ({
         ...event,
         user: {
-          id: event.userIdFk,
-          firstName: event.userFirstName,
-          lastName: event.userLastName,
-          profilePicture: event.userProfilePicture || event.profilePicture,
+          id: event.userId,
+          firstName: event.firstName,
+          lastName: event.lastName,
+          profilePicture: event.profilePicture,
         },
       }));
 
