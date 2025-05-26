@@ -46,6 +46,7 @@ export const useHorseManagement = (stableId) => {
             id: horse.horseId,
             stableHorseId: horse.id,
             name: horse.horseName,
+            breed: horse.horseBreed,
             color: horse.horseColor,
             owner:
               horse.horseOwners && horse.horseOwners.length > 0
