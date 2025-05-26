@@ -122,7 +122,7 @@ const EventForm = ({
                 <TimePicker
                   name="startTime"
                   label="Start"
-                  validation={{ required: "Starttid krävs" }}
+                  validation={{ required: "Start time is required" }}
                 />
               </div>
 
@@ -130,8 +130,8 @@ const EventForm = ({
               <div>
                 <TimePicker
                   name="endTime"
-                  label="Slut&nbsp;"
-                  validation={{ required: "Sluttid krävs" }}
+                  label="End&nbsp;"
+                  validation={{ required: "Endtime is required" }}
                 />
               </div>
             </div>
@@ -142,12 +142,12 @@ const EventForm = ({
           <div className="bg-white p-3 rounded-lg">
             <FormInput
               name="title"
-              placeholder="Skriv in aktivitetens namn..."
+              placeholder="Enter name of activity..."
               validation={{
-                required: "Titel krävs",
+                required: "Titel is required",
                 maxLength: {
                   value: 50,
-                  message: "Max 50 tecken",
+                  message: "Max 50 characters",
                 },
               }}
             />
@@ -163,7 +163,7 @@ const EventForm = ({
                 methods.handleSubmit(handleSubmit)();
               }}
             >
-              {event ? "Uppdatera" : "Lägg till"}
+              {event ? "Update" : "Add"}
             </Button>
 
             {event && (
@@ -175,7 +175,7 @@ const EventForm = ({
                   handleDelete();
                 }}
               >
-                Ta bort
+                Delete
               </Button>
             )}
 
