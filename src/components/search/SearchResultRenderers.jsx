@@ -39,6 +39,12 @@ export const ListItemRenderer = (
         e.stopPropagation(); 
         openModal(e);
     };
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openModal(event);
+        }
+    };
     return (
         <li
             className={`group flex items-center justify-between p-3 border border-primary rounded-lg cursor-pointer mb-2 bg-white ${
@@ -46,6 +52,7 @@ export const ListItemRenderer = (
             } focus:outline-none focus:ring-2 focus:ring-primary`}
             onClick={openModal}
             tabIndex={0}
+            onKeyDown={handleKeyDown}
             onFocus={handleFocus}
             onMouseEnter={(e) => {
                 const button = e.currentTarget.querySelector('button');
