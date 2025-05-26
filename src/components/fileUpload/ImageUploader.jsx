@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
+import { deleteFile, getReadSasUrl } from "../../api/services/fileService";
+import userService from "../../api/services/userService";
 import { validateFile, VALID_IMAGE_TYPES } from "../../utils/fileUploadUtils";
 import Button from "../ui/Button";
-import userService from "../../api/services/userService";
-import { deleteFile, getReadSasUrl } from "../../api/services/fileService";
 
 const ImageUploader = ({
   initialImageUrl = "",
@@ -13,7 +13,7 @@ const ImageUploader = ({
   placeholder = "/src/assets/images/profilePlaceholder.jpg",
   userId = null,
 }) => {
-  const [imageUrl, setImageUrl] = useState(initialImageUrl || placeholder);
+  const [_imageUrl, setImageUrl] = useState(initialImageUrl || placeholder);
   const [loading, setLoading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const fileInputRef = useRef(null);
@@ -94,6 +94,7 @@ const ImageUploader = ({
           try {
             const deleteResult = await deleteFile(oldProfilePicture, userId);
             if (deleteResult.success) {
+              // Delete old image from blob storage
             } else {
               console.warn(
                 "Failed to delete old profile picture:",
