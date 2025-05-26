@@ -123,9 +123,7 @@ const ImageUploader = ({
         } catch (sasError) {
           console.warn("Could not get SAS URL for image preview:", sasError);
           // Fallback to direct URL construction
-          const baseUrl =
-            import.meta.env.VITE_AZURE_STORAGE_URL ||
-            "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
+          const baseUrl = import.meta.env.VITE_AZURE_STORAGE_URL;
 
           setImageUrl(
             `${baseUrl}/profile-pictures/${userId}/${filename}?t=${Date.now()}`
