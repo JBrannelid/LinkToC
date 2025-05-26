@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import ModalHeader from "../components/layout/ModalHeader";
-import { useAppContext } from "../context/AppContext";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useStablePosts } from "../hooks/useStablePosts";
-import PostContainer from "../components/stablePost/PostContainer";
 import { useParams } from "react-router";
-import Button from "../components/ui/Button";
 import AddNoteIcon from "../assets/icons/AddNoteIcon";
 import StablePostForm from "../components/forms/StablePostForm";
+import ModalHeader from "../components/layout/ModalHeader";
+import PostContainer from "../components/stablePost/PostContainer";
+import Button from "../components/ui/Button";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useStablePosts } from "../hooks/useStablePosts";
 import { USER_ROLES } from "../utils/userUtils";
 
 export default function StablePostPage() {
@@ -22,7 +22,7 @@ export default function StablePostPage() {
 
   const {
     posts,
-    status: { loading, error },
+    status: { loading },
     loadingState,
     createPost,
     updatePost,
@@ -213,6 +213,17 @@ export default function StablePostPage() {
           onCancel={handleCloseForm}
           onDelete={handleDeletePost}
           title={currentPost ? "Edit Post" : "New Post"}
+        />
+      )}
+      {isCommentsModalOpen && (
+        <CommentsModal
+          isOpen={isCommentsModalOpen}
+          onClose={handleCommentsModalClose}
+          comments={comments?.[currentPost?.id] || []}
+          postId={currentPost?.id}
+          onCreateComment={createComment}
+          onDeleteComment={deleteComment}
+          loading={commentLoading}
         />
       )}
     </div>
