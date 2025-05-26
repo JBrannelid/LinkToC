@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { getReadSasUrl } from "../../api/services/fileService";
 
 const DEFAULT_FALLBACK = "/src/assets/images/userPlaceholderRounded.webp";
@@ -10,7 +10,7 @@ const ProfileImage = ({
   alt = "",
   fallbackUrl = null,
 }) => {
-  const getFallbackImage = () => {
+  const getFallbackImage = useCallback(() => {
     if (fallbackUrl) return fallbackUrl;
 
     switch (size) {
@@ -25,7 +25,7 @@ const ProfileImage = ({
       default:
         return DEFAULT_FALLBACK;
     }
-  };
+  }, [fallbackUrl, size]);
 
   const [imageUrl, setImageUrl] = useState(getFallbackImage());
   const [hasError, setHasError] = useState(false);
