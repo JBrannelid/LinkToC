@@ -1,10 +1,9 @@
 import React, { useState, useMemo } from "react";
-import { format } from "date-fns";
-import { parseISO, dateFnsCompareDesc } from "../../utils/calendarUtils";
-import { useAppContext } from "../../context/AppContext";
-import LoadingSpinner from "../ui/LoadingSpinner";
 import WallPostCard from "./WallPostCard";
+import { useAppContext } from "../../context/AppContext";
 import { useStablePosts } from "../../hooks/useStablePosts";
+import { parseISO, dateFnsCompareDesc } from "../../utils/calendarUtils";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 export default function WallPost() {
   const { currentStable } = useAppContext();
@@ -12,7 +11,7 @@ export default function WallPost() {
 
   const {
     posts,
-    status: { loading, error },
+    status: { loading },
   } = useStablePosts(currentStable?.id);
 
   const pinnedPosts = useMemo(
@@ -26,15 +25,6 @@ export default function WallPost() {
       ),
     [pinnedPosts]
   );
-
-  const formatData = (dateString) => {
-    try {
-      const date = parseISO(dateString);
-      return format(date, "yyyy-MM-dd");
-    } catch (error) {
-      return "Unknown date";
-    }
-  };
 
   const toggleExpand = (postId) => {
     setExpandedPost((prevIds) => {
