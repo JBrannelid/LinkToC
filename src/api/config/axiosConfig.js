@@ -5,7 +5,6 @@ import { handleAxiosError } from "../utils/errors";
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000, // 10 seconds timeout
-  timeout: 5000,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
