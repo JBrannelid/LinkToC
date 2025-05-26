@@ -96,28 +96,7 @@ const SearchInput = ({
       onFocus(e);
     }
   }, [onFocus]);
-
-  const handleBlur = useCallback((e) => {
-    // const relatedTarget = e.relatedTarget;
-    //
-    // if (
-    //     maintainFocus &&
-    //     !relatedTarget?.closest('[role="listbox"]') &&
-    //     !relatedTarget?.closest('button') &&
-    //     !desktopView
-    // ) {
-    //   // Increased timeout for better UX
-    //   setTimeout(() => {
-    //     if (inputRef.current) {
-    //       inputRef.current.focus();
-    //     }
-    //   }, 150);
-    // }
-
-    if (onBlur) {
-      onBlur(e);
-    }
-  },[maintainFocus, onBlur, desktopView]);
+  
   const handleKeyDown = useCallback((e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -158,7 +137,6 @@ const SearchInput = ({
         aria-autocomplete="list"
         autoComplete="off"
         onFocus={handleFocus}
-        onBlur={handleBlur}
         autoFocus={autoFocus}
         disabled={loading}
         role="searchbox"
