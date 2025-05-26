@@ -108,16 +108,7 @@ export default function HomePage() {
     const eventToDelete = events.find((event) => event.id === eventId);
     if (!eventToDelete) return;
 
-    const eventTitle = eventToDelete.title;
-    const creator =
-      eventToDelete.user &&
-      `${eventToDelete.user.firstName} ${eventToDelete.user.lastName}`.trim();
-
-    if (
-      confirm(
-        `Are you sure you want to delete event "${eventTitle}" created by ${creator}?`
-      )
-    ) {
+    {
       await deleteEvent(eventId);
       await refreshEventsData();
     }
