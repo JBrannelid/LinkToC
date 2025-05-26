@@ -1,10 +1,10 @@
 import { Outlet, useLocation } from "react-router";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+import DesktopFooter from "./components/layout/DesktopFooter";
+import DesktopNavigation from "./components/layout/DesktopNavigation";
+import HeaderContainer from "./components/layout/HeaderContainer";
 import NavigationFooter from "./components/layout/NavigationFooter";
 import { useAuth } from "./context/AuthContext";
-import HeaderContainer from "./components/layout/HeaderContainer";
-import DesktopNavigation from "./components/layout/DesktopNavigation";
-import DesktopFooter from "./components/layout/DesktopFooter";
-import ErrorBoundary from "./components/common/ErrorBoundary";
 
 function App() {
   const { isAuthenticated } = useAuth();
