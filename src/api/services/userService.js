@@ -1,6 +1,6 @@
-import axiosInstance from "../config/axiosConfig";
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.USERS);
 
