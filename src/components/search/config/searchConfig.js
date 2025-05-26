@@ -1,7 +1,7 @@
-import {ROUTES} from "../../../routes/index";
 import {
     createStableSearchConfig,
 } from './entityBuilder.js';
+import {ROUTES} from "../../../routes/index";
 
 const stableSearchConfig = createStableSearchConfig();
 const routeConfigMap = {
