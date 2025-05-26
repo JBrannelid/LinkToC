@@ -135,7 +135,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   onClick={() =>
                     openEditModal(
                       "emergencyContact",
-                      "Emergency Contact",
+                      "Contact",
                       enhancedUser.emergencyContact || ""
                     )
                   }
@@ -266,7 +266,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   onClick={() =>
                     openEditModal(
                       "emergencyContact",
-                      "Emergency Contact",
+                      "Contact",
                       enhancedUser.emergencyContact || ""
                     )
                   }
