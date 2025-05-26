@@ -1,5 +1,5 @@
-import WelcomeLayout from "../components/layout/WelcomeLayout";
 import RegistrationForm from "../components/forms/RegistrationForm";
+import WelcomeLayout from "../components/layout/WelcomeLayout";
 
 const RegistrationPage = () => {
   return (
