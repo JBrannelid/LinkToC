@@ -98,21 +98,21 @@ const SearchInput = ({
   }, [onFocus]);
 
   const handleBlur = useCallback((e) => {
-    const relatedTarget = e.relatedTarget;
-    
-    if (
-        maintainFocus &&
-        !relatedTarget?.closest('[role="listbox"]') &&
-        !relatedTarget?.closest('button') &&
-        !desktopView
-    ) {
-      // Increased timeout for better UX
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 150);
-    }
+    // const relatedTarget = e.relatedTarget;
+    //
+    // if (
+    //     maintainFocus &&
+    //     !relatedTarget?.closest('[role="listbox"]') &&
+    //     !relatedTarget?.closest('button') &&
+    //     !desktopView
+    // ) {
+    //   // Increased timeout for better UX
+    //   setTimeout(() => {
+    //     if (inputRef.current) {
+    //       inputRef.current.focus();
+    //     }
+    //   }, 150);
+    // }
 
     if (onBlur) {
       onBlur(e);
