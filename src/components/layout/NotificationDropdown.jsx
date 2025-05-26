@@ -43,6 +43,7 @@ const NotificationDropdown = () => {
         type="icon"
         onClick={toggleDropdown}
         aria-label="View notifications"
+        className="cursor-pointer"
       >
         <NotificationIcon className="w-6 h-6 text-primary" />
         {unreadCount > 0 && (
