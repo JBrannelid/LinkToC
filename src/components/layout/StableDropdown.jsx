@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useUserStables } from "../../hooks/useUserStables";
-import { useAppContext } from "../../context/AppContext";
-import Button from "../ui/Button";
-import LoadingSpinner from "../ui/LoadingSpinner";
 import { useNavigate, useLocation } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import StableName from "./StableName";
 import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
+import { useAppContext } from "../../context/AppContext";
+import { useUserStables } from "../../hooks/useUserStables";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
+import Button from "../ui/Button";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const StableDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
