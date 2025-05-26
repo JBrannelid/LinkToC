@@ -34,7 +34,7 @@ const TimePicker = ({ name, label, date, validation = {}, className = "" }) => {
       {/* Show error message if validation fails */}
       {errors[name] && (
         <span className="text-error-500 text-xs ml-2">
-          {errors[name].message || "Ogiltig tid"}
+          {errors[name].message || "Invalid time format"}
         </span>
       )}
     </div>
