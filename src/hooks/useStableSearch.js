@@ -1,11 +1,14 @@
-import useStableLocation from "./useStableLocation.js";
 import { useMemo, useCallback } from "react";
-import { createStableSearchConfig } from "../components/search/config/entityBuilder.js";
+import useStableLocation from "./useStableLocation.js";
 import axiosInstance from "../api/config/axiosConfig.js";
+import { createStableSearchConfig } from "../components/search/config/entityBuilder.js";
 import { ListItemRenderer } from "../components/search/SearchResultRenderers.jsx";
 
 export const useStableSearchWithDistance = (options = {}) => {
-  const stableLocationHook = useStableLocation({ autoGetUserLocation: true });
+  const stableLocationHook = useStableLocation({
+    autoGetUserLocation: true,
+    ...options,
+  });
   const { userLocation, calculateDistance } = stableLocationHook;
 
   // Create function to add distance to a stable
