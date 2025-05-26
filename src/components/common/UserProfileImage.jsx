@@ -88,7 +88,7 @@ const UserProfileImage = ({
           alt={altText}
           className={`${sizeClass} rounded-full object-cover`}
           loading="lazy"
-          onError={(e) => {
+          onError={() => {
             setImageError(true);
           }}
         />
