@@ -11,12 +11,7 @@ const eventService = {
     const response = await axiosInstance.get(
       `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
     );
-
-    if (response && response.isSuccess && Array.isArray(response.value)) {
-      return response.value;
-    }
-
-    return [];
+    return response?.value || [];
   },
 
   create: async (data) => {

@@ -29,73 +29,33 @@ const horseService = {
   },
 
   getHorsesWithOwnersByStable: async (stableId) => {
-    try {
-      // Use the constant instead of hardcoding
-      const response = await axiosInstance.get(
-        `${ENDPOINTS.STABLE_HORSES}/${stableId}/horses/with-owners`
-      );
-
-      return response.value || [];
-    } catch (error) {
-      // Handle 404 error as empty results - this is expected when a stable has no horses
-      if (error.status === 404 || error.response?.status === 404) {
-        const errorMessage =
-          error.details?.message ||
-          error.response?.data?.details?.message ||
-          error.message ||
-          "";
-
-        if (errorMessage.includes("No horses")) {
-          return [];
-        }
-      }
-
-      console.error(
-        `Error fetching horses with owners for stable ${stableId}:`,
-        error
-      );
-      throw error;
-    }
+    const response = await axiosInstance.get(
+      `${ENDPOINTS.STABLE_HORSES}/${stableId}/horses/with-owners`
+    );
+    return response.value || [];
   },
 
   getHorseProfile: async (horseId) => {
-    try {
-      if (!horseId) {
-        console.warn("Horse ID is required to fetch profile");
-        return { isSuccess: false, message: "Horse ID is required" };
-      }
-
-      return await axiosInstance.get(`/api/horse/${horseId}/profile`);
-    } catch (error) {
-      console.error("Error fetching horse profile:", error);
-      throw error;
+    if (!horseId) {
+      console.warn("Horse ID is required to fetch profile");
+      return { isSuccess: false, message: "Horse ID is required" };
     }
+    return await axiosInstance.get(`/api/horse/${horseId}/profile`);
   },
 
   getHorsesByStableId: async (stableId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/stable-horses/${stableId}`
-      );
+    const response = await axiosInstance.get(`/api/stable-horses/${stableId}`);
 
-      let horses = [];
-
-      if (response?.data?.value && Array.isArray(response.data.value)) {
-        horses = response.data.value;
-      } else if (response?.data && Array.isArray(response.data)) {
-        horses = response.data;
-      } else if (response?.value && Array.isArray(response.value)) {
-        horses = response.value;
-      } else {
-        console.warn("Could not extract horses array from response:", response);
-        return [];
-      }
-
-      return horses;
-    } catch (error) {
-      console.error(`Error fetching horses for stable ${stableId}:`, error);
-      throw error;
+    if (response?.data?.value && Array.isArray(response.data.value)) {
+      return response.data.value;
+    } else if (response?.data && Array.isArray(response.data)) {
+      return response.data;
+    } else if (response?.value && Array.isArray(response.value)) {
+      return response.value;
     }
+
+    console.warn("Could not extract horses array from response:", response);
+    return [];
   },
 
   removeHorseFromStable: async (stableHorseId) => {
@@ -110,6 +70,7 @@ const horseService = {
     }
   },
 
+  // Remove try-catch, keep validation
   createHorseComposition: async (compositionData) => {
     if (
       !compositionData ||
@@ -119,16 +80,10 @@ const horseService = {
     ) {
       throw new Error("Horse, stable ID, and user ID are required");
     }
-
-    try {
-      return await axiosInstance.post(
-        `/api/horse/create/composition`,
-        compositionData
-      );
-    } catch (error) {
-      console.error("Error creating horse composition:", error);
-      throw error;
-    }
+    return await axiosInstance.post(
+      `/api/horse/create/composition`,
+      compositionData
+    );
   },
 
   addHorse: async (horseData) => {

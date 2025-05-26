@@ -12,12 +12,9 @@ const stablePostService = {
     const response = await axiosInstance.get(
       `${ENDPOINTS.STABLEPOSTBYID}${stableId}`
     );
-
-    if (response && response.isSuccess && Array.isArray(response.value)) {
-      return response.value;
-    }
-
-    return [];
+    return response?.isSuccess && Array.isArray(response.value)
+      ? response.value
+      : [];
   },
 
   // Create a new stable post
@@ -68,20 +65,11 @@ const stablePostService = {
     if (!postId) {
       throw new Error("Post ID is required");
     }
-
-    try {
-      const response = await axiosInstance.get(`/api/comment/${postId}`);
-
-      if (response && response.isSuccess && Array.isArray(response.value)) {
-        return response.value;
-      }
-
-      // Fallback if the response doesn't match expected format
-      // Avoid 404 errors not found
-      return [];
-    } catch (error) {
-      return [];
+    const response = await axiosInstance.get(`/api/comment/${postId}`);
+    if (response && response.isSuccess && Array.isArray(response.value)) {
+      return response.value;
     }
+    return [];
   },
 
   // Create a new comment
@@ -93,7 +81,6 @@ const stablePostService = {
     ) {
       throw new Error("User ID, Stable Post ID, and content are required");
     }
-
     return await axiosInstance.post(
       `/api/comment/create/composition`,
       commentData
