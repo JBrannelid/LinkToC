@@ -1,6 +1,6 @@
 import Calendar from "./calendar";
-import CalendarHeader from "./components/CalendarHeader";
 import CalendarGrid from "./components/CalendarGrid";
+import CalendarHeader from "./components/CalendarHeader";
 import DayCell from "./components/DayCell";
 import WeekdayHeader from "./components/WeekdayHeader";
 
