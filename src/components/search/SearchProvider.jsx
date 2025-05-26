@@ -13,8 +13,7 @@ const SearchProvider = ({ children, customConfig = null }) => {
   const baseConfig = useMemo(() => {
     return customConfig || getConfigForRoutes(location.pathname);
   }, [customConfig, location.pathname]);
-
-  // Check if this is a stable search
+  
   const isStableSearch = baseConfig?.entityType === "stable";
 
   // Get enhanced configuration for stables, or use base config for other entities
@@ -22,13 +21,12 @@ const SearchProvider = ({ children, customConfig = null }) => {
     ? useStableSearchWithDistance()
     : { searchConfig: baseConfig };
 
-  // Use searchState hook with the appropriate config
+ 
   const searchState = useSearchState(searchConfig);
-
-  // Create loading state for messaging
+  
   const loadingState = useLoadingState(searchState.isLoading, "fetch");
 
-  // Create context value object
+ 
   const contextValue = useMemo(
     () => ({
       ...searchState,
