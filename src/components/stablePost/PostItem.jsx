@@ -117,7 +117,7 @@ const PostItem = ({
                 className="w-full h-full"
                 alt={`Profile image of ${userFullName}`}
                 fallbackUrl="/src/assets/images/userPlaceholderRounded.webp"
-                size="small"
+                size="rounded"
               />
             </div>
             {/* Pin icon */}
@@ -170,7 +170,7 @@ const PostItem = ({
                 user={postUser}
                 className="w-full h-full object-cover"
                 alt={`Profile of ${userFullName}`}
-                size="small"
+                size="rounded"
               />
             </div>
             <div className="ml-3">
@@ -219,9 +219,10 @@ const PostItem = ({
 
           {post.image && (
             <div className="w-full mb-4">
-              <img
+              <ProfileImage
                 src={post.image}
                 alt="Post image"
+                size="rounded"
                 className="w-full h-auto object-cover rounded-lg"
               />
             </div>
