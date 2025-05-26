@@ -107,7 +107,7 @@ export default function StablePostPage() {
       {/* Main content area */}
       <div className="flex max-w-5xl mx-auto w-full">
         {/* Main posts feed */}
-        <div className="flex-1 p-4 md:px-6 lg:w-2/4 mt-8">
+        <div className="flex-1 p-4 md:px-6 lg:w-2/4 mt-8 relative">
           <div className="space-y-4">
             <PostContainer
               posts={posts}
@@ -139,7 +139,7 @@ export default function StablePostPage() {
           </div>
         </div>
         {/* Right sidebar - visible on md display*/}
-        <div className="hidden md:flex md:flex-col md:w-4/10 lg:3/10 p-4 space-y-5 mt-22">
+        <div className="hidden md:flex md:flex-col md:w-4/10 lg:w-1/3 p-4 space-y-5 sticky top-58 self-start h-fit">
           <div className="bg-white rounded-xl shadow-md p-4">
             <h3 className="font-medium text-lg mb-3">Stable Info</h3>
             <p className="text-sm lg:text-lg ">
