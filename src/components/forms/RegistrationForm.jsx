@@ -1,23 +1,23 @@
 import { useState, useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { useAuth } from "../../context/AuthContext";
+import FormInput from "./formBuilder/FormInput";
+import FormProvider from "./formBuilder/FormProvider";
 import authService from "../../api/services/authService";
-import Button from "../ui/Button";
-import { ROUTES } from "../../routes/index.jsx";
+import { useAuth } from "../../context/AuthContext";
 import { useLoadingState } from "../../hooks/useLoadingState";
+import { ROUTES } from "../../routes/index.jsx";
 import {
   createSuccessMessage,
   getErrorMessage,
 } from "../../utils/errorUtils.js";
-import FormProvider from "./formBuilder/FormProvider";
-import FormInput from "./formBuilder/FormInput";
+import Button from "../ui/Button";
 
 const RegistrationForm = () => {
   const uniqueId = useId();
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [_message, setMessage] = useState({ type: "", text: "" });
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ const RegistrationForm = () => {
           await login(data.email, data.password);
           sessionStorage.setItem("isFirstLogin", "true");
           navigate(ROUTES.STABLE_ONBOARDING);
-        } catch (loginError) {
+        } catch {
           navigate(ROUTES.LOGIN);
           setMessage(
             createSuccessMessage(
