@@ -4,6 +4,7 @@ import { useAuth } from "./context/AuthContext";
 import HeaderContainer from "./components/layout/HeaderContainer";
 import DesktopNavigation from "./components/layout/DesktopNavigation";
 import DesktopFooter from "./components/layout/DesktopFooter";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -43,39 +44,41 @@ function App() {
   const showFooterNav = isAuthenticated && !shouldHideFooter;
 
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* Desktop header - always hidden on mobile, but conditionally shown on lg+ */}
-      {showDesktopHeader && (
-        <header className="hidden lg:block">
-          <DesktopNavigation />
-        </header>
-      )}
+    <ErrorBoundary>
+      <div className="min-h-screen flex flex-col">
+        {/* Desktop header - always hidden on mobile, but conditionally shown on lg+ */}
+        {showDesktopHeader && (
+          <header className="hidden lg:block">
+            <DesktopNavigation />
+          </header>
+        )}
 
-      {/* Mobile header - completely hidden on lg+ */}
-      {showMobileHeader && (
-        <header className="lg:hidden">
-          <HeaderContainer />
-        </header>
-      )}
+        {/* Mobile header - completely hidden on lg+ */}
+        {showMobileHeader && (
+          <header className="lg:hidden">
+            <HeaderContainer />
+          </header>
+        )}
 
-      <main className="flex-1/2">
-        <Outlet />
-      </main>
+        <main className="flex-1/2">
+          <Outlet />
+        </main>
 
-      {/* Mobile footer nav */}
-      {showFooterNav && (
-        <footer className="lg:hidden mt-auto">
-          <NavigationFooter />
-        </footer>
-      )}
+        {/* Mobile footer nav */}
+        {showFooterNav && (
+          <footer className="lg:hidden mt-auto">
+            <NavigationFooter />
+          </footer>
+        )}
 
-      {/* Desktop footer */}
-      {showFooterNav && (
-        <footer className="hidden lg:block mt-auto">
-          <DesktopFooter />
-        </footer>
-      )}
-    </div>
+        {/* Desktop footer */}
+        {showFooterNav && (
+          <footer className="hidden lg:block mt-auto">
+            <DesktopFooter />
+          </footer>
+        )}
+      </div>
+    </ErrorBoundary>
   );
 }
 
