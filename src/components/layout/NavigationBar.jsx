@@ -25,7 +25,11 @@ const NavigationBar = () => {
   return (
     <div className="w-full md:max-w-[70%] mx-auto">
       {hasStableAccess && (
-        <nav className="nav-container">
+        <nav
+          className="nav-container"
+          role="navigation"
+          aria-label="Main navigation"
+        >
           <Link
             to={ROUTES.HOME}
             className={`p-2 ${
