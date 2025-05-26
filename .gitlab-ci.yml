@@ -1,23 +1,32 @@
 stages:
+
   - check
   - build
   - test
   - deploy
   - teardown
 
-# Mall för byggjobb
+variables:
+  CI_DEBUG_TRACE: "true"  # Aktiverar felsökningsläge för pipelinekörningar
+
 .build_image_template: &build_image_template
   stage: build
-  image: docker:latest
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
   before_script:
+    - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
-    # - export DOCKER_TAG=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
-    - export DOCKER_TAG=latest
+    - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
+    - if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=latest; fi
 
 build-react-image:
   <<: *build_image_template
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_TAG"
+    - echo "Startar build för $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
   rules:
     - if: $CI_MERGE_REQUEST_ID
@@ -26,6 +35,7 @@ build-utils:
   <<: *build_image_template
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
+    - echo "Startar build för $IMAGE_NAME"
     - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
   rules:
     - if: $CI_MERGE_REQUEST_ID
