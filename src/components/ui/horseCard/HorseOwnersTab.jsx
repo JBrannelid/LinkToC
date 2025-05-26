@@ -3,7 +3,6 @@ import LoadingSpinner from "../../ui/LoadingSpinner";
 import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 import { getHorseUserRoleName } from "../../../utils/horseProfileUtils";
-import { getProfileImageUrl } from "../../../utils/userUtils";
 import ProfileImage from "../../common/ProfileImage";
 
 const HorseOwnersTab = ({ horseId, horseProfile }) => {
