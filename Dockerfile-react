@@ -1,44 +1,13 @@
-# === Steg 1: Byggsteg ===
-
-FROM node:latest AS build
+FROM node:latest
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json .
 
 RUN npm install
 
 COPY . .
 
-# === Steg 2: Produktionssteg ===
-
-FROM node:latest
-
-WORKDIR /app
-
-COPY package*.json ./
-
-RUN npm install
-
-COPY --from=build /app .
-
 EXPOSE 5173
 
-CMD ["npm", "run", "dev", "--", "--config", "vite.config.docker.js", "--host", "0.0.0.0", "--debug"]
-
-# CMD ["npm", "run", "dev"]
-
-# # === Steg 1: Byggsteg ===
-# FROM node:latest AS build
-# WORKDIR /app
-# COPY package*.json ./
-# RUN npm install
-# RUN npm install terser --save-dev
-# COPY . .
-# # RUN npm run build
-# RUN npm run dev
-# # === Steg 2: Produktionssteg ===
-# FROM nginx:latest
-# COPY --from=build /app/dist /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev", "--", "--config", "vite.config.docker.js", "--", "--host", "0.0.0.0", "--debug"]
