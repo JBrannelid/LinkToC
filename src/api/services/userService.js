@@ -8,38 +8,17 @@ const userService = {
   ...baseService,
 
   getUserStables: async (userId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/user-stables/user/${userId}`
-      );
-      return response.value || [];
-    } catch (error) {
-      if (
-        error.statusCode === 404 ||
-        (error.message && error.message.includes("User has no stables yet")) ||
-        (error.message &&
-          error.message.includes("not connected to any stables"))
-      ) {
-        console.info(
-          `User has no stable roles yet - this is normal for new users`
-        );
-        return [];
-      }
-
-      throw error;
-    }
+    const response = await axiosInstance.get(
+      `/api/user-stables/user/${userId}`
+    );
+    return response.value || [];
   },
 
   getUsersByStableId: async (stableId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/user-stables/stable/${stableId}`
-      );
-      return response.value || [];
-    } catch (error) {
-      console.error("Error fetching stable members:", error);
-      throw error;
-    }
+    const response = await axiosInstance.get(
+      `/api/user-stables/stable/${stableId}`
+    );
+    return response.value || [];
   },
 
   getById: async (id) => {
@@ -66,31 +45,14 @@ const userService = {
   },
 
   getUserProfile: async (userId, stableId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/user/${userId}/stable/${stableId}`
-      );
-      return response;
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-      throw error;
-    }
+    return await axiosInstance.get(`/api/user/${userId}/stable/${stableId}`);
   },
 
   setProfilePicture: async (userId, blobName) => {
-    try {
-      const response = await axiosInstance.post(
-        "/api/user/set-profile-picture",
-        {
-          userId,
-          blobName,
-        }
-      );
-      return response;
-    } catch (error) {
-      console.error("Error setting profile picture:", error);
-      throw error;
-    }
+    return await axiosInstance.post("/api/user/set-profile-picture", {
+      userId,
+      blobName,
+    });
   },
 };
 
