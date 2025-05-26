@@ -1,7 +1,7 @@
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints.js";
-import { createError, ErrorTypes } from "../utils/errors.js";
 import axiosInstance from "../config/axiosConfig.js";
+import { createError, ErrorTypes } from "../utils/errors.js";
 
 // Create base service with standard CRUD operations
 const baseService = createBaseService(ENDPOINTS.HORSES);
