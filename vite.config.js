@@ -1,7 +1,7 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import compression from "vite-plugin-compression";
 import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
+import compression from "vite-plugin-compression";
 
 // Build project by code-split the application for better performance
 export default defineConfig({
