@@ -27,34 +27,37 @@ export const AppProvider = ({ children }) => {
   const [bs, sbs] = useState(false);
 
   // Update the current stable
-  const changeStable = (id, name = "") => {
-    // Check if this is a newly created stable
-    const newStableFlag = sessionStorage.getItem("newStableCreated");
-    const isNewStable = newStableFlag === "true" && newStableFlag !== null;
-    const sbc = bs || isNewStable;
+  const changeStable = useCallback(
+    (id, name = "") => {
+      // Check if this is a newly created stable
+      const newStableFlag = sessionStorage.getItem("newStableCreated");
+      const isNewStable = newStableFlag === "true" && newStableFlag !== null;
+      const sbc = bs || isNewStable;
 
-    // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
-    if (!sbc && user?.stableRoles && user.stableRoles[id] === undefined) {
-      console.error(
-        "SECURITY ERROR: User is trying to set stable ${id} without membership!"
-      );
-      localStorage.removeItem("currentStable");
-      setCurrentStable(null);
-      return false;
-    }
+      // Add explicit check for undefined (user with a stable role 0, such as a stable manager)
+      if (!sbc && user?.stableRoles && user.stableRoles[id] === undefined) {
+        console.error(
+          "SECURITY ERROR: User is trying to set stable ${id} without membership!"
+        );
+        localStorage.removeItem("currentStable");
+        setCurrentStable(null);
+        return false;
+      }
 
-    // Only used for newly created stables
-    if (isNewStable) {
-      sessionStorage.removeItem("newStableCreated");
-    }
+      // Only used for newly created stables
+      if (isNewStable) {
+        sessionStorage.removeItem("newStableCreated");
+      }
 
-    const stableData = { id, name };
-    setCurrentStable(stableData);
-    localStorage.setItem("currentStable", JSON.stringify(stableData));
+      const stableData = { id, name };
+      setCurrentStable(stableData);
+      localStorage.setItem("currentStable", JSON.stringify(stableData));
 
-    setStableRefreshKey((prev) => prev + 1);
-    return true;
-  };
+      setStableRefreshKey((prev) => prev + 1);
+      return true;
+    },
+    [user?.stableRoles, bs, setCurrentStable, setStableRefreshKey]
+  );
 
   const enableSecurityBypass = () => {
     sbs(true);
