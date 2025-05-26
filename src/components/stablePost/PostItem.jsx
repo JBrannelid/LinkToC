@@ -102,7 +102,7 @@ const PostItem = ({
       <div className="lg:hidden">
         <div className="flex justify-between">
           <p className="text-sm text-grey opacity-80 md:text-sm">
-            {formatPostDate(post.date)}
+            {/* {formatPostDate(post.date)} */}
           </p>
           <p className="text-xs text-grey opacity-80 md:text-sm">
             kl {formatPostTime(post.date)}
@@ -176,7 +176,7 @@ const PostItem = ({
             <div className="ml-3">
               <p className="font-medium">{userFullName}</p>
               <p className="text-xs text-gray-500">
-                {formatPostDate(post.date)} - <br></br>kl{" "}
+                {formatPostDate(post.date)} -<br></br>kl{" "}
                 {formatPostTime(post.date)}
               </p>
             </div>
