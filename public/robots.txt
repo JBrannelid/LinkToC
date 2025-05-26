@@ -1,2 +1,8 @@
 User-agent: *
+Allow: /
+
+# Sitemap
 Sitemap: http://localhost:5173/sitemap.xml
+
+# Disallow admin/private areas and API
+Disallow: /api/

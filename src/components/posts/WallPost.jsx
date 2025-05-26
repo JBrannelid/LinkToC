@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { format } from "date-fns";
 import { parseISO, dateFnsCompareDesc } from "../../utils/calendarUtils";
 import { useAppContext } from "../../context/AppContext";
@@ -10,16 +10,21 @@ export default function WallPost() {
   const { currentStable } = useAppContext();
   const [expandedPost, setExpandedPost] = useState(new Set());
 
-  // Get posts directly from StablePosts hook
   const {
     posts,
     status: { loading, error },
   } = useStablePosts(currentStable?.id);
 
-  // Filter to get only pinned posts or display a empty array
-  const pinnedPosts = posts ? posts.filter((post) => post.isPinned) : [];
-  const sortedPinnedPosts = [...pinnedPosts].sort((a, b) =>
-    dateFnsCompareDesc(parseISO(a.date), parseISO(b.date))
+  const pinnedPosts = useMemo(
+    () => (posts ? posts.filter((post) => post.isPinned) : []),
+    [posts]
+  );
+  const sortedPinnedPosts = useMemo(
+    () =>
+      [...pinnedPosts].sort((a, b) =>
+        dateFnsCompareDesc(parseISO(a.date), parseISO(b.date))
+      ),
+    [pinnedPosts]
   );
 
   const formatData = (dateString) => {
@@ -57,7 +62,6 @@ export default function WallPost() {
     );
   }
 
-  // !pinnedPosts - Display a message
   if (pinnedPosts.length === 0) {
     return (
       <div className="px-2 md:px-0 w-full md:max-w-full">
@@ -79,7 +83,6 @@ export default function WallPost() {
         Important notes
       </h2>
       <div className="lg:bg-white lg:h-full lg:rounded-lg lg:shadow-lg">
-        {/* Display all pinned posts */}
         {sortedPinnedPosts.map((post) => (
           <div key={post.id} className="mb-4 font-semibold">
             <WallPostCard

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import PostGroup from "./PostGroup";
 import {
   isToday,
@@ -18,7 +18,7 @@ const PostContainer = ({
   commentLoading,
   fetchComments,
 }) => {
-  const groupPostsByDate = () => {
+  const groupedPosts = useMemo(() => {
     const groups = {
       today: [],
       lastWeek: [],
@@ -55,10 +55,7 @@ const PostContainer = ({
     groups.older.sort(sortByDate);
 
     return groups;
-  };
-
-  // Group posts into 'today', 'yesterday', and 'older' categories
-  const groupedPosts = groupPostsByDate();
+  }, [posts]);
 
   return (
     <div className="py-2">

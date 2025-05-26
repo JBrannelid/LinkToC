@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Calendar from "../components/calendar/calendar";
 import { enUS } from "date-fns/locale";
 import WallPost from "../components/posts/WallPost";
@@ -22,7 +22,6 @@ export default function HomePage() {
   const { currentStable, currentUser } = useAppContext();
   const currentUserId = currentUser.id;
 
-  // Custom hooks for data fetching
   const {
     stableId,
     status: stableStatus,
@@ -40,100 +39,132 @@ export default function HomePage() {
     fetchAndUpdateEvents,
   } = useCalendarEvents(stableId || currentStable.id);
 
-  // Effect to keep currentDayEvents in sync with events array
+  const memoizedEvents = useMemo(() => events, [events]);
+
+  const currentStableId = useMemo(
+    () => stableId || currentStable.id,
+    [stableId, currentStable.id]
+  );
+
   useEffect(() => {
     if (!selectedDay) return;
     const dayEvents = getEventsForDay(selectedDay);
     setCurrentDayEvents(dayEvents);
-  }, [events, selectedDay, getEventsForDay, refreshKey]);
+  }, [memoizedEvents, selectedDay, getEventsForDay, refreshKey]);
 
-  // Form control functions
-  const handleOpenEventForm = () => {
+  const handleOpenEventForm = useCallback(() => {
     setIsFormOpen(true);
     setCurrentEvent(null);
-  };
+  }, []);
 
-  const handleCloseEventForm = () => {
+  const handleCloseEventForm = useCallback(() => {
     setIsFormOpen(false);
     setCurrentEvent(null);
-  };
+  }, []);
 
-  const handleOpenUpdateForm = (eventId) => {
-    const eventToEdit = events.find((event) => event.id === eventId);
-    if (eventToEdit) {
-      setCurrentEvent(eventToEdit);
-      setIsFormOpen(true);
-    } else {
-      console.error(`Event with ID ${eventId} not found`);
-    }
-  };
+  const handleOpenUpdateForm = useCallback(
+    (eventId) => {
+      const eventToEdit = memoizedEvents.find((event) => event.id === eventId);
+      if (eventToEdit) {
+        setCurrentEvent(eventToEdit);
+        setIsFormOpen(true);
+      } else {
+        console.error(`Event with ID ${eventId} not found`);
+      }
+    },
+    [memoizedEvents]
+  );
 
-  // Helper function to refresh data after CRUD operations
-  const refreshEventsData = async () => {
+  const refreshEventsData = useCallback(async () => {
     await fetchAndUpdateEvents();
     const freshEvents = getEventsForDay(selectedDay);
     setCurrentDayEvents(freshEvents);
     setRefreshKey((prev) => prev + 1);
-  };
+  }, [fetchAndUpdateEvents, getEventsForDay, selectedDay]);
 
-  // Event CRUD handlers
-  const handleCreateEvent = async (eventData) => {
-    const success = await createEvent({
-      ...eventData,
-      stableIdFk: stableId || currentStable.id,
-      userIdFk: currentUserId,
-    });
+  const handleCreateEvent = useCallback(
+    async (eventData) => {
+      const success = await createEvent({
+        ...eventData,
+        stableIdFk: currentStableId,
+        userIdFk: currentUserId,
+      });
 
-    if (success) {
-      handleCloseEventForm();
-      await refreshEventsData();
-    } else console.error("Could not create event");
-  };
+      if (success) {
+        handleCloseEventForm();
+        await refreshEventsData();
+      } else console.error("Could not create event");
+    },
+    [
+      createEvent,
+      currentStableId,
+      currentUserId,
+      handleCloseEventForm,
+      refreshEventsData,
+    ]
+  );
 
-  const handleUpdateEvent = async (eventData) => {
-    const success = await updateEvent({
-      ...eventData,
-      id: currentEvent.id,
-      stableIdFk: stableId || currentStable.id,
-      userIdFk: currentUserId,
-    });
+  const handleUpdateEvent = useCallback(
+    async (eventData) => {
+      const success = await updateEvent({
+        ...eventData,
+        id: currentEvent.id,
+        stableIdFk: currentStableId,
+        userIdFk: currentUserId,
+      });
 
-    if (success) {
-      handleCloseEventForm();
-      await refreshEventsData();
-    } else console.error("Could not update event");
-  };
+      if (success) {
+        handleCloseEventForm();
+        await refreshEventsData();
+      } else console.error("Could not update event");
+    },
+    [
+      updateEvent,
+      currentEvent,
+      currentStableId,
+      currentUserId,
+      handleCloseEventForm,
+      refreshEventsData,
+    ]
+  );
 
-  const handleDeleteEvent = async (eventId) => {
-    const eventToDelete = events.find((event) => event.id === eventId);
-    if (!eventToDelete) return;
+  const handleDeleteEvent = useCallback(
+    async (eventId) => {
+      const eventToDelete = memoizedEvents.find(
+        (event) => event.id === eventId
+      );
+      if (!eventToDelete) return;
 
-    {
-      await deleteEvent(eventId);
-      await refreshEventsData();
-    }
-  };
+      {
+        await deleteEvent(eventId);
+        await refreshEventsData();
+      }
+    },
+    [memoizedEvents, deleteEvent, refreshEventsData]
+  );
 
-  // Handle day selection
-  const handleSelectDay = (day) => {
-    setSelectedDay(day);
-    const dayEvents = getEventsForDay(day);
-    setCurrentDayEvents(dayEvents);
-  };
+  const handleSelectDay = useCallback(
+    (day) => {
+      setSelectedDay(day);
+      const dayEvents = getEventsForDay(day);
+      setCurrentDayEvents(dayEvents);
+    },
+    [getEventsForDay]
+  );
 
-  // Handle day with events is selected (for lg layout)
-  const handleDayWithEventsSelected = (day, events) => {
+  const handleDayWithEventsSelected = useCallback((day, events) => {
     setCurrentDayEvents(events);
     setShowLgWallPost(false);
-  };
+  }, []);
 
-  // Return to wall view on lg screens
-  const handleBackToWall = () => {
+  const handleBackToWall = useCallback(() => {
     setShowLgWallPost(true);
-  };
+  }, []);
 
-  // Loading state
-  if ((calendarStatus.loading && events.length === 0) || stableStatus.loading) {
+  if (
+    (calendarStatus.loading && memoizedEvents.length === 0) ||
+    stableStatus.loading
+  ) {
     return (
       <div className="py-2 text-gray flex items-center justify-center">
         <LoadingSpinner size="medium" className="text-gray" />
@@ -152,7 +183,6 @@ export default function HomePage() {
         <StableName />
       </div>
 
-      {/* Event form modal */}
       {isFormOpen && (
         <EventForm
           event={currentEvent}
@@ -161,16 +191,15 @@ export default function HomePage() {
           onDeleteEvent={handleDeleteEvent}
           title={currentEvent ? "Edit Activity" : "New Activity"}
           date={selectedDay}
-          stables={stableId}
+          stables={currentStableId}
         />
       )}
 
-      {/* Calendar Section */}
       <section className="grid grid-cols-1">
         <Calendar
-          key={refreshKey} // Force full remount on refresh
-          stableId={stableId || currentStable.id}
-          events={events}
+          key={refreshKey}
+          stableId={currentStableId}
+          events={memoizedEvents}
           locale={enUS}
           noEventsMessage="No scheduled events"
           onAddEvent={handleOpenEventForm}
@@ -181,7 +210,6 @@ export default function HomePage() {
           onSelectDay={handleSelectDay}
           onDayWithEventsSelected={handleDayWithEventsSelected}
         >
-          {/* Wall/EventList conditional rendered - md screen above */}
           {showWallPost ? (
             <div className="mt-20">
               <div className="hidden md:block lg:hidden">
@@ -215,7 +243,6 @@ export default function HomePage() {
         </Calendar>
       </section>
 
-      {/* Mobile Wall Post */}
       <section className="mx-1 sm:mx-15 md:hidden lg:hidden">
         <WallPost />
       </section>
