@@ -26,6 +26,7 @@ services:
         - traefik.http.services.${STACK_NAME}.loadbalancer.server.port=5173
     environment:
       - VITE_API_BASE_URL=https://api.g10-main.cc25.chasacademy.dev
+      - VITE_AZURE_STORAGE_URL=https://azuritegrup10blob.cc25.chasacademy.dev/devstoreaccount1/equilog-media
 
 networks:
   traefik-public:
