@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CommentIcon from "../../assets/icons/CommentIcon";
-import { formatUserFullName } from "../../utils/userUtils";
 import { useAppContext } from "../../context/AppContext";
+import { formatUserFullName } from "../../utils/userUtils";
 
 const CommentInput = ({ onSubmit, postId, disabled = false }) => {
   const [comment, setComment] = useState("");
