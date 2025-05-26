@@ -1,6 +1,8 @@
-import Card from "../ui/card";
 import { formatUserFullName, getRoleName } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
+import CardContainer from "../ui/card/CardContainer";
+import CardSubtitle from "../ui/card/CardSubtitle";
+import CardTitle from "../ui/card/CardTitle";
 
 const MemberCard = ({ member, onClick }) => {
   const fullName = formatUserFullName(member);
@@ -14,7 +16,7 @@ const MemberCard = ({ member, onClick }) => {
   };
 
   return (
-    <Card.Container className="cursor-pointer" onClick={onClick}>
+    <CardContainer className="cursor-pointer" onClick={onClick}>
       <div className="p-2 flex flex-col bg-gradient-to-b from-primary-light to-white">
         <div className="flex justify-center bg-background ">
           <div className="w-full h-25 mb-2 rounded-xl overflow-hidden border-2 border-primary lg:h-40 xl:h-45 ">
@@ -27,14 +29,14 @@ const MemberCard = ({ member, onClick }) => {
             />
           </div>
         </div>
-        <Card.Title className="text-xs !text-start">{fullName}</Card.Title>
+        <CardTitle className="text-xs !text-start">{fullName}</CardTitle>
         {roleName && (
-          <Card.Subtitle className="text-xs !text-start">
+          <CardSubtitle className="text-xs !text-start">
             {roleName}
-          </Card.Subtitle>
+          </CardSubtitle>
         )}
       </div>
-    </Card.Container>
+    </CardContainer>
   );
 };
 
