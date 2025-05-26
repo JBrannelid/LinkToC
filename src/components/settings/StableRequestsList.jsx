@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
-import { useStableManagement } from "../../hooks/useStableManagement";
-import CloseIcon from "../../assets/icons/CloseIcon";
 import CheckIcon from "../../assets/icons/CheckIcon";
-import ConfirmationModal from "../../components/ui/ConfirmationModal";
+import CloseIcon from "../../assets/icons/CloseIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import { useStableManagement } from "../../hooks/useStableManagement";
+import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 // Remove comments if we want to display sent invitations
 const StableRequestsList = ({ stableId }) => {

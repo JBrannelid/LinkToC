@@ -1,5 +1,5 @@
 import React from "react";
-import Card from "../ui/card/index.js";
+import CardContainer from "../ui/card/CardContainer";
 
 const UserResultRenderer = ({ item, isSelected, onSelect, config }) => {
   const firstName = item[config?.labelField || "firstName"] || "";
@@ -24,7 +24,7 @@ const UserResultRenderer = ({ item, isSelected, onSelect, config }) => {
       role="option"
       aria-selected={isSelected}
     >
-      <Card.Container className="h-full">
+      <CardContainer className="h-full">
         <div className="flex items-center p-3 min-h-[72px]">
           {/* User profile image - fixed size for consistent touch target */}
           <div className="w-14 h-14 rounded-full overflow-hidden mr-3 flex-shrink-0 border border-light">
@@ -61,7 +61,7 @@ const UserResultRenderer = ({ item, isSelected, onSelect, config }) => {
             )}
           </div>
         </div>
-      </Card.Container>
+      </CardContainer>
     </div>
   );
 };

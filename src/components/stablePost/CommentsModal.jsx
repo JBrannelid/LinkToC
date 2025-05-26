@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import CloseIcon from "../../assets/icons/CloseIcon";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import { useAppContext } from "../../context/AppContext";
 import { parseISO, format } from "../../utils/calendarUtils";
 import { USER_ROLES } from "../../utils/userUtils";
-import ConfirmationModal from "../ui/ConfirmationModal";
-import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import CloseIcon from "../../assets/icons/CloseIcon";
 import ProfileImage from "../common/ProfileImage";
+import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const CommentsModal = ({
   isOpen,
@@ -58,7 +58,7 @@ const CommentsModal = ({
     try {
       const parsedDate = parseISO(dateString);
       return format(parsedDate, "MM/dd-yy HH:mm");
-    } catch (error) {
+    } catch {
       return "Unknown date";
     }
   };

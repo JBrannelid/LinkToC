@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import { horseService } from "../api/index.js";
 import { useLoadingState } from "./useLoadingState";
+import { horseService } from "../api/index.js";
 
 export const useHorseProfile = (horseId) => {
   const [horseProfile, setHorseProfile] = useState(null);

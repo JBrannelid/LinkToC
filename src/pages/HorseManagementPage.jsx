@@ -1,10 +1,10 @@
 import React from "react";
 import ModalHeader from "../components/layout/ModalHeader";
-import { useAppContext } from "../context/AppContext";
 import PermissionGate from "../components/settings/PermissionGate";
-import Button from "../components/ui/Button";
-import { USER_ROLES } from "../utils/userUtils";
 import StableHorseList from "../components/settings/StableHorseList.jsx";
+import Button from "../components/ui/Button";
+import { useAppContext } from "../context/AppContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 
 const HorseManagementPage = () => {

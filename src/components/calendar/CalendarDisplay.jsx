@@ -1,9 +1,9 @@
+import { enUS } from "date-fns/locale";
 import React from "react";
-import { sv } from "date-fns/locale";
 import Calendar from "./calendar";
+import { useAppContext } from "../../context/AppContext";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
-import { useAppContext } from "../../context/AppContext";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 function CalendarDisplay() {
@@ -42,8 +42,7 @@ function CalendarDisplay() {
       <Calendar
         stableId={stableId || currentStable.id}
         events={events}
-        users={users}
-        locale={sv}
+        locale={enUS}
         getEventsForDay={getEventsForDay}
       />
     </div>

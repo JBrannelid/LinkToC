@@ -1,5 +1,5 @@
 import React from "react";
-import ProtectedRoute from "./ProtectedRoute";
+import { ProtectedRoute } from "./components";
 
 // Converts a route config into a protected route by wrapping it in <ProtectedRoute>, applying stable checks if required
 export const createProtectedRoute = (routeConfig) => {

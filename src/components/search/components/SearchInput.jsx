@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSearch } from "../../../context/searchContext";
 import LoadingSpinner from "../../ui/LoadingSpinner";
 
@@ -23,42 +23,43 @@ const SearchInput = ({
     selectedItem,
     executeActionForSelectedItem,
   } = useSearch();
-  const [localValue, setLocalValue] = useState(query || '');
+  const [localValue, setLocalValue] = useState(query || "");
   const isUserTypingRef = useRef(false);
   useEffect(() => {
     if (!isUserTypingRef.current && query !== localValue) {
-      setLocalValue(query || '');
+      setLocalValue(query || "");
     }
   }, [query, localValue]);
-  
+
   const inputRef = useRef(null);
   const wasLoadingRef = useRef(loading);
   const placeholder = config?.placeholderText || "Search...";
   const debounceTimerRef = useRef(null);
-  
-  const handleLocalInputChange = useCallback((e) => {
-    const newValue = e.target.value;
 
-    // Update local state immediately for responsive UI
-    setLocalValue(newValue);
+  const handleLocalInputChange = useCallback(
+    (e) => {
+      const newValue = e.target.value;
 
-    // Mark that user is typing
-    isUserTypingRef.current = true;
+      // Update local state immediately for responsive UI
+      setLocalValue(newValue);
 
-    // Clear any previous debounce timer
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
+      // Mark that user is typing
+      isUserTypingRef.current = true;
 
-    // Only update context after debounce period
-    debounceTimerRef.current = setTimeout(() => {
-      isUserTypingRef.current = false;
-      const syntheticEvent = { target: { value: newValue } };
-      handleInputChange(syntheticEvent);
-      
-    }, 400); 
+      // Clear any previous debounce timer
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
 
-  }, [query, handleInputChange]);
+      // Only update context after debounce period
+      debounceTimerRef.current = setTimeout(() => {
+        isUserTypingRef.current = false;
+        const syntheticEvent = { target: { value: newValue } };
+        handleInputChange(syntheticEvent);
+      }, 400);
+    },
+    [query, handleInputChange]
+  );
   useEffect(() => {
     if (wasLoadingRef.current && !loading && maintainFocus && !desktopView) {
       setTimeout(() => {
@@ -73,7 +74,6 @@ const SearchInput = ({
 
     wasLoadingRef.current = loading;
   }, [loading, maintainFocus, desktopView]);
-
 
   useEffect(() => {
     // Only auto-focus if:
@@ -90,59 +90,67 @@ const SearchInput = ({
     }
   }, [autoFocus, desktopView]);
 
+  const handleFocus = useCallback(
+    (e) => {
+      if (onFocus) {
+        onFocus(e);
+      }
+    },
+    [onFocus]
+  );
 
-  const handleFocus = useCallback((e) => {
-    if (onFocus) {
-      onFocus(e);
-    }
-  }, [onFocus]);
+  const handleBlur = useCallback(
+    (e) => {
+      const relatedTarget = e.relatedTarget;
 
-  const handleBlur = useCallback((e) => {
-    const relatedTarget = e.relatedTarget;
-    
-    if (
+      if (
         maintainFocus &&
         !relatedTarget?.closest('[role="listbox"]') &&
-        !relatedTarget?.closest('button') &&
+        !relatedTarget?.closest("button") &&
         !desktopView
-    ) {
-      // Increased timeout for better UX
-      setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-      }, 150);
-    }
-
-    if (onBlur) {
-      onBlur(e);
-    }
-  },[maintainFocus, onBlur, desktopView]);
-  const handleKeyDown = useCallback((e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-
-      if (selectedItem) {
-        executeActionForSelectedItem();
-      } else if (results && results.length > 0) {
-        handleSelectItem(results[0]);
-
+      ) {
+        // Increased timeout for better UX
         setTimeout(() => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 150);
+      }
+
+      if (onBlur) {
+        onBlur(e);
+      }
+    },
+    [maintainFocus, onBlur, desktopView]
+  );
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+
+        if (selectedItem) {
           executeActionForSelectedItem();
-        }, 10);
-      }
-      return;
-    }
+        } else if (results && results.length > 0) {
+          handleSelectItem(results[0]);
 
-    if (e.key === "ArrowDown" && results && results.length > 0) {
-      e.preventDefault();
-
-      const firstResultItem = document.querySelector('[role="option"]');
-      if (firstResultItem) {
-        firstResultItem.focus();
+          setTimeout(() => {
+            executeActionForSelectedItem();
+          }, 10);
+        }
+        return;
       }
-    }
-  },[selectedItem, results, executeActionForSelectedItem, handleSelectItem]);
+
+      if (e.key === "ArrowDown" && results && results.length > 0) {
+        e.preventDefault();
+
+        const firstResultItem = document.querySelector('[role="option"]');
+        if (firstResultItem) {
+          firstResultItem.focus();
+        }
+      }
+    },
+    [selectedItem, results, executeActionForSelectedItem, handleSelectItem]
+  );
   return (
     <div className={`relative ${className}`}>
       <input
@@ -168,11 +176,11 @@ const SearchInput = ({
       />
 
       {loading && (
-          <div
-              className={`absolute inset-0 flex items-center justify-center bg-white
-    transition-opacity duration-200 ${!loading && message ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
-              role="alert"
-          >
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-white
+      transition-opacity duration-200 opacity-100 z-10`}
+          role="alert"
+        >
           <LoadingSpinner
             size="small"
             withMargin={false}

@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
-import userService from "../api/services/userService";
-import { useAuth } from "../context/AuthContext";
-import { useLoadingState } from "./useLoadingState";
 import { useNavigate } from "react-router";
-import { getErrorMessage } from "../utils/errorUtils";
-import { ROUTES } from "../routes/index.jsx";
+import { useLoadingState } from "./useLoadingState";
 import { authService } from "../api/index.js";
+import userService from "../api/services/userService";
 import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { ROUTES } from "../routes/index.jsx";
+import { getErrorMessage } from "../utils/errorUtils";
 
 export const useUserData = (userId, includeProfile = true) => {
   const [userData, setUserData] = useState(null);
@@ -14,7 +14,7 @@ export const useUserData = (userId, includeProfile = true) => {
   const { currentStable } = useAppContext();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const [operationType, setOperationType] = useState("fetch");
   const navigate = useNavigate();
 

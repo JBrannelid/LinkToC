@@ -1,23 +1,20 @@
 import React, { useCallback } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { ROUTES } from "../../../routes/index.jsx";
 import WelcomeScreen from "./WelcomeScreen.jsx";
+import { useAuth } from "../../../context/AuthContext";
 import { useStableOnboarding } from "../../../hooks/useStableOnboarding";
+import { ROUTES } from "../../../routes/index.jsx";
 import CreateStableForm from "../../forms/CreateStableForm.jsx";
 import JoinStableForm from "../../forms/JoinStableForm.jsx";
-import OnboardingLayout from "../OnboardingLayout.jsx";
 import LoadingSpinner from "../../ui/LoadingSpinner.jsx";
-import { useAuth } from "../../../context/AuthContext";
-import { useAppContext } from "../../../context/AppContext";
-import { useForm } from "react-hook-form";
+import OnboardingLayout from "../OnboardingLayout.jsx";
 
 const StableOnboardingContainer = () => {
   const navigate = useNavigate();
   const { verifyToken } = useAuth();
-  const { changeStable } = useAppContext();
   const {
     currentStep,
-    isFirstLogin,
     loading,
     error,
     message,

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { format } from "../../utils/calendarUtils";
-import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
+import FormProvider from "./formBuilder/FormProvider";
 import TimePicker from "./formBuilder/TimePicker";
-import Button from "../ui/Button";
 import { useAppContext } from "../../context/AppContext";
+import { format } from "../../utils/calendarUtils";
 import ModalHeader from "../layout/ModalHeader";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import Button from "../ui/Button";
 import ConfirmationModal from "../ui/ConfirmationModal";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const EventForm = ({
   event,
@@ -38,7 +38,7 @@ const EventForm = ({
 
   // Time fields for validation
   const watchedStartTime = methods.watch("startTime");
-  const watchedEndTime = methods.watch("endTime");
+  const _watchedEndTime = methods.watch("endTime");
 
   // Helper function to convert time string to minutes for comparison
   const timeToMinutes = (timeString) => {

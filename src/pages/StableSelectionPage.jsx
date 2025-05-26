@@ -1,23 +1,24 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { useAppContext } from "../context/AppContext";
-import { useUserStables } from "../hooks/useUserStables";
-import { useAuth } from "../context/AuthContext";
-import { ROUTES } from "../routes/index.jsx";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import Card from "../components/ui/card";
-import Button from "../components/ui/Button";
-import ModalHeader from "../components/layout/ModalHeader";
+import HandRaisedIcon from "../assets/icons/HandRaisedIcon.jsx";
 import StableIcon from "../assets/icons/StableIcon";
 import { CreateStableForm, JoinStableForm } from "../components/forms";
-import { useStableOnboarding } from "../hooks/useStableOnboarding";
-import { createSuccessMessage } from "../utils/errorUtils";
 import FormMessage from "../components/forms/formBuilder/FormMessage";
-import { USER_ROLES } from "../utils/userUtils.js";
-import HandRaisedIcon from "../assets/icons/HandRaisedIcon.jsx";
+import ModalHeader from "../components/layout/ModalHeader";
+import Button from "../components/ui/Button";
+import CardBody from "../components/ui/card/CardBody.jsx";
+import CardContainer from "../components/ui/card/CardContainer.jsx";
 import ConfirmationModal from "../components/ui/ConfirmationModal.jsx";
-import useStableData from "../hooks/useStableData.js";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
 import useScrollToElement from "../hooks/useScrollToElement.js";
+import useStableData from "../hooks/useStableData.js";
+import { useStableOnboarding } from "../hooks/useStableOnboarding";
+import { useUserStables } from "../hooks/useUserStables";
+import { ROUTES } from "../routes/index.jsx";
+import { createSuccessMessage } from "../utils/errorUtils";
+import { USER_ROLES } from "../utils/userUtils.js";
 
 const StableSelectionPage = () => {
   const { changeStable } = useAppContext();
@@ -26,7 +27,6 @@ const StableSelectionPage = () => {
   const {
     stables,
     loading: stablesLoading,
-    error,
     loadingState: stablesLoadingState,
     refetch: refetchUserStables,
   } = useUserStables();
@@ -115,7 +115,7 @@ const StableSelectionPage = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [location, navigate]);
+  }, [navigate]);
 
   // Open confirmation modal
   const openConfirmation = (stable, action, e) => {
@@ -256,12 +256,12 @@ const StableSelectionPage = () => {
         {stables.length > 0 ? (
           <div className="grid justify-items-center grid-cols-1 md:grid-cols-2 gap-6 mb-10 md:mb-20 mt-10">
             {stables.map((stable) => (
-              <Card.Container
+              <CardContainer
                 key={stable.id}
                 className="cursor-pointer w-full"
                 onClick={() => handleSelectStable(stable)}
               >
-                <Card.Body className="p-6">
+                <CardBody className="p-6">
                   <div className="flex items-center mb-4">
                     <div className="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center mr-4">
                       <StableIcon className="w-8 h-8 text-primary" />
@@ -326,8 +326,8 @@ const StableSelectionPage = () => {
                       </Button>
                     )}
                   </div>
-                </Card.Body>
-              </Card.Container>
+                </CardBody>
+              </CardContainer>
             ))}
           </div>
         ) : (

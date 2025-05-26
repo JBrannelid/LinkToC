@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
-import eventService from "../api/services/eventService";
-import { parseISO, isSameDay } from "../utils/calendarUtils";
-import { useAppContext } from "../context/AppContext.jsx";
 import { useLoadingState } from "./useLoadingState";
+import eventService from "../api/services/eventService";
+import { useAppContext } from "../context/AppContext.jsx";
+import { parseISO, isSameDay } from "../utils/calendarUtils";
 
 export function useCalendarEvents(stableId) {
   const [events, setEvents] = useState([]);

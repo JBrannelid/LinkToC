@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAuth } from "../context/AuthContext";
-import { ROUTES } from "../routes/index.jsx";
-import Button from "../components/ui/Button";
-import ModalHeader from "../components/layout/ModalHeader";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useUserData } from "../hooks/useUserData";
-import PenIcon from "../assets/icons/PenIcon";
-import { useAppContext } from "../context/AppContext";
-import UserProfileForm from "../components/forms/UserProfileForm";
-import { handleSwitchStable, formatUserFullName } from "../utils/userUtils";
-import ConfirmationModal from "../components/ui/ConfirmationModal";
 import LogoutIcon from "../assets/icons/LogoutIcon";
+import PenIcon from "../assets/icons/PenIcon";
 import ProfileImage from "../components/common/ProfileImage.jsx";
+import UserProfileForm from "../components/forms/UserProfileForm";
+import ModalHeader from "../components/layout/ModalHeader";
+import Button from "../components/ui/Button";
+import ConfirmationModal from "../components/ui/ConfirmationModal";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { useUserData } from "../hooks/useUserData";
+import { ROUTES } from "../routes/index.jsx";
+import { handleSwitchStable, formatUserFullName } from "../utils/userUtils";
 
 // Reusable menu item component
 export const SettingsMenuItem = ({ label, onClick, icon }) => (

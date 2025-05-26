@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { useAuth } from "../../context/AuthContext";
-import { useUserData } from "../../hooks/useUserData";
-import ModalHeader from "../layout/ModalHeader";
-import Button from "../ui/Button";
 import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
-import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
-import LoadingSpinner from "../ui/LoadingSpinner";
-import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
-import PenIcon from "../../assets/icons/PenIcon";
-import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import ConfirmationModal from "../ui/ConfirmationModal";
-import ImageUploader from "../fileUpload/ImageUploader";
 import { getReadSasUrl } from "../../api/services/fileService";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import PenIcon from "../../assets/icons/PenIcon";
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../hooks/useUserData";
+import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
+import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
+import ImageUploader from "../fileUpload/ImageUploader";
+import ModalHeader from "../layout/ModalHeader";
+import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const { user, verifyToken } = useAuth();
   const {
     deleteAccount,
-    loading: deleteLoading,
-    error: deleteError,
+    loading: _deleteLoading,
+    error: _deleteError,
   } = useUserData();
   const userId = user?.id;
 

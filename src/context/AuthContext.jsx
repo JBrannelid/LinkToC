@@ -6,9 +6,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
+import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import tokenStorage from "../utils/tokenStorage.js";
 
 const AuthContext = createContext(undefined);
@@ -74,19 +74,6 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   };
-
-  const loadCachedUser = useCallback(() => {
-    try {
-      const cachedUser = sessionStorage.getItem("currentUser");
-      if (cachedUser) {
-        return JSON.parse(cachedUser);
-      }
-      return null;
-    } catch (error) {
-      console.error("Error loading cached user:", error);
-      return null;
-    }
-  }, []);
 
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
@@ -156,7 +143,7 @@ export const AuthProvider = ({ children }) => {
               fullUserData.profilePictureUrl || userData.profilePictureUrl,
             stableRoles: stableRoles,
           });
-        } catch (rolesError) {
+        } catch {
           // Set basic user if role fetch fails
           setUser({
             ...basicUserInfo,

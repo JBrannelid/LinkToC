@@ -9,7 +9,7 @@ export default function StableName({ className = "" }) {
       try {
         const parsed = JSON.parse(savedStable);
         return parsed.name || "Loading...";
-      } catch (error) {
+      } catch {
         return "Loading...";
       }
     }

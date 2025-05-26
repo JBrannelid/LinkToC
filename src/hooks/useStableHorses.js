@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import horseService from "../api/services/horseService";
 import { useLoadingState } from "./useLoadingState";
+import horseService from "../api/services/horseService";
 
 export const useStableHorses = (stableId) => {
   const [horses, setHorses] = useState([]);

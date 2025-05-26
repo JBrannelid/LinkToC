@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FormProvider, FormInput, FormMessage } from "./index.js";
-import Button from "../ui/Button.jsx";
-import { createErrorMessage } from "../../utils/errorUtils.js";
-import ModalHeader from "../../components/layout/ModalHeader.jsx";
 import { useStableLocation } from "../../hooks/useStableLocation.js";
+import { createErrorMessage } from "../../utils/errorUtils.js";
+import ModalHeader from "../layout/ModalHeader.jsx";
+import Button from "../ui/Button.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
 
 const CreateStableForm = ({
@@ -32,7 +32,7 @@ const CreateStableForm = ({
     if (onSubmit) {
       try {
         onSubmit(data);
-      } catch (err) {
+      } catch {
         setFormError(
           createErrorMessage(
             "An error occurred when creating stable! Try again later."

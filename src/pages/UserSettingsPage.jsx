@@ -7,7 +7,6 @@ import {
   handleSupport,
   handleCookieSettings,
   handleStableRequests,
-  handleManageHorses,
 } from "../utils/userUtils";
 
 const UserSettingsPage = () => {

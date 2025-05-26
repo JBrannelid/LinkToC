@@ -1,6 +1,6 @@
 import React from "react";
-import UserAvatarGrid from "../../../components/common/UserAvatarGrid";
 import * as calendarUtils from "../../../utils/calendarUtils";
+import UserAvatarGrid from "../../common/UserAvatarGrid";
 
 // Renders a single day within the calendar grid (daynumber, user image, indicators)
 const DayCell = ({

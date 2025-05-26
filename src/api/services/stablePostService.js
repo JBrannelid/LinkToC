@@ -1,4 +1,4 @@
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints.js";
 import axiosInstance from "../config/axiosConfig";
 

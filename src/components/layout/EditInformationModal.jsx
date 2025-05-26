@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Button from "../ui/Button";
-import { FormProvider, FormInput } from "../forms";
 import { useForm } from "react-hook-form";
+import { FormProvider, FormInput } from "../forms";
 import ModalHeader from "./ModalHeader";
-import FormMessage from "../forms/formBuilder/FormMessage";
-import { createSuccessMessage } from "../../utils/errorUtils";
 import { useAuth } from "../../context/AuthContext";
+import { createSuccessMessage } from "../../utils/errorUtils";
+import FormMessage from "../forms/formBuilder/FormMessage";
+import Button from "../ui/Button";
 
 const EditInformationModal = ({
   isOpen,
@@ -13,9 +13,9 @@ const EditInformationModal = ({
   fieldName,
   fieldLabel,
   initialValue = "",
-  userId, 
+  userId,
   multiline = false,
-  userData, 
+  userData,
   refreshUserData,
   isHorse = false,
   isCurrentUser = false,

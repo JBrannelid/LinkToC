@@ -62,6 +62,7 @@ const fileService = {
   },
 
   // Delete a file from blob storage
+  // Delete a file from blob storage
   deleteFile: async (blobName, userId = null) => {
     try {
       // If blobName is just a filename (doesn't contain a slash)
@@ -90,7 +91,15 @@ const fileService = {
         `/api/blob-storage/delete-blob?blobName=${encodeURIComponent(blobName)}`
       );
 
-      return { success: true };
+      // Check if the deletion was successful (consistent with other functions)
+      if (response && response.isSuccess) {
+        return { success: true };
+      }
+
+      return {
+        success: false,
+        error: response?.message || "Failed to delete file",
+      };
     } catch (error) {
       console.error("Error deleting file:", error);
       // Don't throw, just return failure

@@ -1,16 +1,16 @@
+import { enUS } from "date-fns/locale";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Calendar from "../components/calendar/calendar";
-import { enUS } from "date-fns/locale";
-import WallPost from "../components/posts/WallPost";
 import EventsContainer from "../components/calendar/events/EventsContainer";
-import { useCalendarEvents } from "../hooks/useCalendarEvents";
-import { useStableData } from "../hooks/useStableData";
-import { useAppContext } from "../context/AppContext";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { startOfToday } from "../utils/calendarUtils";
-import * as calendarUtils from "../utils/calendarUtils";
 import EventForm from "../components/forms/EventForm";
 import StableName from "../components/layout/StableName";
+import WallPost from "../components/posts/WallPost";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useCalendarEvents } from "../hooks/useCalendarEvents";
+import { useStableData } from "../hooks/useStableData";
+import { startOfToday } from "../utils/calendarUtils";
+import * as calendarUtils from "../utils/calendarUtils";
 
 export default function HomePage() {
   const [selectedDay, setSelectedDay] = useState(startOfToday());

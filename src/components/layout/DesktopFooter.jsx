@@ -1,12 +1,10 @@
+import { format } from "date-fns";
 import React from "react";
 import { Link } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/index.jsx";
-import { format } from "date-fns";
-import { useAppContext } from "../../context/AppContext";
+import { ROUTES } from "../../routes/index.jsx";
 
 function DesktopFooter() {
   const currentYear = format(new Date(), "yyyy");
-  const { currentUser, currentStable } = useAppContext();
 
   return (
     <div className="w-full bg-white shadow-md lg:h-16 2xl:h-20">

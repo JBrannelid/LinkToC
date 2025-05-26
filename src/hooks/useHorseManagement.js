@@ -1,9 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { useLoadingState } from "./useLoadingState";
 import { horseService } from "../api/index.js";
-import { createHorseProfile } from "../utils/horseProfileUtils.js";
-import { useAuth } from "../context/AuthContext";
 import { useAppContext } from "../context/AppContext.jsx";
+import { createHorseProfile } from "../utils/horseProfileUtils.js";
 
 const emptyStablesCache = new Set();
 
@@ -12,7 +11,6 @@ export const useHorseManagement = (stableId) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [operationType, setOperationType] = useState("fetch");
-  const { user } = useAuth();
 
   const { stableRefreshKey } = useAppContext();
 
@@ -133,16 +131,7 @@ export const useHorseManagement = (stableId) => {
       const response = await horseService.update(updateData);
 
       // Extract data from response
-      let updatedHorseData;
-      if (response?.data) {
-        updatedHorseData = response.data;
-      } else if (response?.value) {
-        updatedHorseData = response.value;
-      } else if (response?.isSuccess && response?.value) {
-        updatedHorseData = response.value;
-      } else {
-        updatedHorseData = response;
-      }
+      const updatedHorseData = response?.data || response?.value || response;
 
       // Refresh the horses list
       await fetchHorses();
@@ -228,18 +217,10 @@ export const useHorseProfile = (horseId) => {
       const response = await horseService.getHorseProfile(horseId);
 
       // Extract horse data from response
-      let rawHorseData = null;
-
-      // Handle API response structure
-      if (response?.data) {
-        rawHorseData = response.data;
-      } else if (response?.value) {
-        rawHorseData = response.value;
-      } else if (response?.isSuccess && response?.value) {
-        rawHorseData = response.value;
-      } else if (typeof response === "object" && response !== null) {
-        rawHorseData = response;
-      }
+      const rawHorseData =
+        response?.data ||
+        response?.value ||
+        (typeof response === "object" && response !== null ? response : null);
 
       if (!rawHorseData) {
         console.error("Could not extract horse data from response");
@@ -285,16 +266,7 @@ export const useHorseProfile = (horseId) => {
       const response = await horseService.update(formattedData);
 
       // Extract data from response
-      let updatedHorseData = null;
-      if (response?.data) {
-        updatedHorseData = response.data;
-      } else if (response?.value) {
-        updatedHorseData = response.value;
-      } else if (response?.isSuccess && response?.value) {
-        updatedHorseData = response.value;
-      } else {
-        updatedHorseData = response;
-      }
+      const updatedHorseData = response?.data || response?.value || response;
 
       const processedHorse = createHorseProfile(updatedHorseData);
       setHorse(processedHorse);

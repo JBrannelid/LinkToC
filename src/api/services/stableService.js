@@ -1,7 +1,7 @@
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints";
-import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage";
+import axiosInstance from "../config/axiosConfig";
 
 const getUserIdFromToken = () => {
   try {

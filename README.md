@@ -134,3 +134,8 @@ VITE_AZURE_STORAGE_URL=your-blob-storage-url
 - Modern browsers with ES2020+ support
 - Mobile browsers (iOS Safari, Android Chrome)
 - Progressive enhancement for older browsers
+
+# Copyright © [Equilog], [2025]
+### All rights reserved.
+### This code is proprietary and confidential.
+### No part of this code may be copied, modified, distributed, or used in any form without express written permission from the copyright holder

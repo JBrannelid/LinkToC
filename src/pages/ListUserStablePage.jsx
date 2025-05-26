@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAppContext } from "../context/AppContext";
-import { useStableManagement } from "../hooks/useStableManagement";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import Button from "../components/ui/Button";
-import ModalHeader from "../components/layout/ModalHeader";
-import StableInfo from "../components/layout/StableInfo";
-import { ROUTES, buildRoute } from "../routes/index.jsx";
 import SearchIcon from "../assets/icons/SearchIcon";
 import MemberCard from "../components/layout/MemberCard";
+import ModalHeader from "../components/layout/ModalHeader";
+import StableInfo from "../components/layout/StableInfo";
+import Button from "../components/ui/Button";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useStableManagement } from "../hooks/useStableManagement";
+import { ROUTES, buildRoute } from "../routes/index.jsx";
 
 const ListUserStablePage = () => {
   const { stableId: urlStableId } = useParams();
@@ -18,8 +18,7 @@ const ListUserStablePage = () => {
 
   // StableId from context or URL params
   const stableId = urlStableId || currentStable?.id;
-  const { members, loading, error, loadingState } =
-    useStableManagement(stableId);
+  const { members, loading, loadingState } = useStableManagement(stableId);
 
   // Filter users based on search term
   const filteredMembers = members.filter((member) => {

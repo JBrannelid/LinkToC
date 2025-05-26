@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router";
-import { useHorseProfile } from "../hooks/useHorseProfile";
+import HorseProfileContent from "../components/ui/horseCard/HorseProfileContent";
 import HorseProfileHeader from "../components/ui/horseCard/HorseProfileHeader";
 import HorseProfileTabs from "../components/ui/horseCard/HorseProfileTabs";
-import HorseProfileContent from "../components/ui/horseCard/HorseProfileContent";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useHorseProfile } from "../hooks/useHorseProfile";
 
 const HorseProfilePage = () => {
   const { horseId } = useParams();

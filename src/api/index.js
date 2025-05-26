@@ -1,14 +1,14 @@
 // Export services
-import eventService from "./services/eventService";
-import stableService from "./services/stableService";
-import stablePostService from "./services/stablePostService";
-import horseService from "./services/horseService";
 import authService from "./services/authService";
-import userService from "./services/userService";
+import { ENDPOINTS } from "./services/endPoints";
+import eventService from "./services/eventService";
+import horseService from "./services/horseService";
 import stableHorseService from "./services/stableHorseService";
+import stablePostService from "./services/stablePostService";
+import stableService from "./services/stableService";
+import userService from "./services/userService";
 
 // Export endpoint configurations
-import { ENDPOINTS } from "./services/endPoints";
 
 // Export error handling utilities
 import { ErrorTypes, createError, handleAxiosError } from "./utils/errors";

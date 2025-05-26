@@ -1,18 +1,18 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/index.jsx";
-import { useAppContext } from "../../context/AppContext";
-import { isRouteActive } from "../../routes/routeUtils";
-import SettingIcon from "../../assets/icons/SettingIcon";
-import { useUserData } from "../../hooks/useUserData";
-import { useAuth } from "../../context/AuthContext";
-import NotificationDropdown from "../layout/NotificationDropdown";
+import NotificationDropdown from "./NotificationDropdown.jsx";
 import StableDropdown from "./StableDropdown";
+import SettingIcon from "../../assets/icons/SettingIcon";
+import { useAppContext } from "../../context/AppContext";
+import { useAuth } from "../../context/AuthContext";
+import { useUserData } from "../../hooks/useUserData";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
+import { isRouteActive } from "../../routes/routeUtils";
+import ProfileImage from "../common/ProfileImage.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import ProfileImage from "../../components/common/ProfileImage.jsx";
 
 const DesktopNavigation = () => {
-  const { currentUser, currentStable } = useAppContext();
+  const { currentUser: _currentUser, currentStable } = useAppContext();
   const location = useLocation();
   const currentPath = location.pathname;
   const { user } = useAuth();

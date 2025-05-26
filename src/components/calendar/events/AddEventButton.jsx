@@ -1,6 +1,6 @@
 import React from "react";
-import Button from "../../ui/Button";
 import PlusIcon from "../../../assets/icons/PlusIcon";
+import Button from "../../ui/Button";
 
 const AddEventButton = ({ onClick }) => {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
-import * as calendarUtils from "../../../utils/calendarUtils";
 import ChevronLeftIcon from "../../../assets/icons/ChevronLeftIcon";
 import ChevronRightIcon from "../../../assets/icons/ChevronRightIcon";
+import * as calendarUtils from "../../../utils/calendarUtils";
 
 const CalendarHeader = ({
   firstDayCurrentMonth,

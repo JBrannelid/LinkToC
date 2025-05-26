@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import { useAppContext } from "../../context/AppContext";
-import PinIcon from "../../assets/icons/PinIcon";
-import LoadingSpinner from "../ui/LoadingSpinner";
-import { format, parseISO } from "../../utils/calendarUtils";
-import Button from "../ui/Button";
-import PenIcon from "../../assets/icons/PenIcon";
-import { USER_ROLES } from "../../utils/userUtils";
-import CommentInput from "../stablePost/CommentInput";
-import CommentCount from "../stablePost/CommentCount";
-import CommentsModal from "../stablePost/CommentsModal";
+import CommentCount from "./CommentCount";
+import CommentInput from "./CommentInput";
+import CommentsModal from "./CommentsModal";
 import MessageIcon from "../../assets/icons/MessageIcon";
+import PenIcon from "../../assets/icons/PenIcon";
+import PinIcon from "../../assets/icons/PinIcon";
+import { useAppContext } from "../../context/AppContext";
+import { useAuth } from "../../context/AuthContext";
+import { format, parseISO } from "../../utils/calendarUtils";
+import { USER_ROLES } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
+import Button from "../ui/Button";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const PostItem = ({
   post,
@@ -49,7 +49,7 @@ const PostItem = ({
   const formatPostDate = (dateString) => {
     try {
       return format(parseISO(dateString), "yyyy-MM-dd");
-    } catch (error) {
+    } catch {
       return "Unknown date";
     }
   };
@@ -58,7 +58,7 @@ const PostItem = ({
   const formatPostTime = (dateString) => {
     try {
       return format(parseISO(dateString), "HH:mm");
-    } catch (error) {
+    } catch {
       return "";
     }
   };

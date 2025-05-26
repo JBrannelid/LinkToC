@@ -1,5 +1,8 @@
 import React, { useCallback, useState } from "react";
-import { FormMessage, FormProvider } from "../forms/index.js";
+import { FormMessage, FormProvider } from "./index.js";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import { useStableJoinRequest } from "../../hooks/useStableJoinRequest.js";
+import ModalHeader from "../layout/ModalHeader.jsx";
 import searchConfigs from "../search/config/searchConfig.js";
 import {
   SearchActions,
@@ -7,10 +10,7 @@ import {
   SearchProvider,
   SearchResults,
 } from "../search/index.js";
-import { useStableJoinRequest } from "../../hooks/useStableJoinRequest.js";
 import ConfirmationModal from "../ui/ConfirmationModal";
-import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import ModalHeader from "../../components/layout/ModalHeader.jsx";
 
 const JoinStableForm = ({
   formMethods,
@@ -20,7 +20,6 @@ const JoinStableForm = ({
   loadingState: externalLoadingState = null,
   error: externalError = null,
   message: externalMessage = null,
-  hideLabel = false,
   inputClassName = "",
   desktopView = false,
 }) => {
@@ -56,6 +55,7 @@ const JoinStableForm = ({
     if (!selectedStable) return;
 
     const result = await sendJoinRequest(selectedStable);
+    console.log("Join request result:", result);
 
     if (result.success) {
       setShowConfirmModal(false);

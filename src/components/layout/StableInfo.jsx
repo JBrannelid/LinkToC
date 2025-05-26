@@ -1,15 +1,14 @@
-import React from "react";
-import { useAppContext } from "../../context/AppContext";
-import { useEffect } from "react";
-import { useStableData } from "../../hooks/useStableData";
-import LoadingSpinner from "../ui/LoadingSpinner";
+import React, { useEffect } from "react";
 import ModalHeader from "./ModalHeader";
-import HorseRidingIcon from "../../assets/icons/HorseRidingIcon";
-import HorseFaceIcon from "../../assets/icons/HorseFaceIcon";
 import HorseBoxIcon from "../../assets/icons/HorseBoxIcon";
+import HorseFaceIcon from "../../assets/icons/HorseFaceIcon";
+import HorseRidingIcon from "../../assets/icons/HorseRidingIcon";
 import LocationPinIcon from "../../assets/icons/LocationPinIcon";
 import PeopleIcon from "../../assets/icons/PeopleIcon";
 import SearchIcon from "../../assets/icons/SearchIcon";
+import { useAppContext } from "../../context/AppContext";
+import { useStableData } from "../../hooks/useStableData";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 export default function StableInfo({
   stableId,

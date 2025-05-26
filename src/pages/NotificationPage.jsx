@@ -1,7 +1,7 @@
 import React from "react";
 import ModalHeader from "../components/layout/ModalHeader";
-import mockNotificationsData from "../testing/mockNotifications.json";
 import NotificationCard from "../components/layout/NotificationCard";
+import mockNotificationsData from "../testing/mockNotifications.json";
 
 const NotificationPage = ({ isDropdown = false }) => {
   const { notifications } = mockNotificationsData;

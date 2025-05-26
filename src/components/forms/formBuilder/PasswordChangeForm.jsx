@@ -1,28 +1,28 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useNavigate } from "react-router";
-import Button from "../../ui/Button";
-import FormInput from "../formBuilder/FormInput";
-import { useAuth } from "../../../context/AuthContext";
+import FormInput from "./FormInput";
 import authService from "../../../api/services/authService";
+import { useAuth } from "../../../context/AuthContext";
+import { ROUTES } from "../../../routes/routeConstants";
 import {
   getErrorMessage,
   createSuccessMessage,
 } from "../../../utils/errorUtils";
-import { ROUTES } from "../../../routes/routeConstants";
 import ModalHeader from "../../layout/ModalHeader";
+import Button from "../../ui/Button";
 
-const PasswordChangeForm = ({ onCancel, onSuccess }) => {
+const PasswordChangeForm = ({ onCancel }) => {
   const [step, setStep] = useState(1); // 1 = verify current, 2 = new password
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
   const navigate = useNavigate();
   const {
-    formState: { errors },
+    formState: { errors: _errors },
     watch,
     handleSubmit,
     reset,
-    register,
+    register: _register,
   } = useFormContext();
 
   const newPassword = watch("new_password");
@@ -41,7 +41,7 @@ const PasswordChangeForm = ({ onCancel, onSuccess }) => {
 
       // If login succeeds, proceed to step 2
       setStep(2);
-    } catch (error) {
+    } catch {
       setMessage({
         type: "error",
         text: "Incorrect password. Please try again.",
