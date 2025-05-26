@@ -14,16 +14,16 @@ services:
         - traefik.enable=true
         - traefik.docker.network=traefik-public
         - traefik.constraint-label=traefik-public
-        - traefik.http.routers.${STACK_NAME}-http.rule=Host(`${STACK_NAME}.cc25.chasacademy.dev`)
-        - traefik.http.routers.${STACK_NAME}-http.entrypoints=http
-        - traefik.http.routers.${STACK_NAME}-http.middlewares=https-redirect
-        - traefik.http.routers.${STACK_NAME}-https.rule=Host(`${STACK_NAME}.cc25.chasacademy.dev`)
-        - traefik.http.routers.${STACK_NAME}-https.entrypoints=https
-        - traefik.http.routers.${STACK_NAME}-https.tls=true
-        - traefik.http.routers.${STACK_NAME}-https.tls.certresolver=le
-        - traefik.http.routers.${STACK_NAME}-https.tls.domains[0].main=cc25.chasacademy.dev
-        - traefik.http.routers.${STACK_NAME}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
-        - traefik.http.services.${STACK_NAME}.loadbalancer.server.port=5173
+        - traefik.http.routers.${STACK_NAMEDF}-http.rule=Host(`${STACK_NAMEDF}.cc25.chasacademy.dev`)
+        - traefik.http.routers.${STACK_NAMEDF}-http.entrypoints=http
+        - traefik.http.routers.${STACK_NAMEDF}-http.middlewares=https-redirect
+        - traefik.http.routers.${STACK_NAMEDF}-https.rule=Host(`${STACK_NAMEDF}.cc25.chasacademy.dev`)
+        - traefik.http.routers.${STACK_NAMEDF}-https.entrypoints=https
+        - traefik.http.routers.${STACK_NAMEDF}-https.tls=true
+        - traefik.http.routers.${STACK_NAMEDF}-https.tls.certresolver=le
+        - traefik.http.routers.${STACK_NAMEDF}-https.tls.domains[0].main=cc25.chasacademy.dev
+        - traefik.http.routers.${STACK_NAMEDF}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
+        - traefik.http.services.${STACK_NAMEDF}.loadbalancer.server.port=5173
     environment:
       - VITE_API_BASE_URL=https://api.g10-main.cc25.chasacademy.dev
       - VITE_AZURE_STORAGE_URL=https://azuritegrup10blob.cc25.chasacademy.dev/devstoreaccount1/equilog-media

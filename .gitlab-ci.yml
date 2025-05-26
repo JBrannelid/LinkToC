@@ -54,7 +54,8 @@ run-tests:
     - export ENDPOINT_NAME="primary"
     - export CI_PROJECT_NAME=$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
-    - export STACK_NAME="g10-$CI_DEFAULT_BRANCH"
+    - export STACK_NAME="g10-frontend-$CI_DEFAULT_BRANCH"
+    - export STACK_NAMEDF="g10-$CI_DEFAULT_BRANCH"
     - set -e
 
 .environment_setup: &env_setup
