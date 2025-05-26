@@ -11,7 +11,8 @@ stages:
   image: docker:latest
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
-    - export DOCKER_TAG=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
+    # - export DOCKER_TAG=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
+    - export DOCKER_TAG=latest
 
 build-react-image:
   <<: *build_image_template
