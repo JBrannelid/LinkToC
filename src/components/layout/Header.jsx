@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
-import { ROUTES } from "../../routes/index.jsx";
-import SettingIcon from "../../assets/icons/SettingIcon";
 import ChevronLeftIcon from "../../assets/icons/ChevronLeftIcon";
-import NotificationIcon from "../../assets/icons/NotificationIcon";
 import CloseIcon from "../../assets/icons/CloseIcon";
-import Button from "../ui/Button";
+import NotificationIcon from "../../assets/icons/NotificationIcon";
+import SettingIcon from "../../assets/icons/SettingIcon";
+import { ROUTES } from "../../routes/index.jsx";
 import mockNotificationsData from "../../testing/mockNotifications.json";
+import Button from "../ui/Button";
 
 export default function Header() {
   const location = useLocation();
