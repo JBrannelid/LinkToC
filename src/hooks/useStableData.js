@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
-import stableService from "../api/services/stableService";
 import { useLoadingState } from "./useLoadingState";
-import { useAppContext } from "../context/AppContext";
-import { ENDPOINTS} from "../api/index.js";
 import axiosInstance from "../api/config/axiosConfig.js";
-import {getErrorMessage} from "../utils/errorUtils.js";
+import { ENDPOINTS} from "../api/index.js";
+import stableService from "../api/services/stableService";
+import { useAppContext } from "../context/AppContext";
 import { useAuth } from "../context/AuthContext";
+import {getErrorMessage} from "../utils/errorUtils.js";
 
 export function useStableData(stableId) {
   const [stables, setStables] = useState([]);
