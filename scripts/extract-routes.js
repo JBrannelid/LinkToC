@@ -43,7 +43,7 @@ export function extractRoutes() {
     });
 
     return ROUTES;
-  } catch (error) {
+  } catch {
     return null;
   }
 }
