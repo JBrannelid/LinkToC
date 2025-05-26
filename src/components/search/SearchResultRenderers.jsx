@@ -1,7 +1,7 @@
 import React, {createElement} from 'react';
 import Button from "../ui/Button.jsx";
 import {ConnectedDisplayDistance} from "../ui/DisplayDistance.jsx"
-
+import StableIcon from "../../assets/icons/StableIcon.jsx";
 
 export const ListItemRenderer = (
     {
@@ -25,7 +25,7 @@ export const ListItemRenderer = (
             onFocus(item);
         }
     };
-    const handleJoinClick = (e) => {
+    const openModal = (e) => {
         e.stopPropagation();
         if (onJoinStable) {
             onJoinStable({
@@ -35,66 +35,37 @@ export const ListItemRenderer = (
             });
         }
     };
-    const placeholderImage = '/src/assets/images/stablePlaceholder.jpg'
-    const handleKeyDown = (event) => {
-        switch (event.key) {
-            case 'ArrowDown':
-                // Focus next item
-                event.preventDefault();
-                const nextItem = document.querySelector(`[data-index="${index + 1}"]`);
-                if (nextItem) {
-                    nextItem.focus();
-                }
-                break;
-
-            case 'ArrowUp':
-                // Focus previous item or search input
-                event.preventDefault();
-                if (index > 0) {
-                    const prevItem = document.querySelector(`[data-index="${index - 1}"]`);
-                    if (prevItem) {
-                        prevItem.focus();
-                    }
-                } else {
-                    // If at first item, go back to search input
-                    const searchInput = document.querySelector('[role="searchbox"]');
-                    if (searchInput) {
-                        searchInput.focus();
-                    }
-                }
-                break;
-
-            case 'Enter':
-                // Select this item and trigger its action
-                event.preventDefault();
-                handleJoinClick(event);
-
-                // After selecting, find and click the primary action button
-                setTimeout(() => {
-                    const actionButton = document.querySelector('button[type="primary"]');
-                    if (actionButton) {
-                        actionButton.click();
-                    }
-                }, 10);
-                break;
-        }
+    const handleButtonClick = (e) => {
+        e.stopPropagation(); 
+        openModal(e);
     };
     return (
         <li
-            className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer mb-2 bg-white ${
-                isSelected ? 'border-primary bg-primary-light' : 'border-light hover:bg-light'
-            }focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent`}
-            role="option"
-            aria-selected={isSelected}
+            className={`group flex items-center justify-between p-3 border border-primary rounded-lg cursor-pointer mb-2 bg-white ${
+                isSelected ? 'bg-primary-light' :  'bg-white hover:bg-primary-light'
+            } focus:outline-none focus:ring-2 focus:ring-primary`}
+            onClick={openModal}
             tabIndex={0}
             onFocus={handleFocus}
-            onKeyDown={handleKeyDown}
+            onMouseEnter={(e) => {
+                const button = e.currentTarget.querySelector('button');
+                if (button) {
+                    button.style.opacity = 1;
+                }
+            }}
+            onMouseLeave={(e) => {
+                const button = e.currentTarget.querySelector('button');
+                if (button) {
+                    button.style.opacity = isSelected ? 1 : 0;
+                }
+            }}
             data-index={index}
+            aria-label={`${primaryText}, ${countyText || 'no county'}, ${stableType || 'stable'}, click to join`}
             {...props}
         >
             <div className="flex items-center flex-grow">
-                {/* Placeholder circle (could be an icon or image) */}
-                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 border border-light">
+                
+                <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center overflow-hidden flex-shrink-0 border border-white">
                     {imageUrl ? (
                         <img
                             src={imageUrl}
@@ -103,11 +74,7 @@ export const ListItemRenderer = (
                             loading="lazy"
                         />
                     ) : (
-                        <img
-                            src={placeholderImage}
-                            alt="Stable placeholder"
-                            className="w-full h-full object-cover opacity-60"
-                        />
+                        <StableIcon className="w-7 h-7 text-primary bg-primary-light" />
                     )}
                 </div>
                 <div className="ml-3 flex-grow min-w-0">
@@ -128,18 +95,23 @@ export const ListItemRenderer = (
                     )}
                 </div>
             </div>
-
-            <Button
-                type={isSelected ? 'primary' : 'secondary'}
-                size="small"
-                className={`ml-2 whitespace-nowrap transition-colors duration-200 
-                    ${!isSelected && 'group-hover:bg-primary group-hover:text-white group-hover:border-primary'}`}
-                onClick={handleJoinClick}
-                aria-pressed={isSelected}
-                data-action-button={isSelected ? 'primary' : ' '}
-            >
-                {isSelected ? (actionLabel || 'Join') : ' '}
-            </Button>
+            
+                <Button
+                    type="primary"
+                    size="small"
+                    className="ml-2 whitespace-nowrap transition-all duration-300"
+                    style={{
+                        opacity: isSelected ? 1 : 0,
+                        transform: isSelected ? 'scale(1)' : 'scale(0.9)'
+                    }}
+                    onClick={handleButtonClick}
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    data-action-button="visual-indicator"
+                >
+                    {actionLabel || 'Join'}
+                </Button>
+            
         </li>
     );
 };
