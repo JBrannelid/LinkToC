@@ -1,13 +1,11 @@
 import React, { Suspense } from "react";
 import { Navigate } from "react-router";
 import { ROUTES } from "./routeConstants";
-import { USER_ROLES } from "../utils/userUtils";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-
-// Regular imports
-import LoginPage from "../pages/LoginPage";
-import HomePage from "../pages/HomePage";
+import PageLoader from "../components/ui/PageLoader";
 import ErrorPage from "../pages/ErrorPage";
+import HomePage from "../pages/HomePage";
+import LoginPage from "../pages/LoginPage";
+import { USER_ROLES } from "../utils/userUtils";
 
 // Pages import with lazy loading
 const RegistrationPage = React.lazy(() => import("../pages/RegistrationPage"));
@@ -46,13 +44,6 @@ const HorseManagementPage = React.lazy(() =>
 );
 const SettingsRouter = React.lazy(() =>
   import("../components/settings/SettingsRouter")
-);
-
-// Loading fallback component
-const PageLoader = () => (
-  <div className="flex justify-center items-center h-screen">
-    <LoadingSpinner size="large" className="text-primary" />
-  </div>
 );
 
 // Wrap component with React-Suspense
