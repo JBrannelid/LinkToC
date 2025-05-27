@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import SearchIcon from "../assets/icons/SearchIcon";
 import MemberCard from "../components/layout/MemberCard";
@@ -16,36 +16,59 @@ const ListUserStablePage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // StableId from context or URL params
-  const stableId = urlStableId || currentStable?.id;
+  // Mmoized StableId
+  const stableId = useMemo(
+    () => urlStableId || currentStable?.id,
+    [urlStableId, currentStable?.id]
+  );
+
   const { members, loading, loadingState } = useStableManagement(stableId);
 
-  // Filter users based on search term
-  const filteredMembers = members.filter((member) => {
-    const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
-    return searchTerm === "" || fullName.includes(searchTerm.toLowerCase());
-  });
+  // Memoize filtered members
+  const filteredMembers = useMemo(() => {
+    if (!members.length) return [];
 
-  const handleSearchChange = (value) => {
+    if (!searchTerm.trim()) return members;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return members.filter((member) => {
+      const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+      return fullName.includes(lowerSearchTerm);
+    });
+  }, [members, searchTerm]);
+
+  // Memoize callbacks to prevent unnecessary re-renders of child components
+  const handleSearchChange = useCallback((value) => {
     setSearchTerm(value);
-  };
+  }, []);
 
-  const handleProfileClick = (userId) => {
-    const route = buildRoute(ROUTES.USER_PROFILE, { userId });
-    navigate(route);
-  };
+  const handleProfileClick = useCallback(
+    (userId) => {
+      if (userId) {
+        const route = buildRoute(ROUTES.USER_PROFILE, { userId });
+        navigate(route);
+      }
+    },
+    [navigate]
+  );
 
-  const handleMyProfileClick = () => {
+  const handleMyProfileClick = useCallback(() => {
     navigate(buildRoute(ROUTES.USER_PROFILE, { userId: currentUser?.id }));
-  };
+  }, [navigate, currentUser?.id]);
 
-  if (loading) {
-    return (
+  // Memoize loading component
+  const LoadingComponent = useMemo(
+    () => (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner size="medium" className="text-gray" />
         <p className="ml-2">{loadingState?.getMessage()}</p>
       </div>
-    );
+    ),
+    [loadingState]
+  );
+
+  if (loading) {
+    return LoadingComponent;
   }
 
   return (
