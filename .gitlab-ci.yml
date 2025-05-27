@@ -83,4 +83,4 @@ teardown:
   script:
     - python portainer.py $CI_JOB_STAGE
   rules:
-      when: manual
+    - when: manual
