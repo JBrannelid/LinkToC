@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 import Button from "./Button";
 
@@ -17,8 +18,18 @@ const ConfirmationModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-30">
-      <div className="bg-white rounded-lg w-9/10 p-7 shadow-lg border border-light max-w-md">
+    <motion.div
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-30"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
+        className="bg-white rounded-lg w-9/10 p-7 shadow-lg border border-light max-w-md"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
+      >
         {icon && <div className="flex justify-center mb-4">{icon}</div>}
 
         <h3 className="text-2xl text-center mb-4">{title}</h3>
@@ -44,8 +55,8 @@ const ConfirmationModal = ({
         >
           {cancelButtonText}
         </Button>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
