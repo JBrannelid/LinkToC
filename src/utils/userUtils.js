@@ -64,7 +64,7 @@ export const constructProfileImageUrl = (profilePicture) => {
   // Check if it's already a full URL
   if (profilePicture.startsWith("http")) return profilePicture;
 
-  const baseUrl = "http://127.0.0.1:10000/devstoreaccount1/equilog-media";
+  const baseUrl = import.meta.env.VITE_AZURE_STORAGE_URL;
 
   // Always construct the full path using user ID from localStorage
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
