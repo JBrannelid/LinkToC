@@ -1,80 +1,72 @@
 import {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
+import { AuthContext } from "./authContext.js";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
-import SessionTimeoutWarning from "../auth/SessionTimeoutWarning.jsx";
 import tokenStorage from "../utils/tokenStorage.js";
 
-const AuthContext = createContext(undefined);
+const parseJwt = (token) => {
+  try {
+    const parts = token.split(".");
+    if (parts.length < 2) {
+      return null;
+    }
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const paddedBase64 = base64.padEnd(
+        base64.length + (4 - (base64.length % 4)),
+        "="
+    );
+    return JSON.parse(window.atob(paddedBase64));
+  } catch (error) {
+    console.error("Error decoding JWT:", error);
+    return null;
+  }
+};
+const refreshInterval = () => {
+  try {
+    const token = tokenStorage.getAccessToken();
 
-export const useAuth = () => useContext(AuthContext);
+    if (!token) {
+      console.warn("No access token found");
+      return null;
+    }
 
+    const payload = parseJwt(token);
+
+    if (!payload || !payload.iat || !payload.exp) {
+      console.warn("Could not parse token timestamps");
+      return null;
+    }
+
+    const issuedAt = payload.iat * 1000;
+    const expiresAt = payload.exp * 1000;
+    const currentTime = Date.now();
+
+    const totalLifetime = expiresAt - issuedAt;
+    const timeUntilExpiry = expiresAt - currentTime;
+
+    if (timeUntilExpiry <= 0) {
+      console.warn("Token already expired");
+      return null;
+    }
+
+    return Math.floor(totalLifetime * 0.95);
+  } catch (error) {
+    console.error("Error calculating refresh interval:", error);
+    return null;
+  }
+};
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
-
-  const parseJwt = (token) => {
-    try {
-      const parts = token.split(".");
-      if (parts.length < 2) {
-        return null;
-      }
-      const base64Url = parts[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const paddedBase64 = base64.padEnd(
-        base64.length + (4 - (base64.length % 4)),
-        "="
-      );
-      return JSON.parse(window.atob(paddedBase64));
-    } catch (error) {
-      console.error("Error decoding JWT:", error);
-      return null;
-    }
-  };
-
-  const refreshInterval = () => {
-    try {
-      const token = tokenStorage.getAccessToken();
-
-      if (!token) {
-        console.warn("No access token found");
-        return null;
-      }
-
-      const payload = parseJwt(token);
-
-      if (!payload || !payload.iat || !payload.exp) {
-        console.warn("Could not parse token timestamps");
-        return null;
-      }
-
-      const issuedAt = payload.iat * 1000;
-      const expiresAt = payload.exp * 1000;
-      const currentTime = Date.now();
-
-      const totalLifetime = expiresAt - issuedAt;
-      const timeUntilExpiry = expiresAt - currentTime;
-
-      if (timeUntilExpiry <= 0) {
-        console.warn("Token already expired");
-        return null;
-      }
-
-      return Math.floor(totalLifetime * 0.95);
-    } catch (error) {
-      console.error("Error calculating refresh interval:", error);
-      return null;
-    }
-  };
-
+  
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
@@ -265,9 +257,9 @@ export const AuthProvider = ({ children }) => {
     return () => {
       if (intervalId) clearInterval(intervalId);
     };
-  }, [user, checkAndRefreshToken, refreshInterval]);
+  }, [user, checkAndRefreshToken]);
 
-  const login = async (email, password) => {
+  const login = useCallback(async (email, password) => {
     try {
       setIsLoading(true);
 
@@ -304,7 +296,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  },[verifyToken]);
 
   const authFetch = useCallback(
     async (url, options = {}) => {
@@ -361,6 +353,7 @@ export const AuthProvider = ({ children }) => {
     [
       user,
       isLoading,
+      login,
       logout,
       authFetch,
       verifyToken,
@@ -372,9 +365,6 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={authContextValue}>
       {children}
-      {showSessionWarning && (
-        <SessionTimeoutWarning onExtend={extendSession} onLogout={logout} />
-      )}
     </AuthContext.Provider>
   );
 };

@@ -1,8 +1,8 @@
 import React, {useRef, useEffect, useCallback, useMemo, useState} from 'react';
 import { useSearch } from '../../../context/searchContext.js';
-import SearchRenderers from '../SearchResultRenderers';
-import LoadingSpinner from '../../ui/LoadingSpinner';
 import { FormMessage } from '../../forms/index';
+import LoadingSpinner from '../../ui/LoadingSpinner';
+import SearchRenderers from '../SearchResultRenderers';
 const { ListItemRenderer } = SearchRenderers;
 const MemoizedListItem = React.memo(ListItemRenderer, (prev, next) => {
     return prev.isSelected === next.isSelected &&
@@ -13,7 +13,6 @@ const SearchResults = (
     {
         className = '',
         maxHeight = '20rem',
-        showWhenEmpty = false,
         onItemSelect,
         onItemFocus = null
     }) => {
@@ -37,7 +36,7 @@ const SearchResults = (
 
     useEffect(() => {
         if (loading) {
-
+        setShowResults(false);
         } else if (results.length > 0) {
             
             const timer = setTimeout(() => {
@@ -58,10 +57,7 @@ const SearchResults = (
 
     
     const handleItemClick = useCallback((item) => {
-      
         handleSelectItem(item);
-
-     
         if (onItemSelect) {
             onItemSelect(item);
         }
@@ -69,15 +65,12 @@ const SearchResults = (
 
     
     const handleItemFocus = useCallback((item) => {
-     
         if (onItemFocus) {
             onItemFocus(item);
         }
-        
         if (contextHandleItemFocus) {
             contextHandleItemFocus(item);
         } else {
-          
             handleSelectItem(item);
         }
     }, [handleSelectItem, contextHandleItemFocus, onItemFocus]);
@@ -141,7 +134,7 @@ const SearchResults = (
                 ))}
             </ul>
         );
-    }, [results, config, isItemSelected, handleItemClick, handleItemFocus, onItemSelect, ItemRenderer]);
+    }, [results, config, isItemSelected, handleItemClick, handleItemFocus, onItemSelect]);
    
     const containerStyle = useMemo(() => ({
         maxHeight,

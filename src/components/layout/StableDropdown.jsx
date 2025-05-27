@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router";
 import StableName from "./StableName";
 import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { useUserStables } from "../../hooks/useUserStables";
 import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import Button from "../ui/Button";

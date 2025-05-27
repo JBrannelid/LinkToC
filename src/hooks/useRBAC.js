@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "./useAppContext.js";
 import { USER_ROLES } from "../utils/userUtils";
 
 export function useRBAC() {

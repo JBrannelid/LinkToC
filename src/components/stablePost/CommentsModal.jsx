@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CloseIcon from "../../assets/icons/CloseIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { parseISO, format } from "../../utils/calendarUtils";
 import { USER_ROLES } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";

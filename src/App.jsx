@@ -4,7 +4,7 @@ import DesktopFooter from "./components/layout/DesktopFooter";
 import DesktopNavigation from "./components/layout/DesktopNavigation";
 import HeaderContainer from "./components/layout/HeaderContainer";
 import NavigationFooter from "./components/layout/NavigationFooter";
-import { useAuth } from "./context/AuthContext";
+import { useAuth } from "./hooks/useAuth.js";
 
 function App() {
   const { isAuthenticated } = useAuth();

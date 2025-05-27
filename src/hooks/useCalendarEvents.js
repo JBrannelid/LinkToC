@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAppContext } from "./useAppContext.js";
 import { useLoadingState } from "./useLoadingState";
 import eventService from "../api/services/eventService";
-import { useAppContext } from "../context/AppContext.jsx";
 import { parseISO, isSameDay } from "../utils/calendarUtils";
 
 export function useCalendarEvents(stableId) {

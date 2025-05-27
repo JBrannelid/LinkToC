@@ -6,7 +6,7 @@ import ModalHeader from "../components/layout/ModalHeader";
 import StableInfo from "../components/layout/StableInfo";
 import Button from "../components/ui/Button";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useStableManagement } from "../hooks/useStableManagement";
 import { ROUTES, buildRoute } from "../routes/index.jsx";
 

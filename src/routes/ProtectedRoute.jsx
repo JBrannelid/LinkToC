@@ -1,8 +1,8 @@
 import { Navigate, useLocation } from "react-router";
 import { ROUTES } from "./routeConstants";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAppContext } from "../context/AppContext";
-import { useAuth } from "../context/AuthContext";
+import { useAppContext } from "../hooks/useAppContext.js";
+import { useAuth } from "../hooks/useAuth.js";
 import { useRBAC } from "../hooks/useRBAC";
 
 const ProtectedRoute = ({

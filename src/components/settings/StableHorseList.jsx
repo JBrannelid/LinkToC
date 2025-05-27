@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import PermissionGate from "./PermissionGate";
 import PlusIcon from "../../assets/icons/PlusIcon";
-import { useAppContext } from "../../context/AppContext.jsx";
 import {
   HORSE_CATEGORIES,
   CATEGORY_LABELS,
 } from "../../context/constants/horseConstants.js";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { useHorseManagement } from "../../hooks/useHorseManagement";
 import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";

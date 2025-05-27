@@ -3,8 +3,8 @@ import React from "react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
-import { AppProvider } from "./context/AppContext";
-import { AuthProvider } from "./context/AuthContext";
+import { AppProvider } from "./context/AppContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import { FileUploadProvider } from "./context/FileUploadContext";
 import { router } from "./routes/index.jsx";
 

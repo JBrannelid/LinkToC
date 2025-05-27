@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import ProfilePage from "./HorseProfilePage.jsx";
-import { useAppContext } from "../context/AppContext.jsx";
+import { useAppContext } from "../hooks/useAppContext.js";
 
 const ProfileTester = () => {
   // We need to change hardcoded image placeholder

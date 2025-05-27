@@ -6,7 +6,7 @@ import EventForm from "../components/forms/EventForm";
 import StableName from "../components/layout/StableName";
 import WallPost from "../components/posts/WallPost";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useCalendarEvents } from "../hooks/useCalendarEvents";
 import { useStableData } from "../hooks/useStableData";
 import { startOfToday } from "../utils/calendarUtils";

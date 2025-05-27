@@ -1,18 +1,11 @@
 import React, {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from "react";
-import { useAuth } from "./AuthContext";
+import { AppContext} from "./appContext.js";
+import { useAuth } from "../hooks/useAuth.js";
 import { USER_ROLES } from "../utils/userUtils";
-
-const AppContext = createContext();
-
-export const useAppContext = () => {
-  return useContext(AppContext);
-};
 
 export const AppProvider = ({ children }) => {
   const { user } = useAuth();
@@ -88,14 +81,14 @@ export const AppProvider = ({ children }) => {
   }, [user?.stableRoles]);
 
   const getCurrentStableRole = useCallback(() => {
-    if (!currentStable || !user.stableRoles) {
+    if (!currentStable || !user?.stableRoles) {
       return USER_ROLES.USER;
     }
     const role = user.stableRoles[currentStable.id];
 
     // explicit check for undefined (user with a stable role 0, such as a stable manager)
     return role !== undefined ? role : USER_ROLES.USER;
-  }, [user?.stableRoles, currentStable?.id]);
+  }, [user?.stableRoles, currentStable]);
 
   const contextValue = {
     currentUser: user,

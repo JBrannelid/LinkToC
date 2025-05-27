@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import WallPostCard from "./WallPostCard";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { useStablePosts } from "../../hooks/useStablePosts";
 import { parseISO, dateFnsCompareDesc } from "../../utils/calendarUtils";
 import LoadingSpinner from "../ui/LoadingSpinner";

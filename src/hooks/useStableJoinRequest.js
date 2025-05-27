@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState.js";
 import stableService from "../api/services/stableService.js";
-import { useAuth } from "../context/AuthContext.jsx";
 import {
   createErrorMessage,
   createSuccessMessage,
@@ -28,7 +28,7 @@ export function useStableJoinRequest() {
   const throttleTimeRemaining = useMemo(() => {
     if (!isThrottled()) return 0;
     return Math.ceil((THROTTLE_TIME - (Date.now() - lastRequest)) / 1000);
-  }, [isThrottled(), lastRequest]);
+  }, [isThrottled, lastRequest]);
   const sendJoinRequest = async (data) => {
     if (!user || !user.id) {
       setError(

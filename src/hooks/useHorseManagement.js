@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
+import { useAppContext } from "./useAppContext.js";
 import { useLoadingState } from "./useLoadingState";
 import { horseService } from "../api/index.js";
-import { useAppContext } from "../context/AppContext.jsx";
 import { createHorseProfile } from "../utils/horseProfileUtils.js";
 
 const emptyStablesCache = new Set();

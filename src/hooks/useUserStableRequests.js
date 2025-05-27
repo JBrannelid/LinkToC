@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
-import { useAuth } from "../context/AuthContext";
 
 export const useUserStableRequests = () => {
   const [sentRequests, setSentRequests] = useState([]);

@@ -4,7 +4,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import UserProfileContent from "../components/ui/userCard/UserProfileContent";
 import UserProfileHeader from "../components/ui/userCard/UserProfileHeader";
 import UserProfileTabs from "../components/ui/userCard/UserProfileTabs";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useUserData } from "../hooks/useUserData";
 
 const UserProfilePage = () => {

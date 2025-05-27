@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAppContext } from "./useAppContext.js";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
 import userService from "../api/services/userService";
-import { useAppContext } from "../context/AppContext";
-import { useAuth } from "../context/AuthContext";
 
 export function useUserStables() {
   const [userStables, setUserStables] = useState([]);

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import WelcomeScreen from "./WelcomeScreen.jsx";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth } from "../../../hooks/useAuth.js";
 import { useStableOnboarding } from "../../../hooks/useStableOnboarding";
 import { ROUTES } from "../../../routes/index.jsx";
 import CreateStableForm from "../../forms/CreateStableForm.jsx";

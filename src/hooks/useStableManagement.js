@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
+import { useAppContext } from "./useAppContext.js";
 import { useLoadingState } from "./useLoadingState";
 import stableService from "../api/services/stableService";
 import userService from "../api/services/userService";
-import { useAppContext } from "../context/AppContext";
 
 export const useStableManagement = (stableId) => {
   const [members, setMembers] = useState([]);

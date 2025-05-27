@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAppContext } from "./useAppContext.js";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState";
 import axiosInstance from "../api/config/axiosConfig.js";
 import { ENDPOINTS} from "../api/index.js";
 import stableService from "../api/services/stableService";
-import { useAppContext } from "../context/AppContext";
-import { useAuth } from "../context/AuthContext";
 import {getErrorMessage} from "../utils/errorUtils.js";
 
 export function useStableData(stableId) {

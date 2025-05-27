@@ -6,7 +6,7 @@ import StableRequestsList from "../components/settings/StableRequestsList";
 
 import UserStableRequestsList from "../components/settings/UserStableRequestsList";
 import Button from "../components/ui/Button";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { USER_ROLES } from "../utils/userUtils";
 
 const StableManagementPage = () => {

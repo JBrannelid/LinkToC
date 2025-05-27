@@ -1,7 +1,7 @@
 import { enUS } from "date-fns/locale";
 import React from "react";
 import Calendar from "./calendar";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { useCalendarEvents } from "../../hooks/useCalendarEvents";
 import { useStableData } from "../../hooks/useStableData";
 import LoadingSpinner from "../ui/LoadingSpinner";

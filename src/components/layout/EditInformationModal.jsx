@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FormProvider, FormInput } from "../forms";
 import ModalHeader from "./ModalHeader";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { createSuccessMessage } from "../../utils/errorUtils";
 import FormMessage from "../forms/formBuilder/FormMessage";
 import Button from "../ui/Button";

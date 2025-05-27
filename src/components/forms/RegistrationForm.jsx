@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import FormInput from "./formBuilder/FormInput";
 import FormProvider from "./formBuilder/FormProvider";
 import authService from "../../api/services/authService";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { useLoadingState } from "../../hooks/useLoadingState";
 import { ROUTES } from "../../routes/index.jsx";
 import {

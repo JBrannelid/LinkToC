@@ -4,8 +4,8 @@ import FeedIcon from "../../assets/icons/FeedIcon";
 import HomeIcon from "../../assets/icons/HomeIcon";
 import HorseFaceIcon from "../../assets/icons/HorseFaceIcon";
 import UserIcon from "../../assets/icons/UserIcon";
-import { useAppContext } from "../../context/AppContext";
-import { useAuth } from "../../context/AuthContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
+import { useAuth } from "../../hooks/useAuth.js";
 import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { isRouteActive } from "../../routes/routeUtils";
 

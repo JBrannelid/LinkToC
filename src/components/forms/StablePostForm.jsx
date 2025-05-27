@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { FormProvider, FormInput } from "./index";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import ModalHeader from "../layout/ModalHeader";
 import Button from "../ui/Button";
 

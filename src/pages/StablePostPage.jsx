@@ -6,7 +6,7 @@ import ModalHeader from "../components/layout/ModalHeader";
 import PostContainer from "../components/stablePost/PostContainer";
 import Button from "../components/ui/Button";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useStablePosts } from "../hooks/useStablePosts";
 import { USER_ROLES } from "../utils/userUtils";
 

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import FormInput from "./formBuilder/FormInput";
 import FormProvider from "./formBuilder/FormProvider";
 import TimePicker from "./formBuilder/TimePicker";
-import { useAppContext } from "../../context/AppContext";
+import { useAppContext } from "../../hooks/useAppContext.js";
 import { format } from "../../utils/calendarUtils";
 import ModalHeader from "../layout/ModalHeader";
 import Button from "../ui/Button";
