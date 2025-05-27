@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useMemo,
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { getUploadSasUrl } from "../api/services/fileService";
@@ -116,13 +117,16 @@ export const FileUploadProvider = ({ children }) => {
     });
   }, []);
 
-  const value = {
-    uploads,
-    uploadErrors,
-    uploadFile,
-    clearUpload,
-    clearError,
-  };
+  const value = useMemo(
+    () => ({
+      uploads,
+      uploadErrors,
+      uploadFile,
+      clearUpload,
+      clearError,
+    }),
+    [uploads, uploadErrors, uploadFile, clearUpload, clearError]
+  );
 
   // Make the context globally available to solve the hook usage issue
   useEffect(() => {
