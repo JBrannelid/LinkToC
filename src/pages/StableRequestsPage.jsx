@@ -2,7 +2,7 @@ import React from "react";
 import ModalHeader from "../components/layout/ModalHeader";
 import StableRequestsList from "../components/settings/StableRequestsList";
 import UserStableRequestsList from "../components/settings/UserStableRequestsList";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useRBAC } from "../hooks/useRBAC";
 import { USER_ROLES } from "../utils/userUtils";
 

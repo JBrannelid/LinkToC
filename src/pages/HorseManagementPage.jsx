@@ -3,7 +3,7 @@ import ModalHeader from "../components/layout/ModalHeader";
 import PermissionGate from "../components/settings/PermissionGate";
 import StableHorseList from "../components/settings/StableHorseList.jsx";
 import Button from "../components/ui/Button";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { USER_ROLES } from "../utils/userUtils";
 
 

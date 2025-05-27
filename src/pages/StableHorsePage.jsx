@@ -6,7 +6,7 @@ import StableHorseCard from "../components/layout/StableHorseCard";
 import StableInfo from "../components/layout/StableInfo";
 import Button from "../components/ui/Button";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAppContext } from "../context/AppContext";
+import { useAppContext } from "../hooks/useAppContext.js";
 import { useStableHorses } from "../hooks/useStableHorses";
 import { ROUTES, buildRoute } from "../routes/index.jsx";
 

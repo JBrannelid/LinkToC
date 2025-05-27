@@ -1,5 +1,5 @@
 import { useRouteError, Link } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../hooks/useAuth.js";
 import { ROUTES } from "../routes/index.jsx";
 
 export default function ErrorPage() {
