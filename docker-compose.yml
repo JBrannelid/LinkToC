@@ -25,7 +25,8 @@ services:
         - traefik.http.routers.${STACK_NAMEDF}-https.tls.domains[0].sans=*.cc25.chasacademy.dev
         - traefik.http.services.${STACK_NAMEDF}.loadbalancer.server.port=5173
     environment:
-      - VITE_API_BASE_URL=https://api.g10-main.cc25.chasacademy.dev
+      # - VITE_API_BASE_URL=https://api.g10-main.cc25.chasacademy.dev
+      - VITE_API_BASE_URL=https://api-g10-main.cc25.chasacademy.dev
       - VITE_AZURE_STORAGE_URL=https://azuritegrup10blob.cc25.chasacademy.dev/devstoreaccount1/equilog-media
 
 networks:
