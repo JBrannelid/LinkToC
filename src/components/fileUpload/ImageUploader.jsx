@@ -49,14 +49,10 @@ const ImageUploader = ({
           if (userResponse?.value?.profilePicture) {
             oldProfilePicture = userResponse.value.profilePicture;
           }
-        } catch (e) {
+        } catch (error) {
           console.warn("Couldn't retrieve old profile picture:", e);
         }
       }
-
-      // Show preview immediately while uploading
-      const localPreview = URL.createObjectURL(file);
-      setImageUrl(localPreview);
 
       // Get the FileUpload context via import to avoid hook rules issues
       const { uploadFile } = window.__fileUploadContext || {};
@@ -115,20 +111,17 @@ const ImageUploader = ({
 
         // Try to get a proper URL for viewing the image
         try {
-          // Get a SAS URL for more reliable access - PASS THE USERID EXPLICITLY HERE
-          const sasUrl = await getReadSasUrl(filename, userId);
+          const blobPath = `profile-pictures/${userId}/${filename}`;
+          const sasUrl = await getReadSasUrl(blobPath);
           if (sasUrl) {
-            // Use the SAS URL for image preview
-            setImageUrl(sasUrl);
+            setImageUrl(`${sasUrl}&t=${Date.now()}`);
+          } else {
+            // If SAS URL fails, use placeholder
+            setImageUrl(placeholder);
           }
         } catch (sasError) {
           console.warn("Could not get SAS URL for image preview:", sasError);
-          // Fallback to direct URL construction
-          const baseUrl = import.meta.env.VITE_AZURE_STORAGE_URL;
-
-          setImageUrl(
-            `${baseUrl}/profile-pictures/${userId}/${filename}?t=${Date.now()}`
-          );
+          setImageUrl(placeholder);
         }
       }
 
