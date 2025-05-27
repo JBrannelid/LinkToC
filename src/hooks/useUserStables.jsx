@@ -48,7 +48,14 @@ export function useUserStables() {
       const stableDetails = await Promise.all(stableResponse);
       setUserStables(stableDetails.filter((stable) => stable !== null));
     } catch (error) {
-      setError(error.message || "Failed to retrieve user stables");
+      
+      if (error.response?.status === 404 || error.message?.includes("User has no stables")) {
+        setUserStables([]);
+        setError(null); 
+      } else {
+        // Real error - set error state
+        setError(error.message || "Failed to retrieve user stables");
+      }
     } finally {
       setLoading(false);
     }
