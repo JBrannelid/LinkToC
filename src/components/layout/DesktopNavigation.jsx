@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 import { Link, useLocation } from "react-router";
 import NotificationDropdown from "./NotificationDropdown.jsx";
@@ -10,7 +11,6 @@ import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { isRouteActive } from "../../routes/routeUtils";
 import ProfileImage from "../common/ProfileImage.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
-import { motion } from "framer-motion";
 
 const DesktopNavigation = () => {
   const { currentUser: _currentUser, currentStable } = useAppContext();

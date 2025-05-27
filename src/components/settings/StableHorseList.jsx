@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import PermissionGate from "./PermissionGate";
-import PlusIcon from "../../assets/icons/PlusIcon";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
-import ConfirmationModal from "../ui/ConfirmationModal";
+import PlusIcon from "../../assets/icons/PlusIcon";
 import {
   HORSE_CATEGORIES,
   CATEGORY_LABELS,
@@ -10,6 +9,7 @@ import {
 import { useAppContext } from "../../hooks/useAppContext.js";
 import { useHorseManagement } from "../../hooks/useHorseManagement";
 import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 const HorseList = ({ stableId }) => {
@@ -30,9 +30,9 @@ const HorseList = ({ stableId }) => {
   const [actionConfirmation, setActionConfirmation] = useState({
     isOpen: false,
     horse: null,
-    action: null
+    action: null,
   });
-  
+
   const {
     horses,
     loading,
@@ -82,16 +82,17 @@ const HorseList = ({ stableId }) => {
     setActionConfirmation({
       isOpen: true,
       horse,
-      action: "delete"
+      action: "delete",
     });
   };
-  const handleRemove = (horse) => {
-    setActionConfirmation({
-      isOpen: true,
-      horse,
-      action: "remove"
-    });
-  };
+
+  // const handleRemove = (horse) => {
+  //   setActionConfirmation({
+  //     isOpen: true,
+  //     horse,
+  //     action: "remove",
+  //   });
+  // };
 
   const handleCloseModal = () => {
     if (!loading) {
@@ -115,14 +116,14 @@ const HorseList = ({ stableId }) => {
         result = await addHorse(horseForm, currentUser?.id);
       } else if (actionType === "edit" && selectedHorse) {
         result = await updateHorse(selectedHorse.id, horseForm);
-      } 
+      }
 
       // Handle the response
       if (result && result.success) {
         setActionSuccess(
           actionType === "add"
-            ? "🐴 New horse recruited for glory!" 
-              : "✏️ Horse info polished to perfection!"
+            ? "🐴 New horse recruited for glory!"
+            : "✏️ Horse info polished to perfection!"
         );
         setActionSuccess("🐎 Message cleared. Back to the stables!");
         handleCloseModal();
@@ -144,7 +145,8 @@ const HorseList = ({ stableId }) => {
         confirmText: "Delete",
         buttonType: "danger",
         iconBg: "bg-error-500",
-        message: "This action will completely remove the horse from the system and cannot be undone.",
+        message:
+          "This action will completely remove the horse from the system and cannot be undone.",
       };
     } else if (action === "remove") {
       return {
@@ -152,7 +154,8 @@ const HorseList = ({ stableId }) => {
         confirmText: "Remove",
         buttonType: "warning",
         iconBg: "bg-warning-500",
-        message: "The horse will remain in the system but will no longer be associated with this stable.",
+        message:
+          "The horse will remain in the system but will no longer be associated with this stable.",
       };
     }
 
@@ -339,85 +342,85 @@ const HorseList = ({ stableId }) => {
                 <p className="text-red-700">{actionError}</p>
               </div>
             )}
-            
-              <form
-                className="space-y-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-              >
-                <div>
-                  <label
-                    htmlFor="horseName"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    Horse Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="horseName"
-                    name="name"
-                    value={horseForm.name}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    aria-required="true"
-                  />
-                </div>
 
-                <div>
-                  <label
-                    htmlFor="horseBreed"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    Breed
-                  </label>
-                  <input
-                    type="text"
-                    id="horseBreed"
-                    name="breed"
-                    value={horseForm.breed}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+            <form
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+              }}
+            >
+              <div>
+                <label
+                  htmlFor="horseName"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Horse Name *
+                </label>
+                <input
+                  type="text"
+                  id="horseName"
+                  name="name"
+                  value={horseForm.name}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  aria-required="true"
+                />
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="horseColor"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    Color
-                  </label>
-                  <input
-                    type="text"
-                    id="horseColor"
-                    name="color"
-                    value={horseForm.color}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="horseBreed"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Breed
+                </label>
+                <input
+                  type="text"
+                  id="horseBreed"
+                  name="breed"
+                  value={horseForm.breed}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="horseAge"
-                    className="block text-sm font-medium mb-1"
-                  >
-                    Birth Date
-                  </label>
-                  <input
-                    type="date"
-                    id="horseAge"
-                    name="age"
-                    value={horseForm.age}
-                    onChange={handleInputChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                    max={new Date().toISOString().split("T")[0]}
-                  />
-                  <p className="text-xs text-gray mt-1">Format: YYYY-MM-DD</p>
-                </div>
-              </form>
+              <div>
+                <label
+                  htmlFor="horseColor"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Color
+                </label>
+                <input
+                  type="text"
+                  id="horseColor"
+                  name="color"
+                  value={horseForm.color}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="horseAge"
+                  className="block text-sm font-medium mb-1"
+                >
+                  Birth Date
+                </label>
+                <input
+                  type="date"
+                  id="horseAge"
+                  name="age"
+                  value={horseForm.age}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  max={new Date().toISOString().split("T")[0]}
+                />
+                <p className="text-xs text-gray mt-1">Format: YYYY-MM-DD</p>
+              </div>
+            </form>
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3 mt-6">
@@ -452,28 +455,36 @@ const HorseList = ({ stableId }) => {
         </div>
       )}
       <ConfirmationModal
-          isOpen={actionConfirmation.isOpen}
-          onClose={() => setActionConfirmation({ isOpen: false, horse: null, action: null })}
-          onConfirm={async () => {
-            const { horse, action } = actionConfirmation;
-            const result = action === "delete"
-                ? await deleteHorse(horse.id)
-                : await removeHorseFromStable(horse.stableHorseId);
+        isOpen={actionConfirmation.isOpen}
+        onClose={() =>
+          setActionConfirmation({ isOpen: false, horse: null, action: null })
+        }
+        onConfirm={async () => {
+          const { horse, action } = actionConfirmation;
+          const result =
+            action === "delete"
+              ? await deleteHorse(horse.id)
+              : await removeHorseFromStable(horse.stableHorseId);
 
-            if (result?.success) {
-              setActionConfirmation({ isOpen: false, horse: null, action: null });
-            }
-          }}
-          loading={loading}
-          title={confirmProps.title}
-          confirmButtonText={confirmProps.confirmText}
-          cancelButtonText="Cancel"
-          confirmButtonType={confirmProps.buttonType}
-          icon={<HandRaisedIcon size={70} backgroundColor={confirmProps.iconBg} iconColor="text-white" />}
+          if (result?.success) {
+            setActionConfirmation({ isOpen: false, horse: null, action: null });
+          }
+        }}
+        loading={loading}
+        title={confirmProps.title}
+        confirmButtonText={confirmProps.confirmText}
+        cancelButtonText="Cancel"
+        confirmButtonType={confirmProps.buttonType}
+        icon={
+          <HandRaisedIcon
+            size={70}
+            backgroundColor={confirmProps.iconBg}
+            iconColor="text-white"
+          />
+        }
       >
         <p>{confirmProps.message}</p>
       </ConfirmationModal>
-      
     </section>
   );
 };
