@@ -1,5 +1,4 @@
 stages:
-
   - check
   - build
   - test
@@ -21,13 +20,25 @@ variables:
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
     - if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=latest; fi
+    # Lista Docker-objekt innan byggprocessen
+    - docker system df
+    - docker images -a
+    - docker container ls -a
+    - docker volume ls
 
 build-react-image:
   <<: *build_image_template
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_TAG"
     - echo "Startar build för $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
+    - docker buildx build --no-cache --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
+    # Rensa Docker-system efter byggprocessen
+    - docker system prune -a -f
+    # Lista Docker-objekt efter rensning
+    - docker system df
+    - docker images -a
+    - docker container ls -a
+    - docker volume ls
   rules:
     - if: $CI_MERGE_REQUEST_ID
 
@@ -36,7 +47,14 @@ build-utils:
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
     - echo "Startar build för $IMAGE_NAME"
-    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
+    - docker buildx build --no-cache --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
+    # Rensa Docker-system efter byggprocessen
+    - docker system prune -a -f
+    # Lista Docker-objekt efter rensning
+    - docker system df
+    - docker images -a
+    - docker container ls -a
+    - docker volume ls
   rules:
     - if: $CI_MERGE_REQUEST_ID
 
