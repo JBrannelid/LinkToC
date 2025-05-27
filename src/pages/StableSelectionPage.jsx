@@ -213,7 +213,7 @@ const StableSelectionPage = () => {
         title: `Leave stable "${stable?.name || ""}"?`,
         confirmText: "Leave",
         buttonType: "warning",
-        iconBg: "bg-warning-500",
+        iconBg: "bg-warning-400",
         message:
           "Are you sure you want to leave this stable? You'll need to send another invite to join the stable again.",
       };
