@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAppContext } from "../../context/AppContext.jsx";
+import { useAppContext } from "../../hooks/useAppContext.js";
 
 export default function StableName({ className = "" }) {
   const { currentStable, stableData } = useAppContext();
