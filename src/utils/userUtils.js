@@ -58,55 +58,6 @@ export const formatUserFullName = (user) => {
   return `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Unknown";
 };
 
-export const constructProfileImageUrl = (profilePicture) => {
-  if (!profilePicture) return null;
-
-  // Check if it's already a full URL
-  if (profilePicture.startsWith("http")) return profilePicture;
-
-  const baseUrl = import.meta.env.VITE_AZURE_STORAGE_URL;
-
-  // Always construct the full path using user ID from localStorage
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-  const userId = currentUser?.id;
-
-  // Log the full constructed URL for debugging
-  const fullUrl = `${baseUrl}/profile-pictures/${userId}/${profilePicture}`;
-
-  return fullUrl;
-};
-
-export const getProfileImageUrl = (
-  user,
-  size = "default",
-  fallbackUrl = null
-) => {
-  const profileImage = user?.profilePicture;
-
-  // If user has a custom profile image, construct the full URL
-  if (profileImage) {
-    const url = constructProfileImageUrl(profileImage);
-    // cache-busting with a random value
-    return `${url}?t=${Date.now()}-${Math.random()
-      .toString(36)
-      .substring(2, 10)}`;
-  }
-
-  // Return the appropriate placeholder
-  switch (size) {
-    case "small":
-      return "/src/assets/images/userPlaceholderSmall.webp";
-    case "medium":
-      return "/src/assets/images/userPlaceholdermedium.webp";
-    case "large":
-      return "/src/assets/images/userPlaceholderLarge.webp";
-    case "rounded":
-      return "/src/assets/images/userPlaceholderRounded.webp";
-    default:
-      return fallbackUrl || "/src/assets/images/userPlaceholderRounded.webp";
-  }
-};
-
 export const getRoleName = (role) => {
   switch (role) {
     case 0:
