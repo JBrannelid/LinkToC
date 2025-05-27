@@ -6,6 +6,7 @@ import {
   createErrorMessage,
   createSuccessMessage,
   createWarningMessage,
+    ErrorTypes,
 } from "../utils/errorUtils.js";
 
 export function useStableJoinRequest() {
@@ -40,6 +41,7 @@ export function useStableJoinRequest() {
       setError(createErrorMessage("No stable selected"));
       return { success: false };
     }
+    
     if (isThrottled()) {
       const warningMsg = `Please wait ${throttleTimeRemaining} seconds before sending another join request`;
       setMessage(createWarningMessage(warningMsg));
@@ -50,20 +52,18 @@ export function useStableJoinRequest() {
         message: warningMsg,
       };
     }
+    setLoading(true);
+    setOperationType("create");
+    setError(null);
+    setMessage(null);
+    setLastRequest(Date.now());
+    
+    const requestData = {
+      userId: user.id,
+      stableId: data.stableId || data.id,
+    }
 
     try {
-      setLoading(true);
-      setOperationType("create");
-      setError(null);
-      setMessage(null);
-
-      const requestData = {
-        userId: user.id,
-        stableId: data.stableId,
-      };
-      try {
-        setLastRequest(Date.now());
-
         const response = await stableService.createStableJoinRequest(
           requestData
         );
@@ -77,33 +77,39 @@ export function useStableJoinRequest() {
             success: true,
             message: successMsg,
           };
-        } else {
-          const errorMsg = response?.message || "Failed to send join request";
-          if (
-            errorMsg.toLowerCase().includes("already") ||
-            errorMsg.toLowerCase().includes("duplicate")
-          ) {
-            const warningMsg = `You've already requested to join this stable`;
-            setMessage(createWarningMessage(warningMsg));
-            return {
-              success: false,
-              alreadyRequested: true,
-              message: warningMsg,
-            };
-          } else {
-            setError(createErrorMessage(errorMsg));
-            return {
-              success: false,
-              message: errorMsg,
-            };
-          }
-        }
-      } catch {
-        setLastRequest(Date.now());
-      }
+        }  setError(createErrorMessage("Unexpected response format"));
+      return {
+        success: false,
+        message: "Unexpected response format",
+      };
+          
+        
     } catch (error) {
-      const errorMsg =
-        error?.message || "An error occurred while sending the join request";
+      if (error.type === ErrorTypes.VALIDATION && error.status === 400) {
+        const apiMessage = error.details?.message || error.message || "";
+        
+        if (
+            apiMessage.toLowerCase().includes("already") ||
+            apiMessage.toLowerCase().includes("duplicate") ||
+            apiMessage.toLowerCase().includes("member")
+        ) {
+          const warningMsg = `You're already a member of this stable.`;
+          setMessage(createWarningMessage(warningMsg));
+          return {
+            success: false,
+            alreadyMember: true,
+            message: warningMsg,
+          };
+        }
+        
+        setError(createErrorMessage(apiMessage));
+        return {
+          success: false,
+          message: apiMessage,
+        };
+      }
+      
+      const errorMsg = error?.message || "An error occurred while sending the join request";
       setError(createErrorMessage(errorMsg));
       return {
         success: false,
