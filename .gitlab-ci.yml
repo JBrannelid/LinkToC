@@ -83,5 +83,4 @@ teardown:
   script:
     - python portainer.py $CI_JOB_STAGE
   rules:
-    - if: $CI_MERGE_REQUEST_ID
       when: manual
