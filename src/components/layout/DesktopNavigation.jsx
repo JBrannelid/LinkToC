@@ -10,6 +10,7 @@ import { ROUTES, buildRoute } from "../../routes/index.jsx";
 import { isRouteActive } from "../../routes/routeUtils";
 import ProfileImage from "../common/ProfileImage.jsx";
 import LoadingSpinner from "../ui/LoadingSpinner.jsx";
+import { motion } from "framer-motion";
 
 const DesktopNavigation = () => {
   const { currentUser: _currentUser, currentStable } = useAppContext();
@@ -77,129 +78,165 @@ const DesktopNavigation = () => {
         <div className="flex items-center space-x-10">
           {/* Main Navigation */}
           {hasStableAccess && (
-            <nav
+            <motion.nav
               className="flex items-center space-x-8"
               role="navigation"
               aria-label="Main navigation"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
             >
-              <Link
-                to={ROUTES.HOME}
-                className={`text-[16px] font-medium transition-colors ${
-                  isActive(ROUTES.HOME)
-                    ? "text-primary"
-                    : "text-black hover:text-primary"
-                }`}
-                aria-label="Go to dashboard home"
-                aria-current={isActive(ROUTES.HOME) ? "page" : undefined}
-              >
-                Home
-              </Link>
+              <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                <Link
+                  to={ROUTES.HOME}
+                  className={`text-[16px] font-medium transition-colors ${
+                    isActive(ROUTES.HOME)
+                      ? "text-primary"
+                      : "text-black hover:text-primary"
+                  }`}
+                  aria-label="Go to dashboard home"
+                  aria-current={isActive(ROUTES.HOME) ? "page" : undefined}
+                >
+                  Home
+                </Link>
+              </motion.div>
 
-              <Link
-                to={buildRoute(ROUTES.STABLE_POST, {
-                  stableId: currentStable?.id,
-                })}
-                className={`text-[16px] font-medium transition-colors ${
-                  isActive(ROUTES.STABLE_POST.split("/:")[0])
-                    ? "text-primary"
-                    : "text-black hover:text-primary"
-                }`}
-                aria-label="View stable feed and posts"
-                aria-current={
-                  isActive(ROUTES.STABLE_POST.split("/:")[0])
-                    ? "page"
-                    : undefined
-                }
-              >
-                Feed
-              </Link>
+              <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                <Link
+                  to={buildRoute(ROUTES.STABLE_POST, {
+                    stableId: currentStable?.id,
+                  })}
+                  className={`text-[16px] font-medium transition-colors ${
+                    isActive(ROUTES.STABLE_POST.split("/:")[0])
+                      ? "text-primary"
+                      : "text-black hover:text-primary"
+                  }`}
+                  aria-label="View stable feed and posts"
+                  aria-current={
+                    isActive(ROUTES.STABLE_POST.split("/:")[0])
+                      ? "page"
+                      : undefined
+                  }
+                >
+                  Feed
+                </Link>
+              </motion.div>
 
-              <Link
-                to={buildRoute(ROUTES.STABLE_HORSES, {
-                  stableId: currentStable?.id,
-                })}
-                className={`text-[16px] font-medium transition-colors ${
-                  isActive(ROUTES.STABLE_HORSES.split("/:")[0])
-                    ? "text-primary"
-                    : "text-black hover:text-primary"
-                }`}
-                aria-label="View and manage horses"
-                aria-current={
-                  isActive(ROUTES.STABLE_HORSES.split("/:")[0])
-                    ? "page"
-                    : undefined
-                }
-              >
-                Horses
-              </Link>
+              <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                <Link
+                  to={buildRoute(ROUTES.STABLE_HORSES, {
+                    stableId: currentStable?.id,
+                  })}
+                  className={`text-[16px] font-medium transition-colors ${
+                    isActive(ROUTES.STABLE_HORSES.split("/:")[0])
+                      ? "text-primary"
+                      : "text-black hover:text-primary"
+                  }`}
+                  aria-label="View and manage horses"
+                  aria-current={
+                    isActive(ROUTES.STABLE_HORSES.split("/:")[0])
+                      ? "page"
+                      : undefined
+                  }
+                >
+                  Horses
+                </Link>
+              </motion.div>
 
-              <Link
-                to={buildRoute(ROUTES.STABLE_MEMBERS, {
-                  stableId: currentStable?.id,
-                })}
-                className={`text-[16px] font-medium transition-colors ${
-                  isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
-                    ? "text-primary"
-                    : "text-black hover:text-primary"
-                }`}
-                aria-label="View and manage stable members"
-                aria-current={
-                  isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
-                    ? "page"
-                    : undefined
-                }
-              >
-                Members
-              </Link>
-            </nav>
+              <motion.div whileHover={{ y: -2 }} transition={{ duration: 0.2 }}>
+                <Link
+                  to={buildRoute(ROUTES.STABLE_MEMBERS, {
+                    stableId: currentStable?.id,
+                  })}
+                  className={`text-[16px] font-medium transition-colors ${
+                    isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
+                      ? "text-primary"
+                      : "text-black hover:text-primary"
+                  }`}
+                  aria-label="View and manage stable members"
+                  aria-current={
+                    isActive(ROUTES.STABLE_MEMBERS.split("/:")[0])
+                      ? "page"
+                      : undefined
+                  }
+                >
+                  Members
+                </Link>
+              </motion.div>
+            </motion.nav>
           )}
 
           {/* User Actions */}
-          <div
+          <motion.div
             className="flex items-center space-x-4"
             role="region"
             aria-label="User actions"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
             {/* Settings */}
-            <Link
-              to={ROUTES.SETTINGS}
-              className="text-primary hover:text-primary-dark transition-colors"
-              aria-label="Open settings and preferences"
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
             >
-              <SettingIcon
-                className="w-6 h-6 text-primary"
-                aria-hidden="true"
-              />
-              <span className="sr-only">Settings</span>
-            </Link>
+              <Link
+                to={ROUTES.SETTINGS}
+                className="text-primary hover:text-primary-dark transition-colors"
+                aria-label="Open settings and preferences"
+              >
+                <SettingIcon
+                  className="w-6 h-6 text-primary"
+                  aria-hidden="true"
+                />
+                <span className="sr-only">Settings</span>
+              </Link>
+            </motion.div>
 
             {/* Notifications */}
             {!shouldHideNotification && (
-              <div className="cursor-pointer" aria-label="Notifications">
+              <motion.div
+                className="cursor-pointer"
+                aria-label="Notifications"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
                 <NotificationDropdown />
-              </div>
+              </motion.div>
             )}
 
             {/* User Profile */}
-            <Link
-              to={buildRoute(ROUTES.USER_PROFILE, { userId })}
-              className="text-primary hover:text-primary-dark transition-colors"
-              aria-label={`View profile for ${
-                displayUser?.firstName || "user"
-              } ${displayUser?.lastName || ""}`}
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
             >
-              <div className="w-9 h-9 rounded-full overflow-hidden mr-4 border-2 border-transparent">
-                <ProfileImage
-                  user={displayUser}
-                  className="w-full h-full"
-                  alt={`Profile picture of ${
-                    displayUser?.firstName || "user"
-                  } ${displayUser?.lastName || ""}`}
-                />
-              </div>
-              <span className="sr-only">User profile</span>
-            </Link>
-          </div>
+              <Link
+                to={buildRoute(ROUTES.USER_PROFILE, { userId })}
+                className="text-primary hover:text-primary-dark transition-colors"
+                aria-label={`View profile for ${
+                  displayUser?.firstName || "user"
+                } ${displayUser?.lastName || ""}`}
+              >
+                <motion.div
+                  className="w-9 h-9 rounded-full overflow-hidden mr-4 border-2 border-transparent"
+                  whileHover={{ borderColor: "rgb(var(--color-primary))" }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ProfileImage
+                    user={displayUser}
+                    className="w-full h-full"
+                    alt={`Profile picture of ${
+                      displayUser?.firstName || "user"
+                    } ${displayUser?.lastName || ""}`}
+                  />
+                </motion.div>
+                <span className="sr-only">User profile</span>
+              </Link>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </header>
