@@ -79,24 +79,19 @@ const ListUserStablePage = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      {" "}
       {/* Header */}
       <div className="bg-primary-light lg:bg-background">
         <ModalHeader />
       </div>
+
       {/* Stable Info */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <StableInfo
-          stableId={stableId}
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-          searchPlaceholder="Search..."
-        />
-      </motion.div>
+      <StableInfo
+        stableId={stableId}
+        searchTerm={searchTerm}
+        onSearchChange={handleSearchChange}
+        searchPlaceholder="Search..."
+      />
+
       {/* Member List */}
       <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
