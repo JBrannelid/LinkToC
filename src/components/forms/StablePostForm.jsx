@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import Button from "../ui/Button";
-import { FormProvider, FormInput } from "../forms";
-import ModalHeader from "../layout/ModalHeader";
+import { FormProvider, FormInput } from "./index";
 import { useAppContext } from "../../context/AppContext";
+import ModalHeader from "../layout/ModalHeader";
+import Button from "../ui/Button";
 
 const StablePostForm = ({
   post = null,

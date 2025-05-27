@@ -1,7 +1,7 @@
 import React from "react";
+import AddEventButton from "./AddEventButton";
 import EventsHeader from "./EventsHeader";
 import EventsList from "./EventsList";
-import AddEventButton from "./AddEventButton";
 
 const MobileEventsView = ({
   selectedDay,

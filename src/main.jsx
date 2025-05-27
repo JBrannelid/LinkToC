@@ -3,10 +3,10 @@ import React from "react";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router";
-import { router } from "./routes/index.jsx";
 import { AppProvider } from "./context/AppContext";
 import { AuthProvider } from "./context/AuthContext";
 import { FileUploadProvider } from "./context/FileUploadContext";
+import { router } from "./routes/index.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { useLocation } from "react-router";
-import { SearchContext } from "../../context/searchContext";
 import { getConfigForRoutes } from "./config/searchConfig";
+import { SearchContext } from "../../context/searchContext";
 import { useLoadingState } from "../../hooks/useLoadingState";
 import useSearchState from "../../hooks/useSearchState.js";
 import { useStableSearchWithDistance } from "../../hooks/useStableSearch.js";
@@ -16,10 +16,12 @@ const SearchProvider = ({ children, customConfig = null }) => {
   
   const isStableSearch = baseConfig?.entityType === "stable";
 
+  const stableSearchResult = useStableSearchWithDistance();
+
   // Get enhanced configuration for stables, or use base config for other entities
-  const { searchConfig } = isStableSearch
-    ? useStableSearchWithDistance()
-    : { searchConfig: baseConfig };
+  const searchConfig = isStableSearch
+    ? stableSearchResult.searchConfig
+    : baseConfig;
 
  
   const searchState = useSearchState(searchConfig);
@@ -32,7 +34,7 @@ const SearchProvider = ({ children, customConfig = null }) => {
       ...searchState,
       loading: searchState.isLoading,
       loadingState,
-      config: searchConfig, // Use searchConfig here
+      config: searchConfig,
     }),
     [searchState, loadingState, searchConfig]
   );

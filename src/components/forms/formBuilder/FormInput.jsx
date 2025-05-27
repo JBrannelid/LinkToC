@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import EyeIcon from "../../../assets/icons/EyeIcon";
-import EyeOffIcon from "../../../assets/icons//EyeOffIcon";
+import EyeOffIcon from "../../../assets/icons/EyeOffIcon";
 import MailIcon from "../../../assets/icons/MailIcon";
 
 // A form input component that integrates with React Hook Form
@@ -14,7 +14,6 @@ const FormInput = ({
   validation = {},
   className = "",
   labelPosition = "inline",
-  errorMessage = "This field is required",
   isPasswordMasked = false,
   autoComplete,
   inputClassName = "",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ResetPasswordForm from "../components/forms/ResetPasswordForm";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import WelcomeLayout from "../components/layout/WelcomeLayout";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const ResetPasswordPage = () => {
   const [loading, setLoading] = useState(false);

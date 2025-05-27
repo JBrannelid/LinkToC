@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router";
-import { ROUTES } from "../../routes/index.jsx";
 import Header from "./Header";
+import { ROUTES } from "../../routes/index.jsx";
 
 // A wrapper component that applies the appropriate background to the header
 const HeaderContainer = () => {

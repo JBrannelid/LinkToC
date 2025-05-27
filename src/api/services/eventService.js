@@ -1,6 +1,6 @@
-import axiosInstance from "../config/axiosConfig";
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints.js";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.EVENTS);
 const eventService = {
@@ -11,12 +11,7 @@ const eventService = {
     const response = await axiosInstance.get(
       `${ENDPOINTS.EVENTS_BY_STABLE}/${stableId}`
     );
-
-    if (response && response.isSuccess && Array.isArray(response.value)) {
-      return response.value;
-    }
-
-    return [];
+    return response?.value || [];
   },
 
   create: async (data) => {

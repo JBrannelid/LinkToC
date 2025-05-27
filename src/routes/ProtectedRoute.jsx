@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from "react-router";
-import { useAuth } from "../context/AuthContext";
-import { useAppContext } from "../context/AppContext";
-import { useRBAC } from "../hooks/useRBAC";
 import { ROUTES } from "./routeConstants";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { useRBAC } from "../hooks/useRBAC";
 
 const ProtectedRoute = ({
   children,

@@ -53,7 +53,9 @@ export function extractReadableErrorMessage(errorData) {
     if (stringfield.length < 100) {
       return stringfield;
     }
-  } catch (e) {}
+  } catch {
+    // Ignore JSON stringify errors
+  }
 
   return "An error occurred with your request. Please check your input and try again.";
 }

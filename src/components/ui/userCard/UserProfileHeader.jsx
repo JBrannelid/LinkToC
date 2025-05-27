@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useAppContext } from "../../../context/AppContext";
-import { formatUserFullName, getRoleName } from "../../../utils/userUtils";
-import Button from "../../ui/Button";
-import MessageIcon from "../../../assets/icons/MessageIcon";
 import EmergencyContactIcon from "../../../assets/icons/EmergencyContactIcon";
-import PhoneIcon from "../../../assets/icons/PhoneIcon";
+import MessageIcon from "../../../assets/icons/MessageIcon";
 import PenIcon from "../../../assets/icons/PenIcon";
-import EditInformationModal from "../../layout/EditInformationModal";
+import PhoneIcon from "../../../assets/icons/PhoneIcon";
+import { useAppContext } from "../../../context/AppContext";
 import { useAuth } from "../../../context/AuthContext";
-import ProfileImage from "../../../components/common/ProfileImage";
+import { formatUserFullName, getRoleName } from "../../../utils/userUtils";
+import ProfileImage from "../../common/ProfileImage";
+import EditInformationModal from "../../layout/EditInformationModal";
+import Button from "../Button";
 
 const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
   const { currentStable } = useAppContext();
@@ -135,7 +135,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   onClick={() =>
                     openEditModal(
                       "emergencyContact",
-                      "Emergency Contact",
+                      "Contact",
                       enhancedUser.emergencyContact || ""
                     )
                   }
@@ -266,7 +266,7 @@ const UserProfileHeader = ({ user, userProfile, forceRefresh }) => {
                   onClick={() =>
                     openEditModal(
                       "emergencyContact",
-                      "Emergency Contact",
+                      "Contact",
                       enhancedUser.emergencyContact || ""
                     )
                   }

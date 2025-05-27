@@ -1,144 +1,157 @@
-import React, {forwardRef, useCallback, useEffect, useMemo} from 'react';
-import { useFormContext } from 'react-hook-form';
-import SearchInput from './SearchInput';
-import SearchResults from './SearchResults';
-import SearchActions from './SearchActions';
-import { FormMessage } from '../../forms/index';
-import {SearchProvider} from "../index.js";
+import React, { forwardRef, useCallback, useEffect, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
+import SearchActions from "./SearchActions";
+import SearchInput from "./SearchInput";
+import SearchResults from "./SearchResults";
+import { FormMessage } from "../../forms/index";
+import { SearchProvider } from "../index.js";
 
-const SearchField = forwardRef((
+const SearchField = forwardRef(
+  (
     {
-        name,
-        label,
-        labelClassName = '',
-        containerClassName = '',
-        validation = {},
-        customConfig = null,
-        onSearch,
-        onSelectItem,
-        onCancel,
-        errorMessage = "This field is required. Please enter a value.",
-        resultsClassName = '',
-        searchBarClassName = '',
-        labelPosition = 'above',
-        showMessage = true,
-        formError = null,
-        message = null,
-    }, ref) => {
+      name,
+      label,
+      labelClassName = "",
+      containerClassName = "",
+      validation = {},
+      customConfig = null,
+      onSearch,
+      onSelectItem,
+      onCancel,
+      errorMessage = "This field is required. Please enter a value.",
+      resultsClassName = "",
+      searchBarClassName = "",
+      labelPosition = "above",
+      showMessage = true,
+      formError = null,
+      message = null,
+    },
+    ref
+  ) => {
     const {
-        register,
-        setValue,
-        formState: { errors },
-        trigger
+      register,
+      setValue,
+      formState: { errors },
+      trigger,
     } = useFormContext();
 
     // Handle selection with form integration
-    const handleSelectItem = useCallback((item) => {
+    const handleSelectItem = useCallback(
+      (item) => {
         if (item && item.id) {
-            setValue(name, item.id, { shouldValidate: true });
-            trigger(name);
+          setValue(name, item.id, { shouldValidate: true });
+          trigger(name);
         }
 
         if (onSelectItem) {
-            onSelectItem(item);
+          onSelectItem(item);
         }
-    },[onSelectItem,setValue, name, trigger]);
+      },
+      [onSelectItem, setValue, name, trigger]
+    );
 
     // Handle search action with form integration
-    const handleSearchAction = useCallback((selectedItem) => {
+    const handleSearchAction = useCallback(
+      (selectedItem) => {
         if (selectedItem && selectedItem.id) {
-            setValue(name, selectedItem.id, { shouldValidate: true });
-            trigger(name);
+          setValue(name, selectedItem.id, { shouldValidate: true });
+          trigger(name);
         }
 
         if (onSearch) {
-            onSearch(selectedItem);
+          onSearch(selectedItem);
         }
-    },[onSearch, trigger, setValue, trigger]);
+      },
+      [onSearch, trigger, setValue, trigger]
+    );
 
     // Handle cancel action
     const handleCancel = useCallback(() => {
-        if (onCancel) {
-            onCancel();
-        }
+      if (onCancel) {
+        onCancel();
+      }
     }, [onCancel]);
 
     // Register the field with form
-    useEffect(() => {
+    useEffect(
+      (name) => {
         register(name, validation);
-    }, [register, name, validation]);
+      },
+      [register, name, validation]
+    );
 
     // Prepare display message
-    const displayMessage = useMemo(()=> {
-        return formError ||
-            (errors[name] ? { type: "error", text: errors[name].message || errorMessage } : null) ||
-            (message && message.text ? message : null);
-    },[formError, errors, name, errorMessage, message]);
+    const displayMessage = useMemo(() => {
+      return (
+        formError ||
+        (errors[name]
+          ? { type: "error", text: errors[name].message || errorMessage }
+          : null) ||
+        (message && message.text ? message : null)
+      );
+    }, [formError, errors, name, errorMessage, message]);
     const labelElement = useMemo(() => {
-        if (!label) return null;
+      if (!label) return null;
 
-        return (
-            <label
-                htmlFor={name}
-                className={`form-label ${
-                    labelPosition === "above" ? "mb-1" : "mr-2"
-                } text-sm font-medium ${labelClassName}`}
-            >
-                {label}
-            </label>
-        );
+      return (
+        <label
+          htmlFor={name}
+          className={`form-label ${
+            labelPosition === "above" ? "mb-1" : "mr-2"
+          } text-sm font-medium ${labelClassName}`}
+        >
+          {label}
+        </label>
+      );
     }, [label, labelPosition, labelClassName, name]);
     const errorElement = useMemo(() => {
-        if (!showMessage || !displayMessage) return null;
+      if (!showMessage || !displayMessage) return null;
 
-        return <FormMessage message={displayMessage} />;
+      return <FormMessage message={displayMessage} />;
     }, [showMessage, displayMessage]);
-    const stableConfig = useMemo(() => {
-        return customConfig;
-    }, [customConfig]);
-    
+
     return (
-        <SearchProvider customConfig={customConfig}>
-            <div className={`form-control ${containerClassName}`}>
-                {/* Label */}
-                {labelElement}
-                
-                <input
-                    type="hidden"
-                    id={name}
-                    name={name}
-                    aria-hidden="true"
-                    ref={ref}
-                />
+      <SearchProvider customConfig={customConfig}>
+        <div className={`form-control ${containerClassName}`}>
+          {/* Label */}
+          {labelElement}
 
-                {/* Search bar */}
-                <SearchInput
-                    className={searchBarClassName}
-                    ariaLabel={label || "Sök"}
-                    autoFocus
-                />
+          <input
+            type="hidden"
+            id={name}
+            name={name}
+            aria-hidden="true"
+            ref={ref}
+          />
 
-                {/* Search results */}
-                <SearchResults
-                    className={`mt-2 ${resultsClassName}`}
-                    maxHeight="60vh"
-                    onItemSelect={handleSelectItem}
-                />
+          {/* Search bar */}
+          <SearchInput
+            className={searchBarClassName}
+            ariaLabel={label || "Sök"}
+            autoFocus
+          />
 
-                {/* Action buttons */}
-                <div className="mt-4">
-                    <SearchActions
-                        onAction={handleSearchAction}
-                        onCancel={handleCancel}
-                    />
-                </div>
+          {/* Search results */}
+          <SearchResults
+            className={`mt-2 ${resultsClassName}`}
+            maxHeight="60vh"
+            onItemSelect={handleSelectItem}
+          />
 
-                {errorElement}
+          {/* Action buttons */}
+          <div className="mt-4">
+            <SearchActions
+              onAction={handleSearchAction}
+              onCancel={handleCancel}
+            />
+          </div>
 
-            </div>
-        </SearchProvider>
+          {errorElement}
+        </div>
+      </SearchProvider>
     );
-});
+  }
+);
 
 SearchField.displayName = "SearchField";
 export default React.memo(SearchField);

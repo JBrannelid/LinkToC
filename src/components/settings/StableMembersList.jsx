@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
+import PermissionGate from "./PermissionGate";
+import CheckIcon from "../../assets/icons/CheckIcon";
 import { useStableManagement } from "../../hooks/useStableManagement";
 import { USER_ROLES } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
-import CheckIcon from "../../assets/icons/CheckIcon";
-import PermissionGate from "../../components/settings/PermissionGate";
+import Button from "../ui/Button";
 
 const ROLE_OPTIONS = [
   { id: USER_ROLES.USER, label: "Member" },
@@ -38,6 +38,7 @@ const StableMembersList = ({ stableId }) => {
     ) {
       const success = await updateMemberRole(selectedMember.id, selectedRole);
       if (success) {
+        // Role updated successfully - the hook will refresh the data
       } else {
         console.error("Failed to update role");
       }

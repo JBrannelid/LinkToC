@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
+import SearchIcon from "../assets/icons/SearchIcon";
+import ModalHeader from "../components/layout/ModalHeader";
+import StableHorseCard from "../components/layout/StableHorseCard";
+import StableInfo from "../components/layout/StableInfo";
+import Button from "../components/ui/Button";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAppContext } from "../context/AppContext";
 import { useStableHorses } from "../hooks/useStableHorses";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import Button from "../components/ui/Button";
-import ModalHeader from "../components/layout/ModalHeader";
-import StableInfo from "../components/layout/StableInfo";
 import { ROUTES, buildRoute } from "../routes/index.jsx";
-import SearchIcon from "../assets/icons/SearchIcon";
-import StableHorseCard from "../components/layout/StableHorseCard";
 
 function StableHorsePage() {
   const { stableId: urlStableId } = useParams();

@@ -1,17 +1,17 @@
 import React from "react";
 import { Link, useLocation } from "react-router";
-import { ROUTES, buildRoute } from "../../routes/index.jsx";
-import { useAppContext } from "../../context/AppContext";
-import { isRouteActive } from "../../routes/routeUtils";
 import FeedIcon from "../../assets/icons/FeedIcon";
 import HomeIcon from "../../assets/icons/HomeIcon";
 import HorseFaceIcon from "../../assets/icons/HorseFaceIcon";
 import UserIcon from "../../assets/icons/UserIcon";
+import { useAppContext } from "../../context/AppContext";
 import { useAuth } from "../../context/AuthContext";
+import { ROUTES, buildRoute } from "../../routes/index.jsx";
+import { isRouteActive } from "../../routes/routeUtils";
 
 const NavigationBar = () => {
   const { user } = useAuth();
-  const { currentUser, currentStable } = useAppContext();
+  const { currentStable } = useAppContext();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -25,7 +25,11 @@ const NavigationBar = () => {
   return (
     <div className="w-full md:max-w-[70%] mx-auto">
       {hasStableAccess && (
-        <nav className="nav-container">
+        <nav
+          className="nav-container"
+          role="navigation"
+          aria-label="Main navigation"
+        >
           <Link
             to={ROUTES.HOME}
             className={`p-2 ${

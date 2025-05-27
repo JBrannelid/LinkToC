@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
-import MobileEventsView from "./MobileEventsView";
 import DesktopEventsView from "./DesktopEventsView";
+import MobileEventsView from "./MobileEventsView";
 
 const EventsContainer = ({
   selectedDay,

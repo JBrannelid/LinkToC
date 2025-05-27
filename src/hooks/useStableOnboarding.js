@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useAppContext } from "../context/AppContext";
-import { stableService, userService } from "../api";
-import { getErrorMessage } from "../utils/errorUtils";
-import { useLoadingState } from "./useLoadingState";
 import { useForm } from "react-hook-form";
+import { stableService, userService } from "../api";
+import { useLoadingState } from "./useLoadingState";
+import { useAppContext } from "../context/AppContext";
+import { useAuth } from "../context/AuthContext";
+import { getErrorMessage } from "../utils/errorUtils";
 
 export const useStableOnboarding = () => {
   const { user } = useAuth();

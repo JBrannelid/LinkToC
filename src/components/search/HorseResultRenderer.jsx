@@ -1,6 +1,6 @@
 import React from "react";
-import Card from "../ui/card/index.js";
 import Button from "../ui/Button.jsx";
+import CardContainer from "../ui/card/CardContainer.jsx";
 
 const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
   const name = item[config?.labelField || "name"] || "Unnamed horse";
@@ -22,7 +22,7 @@ const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
       role="option"
       aria-selected={isSelected}
     >
-      <Card.Container className="h-full w-full">
+      <CardContainer className="h-full w-full">
         {/* Content layout that works on all screen sizes */}
         <div className="flex flex-col p-3">
           <div className="flex items-center">
@@ -73,7 +73,7 @@ const HorseResultRenderer = ({ item, isSelected, onSelect, config }) => {
             </Button>
           </div>
         </div>
-      </Card.Container>
+      </CardContainer>
     </div>
   );
 };

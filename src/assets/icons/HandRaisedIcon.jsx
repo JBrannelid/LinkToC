@@ -2,7 +2,6 @@ import React from "react";
 
 const HandRaisedIcon = ({
   size = 24,
-  color = "currentColor",
   backgroundColor = "bg-error-500",
   iconColor = "text-white",
   className = "",

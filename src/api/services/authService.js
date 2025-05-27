@@ -1,8 +1,8 @@
 import createBaseService from "./baseService.js";
 import { ENDPOINTS } from "./endPoints.js";
-import axiosInstance from "../config/axiosConfig";
-import tokenStorage from "../../utils/tokenStorage.js";
 import { getErrorMessage } from "../../utils/errorUtils.js";
+import tokenStorage from "../../utils/tokenStorage.js";
+import axiosInstance from "../config/axiosConfig";
 
 const baseService = createBaseService(ENDPOINTS.AUTH);
 

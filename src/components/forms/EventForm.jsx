@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { format } from "../../utils/calendarUtils";
-import FormProvider from "./formBuilder/FormProvider";
 import FormInput from "./formBuilder/FormInput";
+import FormProvider from "./formBuilder/FormProvider";
 import TimePicker from "./formBuilder/TimePicker";
-import Button from "../ui/Button";
 import { useAppContext } from "../../context/AppContext";
+import { format } from "../../utils/calendarUtils";
 import ModalHeader from "../layout/ModalHeader";
+import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const EventForm = ({
   event,
@@ -18,6 +20,9 @@ const EventForm = ({
   stables = [],
 }) => {
   const { currentStable } = useAppContext();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const methods = useForm({
     defaultValues: {
@@ -30,6 +35,29 @@ const EventForm = ({
   });
 
   const formattedDate = format(date, "yyyy-MM-dd");
+
+  // Time fields for validation
+  const watchedStartTime = methods.watch("startTime");
+  const _watchedEndTime = methods.watch("endTime");
+
+  // Helper function to convert time string to minutes for comparison
+  const timeToMinutes = (timeString) => {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    return hours * 60 + minutes;
+  };
+
+  // Validation function for end time
+  const validateEndTime = (endTime) => {
+    if (!watchedStartTime || !endTime) return true;
+
+    const startMinutes = timeToMinutes(watchedStartTime);
+    const endMinutes = timeToMinutes(endTime);
+
+    if (endMinutes <= startMinutes) {
+      return "End time must be after start time";
+    }
+    return true;
+  };
 
   useEffect(() => {
     const getTime = (dateInput, targetHour) => {
@@ -60,7 +88,9 @@ const EventForm = ({
     }
   }, [event, date, methods, currentStable]);
 
-  const handleSubmit = (data) => {
+  const handleSubmit = async (data) => {
+    if (isSubmitting) return;
+
     const [startHour, startMinute] = data.startTime.split(":").map(Number);
     const [endHour, endMinute] = data.endTime.split(":").map(Number);
 
@@ -70,32 +100,72 @@ const EventForm = ({
     const end = new Date(date);
     end.setHours(endHour, endMinute);
 
-    onSubmit?.({
-      title: data.title,
-      content: data.description,
-      id: event?.id,
-      startDateTime: start.toISOString(),
-      endDateTime: end.toISOString(),
-      stableIdFk: data.stableId || event?.stableIdFk || currentStable?.id,
-      userIdFk: event?.userIdFk,
-    });
+    // Additional frontend validation before submission
+    if (end <= start) {
+      methods.setError("endTime", {
+        type: "manual",
+        message: "End time must be after start time",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await onSubmit?.({
+        title: data.title,
+        content: data.description,
+        id: event?.id,
+        startDateTime: start.toISOString(),
+        endDateTime: end.toISOString(),
+        stableIdFk: data.stableId || event?.stableIdFk || currentStable?.id,
+        userIdFk: event?.userIdFk,
+      });
+    } catch (error) {
+      console.error("Error submitting event:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDelete = () => {
-    if (event && event.id && typeof onDeleteEvent === "function") {
-      onDeleteEvent(event.id);
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!event?.id || typeof onDeleteEvent !== "function") {
       onCancel();
-    } else {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      await onDeleteEvent(event.id);
+      setShowDeleteConfirmation(false);
       onCancel();
+    } catch (error) {
+      console.error("Error deleting event:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
       <div className="w-full h-full md:h-auto md:w-xl overflow-y-auto bg-background shadow-md rounded flex flex-col relative">
+        {/* Loading Overlay */}
+        {isSubmitting && (
+          <div className="absolute inset-0 bg-black/20 z-10 flex items-center justify-center rounded">
+            <div className="bg-white rounded-lg p-4 shadow-lg flex items-center space-x-3">
+              <LoadingSpinner size="medium" className="text-primary" />
+              <span className="text-sm">Saving...</span>
+            </div>
+          </div>
+        )}
+
         <div className="bg-primary-light pb-5">
           <ModalHeader
-            // title={title}
             showCloseBtn={true}
             onCloseClick={onCancel}
             className="bg-primary-light"
@@ -117,7 +187,7 @@ const EventForm = ({
                 <span>{formattedDate}</span>
               </div>
 
-              {/* Start */}
+              {/* Start Time */}
               <div>
                 <TimePicker
                   name="startTime"
@@ -126,12 +196,15 @@ const EventForm = ({
                 />
               </div>
 
-              {/* End */}
+              {/* End Time with validation */}
               <div>
                 <TimePicker
                   name="endTime"
-                  label="End&nbsp;"
-                  validation={{ required: "Endtime is required" }}
+                  label="End"
+                  validation={{
+                    required: "End time is required",
+                    validate: validateEndTime,
+                  }}
                 />
               </div>
             </div>
@@ -139,15 +212,16 @@ const EventForm = ({
 
           <div className="h-5" />
 
-          <div className="bg-white p-3 rounded-lg">
+          <div className=" p-3 rounded-lg">
             <FormInput
               name="title"
-              placeholder="Enter name of activity..."
+              placeholder="Enter activity name..."
+              className="bg-white border border-primary rounded-lg"
               validation={{
-                required: "Titel is required",
+                required: "Title is required",
                 maxLength: {
                   value: 50,
-                  message: "Max 50 characters",
+                  message: "Maximum 50 characters",
                 },
               }}
             />
@@ -157,19 +231,29 @@ const EventForm = ({
             <Button
               type="submit"
               className="w-9/10 mx-auto bg-primary"
-              // Explicitly calling handleSubmit because htmlType="submit" doesn't work with React Hook Form.
+              disabled={isSubmitting}
               onClick={(e) => {
                 e.preventDefault();
                 methods.handleSubmit(handleSubmit)();
               }}
             >
-              {event ? "Update" : "Add"}
+              {isSubmitting ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <LoadingSpinner size="small" className="text-white" />
+                  <span>Saving...</span>
+                </div>
+              ) : event ? (
+                "Update"
+              ) : (
+                "Add"
+              )}
             </Button>
 
             {event && (
               <Button
                 type="danger"
                 className="w-9/10 mx-auto mt-2"
+                disabled={isSubmitting || isDeleting}
                 onClick={(e) => {
                   e.preventDefault();
                   handleDelete();
@@ -183,6 +267,7 @@ const EventForm = ({
               <select
                 {...methods.register("stableId")}
                 className="w-full p-2 border border-gray-300 rounded-md mb-6"
+                disabled={isSubmitting || isDeleting}
               >
                 {stables.map(({ id, name }) => (
                   <option key={id} value={id}>
@@ -193,6 +278,21 @@ const EventForm = ({
             )}
           </div>
         </FormProvider>
+
+        {/* Delete Confirmation Modal */}
+        <ConfirmationModal
+          isOpen={showDeleteConfirmation}
+          onClose={() => setShowDeleteConfirmation(false)}
+          onConfirm={handleConfirmDelete}
+          loading={isDeleting}
+          title="Delete Event"
+          confirmButtonText="Delete"
+          cancelButtonText="Cancel"
+          confirmButtonType="danger"
+          cancelButtonType="secondary"
+        >
+          Are you sure you want to delete this event? This cannot be undone.
+        </ConfirmationModal>
       </div>
     </div>
   );

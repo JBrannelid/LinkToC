@@ -4,7 +4,7 @@ import { handleAxiosError } from "../utils/errors";
 // Axios instance with default configuration
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 5000,
+  timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -16,27 +16,20 @@ axiosInstance.interceptors.request.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Only retry for network errors, not auth or validation
-    if (
-      error.message === "Network Error" &&
-      !originalRequest._retry &&
-      !originalRequest.url.includes("/login")
-    ) {
-      // Don't retry auth requests
-
+    // Retry logic
+    if (error.message === "Network Error" && !originalRequest._retry) {
       originalRequest._retry = true;
-
-      try {
-        // Wait before retrying
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        return await axiosInstance(originalRequest);
-      } catch (retryError) {
-        // If retry fails, continue to regular error handling
-        return Promise.reject(retryError);
-      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      return axiosInstance(originalRequest);
     }
 
-    // If not retrying, pass to regular error handling
+    // Rate limiting
+    if (error.response?.status === 429 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      return axiosInstance(originalRequest);
+    }
+
     return Promise.reject(error);
   }
 );

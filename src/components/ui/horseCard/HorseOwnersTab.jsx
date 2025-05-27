@@ -1,11 +1,11 @@
 import React from "react";
-import LoadingSpinner from "../../ui/LoadingSpinner";
 import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
 import { getHorseUserRoleName } from "../../../utils/horseProfileUtils";
 import ProfileImage from "../../common/ProfileImage";
+import LoadingSpinner from "../LoadingSpinner";
 
-const HorseOwnersTab = ({ horseId, horseProfile }) => {
+const HorseOwnersTab = ({ horseProfile }) => {
   const navigate = useNavigate();
 
   // Extract owners from horseProfile data

@@ -1,42 +1,118 @@
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 
-// TimePicker component integrated with React Hook Form
-const TimePicker = ({ name, label, date, validation = {}, className = "" }) => {
+const TimePicker = ({
+  name,
+  label,
+  validation = {},
+  className = "",
+  placeholder = "HH:MM",
+  ...props
+}) => {
   const {
-    control,
+    register,
     formState: { errors },
-  } = useFormContext(); // Access form context provided by RHFFormProvider
+    setValue,
+    watch,
+  } = useFormContext();
+
+  const [isFirefox, setIsFirefox] = useState(false);
+  const fieldValue = watch(name);
+  const fieldError = errors[name];
+
+  // Detect Firefox browser
+  useEffect(() => {
+    setIsFirefox(navigator.userAgent.toLowerCase().indexOf("firefox") > -1);
+  }, []);
+
+  // Format time for better display
+  const formatTimeForDisplay = (time) => {
+    if (!time) return "";
+
+    // Ensure proper HH:MM format
+    if (time.length === 5 && time.includes(":")) {
+      return time;
+    }
+  };
+
+  // Validate time format
+  const validateTimeFormat = (value) => {
+    if (!value) return true;
+
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(value)) {
+      return "Please enter a valid time format (HH:MM, 24-hour format)";
+    }
+
+    return true;
+  };
+
+  // Handle input change
+  const handleTimeChange = (e) => {
+    const value = e.target.value;
+    setValue(name, value, { shouldValidate: true });
+  };
+
+  // Enhanced validation combining format and custom validation
+  const combinedValidation = {
+    ...validation,
+    validate: {
+      format: validateTimeFormat,
+      ...(typeof validation.validate === "function"
+        ? { custom: validation.validate }
+        : validation.validate || {}),
+    },
+  };
+
+  // Build CSS classes
+  const inputClasses = [
+    "time-picker-input",
+    isFirefox ? "time-input-firefox" : "",
+    fieldError ? "error" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <div className="flex">
-      <div className="flex-1">
-        {/* Display the date and label(Tid) */}
-        <span>{date}</span>
-        <span>{label}&nbsp;&nbsp;</span>
+    <div className="flex flex-col min-w-28">
+      {label && (
+        <label
+          htmlFor={name}
+          className="block text-sm font-medium text-gray mb-1"
+        >
+          {label}
+        </label>
+      )}
 
-        {/* Controlled time input field using RHF's Controller */}
-        <Controller
-          name={name}
-          control={control}
-          rules={validation}
-          render={({ field }) => (
-            <input
-              type="time"
-              value={field.value}
-              onChange={field.onChange}
-              className={`w-20 focus:outline-none ${className}`}
-            />
-          )}
+      <div className="relative">
+        <input
+          id={name}
+          type="time"
+          {...register(name, combinedValidation)}
+          onChange={handleTimeChange}
+          value={formatTimeForDisplay(fieldValue)}
+          placeholder={placeholder}
+          className={inputClasses}
+          {...props}
         />
       </div>
 
-      {/* Show error message if validation fails */}
-      {errors[name] && (
-        <span className="text-error-500 text-xs ml-2">
-          {errors[name].message || "Invalid time format"}
-        </span>
+      {fieldError && (
+        <p className="time-picker-error" role="alert">
+          {fieldError.message}
+        </p>
       )}
+
+      {/* Fallback for browsers that don't support time input */}
+      <noscript>
+        <input
+          type="text"
+          pattern="[0-9]{2}:[0-9]{2}"
+          placeholder="HH:MM (24-hour format)"
+          className="time-picker-input"
+        />
+      </noscript>
     </div>
   );
 };

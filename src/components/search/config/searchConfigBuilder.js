@@ -1,5 +1,5 @@
-import baseSearchConfig from './searchConfigBase';
 import { createResponseHandler } from './responseHandlers.js';
+import baseSearchConfig from './searchConfigBase';
 
 class SearchConfigBuilder {
     constructor(entityType) {

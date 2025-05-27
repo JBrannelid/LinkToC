@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
-import { ROUTES } from "../routes/index.jsx";
 import WelcomeLayout from "../components/layout/WelcomeLayout";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { ROUTES } from "../routes/index.jsx";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();

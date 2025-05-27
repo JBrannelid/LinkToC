@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import UserHorsesTab from "./UserHorsesTab";
-import EditInformationModal from "../../layout/EditInformationModal";
 import { useAuth } from "../../../context/AuthContext";
+import EditInformationModal from "../../layout/EditInformationModal";
 
 const UserProfileContent = ({ user, userProfile, activeTab, forceRefresh }) => {
   const { user: currentUser } = useAuth();

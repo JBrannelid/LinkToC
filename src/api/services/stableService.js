@@ -1,7 +1,7 @@
-import createBaseService from "../services/baseService";
+import createBaseService from "./baseService";
 import { ENDPOINTS } from "./endPoints";
-import axiosInstance from "../config/axiosConfig";
 import tokenStorage from "../../utils/tokenStorage";
+import axiosInstance from "../config/axiosConfig";
 
 const getUserIdFromToken = () => {
   try {
@@ -172,24 +172,6 @@ const stableService = {
     return [];
   },
 
-  // Awaiting backend implementation to recives stable invites by user id
-  // getStableInvitesByUserId: async (userId) => {
-  //   try {
-  //     const response = await axiosInstance.get(
-  //       `/api/get-stable-invites-by-user/${userId}`
-  //     );
-
-  //     if (response && response.isSuccess && Array.isArray(response.value)) {
-  //       return response.value;
-  //     }
-
-  //     return [];
-  //   } catch (error) {
-  //     console.error("Error fetching user stable invites:", error);
-  //     throw error;
-  //   }
-  // },
-
   // For rejecting an application request from a user to join the stable
   rejectStableJoinRequest: async (requestData) => {
     return await axiosInstance.post(
@@ -213,21 +195,12 @@ const stableService = {
 
   // GET all join request ask by the User
   getUserStableRequests: async (userId) => {
-    try {
-      const response = await axiosInstance.get(
-        `/api/get-stable-join-requests-by-user/${userId}`
-      );
-
-      // The API returns data in the 'value' property
-      if (response && response.isSuccess && Array.isArray(response.value)) {
-        return response.value;
-      }
-
-      return [];
-    } catch (error) {
-      console.error("Error fetching user stable requests:", error);
-      throw error;
-    }
+    const response = await axiosInstance.get(
+      `/api/get-stable-join-requests-by-user/${userId}`
+    );
+    return response?.isSuccess && Array.isArray(response.value)
+      ? response.value
+      : [];
   },
 
   // Cancel a ongoing join request

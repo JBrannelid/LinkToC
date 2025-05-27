@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "../ui/Button";
-import SettingIcon from "../../assets/icons/SettingIcon";
-import CloseIcon from "../../assets/icons/CloseIcon";
 import ChevronLeftIcon from "../../assets/icons/ChevronLeftIcon";
+import CloseIcon from "../../assets/icons/CloseIcon";
+import SettingIcon from "../../assets/icons/SettingIcon";
+import Button from "../ui/Button";
 
 const ModalHeader = ({
   // Button configuration

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
-import { useUserStableRequests } from "../../hooks/useUserStableRequests";
 import CloseIcon from "../../assets/icons/CloseIcon";
-import ConfirmationModal from "../ui/ConfirmationModal";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import { useUserStableRequests } from "../../hooks/useUserStableRequests";
+import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
 import LoadingSpinner from "../ui/LoadingSpinner";
 
 const UserStableRequestsList = () => {

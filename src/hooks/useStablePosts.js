@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import stablePostService from "../api/services/stablePostService";
 import { useLoadingState } from "./useLoadingState";
+import stablePostService from "../api/services/stablePostService";
 import { useAppContext } from "../context/AppContext";
 
 export function useStablePosts(stableId, currentUser) {

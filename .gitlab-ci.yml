@@ -1,4 +1,5 @@
 stages:
+
   - check
   - build
   - test
@@ -6,83 +7,57 @@ stages:
   - teardown
 
 variables:
-  CI_DEBUG_TRACE: "true"  # Enable debug mode
-  # PIPELINE_ROOT: "/builds/cc25group-10/frontend"
+  CI_DEBUG_TRACE: "true"  # Aktiverar felsökningsläge för pipelinekörningar
 
-# Runs a pipeline that builds a base of all 3 images on fresh merge requests.
-# child-build-pipeline:
-#   stage: check
-#   trigger:
-#     include:
-#       - local: "build-base-images.yml"
-#     strategy: depend
-#   rules:
-#     - if: '$CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH'
-#     - if: $CI_MERGE_REQUEST_ID
-#   allow_failure: true
-
-# Template for all build jobs
 .build_image_template: &build_image_template
   stage: build
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
   variables:
-    REGISTRY_PATH: "$CI_REGISTRY/cc25group-10/frontend"
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
+    - docker info
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
-    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=$CI_DEFAULT_BRANCH; fi
+    - if [[ $CI_MERGE_REQUEST_TARGET_BRANCH_NAME = $CI_DEFAULT_BRANCH ]]; then DOCKER_TAG=latest; else DOCKER_TAG=latest; fi
 
 build-react-image:
   <<: *build_image_template
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_TAG"
-    - echo "Building $IMAGE_NAME"
-    # - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-react .
+    - echo "Startar build för $IMAGE_NAME"
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-react .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 build-utils:
   <<: *build_image_template
   script:
     - export IMAGE_NAME="$CI_REGISTRY_IMAGE/utils:latest"
-    - echo "Building $IMAGE_NAME"
-    # - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
-    - docker buildx build \
-        --cache-from=type=registry,ref="$IMAGE_NAME" \
-        --cache-to=type=inline \
-        -t "$IMAGE_NAME" \
-        --push \
-        -f Dockerfile-utils .
+    - echo "Startar build för $IMAGE_NAME"
+    - docker buildx build --cache-from="$IMAGE_NAME" -t "$IMAGE_NAME" --push -f Dockerfile-utils .
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
-# Run all (fake) tests on codechange and ONLY on branches where there is a merge request
 run-tests:
   stage: test
   script:
     - echo "TOTAL                  353     20    94%"
   coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
 
-# Setup for teardown and deploy
 .base_util_setup:
   image: $CI_REGISTRY_IMAGE/utils:latest
   before_script:
     - export ENDPOINT_NAME="primary"
     - export CI_PROJECT_NAME=$(echo "$CI_PROJECT_NAME" | tr '[:upper:]' '[:lower:]')
     - export CI_DEFAULT_BRANCH=$(echo "$CI_DEFAULT_BRANCH" | tr '[:upper:]' '[:lower:]')
-    - export STACK_NAME="g10-$CI_DEFAULT_BRANCH"
+    - export STACK_NAME="g10-frontend-$CI_DEFAULT_BRANCH"
+    - export STACK_NAMEDF="g10-$CI_DEFAULT_BRANCH"
     - set -e
 
-# Environment name reference
 .environment_setup: &env_setup
   name: review/$CI_DEFAULT_BRANCH
 
@@ -91,26 +66,22 @@ deploy:
   stage: deploy
   environment:
     <<: *env_setup
-    # url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
+    url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
     on_stop: teardown
   script:
-    - echo "Deploy"
-    - if [[ $CI_DEFAULT_BRANCH = $CI_DEFAULT_BRANCH ]]; then DOCKER_COMPOSE=docker-compose.yml; else DOCKER_COMPOSE=docker-compose-test.yml; fi
+    - export DOCKER_COMPOSE="docker-compose.yml"
     - python portainer.py $CI_JOB_STAGE -dc $DOCKER_COMPOSE
   rules:
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
 
 teardown:
   extends: .base_util_setup
   stage: teardown
-  image: $CI_REGISTRY_IMAGE/utils:latest
   environment:
     <<: *env_setup
     action: stop
   script:
-    - echo "Teardown"
     - python portainer.py $CI_JOB_STAGE
   rules:
-    - when: manual
-    - if: '$CI_MERGE_REQUEST_ID'
+    - if: $CI_MERGE_REQUEST_ID
       when: manual

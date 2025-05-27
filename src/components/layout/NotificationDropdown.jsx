@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router";
-import { ROUTES } from "../../routes/index.jsx";
-import NotificationIcon from "../../assets/icons/NotificationIcon";
-import Button from "../ui/Button";
-import mockNotificationsData from "../../testing/mockNotifications.json";
 import NotificationCard from "./NotificationCard";
+import NotificationIcon from "../../assets/icons/NotificationIcon";
+import { ROUTES } from "../../routes/index.jsx";
+import mockNotificationsData from "../../testing/mockNotifications.json";
+import Button from "../ui/Button";
 
 const NotificationDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +43,7 @@ const NotificationDropdown = () => {
         type="icon"
         onClick={toggleDropdown}
         aria-label="View notifications"
+        className="cursor-pointer"
       >
         <NotificationIcon className="w-6 h-6 text-primary" />
         {unreadCount > 0 && (

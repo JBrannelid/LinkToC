@@ -1,13 +1,13 @@
 import React from "react";
 import ModalHeader from "../components/layout/ModalHeader";
-import { useAppContext } from "../context/AppContext";
+import PermissionGate from "../components/settings/PermissionGate";
 import StableMembersList from "../components/settings/StableMembersList";
 import StableRequestsList from "../components/settings/StableRequestsList";
-import PermissionGate from "../components/settings/PermissionGate";
-import { USER_ROLES } from "../utils/userUtils";
 
 import UserStableRequestsList from "../components/settings/UserStableRequestsList";
 import Button from "../components/ui/Button";
+import { useAppContext } from "../context/AppContext";
+import { USER_ROLES } from "../utils/userUtils";
 
 const StableManagementPage = () => {
   const { currentStable } = useAppContext();

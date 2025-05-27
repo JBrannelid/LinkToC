@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import AlertCircleIcon from "../../assets/icons/AlertCircleIcon.jsx";
-import FormProvider from "./formBuilder/FormProvider";
+import { useNavigate } from "react-router";
 import FormInput from "./formBuilder/FormInput";
-import authService from "../../api/services/authService";
 import FormMessage from "./formBuilder/FormMessage";
+import FormProvider from "./formBuilder/FormProvider";
+import authService from "../../api/services/authService";
+import AlertCircleIcon from "../../assets/icons/AlertCircleIcon.jsx";
+import { ROUTES } from "../../routes/index.jsx";
+
 import {
   getErrorMessage,
   createSuccessMessage,
@@ -12,8 +15,6 @@ import {
   createErrorMessage,
 } from "../../utils/errorUtils.js";
 import Button from "../ui/Button.jsx";
-import { ROUTES } from "../../routes/index.jsx";
-import { useNavigate } from "react-router";
 
 const ForgotPasswordForm = ({ onSuccess, setParentLoading = null }) => {
   const [loading, setLoading] = useState(false);

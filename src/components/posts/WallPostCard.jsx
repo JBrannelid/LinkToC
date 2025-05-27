@@ -1,5 +1,5 @@
-import PinIcon from "../../assets/icons/PinIcon";
 import ChevronDownIcon from "../../assets/icons/ChevronDownIcon";
+import PinIcon from "../../assets/icons/PinIcon";
 
 const WallPostCard = ({
   title,

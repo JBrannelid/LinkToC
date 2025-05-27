@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import EventsContainer from "./events/EventsContainer";
-import CalendarHeader from "./components/CalendarHeader";
 import CalendarGrid from "./components/CalendarGrid";
+import CalendarHeader from "./components/CalendarHeader";
+import EventsContainer from "./events/EventsContainer";
 import { useDateFns } from "../../hooks/useDateFns";
 import * as calendarUtils from "../../utils/calendarUtils";
 
 const Calendar = ({
-  users = [],
   locale,
   noEventsMessage = "No scheduled events",
   onAddEvent,
@@ -26,7 +25,7 @@ const Calendar = ({
     if (selectedDay && dateUtils.setSelectedDay) {
       dateUtils.setSelectedDay(selectedDay, false);
     }
-  }, [selectedDay, dateUtils.setSelectedDay]);
+  }, [selectedDay, dateUtils.setSelectedDay, dateUtils]);
 
   useEffect(() => {
     if (getEventsForDay && selectedDay) {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HorseOwnersTab from "./HorseOwnersTab";
-import EditInformationModal from "../../layout/EditInformationModal";
 import { useAuth } from "../../../context/AuthContext";
+import EditInformationModal from "../../layout/EditInformationModal";
 
 const HorseProfileContent = ({
   horse,
@@ -100,18 +100,9 @@ const HorseProfileContent = ({
 };
 
 // Info tab content
-const InfoTabContent = ({
-  horse,
-  horseProfile,
-  openEditModal,
-  hasHorseRole,
-}) => {
+const InfoTabContent = ({ horse, openEditModal, hasHorseRole }) => {
   const coreInformation =
     horse?.coreInformation || "No important information added yet";
-  const breed = horse?.breed || "Unknown breed";
-  const age = horse?.age ? new Date(horse.age).getFullYear() : "Unknown";
-  const currentYear = new Date().getFullYear();
-  const ageInYears = age !== "Unknown" ? currentYear - age : "Unknown";
 
   const bio =
     horse?.bio ||
@@ -132,11 +123,7 @@ const InfoTabContent = ({
           onClick={
             hasHorseRole
               ? () =>
-                  openEditModal(
-                    "coreInformation",
-                    "Important Information",
-                    coreInformation
-                  )
+                  openEditModal("core info", "Important info", coreInformation)
               : undefined
           }
         >

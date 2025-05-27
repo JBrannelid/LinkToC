@@ -3,8 +3,6 @@ import React from "react";
 const EmergencyContactIcon = ({
   size = 24,
   color = "currentColor",
-  backgroundColor,
-  iconColor,
   className = "",
   strokeWidth = 1.5,
   ...props

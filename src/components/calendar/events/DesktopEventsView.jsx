@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "../../ui/Button";
-import { formatTimeOnly } from "../../../utils/calendarUtils";
 import CloseIcon from "../../../assets/icons/CloseIcon";
+import { formatTimeOnly } from "../../../utils/calendarUtils";
 import ProfileImage from "../../common/ProfileImage";
+import Button from "../../ui/Button";
 
 const DesktopEventsView = ({
   selectedDay,

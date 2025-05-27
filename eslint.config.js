@@ -1,8 +1,8 @@
 import js from "@eslint/js";
-import globals from "globals";
+import importPlugin from "eslint-plugin-import";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import importPlugin from "eslint-plugin-import";
+import globals from "globals";
 
 export default [
   { ignores: ["dist"] },
@@ -31,9 +31,15 @@ export default [
         { allowConstantExport: true },
       ],
 
+      "import/no-useless-path-segments": "error",
       "import/no-unresolved": "error",
-      "import/extensions": ["error", "ignorePackages"],
-      "import/case-sensitivity": "error",
+      "import/order": [
+        "error",
+        {
+          groups: ["builtin", "external", "internal"],
+          alphabetize: { order: "asc", caseInsensitive: true },
+        },
+      ],
     },
     settings: {
       "import/resolver": {

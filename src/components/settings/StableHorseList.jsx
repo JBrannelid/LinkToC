@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import Button from "../ui/Button";
-import { useHorseManagement } from "../../hooks/useHorseManagement";
 import PermissionGate from "./PermissionGate";
+import PlusIcon from "../../assets/icons/PlusIcon";
+import { useAppContext } from "../../context/AppContext.jsx";
 import {
   HORSE_CATEGORIES,
   CATEGORY_LABELS,
 } from "../../context/constants/horseConstants.js";
+import { useHorseManagement } from "../../hooks/useHorseManagement";
+import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { useAppContext } from "../../context/AppContext.jsx";
-import { useAuth } from "../../context/AuthContext.jsx";
-import PlusIcon from "../../assets/icons/PlusIcon";
 
-const HorseList = ({ stableId, showOwners = true }) => {
-  const { UserRoles, getCurrentStableRole, currentUser, stableRefreshKey } =
-    useAppContext();
-  const { user } = useAuth();
+const HorseList = ({ stableId }) => {
+  const { UserRoles, currentUser } = useAppContext();
 
   const [showActionModal, setShowActionModal] = useState(false);
   const [selectedHorse, setSelectedHorse] = useState(null);
@@ -151,8 +148,6 @@ const HorseList = ({ stableId, showOwners = true }) => {
       return "";
     }
   };
-
-  const currentRole = getCurrentStableRole();
 
   return (
     <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
