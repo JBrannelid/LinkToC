@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import React from "react";
 import LoadingIcon from "../../assets/icons/LoadingIcon";
@@ -11,9 +12,13 @@ const LoadingSpinner = ({
   const marginClass = withMargin ? "mr-5" : "";
 
   return (
-    <span className={`animate-spin ${marginClass} ${className}`}>
+    <motion.span
+      className={`${marginClass} ${className}`}
+      animate={{ rotate: 360 }}
+      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+    >
       <LoadingIcon size={iconSize} color="currentColor" />
-    </span>
+    </motion.span>
   );
 };
 
