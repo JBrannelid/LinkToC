@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router";
 import NotificationCard from "./NotificationCard";
@@ -55,7 +56,12 @@ const NotificationDropdown = () => {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-5 z-50 w-100 max-h-[80vh] overflow-auto mt-3 2xl:top-12">
+        <motion.div
+          className="absolute right-5 z-50 w-100 max-h-[80vh] overflow-auto mt-3 2xl:top-12"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.15 }}
+        >
           <div className="bg-primary-light rounded-lg shadow-lg">
             <div className="p-4">
               <p className="text-error-500 text-center text-sm mb-2">
@@ -81,7 +87,7 @@ const NotificationDropdown = () => {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
