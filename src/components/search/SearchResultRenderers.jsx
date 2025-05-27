@@ -52,13 +52,16 @@ export const ListItemRenderer = (
                 const button = e.currentTarget.querySelector('button');
                 if (button) {
                     button.style.opacity = 1;
+                    button.style.transform = 'scale(1)';
                 }
             }}
             onBlur={(e) => {
                 setIsFocused(false);
                 const button = e.currentTarget.querySelector('button');
                 if (button) {
-                    button.style.opacity = 0;
+                    if (window.innerWidth >= 768) {
+                        button.style.opacity = isSelected ? 1 : 0;
+                    }
                 }
             }}
             onMouseEnter={(e) => {
@@ -71,7 +74,6 @@ export const ListItemRenderer = (
                 const button = e.currentTarget.querySelector('button');
                 if (button) {
                     button.style.opacity = 0;
-
                 }
             }}
             data-index={index}
@@ -114,11 +116,11 @@ export const ListItemRenderer = (
                 <Button
                     type="primary"
                     size="small"
-                    className="ml-2 whitespace-nowrap transition-all duration-300
-                    opacity-100 scale-100 
-        md:opacity-0 
-        active:scale-90 hover:scale-105"
+                    className="ml-2 whitespace-nowrap transition-all duration-300"
                     onClick={handleButtonClick}
+                    style={{
+                        opacity: window.innerWidth < 768 ? 1 : 0,
+                    }}
                     tabIndex={-1}
                     aria-hidden="true"
                     data-action-button="visual-indicator"

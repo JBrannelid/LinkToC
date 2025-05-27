@@ -74,11 +74,8 @@ const SearchResults = (
             handleSelectItem(item);
         }
     }, [handleSelectItem, contextHandleItemFocus, onItemFocus]);
-
     
-    const ItemRenderer = config?.resultItemRenderer
-        ? React.memo(config.resultItemRenderer)
-        : MemoizedListItem;
+    const ItemRenderer = config?.resultItemRenderer || MemoizedListItem;
     
     const renderedResults = useMemo(() => {
         if (results.length === 0) return null;
@@ -97,6 +94,7 @@ const SearchResults = (
                     aria-label={`Search results for ${config?.entityType || 'items'}`}
                 >
                     {results.map((item, index) => (
+                        
                         <ItemRenderer
                             key={item[config?.idField || 'id'] || index}
                             item={item}
@@ -112,7 +110,6 @@ const SearchResults = (
                 </div>
             );
         }
-        
         return (
             <ul
                 className="space-y-2"

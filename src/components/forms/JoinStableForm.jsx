@@ -49,27 +49,25 @@ const JoinStableForm = ({
     setSelectedStable(data);
     setShowConfirmModal(true);
   }, []);
-
-  // Handle confirmation - send the join request
+  
   const handleJoinConfirm = useCallback(async () => {
     if (!selectedStable) return;
 
     const result = await sendJoinRequest(selectedStable);
-    console.log("Join request result:", result);
 
-    if (result.success) {
-      setShowConfirmModal(false);
-
-      if (onSubmit) {
-        setTimeout(() => {
+      setTimeout(() => {
+        setShowConfirmModal(false);
+        if (onSubmit) {
           onSubmit({
             ...selectedStable,
             action: "request",
-            requestSent: true,
+            requestSent: result.success, 
+            result: result 
           });
-        }, 1500);
-      }
-    }
+        }
+        
+      }, 1500);
+    
   }, [selectedStable, sendJoinRequest, onSubmit]);
 
   const handleCancelSearch = () => {
