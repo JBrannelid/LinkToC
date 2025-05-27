@@ -12,6 +12,7 @@ import { USER_ROLES } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
 import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import { motion } from "framer-motion";
 
 const PostItem = ({
   post,
@@ -97,7 +98,12 @@ const PostItem = ({
       : post.commentCount || 0;
 
   return (
-    <div className="bg-background pb-2 md:w-9/10 lg:mb-6">
+    <motion.div
+      className="bg-background pb-2 md:w-9/10 lg:mb-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Mobile/medium layout */}
       <div className="lg:hidden">
         <div className="flex justify-between">
@@ -159,7 +165,6 @@ const PostItem = ({
           </div>
         </div>
       </div>
-
       {/* md screen layout and above */}
       <div className="hidden md:block bg-white rounded-lg shadow-lg overflow-hidden lg:mt-4">
         {/* Header */}
@@ -240,7 +245,6 @@ const PostItem = ({
           />
         </div>
       </div>
-
       {/* Comments Modal */}
       <CommentsModal
         isOpen={showCommentsModal}
@@ -251,7 +255,7 @@ const PostItem = ({
         onDeleteComment={onDeleteComment}
         loading={commentLoading}
       />
-    </div>
+    </motion.div>
   );
 };
 
