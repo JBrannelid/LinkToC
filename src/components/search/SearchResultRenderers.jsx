@@ -1,4 +1,4 @@
-import React, {createElement} from 'react';
+import React, {createElement, useState} from 'react';
 import Button from "../ui/Button.jsx";
 import {ConnectedDisplayDistance} from "../ui/DisplayDistance.jsx"
 import StableIcon from "../../assets/icons/StableIcon.jsx";
@@ -16,44 +16,54 @@ export const ListItemRenderer = (
         onAction,
         ...props
     }) => {
+    const [isOpening, setIsOpening] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
     const primaryText = item[config?.labelField || 'name']
     const countyText = item.county || '';
     const imageUrl = item[config?.imageField || 'image'];
     const stableType = item.type || '';
-    const handleFocus = () => {
-        if (onFocus) {
-            onFocus(item);
-        }
-    };
+
     const openModal = (e) => {
         e.stopPropagation();
-        if (onJoinStable) {
-            onJoinStable({
-                stableId: item.id,
-                stableName: item,
-                action: 'join'
-            });
-        }
+        const delay = window.innerWidth < 768 ? 500 : 400;
+        setTimeout(() => {
+            if (onJoinStable) {
+                onJoinStable({
+                    stableId: item.id,
+                    stableName: item,
+                    action: 'join'
+                });
+            }
+            setIsOpening(false);
+        },delay);
+       
     };
     const handleButtonClick = (e) => {
         e.stopPropagation(); 
         openModal(e);
     };
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openModal(event);
-        }
-    };
+    const baseClasses = "group flex items-center justify-between p-3 border border-primary rounded-lg cursor-pointer mb-2 bg-white hover:bg-primary-light focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-150 active:scale-96 active:bg-primary-light";
+    const selectedClasses = isSelected ? "bg-primary-light hover:bg-primary active:bg-primary" : "";
     return (
         <li
-            className={`group flex items-center justify-between p-3 border border-primary rounded-lg cursor-pointer mb-2 bg-white ${
-                isSelected ? 'bg-primary-light' :  'bg-white hover:bg-primary-light'
-            } focus:outline-none focus:ring-2 focus:ring-primary`}
+            
+            className={`${baseClasses} ${selectedClasses}`}
             onClick={openModal}
             tabIndex={0}
-            onKeyDown={handleKeyDown}
-            onFocus={handleFocus}
+            onFocus={(e) => {
+                setIsFocused(true);
+                const button = e.currentTarget.querySelector('button');
+                if (button) {
+                    button.style.opacity = 1;
+                }
+            }}
+            onBlur={(e) => {
+                setIsFocused(false);
+                const button = e.currentTarget.querySelector('button');
+                if (button) {
+                    button.style.opacity = 0;
+                }
+            }}
             onMouseEnter={(e) => {
                 const button = e.currentTarget.querySelector('button');
                 if (button) {
@@ -63,7 +73,8 @@ export const ListItemRenderer = (
             onMouseLeave={(e) => {
                 const button = e.currentTarget.querySelector('button');
                 if (button) {
-                    button.style.opacity = isSelected ? 1 : 0;
+                    button.style.opacity = 0;
+
                 }
             }}
             data-index={index}
@@ -106,11 +117,10 @@ export const ListItemRenderer = (
                 <Button
                     type="primary"
                     size="small"
-                    className="ml-2 whitespace-nowrap transition-all duration-300"
-                    style={{
-                        opacity: isSelected ? 1 : 0,
-                        transform: isSelected ? 'scale(1)' : 'scale(0.9)'
-                    }}
+                    className="ml-2 whitespace-nowrap transition-all duration-300
+                    opacity-100 scale-100 
+        md:opacity-0 
+        active:scale-90 hover:scale-105"
                     onClick={handleButtonClick}
                     tabIndex={-1}
                     aria-hidden="true"
