@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { motion } from "framer-motion";
+import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import SearchIcon from "../assets/icons/SearchIcon";
 import MemberCard from "../components/layout/MemberCard";
@@ -16,40 +17,68 @@ const ListUserStablePage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // StableId from context or URL params
-  const stableId = urlStableId || currentStable?.id;
+  // Mmoized StableId
+  const stableId = useMemo(
+    () => urlStableId || currentStable?.id,
+    [urlStableId, currentStable?.id]
+  );
+
   const { members, loading, loadingState } = useStableManagement(stableId);
 
-  // Filter users based on search term
-  const filteredMembers = members.filter((member) => {
-    const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
-    return searchTerm === "" || fullName.includes(searchTerm.toLowerCase());
-  });
+  // Memoize filtered members
+  const filteredMembers = useMemo(() => {
+    if (!members.length) return [];
 
-  const handleSearchChange = (value) => {
+    if (!searchTerm.trim()) return members;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return members.filter((member) => {
+      const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
+      return fullName.includes(lowerSearchTerm);
+    });
+  }, [members, searchTerm]);
+
+  // Memoize callbacks to prevent unnecessary re-renders of child components
+  const handleSearchChange = useCallback((value) => {
     setSearchTerm(value);
-  };
+  }, []);
 
-  const handleProfileClick = (userId) => {
-    const route = buildRoute(ROUTES.USER_PROFILE, { userId });
-    navigate(route);
-  };
+  const handleProfileClick = useCallback(
+    (userId) => {
+      if (userId) {
+        const route = buildRoute(ROUTES.USER_PROFILE, { userId });
+        navigate(route);
+      }
+    },
+    [navigate]
+  );
 
-  const handleMyProfileClick = () => {
+  const handleMyProfileClick = useCallback(() => {
     navigate(buildRoute(ROUTES.USER_PROFILE, { userId: currentUser?.id }));
-  };
+  }, [navigate, currentUser?.id]);
 
-  if (loading) {
-    return (
+  // Memoize loading component
+  const LoadingComponent = useMemo(
+    () => (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner size="medium" className="text-gray" />
         <p className="ml-2">{loadingState?.getMessage()}</p>
       </div>
-    );
+    ),
+    [loadingState]
+  );
+
+  if (loading) {
+    return LoadingComponent;
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+    <motion.div
+      className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Header */}
       <div className="bg-primary-light lg:bg-background">
         <ModalHeader />
@@ -82,7 +111,12 @@ const ListUserStablePage = () => {
         </div>
 
         {/* Profile Btn */}
-        <div className="mb-6 flex justify-center lg:hidden ">
+        <motion.div
+          className="mb-6 flex justify-center lg:hidden"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <Button
             type="secondary"
             className="w-full max-w-sm"
@@ -90,18 +124,43 @@ const ListUserStablePage = () => {
           >
             My profile
           </Button>
-        </div>
+        </motion.div>
 
         {/* Members Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.08,
+              },
+            },
+          }}
+        >
           {filteredMembers.map((member, index) => (
-            <MemberCard
+            <motion.div
               key={`stable-member-${member.id}-${index}`}
-              member={member}
-              onClick={() => handleProfileClick(member.userId)}
-            />
+              variants={{
+                hidden: { opacity: 0, y: 20, scale: 0.95 },
+                visible: { opacity: 1, y: 0, scale: 1 },
+              }}
+              whileHover={{
+                y: -2,
+                scale: 1.02,
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+            >
+              <MemberCard
+                member={member}
+                onClick={() => handleProfileClick(member.userId)}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {filteredMembers.length === 0 && (
           <div className="text-center py-10">
@@ -109,7 +168,7 @@ const ListUserStablePage = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

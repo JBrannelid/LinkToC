@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import PermissionGate from "./PermissionGate";
 import CheckIcon from "../../assets/icons/CheckIcon";
@@ -88,7 +89,19 @@ const StableMembersList = ({ stableId }) => {
       </header>
 
       {/* List container with scroll */}
-      <div className="max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto pr-1 space-y-1">
+      <motion.div
+        className="max-h-64 md:max-h-80 lg:max-h-96 overflow-y-auto pr-1 space-y-1"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.1,
+            },
+          },
+        }}
+      >
+        {" "}
         {/* Managers */}
         {groupedMembers[USER_ROLES.MANAGER].length > 0 && (
           <section className="mb-3">
@@ -100,8 +113,17 @@ const StableMembersList = ({ stableId }) => {
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <article
+                <motion.article
+                  key={`member-${member.id}`}
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  whileHover={{
+                    backgroundColor: "rgba(2, 122, 72, 0.05)",
+                    transition: { duration: 0.5 },
+                  }}
                   onClick={() => handleClickMember(member)}
                 >
                   <div className="flex items-center">
@@ -114,12 +136,11 @@ const StableMembersList = ({ stableId }) => {
                     </div>
                     <p className="text-sm">{`${member.firstName} ${member.lastName}`}</p>
                   </div>
-                </article>
+                </motion.article>
               </PermissionGate>
             ))}
           </section>
         )}
-
         {/* Admins */}
         {groupedMembers[USER_ROLES.ADMIN].length > 0 && (
           <section className="mb-3">
@@ -133,8 +154,17 @@ const StableMembersList = ({ stableId }) => {
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <article
+                <motion.article
+                  key={`member-${member.id}`}
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  whileHover={{
+                    backgroundColor: "rgba(2, 122, 72, 0.05)",
+                    transition: { duration: 0.5 },
+                  }}
                   onClick={() => handleClickMember(member)}
                 >
                   <div className="flex items-center">
@@ -150,12 +180,11 @@ const StableMembersList = ({ stableId }) => {
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>
-                </article>
+                </motion.article>
               </PermissionGate>
             ))}
           </section>
         )}
-
         {/* Regular Members */}
         {groupedMembers[USER_ROLES.USER].length > 0 && (
           <section className="mb-3">
@@ -167,8 +196,17 @@ const StableMembersList = ({ stableId }) => {
                 key={`member-${member.id}`}
                 requiredRoles={[USER_ROLES.MANAGER]}
               >
-                <article
+                <motion.article
+                  key={`member-${member.id}`}
                   className="flex items-center justify-between py-2 px-3 bg-light/30 rounded-lg mb-2 cursor-pointer"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  whileHover={{
+                    backgroundColor: "rgba(2, 122, 72, 0.05)",
+                    transition: { duration: 0.5 },
+                  }}
                   onClick={() => handleClickMember(member)}
                 >
                   <div className="flex items-center">
@@ -184,12 +222,12 @@ const StableMembersList = ({ stableId }) => {
                   <span className="px-2 py-1 bg-primary-light text-primary rounded-full text-sm">
                     {getRoleName(member.role)}
                   </span>
-                </article>
+                </motion.article>{" "}
               </PermissionGate>
             ))}
           </section>
         )}
-      </div>
+      </motion.div>
 
       {/* Member Action Modal */}
       {showActionModal && selectedMember && (

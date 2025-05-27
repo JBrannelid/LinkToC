@@ -1,9 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "./authContext.js";
 import authService from "../api/services/authService.js";
 import userService from "../api/services/userService";
@@ -18,8 +13,8 @@ const parseJwt = (token) => {
     const base64Url = parts[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
     const paddedBase64 = base64.padEnd(
-        base64.length + (4 - (base64.length % 4)),
-        "="
+      base64.length + (4 - (base64.length % 4)),
+      "="
     );
     return JSON.parse(window.atob(paddedBase64));
   } catch (error) {
@@ -66,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [sessionTimeout, setSessionTimeout] = useState(null);
   const [showSessionWarning, setShowSessionWarning] = useState(false);
-  
+
   // Fetch user-stable roles after token verification
   const verifyToken = useCallback(async () => {
     try {
@@ -259,44 +254,47 @@ export const AuthProvider = ({ children }) => {
     };
   }, [user, checkAndRefreshToken]);
 
-  const login = useCallback(async (email, password) => {
-    try {
-      setIsLoading(true);
+  const login = useCallback(
+    async (email, password) => {
+      try {
+        setIsLoading(true);
 
-      // Use authService to login
-      const response = await authService.login({ email, password });
+        // Use authService to login
+        const response = await authService.login({ email, password });
 
-      // Handle the API response
-      if (!response) {
-        throw new Error("Login failed: No response from server");
+        // Handle the API response
+        if (!response) {
+          throw new Error("Login failed: No response from server");
+        }
+
+        // Extract tokens
+        const accessToken = response?.value?.accessToken;
+        const refreshToken = response?.value?.refreshToken;
+
+        if (!accessToken || !refreshToken) {
+          console.error("Unexpected response structure", response);
+          throw new Error("Authentication failed: Invalid token response");
+        }
+
+        // Store tokens
+        tokenStorage.setAccessToken(accessToken);
+        tokenStorage.setRefreshToken(refreshToken);
+
+        await verifyToken();
+
+        // Check if user has a saved stable
+        const savedStable = localStorage.getItem("currentStable");
+
+        return { success: true, hasStable: !!savedStable };
+      } catch (error) {
+        console.error("Login error:", error);
+        throw error;
+      } finally {
+        setIsLoading(false);
       }
-
-      // Extract tokens
-      const accessToken = response?.value?.accessToken;
-      const refreshToken = response?.value?.refreshToken;
-
-      if (!accessToken || !refreshToken) {
-        console.error("Unexpected response structure", response);
-        throw new Error("Authentication failed: Invalid token response");
-      }
-
-      // Store tokens
-      tokenStorage.setAccessToken(accessToken);
-      tokenStorage.setRefreshToken(refreshToken);
-
-      await verifyToken();
-
-      // Check if user has a saved stable
-      const savedStable = localStorage.getItem("currentStable");
-
-      return { success: true, hasStable: !!savedStable };
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
-    } finally {
-      setIsLoading(false);
-    }
-  },[verifyToken]);
+    },
+    [verifyToken]
+  );
 
   const authFetch = useCallback(
     async (url, options = {}) => {

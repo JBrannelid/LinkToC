@@ -103,7 +103,7 @@ const CommentsModal = ({
                         alt={`${comment.firstName || "User"} ${
                           comment.lastName || ""
                         }'s avatar`}
-                        size="small"
+                        size="rounded"
                       />
                     </div>
                     {/* Display date format outside main border/container */}

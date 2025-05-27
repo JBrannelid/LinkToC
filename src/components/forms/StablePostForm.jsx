@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormProvider, FormInput } from "./index";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import { useAppContext } from "../../hooks/useAppContext.js";
 import ModalHeader from "../layout/ModalHeader";
 import Button from "../ui/Button";
+import ConfirmationModal from "../ui/ConfirmationModal";
 
 const StablePostForm = ({
   post = null,
@@ -14,6 +16,7 @@ const StablePostForm = ({
 }) => {
   const { currentStable, currentUser } = useAppContext();
   const fileInputRef = useRef(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const methods = useForm({
     defaultValues: {
@@ -52,8 +55,13 @@ const StablePostForm = ({
   };
 
   const handleDelete = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
     if (post && post.id && typeof onDelete === "function") {
       onDelete(post.id);
+      setShowDeleteConfirm(false);
       onCancel();
     } else {
       onCancel();
@@ -164,6 +172,27 @@ const StablePostForm = ({
             </div>
           </FormProvider>
         </div>
+        <ConfirmationModal
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleConfirmDelete}
+          title="Delete this post?"
+          confirmButtonText="Delete"
+          confirmButtonType="danger"
+          cancelButtonText="Cancel"
+          icon={
+            <HandRaisedIcon
+              size={70}
+              backgroundColor="bg-error-500"
+              iconColor="text-white"
+            />
+          }
+        >
+          <p className="text-center">
+            Are you sure you want to delete this post? This action cannot be
+            undone.
+          </p>
+        </ConfirmationModal>
       </div>
     </div>
   );

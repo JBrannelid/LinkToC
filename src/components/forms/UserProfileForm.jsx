@@ -3,13 +3,12 @@ import { useForm, FormProvider } from "react-hook-form";
 import FormInput from "./formBuilder/FormInput";
 import FormMessage from "./formBuilder/FormMessage";
 import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
-import { getReadSasUrl } from "../../api/services/fileService";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import PenIcon from "../../assets/icons/PenIcon";
 import { useAuth } from "../../hooks/useAuth.js";
 import { useUserData } from "../../hooks/useUserData";
 import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
-import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
+import { formatUserFullName } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
 import ImageUploader from "../fileUpload/ImageUploader";
 import ModalHeader from "../layout/ModalHeader";
@@ -42,7 +41,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [uploadError, setUploadError] = useState("");
-  const [previewImageUrl, setPreviewImageUrl] = useState(null);
+  const [imageRefreshKey, setImageRefreshKey] = useState(0);
 
   const methods = useForm({
     defaultValues: {
@@ -63,26 +62,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
       });
     }
   }, [userData, methods]);
-
-  // Fetch the SAS URL for the profile image if available
-  useEffect(() => {
-    const fetchProfileImageSasUrl = async () => {
-      if (userData?.profilePicture) {
-        try {
-          // Get a SAS URL for the profile image
-          const sasUrl = await getReadSasUrl(userData.profilePicture, userId);
-          if (sasUrl) {
-            // Add cache busting parameter
-            setPreviewImageUrl(`${sasUrl}&t=${Date.now()}`);
-          }
-        } catch (error) {
-          console.warn("Could not get SAS URL for profile image:", error);
-        }
-      }
-    };
-
-    fetchProfileImageSasUrl();
-  }, [userData?.profilePicture, userId]);
 
   const onSubmit = async (data) => {
     try {
@@ -142,8 +121,6 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
 
   const displayUser = userData || user;
   const userFullName = formatUserFullName(displayUser);
-  // Use the SAS URL if available, otherwise fall back to the standard URL construction
-  const profileImageUrl = previewImageUrl || getProfileImageUrl(displayUser);
 
   return (
     <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
@@ -165,7 +142,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                 <div className="flex items-center justify-between">
                   <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-light">
                     <ProfileImage
-                      src={profileImageUrl}
+                      key={imageRefreshKey}
+                      user={displayUser}
                       className="w-full h-full"
                       size="rounded"
                       alt={`Profile image of ${userFullName}`}
@@ -173,31 +151,8 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                   </div>
                   <div className="mr-5 ">
                     <ImageUploader
-                      initialImageUrl={profileImageUrl}
-                      onImageUploaded={async (fileData) => {
-                        // Try to get a SAS URL for the new image
-                        try {
-                          const sasUrl = await getReadSasUrl(
-                            fileData.fileName,
-                            userId
-                          );
-                          if (sasUrl) {
-                            // Update image preview immediately with cache busting
-                            setPreviewImageUrl(`${sasUrl}&t=${Date.now()}`);
-                          } else {
-                            // Fall back to direct URL if SAS fails
-                            setPreviewImageUrl(
-                              `${fileData.url}?t=${Date.now()}`
-                            );
-                          }
-                        } catch (error) {
-                          console.warn(
-                            "Could not get SAS URL for uploaded image:",
-                            error
-                          );
-                          // Use the URL from the upload result
-                          setPreviewImageUrl(`${fileData.url}?t=${Date.now()}`);
-                        }
+                      onImageUploaded={async () => {
+                        setImageRefreshKey((prev) => prev + 1);
 
                         // Force refresh user data to get updated image
                         await fetchAndUpdateUserData();

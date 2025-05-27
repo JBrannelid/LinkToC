@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { motion } from "framer-motion";
+import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import SearchIcon from "../assets/icons/SearchIcon";
 import ModalHeader from "../components/layout/ModalHeader";
@@ -16,35 +17,60 @@ function StableHorsePage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // StableId from context or URL params
-  const stableId = urlStableId || currentStable?.id;
+  // Memoized StableId from context
+  const stableId = useMemo(
+    () => urlStableId || currentStable?.id,
+    [urlStableId, currentStable?.id]
+  );
+
   const { horses, loading, loadingState } = useStableHorses(stableId);
 
-  // Filter horses based on search term
-  const filteredHorses = horses.filter((horse) => {
-    const horseName = horse.horseName?.toLowerCase() || "";
-    return searchTerm === "" || horseName.includes(searchTerm.toLowerCase());
-  });
+  // Memoize filtered horses
+  const filteredHorses = useMemo(() => {
+    if (!horses.length) return [];
 
-  const handleSearchChange = (value) => {
+    if (!searchTerm.trim()) return horses;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return horses.filter((horse) => {
+      const horseName = horse.horseName?.toLowerCase() || "";
+      return horseName.includes(lowerSearchTerm);
+    });
+  }, [horses, searchTerm]);
+
+  // Memoize callbacks to prevent unnecessary re-renders of child components
+  const handleSearchChange = useCallback((value) => {
     setSearchTerm(value);
-  };
+  }, []);
 
-  const handleHorseClick = (horseId) => {
-    navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId }));
-  };
+  const handleHorseClick = useCallback(
+    (horseId) => {
+      navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId }));
+    },
+    [navigate]
+  );
 
-  if (loading) {
-    return (
+  const LoadingComponent = useMemo(
+    () => (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner size="medium" className="text-gray" />
         <p className="ml-2">{loadingState?.getMessage()}</p>
       </div>
-    );
+    ),
+    [loadingState]
+  );
+
+  if (loading) {
+    return LoadingComponent;
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+    <motion.div
+      className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Header */}
       <div className="bg-primary-light lg:bg-background">
         <ModalHeader />
@@ -58,7 +84,7 @@ function StableHorsePage() {
         searchPlaceholder="Search..."
       />
 
-      {/* Member List */}
+      {/* Horse List */}
       <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
@@ -77,7 +103,12 @@ function StableHorsePage() {
         </div>
 
         {/* Profile Btn */}
-        <div className="mb-6 flex justify-center lg:hidden ">
+        <motion.div
+          className="mb-6 flex justify-center lg:hidden"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <Button
             type="secondary"
             className="w-full max-w-sm"
@@ -85,20 +116,45 @@ function StableHorsePage() {
           >
             My horse
           </Button>
-        </div>
+        </motion.div>
 
         {/* Horses Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5">
+        <motion.div
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-5"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            visible: {
+              transition: {
+                staggerChildren: 0.08,
+              },
+            },
+          }}
+        >
           {filteredHorses.map((horse, index) => (
-            <StableHorseCard
+            <motion.div
               key={horse.id ?? `horse-${index}`}
-              horse={horse}
-              onClick={() =>
-                handleHorseClick(horse.id || horse.horseId || horse.HorseId)
-              }
-            />
+              variants={{
+                hidden: { opacity: 0, y: 20, scale: 0.95 },
+                visible: { opacity: 1, y: 0, scale: 1 },
+              }}
+              whileHover={{
+                y: -2,
+                scale: 1.02,
+                boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+            >
+              <StableHorseCard
+                horse={horse}
+                onClick={() =>
+                  handleHorseClick(horse.id || horse.horseId || horse.HorseId)
+                }
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {filteredHorses.length === 0 && (
           <div className="text-center py-10">
@@ -106,7 +162,7 @@ function StableHorsePage() {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
