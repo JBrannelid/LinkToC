@@ -26,7 +26,7 @@ const fileService = {
     try {
       // If blobName is just a filename (doesn't contain a slash)
       if (blobName && !blobName.includes("/")) {
-        // Try to get userId from parameter first
+        // get userId from parameter first
         let userIdToUse = userId;
         // fallback to localStorage
         if (!userIdToUse) {
@@ -56,18 +56,27 @@ const fileService = {
 
       throw new Error(response?.message || "Failed to get read URL");
     } catch (error) {
-      console.error("Error getting read URL:", error);
-      throw error;
+      if (error.response?.status === 404) {
+        return {
+          success: false,
+          error: "File not found",
+          notFound: true,
+        };
+      }
+
+      return {
+        success: false,
+        error: error.message || "Failed to get read URL",
+      };
     }
   },
 
-  // Delete a file from blob storage
   // Delete a file from blob storage
   deleteFile: async (blobName, userId = null) => {
     try {
       // If blobName is just a filename (doesn't contain a slash)
       if (!blobName.includes("/")) {
-        // Try to get userId from parameter first
+        // Get userId from parameter first
         let userIdToUse = userId;
 
         if (!userIdToUse) {
@@ -91,7 +100,7 @@ const fileService = {
         `/api/blob-storage/delete-blob?blobName=${encodeURIComponent(blobName)}`
       );
 
-      // Check if the deletion was successful (consistent with other functions)
+      // Check if the deletion was successful
       if (response && response.isSuccess) {
         return { success: true };
       }
