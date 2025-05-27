@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useAppContext } from "./useAppContext.js";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState";
 import { authService } from "../api/index.js";
 import userService from "../api/services/userService";
-import { useAppContext } from "../context/AppContext";
-import { useAuth } from "../context/AuthContext";
 import { ROUTES } from "../routes/index.jsx";
 import { getErrorMessage } from "../utils/errorUtils";
 

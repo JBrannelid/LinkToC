@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
+import { useAuth } from "./useAuth.js";
 import { useLoadingState } from "./useLoadingState.js";
 import stableService from "../api/services/stableService.js";
-import { useAuth } from "../context/AuthContext.jsx";
 import {
   createErrorMessage,
   createSuccessMessage,

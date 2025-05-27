@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import { useAppContext } from "./useAppContext.js";
 import { useLoadingState } from "./useLoadingState";
 import stablePostService from "../api/services/stablePostService";
-import { useAppContext } from "../context/AppContext";
 
 export function useStablePosts(stableId, currentUser) {
   const [posts, setPosts] = useState([]);

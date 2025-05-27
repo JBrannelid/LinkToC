@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
+import { useAppContext } from "./useAppContext.js";
+import { useAuth } from "./useAuth.js";
 import { stableService, userService } from "../api";
 import { useLoadingState } from "./useLoadingState";
-import { useAppContext } from "../context/AppContext";
-import { useAuth } from "../context/AuthContext";
 import { getErrorMessage } from "../utils/errorUtils";
 
 export const useStableOnboarding = () => {
@@ -122,7 +122,7 @@ export const useStableOnboarding = () => {
         setLoading(false);
       }
     },
-    [changeStable]
+    []
   );
 
   const handleJoinStable = useCallback(
