@@ -144,16 +144,9 @@ export function useStableData(stableId) {
     try {
       setLoading(true);
       setError(null);
-
-      // Direct API call to leave stable endpoint
-      await axiosInstance.delete(`/api/user-stables/leave`, {
-        params: {
-          userId: user.id,
-          stableId: stableIdToLeave
-        }
-      });
-
-      // Refresh data after successfully leaving
+      
+      await axiosInstance.delete(`/api/user-stables/leave/${user.id}/${stableIdToLeave}`);
+      
       await fetchAndUpdateStables();
 
       return true;
