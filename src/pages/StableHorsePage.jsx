@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import SearchIcon from "../assets/icons/SearchIcon";
 import ModalHeader from "../components/layout/ModalHeader";
@@ -16,31 +16,51 @@ function StableHorsePage() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
 
-  // StableId from context or URL params
-  const stableId = urlStableId || currentStable?.id;
+  // Memoized StableId from context
+  const stableId = useMemo(
+    () => urlStableId || currentStable?.id,
+    [urlStableId, currentStable?.id]
+  );
+
   const { horses, loading, loadingState } = useStableHorses(stableId);
 
-  // Filter horses based on search term
-  const filteredHorses = horses.filter((horse) => {
-    const horseName = horse.horseName?.toLowerCase() || "";
-    return searchTerm === "" || horseName.includes(searchTerm.toLowerCase());
-  });
+  // Memoize filtered horses
+  const filteredHorses = useMemo(() => {
+    if (!horses.length) return [];
 
-  const handleSearchChange = (value) => {
+    if (!searchTerm.trim()) return horses;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return horses.filter((horse) => {
+      const horseName = horse.horseName?.toLowerCase() || "";
+      return horseName.includes(lowerSearchTerm);
+    });
+  }, [horses, searchTerm]);
+
+  // Memoize callbacks to prevent unnecessary re-renders of child components
+  const handleSearchChange = useCallback((value) => {
     setSearchTerm(value);
-  };
+  }, []);
 
-  const handleHorseClick = (horseId) => {
-    navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId }));
-  };
+  const handleHorseClick = useCallback(
+    (horseId) => {
+      navigate(buildRoute(ROUTES.HORSE_PROFILE, { horseId }));
+    },
+    [navigate]
+  );
 
-  if (loading) {
-    return (
+  const LoadingComponent = useMemo(
+    () => (
       <div className="flex items-center justify-center h-screen">
         <LoadingSpinner size="medium" className="text-gray" />
         <p className="ml-2">{loadingState?.getMessage()}</p>
       </div>
-    );
+    ),
+    [loadingState]
+  );
+
+  if (loading) {
+    return LoadingComponent;
   }
 
   return (
@@ -58,7 +78,7 @@ function StableHorsePage() {
         searchPlaceholder="Search..."
       />
 
-      {/* Member List */}
+      {/* Horse List */}
       <div className="px-5 py-3 md:px-10 lg:px-40 xl:px-60 pt-2 lg:pt-10">
         {/* Search Bar */}
         <div className="mb-5 border-t border-b border-gray py-5 lg:hidden">
