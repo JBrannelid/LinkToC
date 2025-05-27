@@ -1,23 +1,20 @@
-import React, {createElement, useState} from 'react';
+import React, {useState} from 'react';
+import StableIcon from "../../assets/icons/StableIcon.jsx";
 import Button from "../ui/Button.jsx";
 import {ConnectedDisplayDistance} from "../ui/DisplayDistance.jsx"
-import StableIcon from "../../assets/icons/StableIcon.jsx";
 
 export const ListItemRenderer = (
     {
         item,
         isSelected,
-        onSelect,
-        onFocus,
         config,
         onJoinStable,
         actionLabel = 'Join',
         index,
-        onAction,
         ...props
     }) => {
-    const [isOpening, setIsOpening] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+    const [_isOpening, setIsOpening] = useState(false);
+    const [_isFocused, setIsFocused] = useState(false);
     const primaryText = item[config?.labelField || 'name']
     const countyText = item.county || '';
     const imageUrl = item[config?.imageField || 'image'];

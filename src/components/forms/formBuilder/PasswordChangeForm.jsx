@@ -3,8 +3,8 @@ import { useFormContext } from "react-hook-form";
 import { useNavigate } from "react-router";
 import FormInput from "./FormInput";
 import authService from "../../../api/services/authService";
-import { useAuth } from "../../../context/AuthContext";
-import { ROUTES } from "../../../routes/routeConstants";
+import { useAuth } from "../../../hooks/useAuth.js";
+import { ROUTES } from "../../../routes/index.jsx";
 import {
   getErrorMessage,
   createSuccessMessage,

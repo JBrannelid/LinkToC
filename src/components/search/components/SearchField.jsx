@@ -62,7 +62,7 @@ const SearchField = forwardRef(
           onSearch(selectedItem);
         }
       },
-      [onSearch, trigger, setValue, trigger]
+      [onSearch, trigger, setValue, name]
     );
 
     // Handle cancel action
@@ -73,12 +73,10 @@ const SearchField = forwardRef(
     }, [onCancel]);
 
     // Register the field with form
-    useEffect(
-      (name) => {
+    useEffect(() => {
         register(name, validation);
       },
-      [register, name, validation]
-    );
+      [register, name, validation]);
 
     // Prepare display message
     const displayMessage = useMemo(() => {

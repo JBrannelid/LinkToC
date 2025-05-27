@@ -7,7 +7,6 @@ const SearchInput = ({
   inputClassName = "",
   ariaLabel,
   onFocus,
-  onBlur,
   autoFocus = false,
   desktopView = false,
   maintainFocus = true,
@@ -58,7 +57,7 @@ const SearchInput = ({
         handleInputChange(syntheticEvent);
       }, 400);
     },
-    [query, handleInputChange]
+    [handleInputChange]
   );
   useEffect(() => {
     if (wasLoadingRef.current && !loading && maintainFocus && !desktopView) {
