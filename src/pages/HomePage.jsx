@@ -1,4 +1,5 @@
 import { enUS } from "date-fns/locale";
+import { motion } from "framer-motion";
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Calendar from "../components/calendar/calendar";
 import EventsContainer from "../components/calendar/events/EventsContainer";
@@ -178,10 +179,20 @@ export default function HomePage() {
   }
 
   return (
-    <div className="mt-5 md:mt-10 pb-20 md:pb-10 sm:px-1 xl:px-16 lg:px-14">
-      <div className="flex items-center justify-center mb-5 md:hidden">
+    <motion.div
+      className="mt-5 md:mt-10 pb-20 md:pb-10 sm:px-1 xl:px-16 lg:px-14"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.2 }}
+    >
+      <motion.div
+        className="flex items-center justify-center mb-5 md:hidden"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
         <StableName />
-      </div>
+      </motion.div>
 
       {isFormOpen && (
         <EventForm
@@ -195,7 +206,13 @@ export default function HomePage() {
         />
       )}
 
-      <section className="grid grid-cols-1">
+      <motion.section
+        className="grid grid-cols-1"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+      >
+        {" "}
         <Calendar
           key={refreshKey}
           stableId={currentStableId}
@@ -241,11 +258,16 @@ export default function HomePage() {
             </div>
           )}
         </Calendar>
-      </section>
+      </motion.section>
 
-      <section className="mx-1 sm:mx-15 md:hidden lg:hidden">
+      <motion.section
+        className="mx-1 sm:mx-15 md:hidden lg:hidden"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <WallPost />
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
