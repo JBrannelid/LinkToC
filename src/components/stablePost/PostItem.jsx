@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import CommentCount from "./CommentCount";
 import CommentInput from "./CommentInput";
@@ -12,7 +13,6 @@ import { USER_ROLES } from "../../utils/userUtils";
 import ProfileImage from "../common/ProfileImage";
 import Button from "../ui/Button";
 import LoadingSpinner from "../ui/LoadingSpinner";
-import { motion } from "framer-motion";
 
 const PostItem = ({
   post,
