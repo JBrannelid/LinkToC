@@ -126,6 +126,11 @@ export const useHorseManagement = (stableId) => {
         breed: horseData.breed || null,
         color: horseData.color || null,
         age: horseData.age || null,
+        coreInformation: horseData.coreInformation || null,
+        description: horseData.description || null,
+        currentBox: horseData.currentBox || null,
+        weight: horseData.weight || null,
+        height: horseData.height || null,
       };
 
       const response = await horseService.update(updateData);
@@ -255,11 +260,15 @@ export const useHorseProfile = (horseId) => {
       // Format the horse data to match HorseUpdateDto
       const formattedData = {
         id: horseId,
-        name: updateData.name,
-        breed: updateData.breed || null,
-        color: updateData.color || null,
-        age: updateData.age || null,
-        // Include stableId if it exists in current horse data
+        name: updateData.name || horse?.name,
+        breed: updateData.breed || horse?.breed,
+        color: updateData.color || horse?.color,
+        age: updateData.age || horse?.age,
+        coreInformation: updateData.coreInformation || horse?.coreInformation,
+        description: updateData.description || horse?.description,
+        currentBox: updateData.currentBox || horse?.currentBox,
+        weight: updateData.weight || horse?.weight,
+        height: updateData.height || horse?.height,
         stableId: horse?.stableId,
       };
 

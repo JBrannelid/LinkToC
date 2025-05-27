@@ -79,7 +79,7 @@ const ProfileImage = ({
     if (user && !hasError) {
       fetchImageUrl();
     }
-  }, [user, hasError]);
+  }, [user, hasError, getFallbackImage]);
 
   const userFullName = user
     ? `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User"

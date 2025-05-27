@@ -43,7 +43,7 @@ export function useCalendarEvents(stableId) {
     } finally {
       setLoading(false);
     }
-  }, [stableId, currentUserId]);
+  }, [stableId]);
 
   useEffect(() => {
     fetchAndUpdateEvents();

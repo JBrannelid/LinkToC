@@ -87,6 +87,7 @@ const EditInformationModal = ({
             age: userData?.age || null,
             description: userData?.description || "",
             bio: userData?.bio || "",
+            coreInformation: userData?.coreInformation || "",
             weight: parseNumericValue(userData?.weight),
             height: parseNumericValue(userData?.height),
             currentBox: parseNumericValue(

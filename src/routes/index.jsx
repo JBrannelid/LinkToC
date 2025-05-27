@@ -5,9 +5,11 @@ import { publicRoutes, protectedRoutes, errorRoute } from "./routeConfig";
 import { ROUTES, buildRoute } from "./routeConstants";
 import { createProtectedRoutes } from "./routeUtils";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export { ROUTES, buildRoute };
 
 // Create and export the router configuration
+// eslint-disable-next-line react-refresh/only-export-components
 export const createAppRouter = () => {
   return createBrowserRouter([
     {
@@ -20,4 +22,5 @@ export const createAppRouter = () => {
 };
 
 // Export a pre-configured router instance
+// eslint-disable-next-line react-refresh/only-export-components
 export const router = createAppRouter();

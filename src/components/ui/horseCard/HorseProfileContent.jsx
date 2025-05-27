@@ -123,7 +123,11 @@ const InfoTabContent = ({ horse, openEditModal, hasHorseRole }) => {
           onClick={
             hasHorseRole
               ? () =>
-                  openEditModal("core info", "Important info", coreInformation)
+                  openEditModal(
+                    "coreInformation",
+                    "Important info",
+                    coreInformation
+                  )
               : undefined
           }
         >
