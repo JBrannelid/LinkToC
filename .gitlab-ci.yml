@@ -66,7 +66,7 @@ deploy:
   environment:
     <<: *env_setup
     url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
-    on_stop: teardown
+    # on_stop: teardown
   script:
     - echo "Levererar till miljö"
     - export DOCKER_COMPOSE="docker-compose.yml"
