@@ -61,11 +61,11 @@ const ProfileImage = ({
           return;
         }
 
-        // Use the correct blob path format
+        // Use blob path format
         const blobPath = `profile-pictures/${ownerId}/${profilePicture}`;
 
         try {
-          // Use the existing SAS URL service
+          // Use  SAS URL service
           const sasUrl = await getReadSasUrl(blobPath);
           if (sasUrl) {
             // Add cache-busting parameter
