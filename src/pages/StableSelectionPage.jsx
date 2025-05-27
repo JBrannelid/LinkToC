@@ -411,7 +411,7 @@ const StableSelectionPage = () => {
           <HandRaisedIcon
             size={70}
             backgroundColor={confirmProps.iconBg || "bg-primary"}
-            iconColor="text-red-500"
+            iconColor="text-white"
           />
         }
       >

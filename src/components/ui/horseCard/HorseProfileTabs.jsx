@@ -12,7 +12,7 @@ const HorseProfileTabs = ({ activeTab, onChange }) => {
           }`}
           onClick={() => onChange("info")}
         >
-          Info
+          About
         </button>
         <button
           className={`px-4 py-1 text-lg lg:text-xl lg:py-2 font-semibold ${
@@ -22,7 +22,7 @@ const HorseProfileTabs = ({ activeTab, onChange }) => {
           }`}
           onClick={() => onChange("owners")}
         >
-          Owners
+          Riders
         </button>
       </div>
     </div>

@@ -4,7 +4,7 @@ function useSearchState(config) {
     // Core state - simplified for single selection only
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedItem, setSelectedItem] = useState(results[0]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [message, setMessage] = useState(null);

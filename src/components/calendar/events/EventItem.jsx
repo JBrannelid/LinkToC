@@ -11,7 +11,7 @@ const EventItem = ({ event, index, onUpdate }) => {
     [event.user?.firstName, event.user?.lastName]
       .filter(Boolean)
       .join(" ")
-      .trim() || "Okänd Användare";
+      .trim() || "Unknown User";
 
   const handleItemClick = () => {
     if (onUpdate) {
