@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PermissionGate from "./PermissionGate";
 import PlusIcon from "../../assets/icons/PlusIcon";
+import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
+import ConfirmationModal from "../ui/ConfirmationModal";
 import {
   HORSE_CATEGORIES,
   CATEGORY_LABELS,
@@ -24,6 +26,13 @@ const HorseList = ({ stableId }) => {
     color: "",
     age: "",
   });
+
+  const [actionConfirmation, setActionConfirmation] = useState({
+    isOpen: false,
+    horse: null,
+    action: null
+  });
+  
   const {
     horses,
     loading,
@@ -63,11 +72,25 @@ const HorseList = ({ stableId }) => {
     setShowActionModal(true);
   };
 
+  // const handleDelete = (horse) => {
+  //   resetMessage();
+  //   setActionType("delete");
+  //   setSelectedHorse(horse);
+  //   setShowActionModal(true);
+  // };
   const handleDelete = (horse) => {
-    resetMessage();
-    setActionType("delete");
-    setSelectedHorse(horse);
-    setShowActionModal(true);
+    setActionConfirmation({
+      isOpen: true,
+      horse,
+      action: "delete"
+    });
+  };
+  const handleRemove = (horse) => {
+    setActionConfirmation({
+      isOpen: true,
+      horse,
+      action: "remove"
+    });
   };
 
   const handleCloseModal = () => {
@@ -89,26 +112,17 @@ const HorseList = ({ stableId }) => {
 
     try {
       if (actionType === "add") {
-        // Add the user ID from the context we're already using
         result = await addHorse(horseForm, currentUser?.id);
       } else if (actionType === "edit" && selectedHorse) {
         result = await updateHorse(selectedHorse.id, horseForm);
-      } else if (actionType === "delete" && selectedHorse) {
-        result = await deleteHorse(selectedHorse.id);
-      } else if (actionType === "remove" && selectedHorse) {
-        result = await removeHorseFromStable(selectedHorse.stableHorseId);
-      }
+      } 
 
       // Handle the response
       if (result && result.success) {
         setActionSuccess(
           actionType === "add"
-            ? "🐴 New horse recruited for glory!"
-            : actionType === "edit"
-            ? "✏️ Horse info polished to perfection!"
-            : actionType === "delete"
-            ? "🗑️ Horse sent galloping into the sunset!"
-            : "🏇 Horse trotted away from the stable!"
+            ? "🐴 New horse recruited for glory!" 
+              : "✏️ Horse info polished to perfection!"
         );
         setActionSuccess("🐎 Message cleared. Back to the stables!");
         handleCloseModal();
@@ -120,6 +134,29 @@ const HorseList = ({ stableId }) => {
     } catch (error) {
       setActionError(error.message || "An unexpected error occurred");
     }
+  };
+  const getConfirmationProps = () => {
+    const { horse, action } = actionConfirmation;
+
+    if (action === "delete") {
+      return {
+        title: `Delete horse "${horse?.name || ""}"?`,
+        confirmText: "Delete",
+        buttonType: "danger",
+        iconBg: "bg-error-500",
+        message: "This action will completely remove the horse from the system and cannot be undone.",
+      };
+    } else if (action === "remove") {
+      return {
+        title: `Remove "${horse?.name || ""}" from stable?`,
+        confirmText: "Remove",
+        buttonType: "warning",
+        iconBg: "bg-warning-500",
+        message: "The horse will remain in the system but will no longer be associated with this stable.",
+      };
+    }
+
+    return {};
   };
 
   const formatAge = (age) => {
@@ -148,6 +185,7 @@ const HorseList = ({ stableId }) => {
       return "";
     }
   };
+  const confirmProps = getConfirmationProps();
 
   return (
     <section className="bg-white rounded-lg shadow-sm md:shadow-md p-4 md:p-6">
@@ -286,11 +324,7 @@ const HorseList = ({ stableId }) => {
             <h3 className="mb-4 text-lg font-bold">
               {actionType === "add"
                 ? "Add New Horse"
-                : actionType === "edit"
-                ? `Edit ${selectedHorse?.name}`
-                : actionType === "delete"
-                ? `Delete ${selectedHorse?.name}`
-                : `Remove ${selectedHorse?.name} from stable`}
+                : `Edit ${selectedHorse?.name}`}
             </h3>
 
             {/* Success and Error Messages */}
@@ -305,29 +339,7 @@ const HorseList = ({ stableId }) => {
                 <p className="text-red-700">{actionError}</p>
               </div>
             )}
-
-            {/* Modal Content */}
-            {actionType === "delete" ? (
-              <div>
-                <p className="mb-4">
-                  Are you sure you want to delete {selectedHorse?.name}? This
-                  action will completely remove the horse from the system and
-                  cannot be undone.
-                </p>
-              </div>
-            ) : actionType === "remove" ? (
-              <div>
-                <p className="mb-4">
-                  Are you sure you want to remove {selectedHorse?.name} from
-                  this stable? The horse will remain in the system but will no
-                  longer be associated with this stable.
-                </p>
-                <p className="text-yellow-600 text-sm mb-4">
-                  Note: This action will only remove the horse from this stable.
-                  It does not delete the horse from the system.
-                </p>
-              </div>
-            ) : (
+            
               <form
                 className="space-y-4"
                 onSubmit={(e) => {
@@ -406,7 +418,6 @@ const HorseList = ({ stableId }) => {
                   <p className="text-xs text-gray mt-1">Format: YYYY-MM-DD</p>
                 </div>
               </form>
-            )}
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-3 mt-6">
@@ -419,13 +430,7 @@ const HorseList = ({ stableId }) => {
               </Button>
 
               <Button
-                type={
-                  actionType === "delete"
-                    ? "danger"
-                    : actionType === "remove"
-                    ? "warning"
-                    : "primary"
-                }
+                type="primary"
                 onClick={handleSubmit}
                 disabled={
                   (actionType === "add" && !horseForm.name) ||
@@ -438,18 +443,37 @@ const HorseList = ({ stableId }) => {
                   <LoadingSpinner size="small" className="mx-auto" />
                 ) : actionType === "add" ? (
                   "Add Horse"
-                ) : actionType === "edit" ? (
-                  "Save Changes"
-                ) : actionType === "delete" ? (
-                  "Delete Horse"
                 ) : (
-                  "Remove from Stable"
+                  "Save Changes"
                 )}
               </Button>
             </div>
           </div>
         </div>
       )}
+      <ConfirmationModal
+          isOpen={actionConfirmation.isOpen}
+          onClose={() => setActionConfirmation({ isOpen: false, horse: null, action: null })}
+          onConfirm={async () => {
+            const { horse, action } = actionConfirmation;
+            const result = action === "delete"
+                ? await deleteHorse(horse.id)
+                : await removeHorseFromStable(horse.stableHorseId);
+
+            if (result?.success) {
+              setActionConfirmation({ isOpen: false, horse: null, action: null });
+            }
+          }}
+          loading={loading}
+          title={confirmProps.title}
+          confirmButtonText={confirmProps.confirmText}
+          cancelButtonText="Cancel"
+          confirmButtonType={confirmProps.buttonType}
+          icon={<HandRaisedIcon size={70} backgroundColor={confirmProps.iconBg} iconColor="text-white" />}
+      >
+        <p>{confirmProps.message}</p>
+      </ConfirmationModal>
+      
     </section>
   );
 };
