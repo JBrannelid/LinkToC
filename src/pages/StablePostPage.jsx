@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import AddNoteIcon from "../assets/icons/AddNoteIcon";
@@ -139,7 +140,12 @@ export default function StablePostPage() {
           </div>
         </div>
         {/* Right sidebar - visible on md display*/}
-        <div className="hidden md:flex md:flex-col md:w-4/10 lg:w-1/3 p-4 space-y-5 sticky top-58 self-start h-fit">
+        <motion.div
+          className="hidden md:flex md:flex-col md:w-4/10 lg:w-1/3 p-4 space-y-5 sticky top-58 self-start h-fit"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
           <div className="bg-white rounded-xl shadow-md p-4">
             <h3 className="font-medium text-lg mb-3">Stable Info</h3>
             <p className="text-sm lg:text-lg ">
@@ -187,7 +193,7 @@ export default function StablePostPage() {
               </Button>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Create new post button - on sm screen */}

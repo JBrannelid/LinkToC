@@ -3,7 +3,6 @@ import ModalHeader from "../components/layout/ModalHeader";
 import PermissionGate from "../components/settings/PermissionGate";
 import StableMembersList from "../components/settings/StableMembersList";
 import StableRequestsList from "../components/settings/StableRequestsList";
-
 import UserStableRequestsList from "../components/settings/UserStableRequestsList";
 import Button from "../components/ui/Button";
 import { useAppContext } from "../hooks/useAppContext.js";
@@ -15,7 +14,7 @@ const StableManagementPage = () => {
   const handleGoBack = () => {
     window.history.back();
   };
-  
+
   return (
     <PermissionGate requiredRoles={[USER_ROLES.ADMIN, USER_ROLES.MANAGER]}>
       <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">

@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
@@ -42,7 +43,19 @@ const HorseOwnersTab = ({ horseProfile }) => {
   // Display horse's owners from the profile data
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6">
+      <motion.div
+        className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.1,
+            },
+          },
+        }}
+      >
+        {" "}
         {horseOwners.map((ownerRole, index) => {
           if (!ownerRole) return null;
 
@@ -55,10 +68,21 @@ const HorseOwnersTab = ({ horseProfile }) => {
           const roleName = getHorseUserRoleName(ownerRole.userRole);
 
           return (
-            <div
+            <motion.div
               key={`user-${userData.id || index}`}
               className="border border-primary rounded-lg overflow-hidden cursor-pointer mx-auto max-w-xs bg-gradient-to-b from-primary-light to-white"
               onClick={() => handleUserClick(userData.id)}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              whileHover={{
+                y: -4,
+                scale: 1.02,
+                boxShadow: "0 8px 25px rgba(0,0,0,0.12)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
             >
               <div className="flex justify-center items-center overflow-hidden ">
                 <ProfileImage
@@ -76,10 +100,10 @@ const HorseOwnersTab = ({ horseProfile }) => {
                   {userData.phoneNumber && `Phone: ${userData.phoneNumber}`}
                 </p>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </>
   );
 };

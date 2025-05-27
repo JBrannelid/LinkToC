@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 import { useNavigate } from "react-router";
 import { buildRoute, ROUTES } from "../../../routes/index.jsx";
@@ -41,7 +42,19 @@ const UserHorsesTab = ({ userProfile }) => {
   // Display user's horses from the profile data
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6">
+      <motion.div
+        className="grid grid-cols-1 gap-4 px-10 sm:grid-cols-2 sm:gap-15 lg:grid-cols-3 lg:gap-6"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          visible: {
+            transition: {
+              staggerChildren: 0.1,
+            },
+          },
+        }}
+      >
+        {" "}
         {userHorses.map((horseRole) => {
           const horse = horseRole.horse;
 
@@ -51,10 +64,21 @@ const UserHorsesTab = ({ userProfile }) => {
           const userRole = horseRole.userRole;
 
           return (
-            <div
+            <motion.div
               key={`horse-${horse.id}`}
               className="border border-primary rounded-lg overflow-hidden cursor-pointer"
               onClick={() => handleHorseClick(horse.id)}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
+              }}
+              whileHover={{
+                y: -4,
+                scale: 1.02,
+                boxShadow: "0 8px 25px rgba(0,0,0,0.12)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.2 }}
             >
               <div className="w-full h-50">
                 <img
@@ -76,10 +100,10 @@ const UserHorsesTab = ({ userProfile }) => {
                     : "Caretaker"}
                 </p>
               </div>
-            </div>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </>
   );
 };
