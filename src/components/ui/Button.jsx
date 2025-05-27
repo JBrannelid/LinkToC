@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import React from "react";
 import LoadingSpinner from "./LoadingSpinner";
@@ -86,11 +87,14 @@ const Button = ({
   };
 
   return (
-    <button
+    <motion.button
       type={htmlType}
       className={buttonStyles}
       disabled={disabled || loading}
       onClick={handleClick}
+      whileHover={{ scale: disabled || loading ? 1 : 1.02 }}
+      whileTap={{ scale: disabled || loading ? 1 : 0.98 }}
+      transition={{ duration: 0.1 }}
       aria-disabled={disabled || loading}
       aria-busy={loading}
       {...rest}
@@ -99,7 +103,7 @@ const Button = ({
         <LoadingSpinner size={size} withMargin={variant !== "icon"} />
       )}
       {children}
-    </button>
+    </motion.button>
   );
 };
 
