@@ -1,5 +1,4 @@
 stages:
-
   - check
   - build
   - test
@@ -69,6 +68,7 @@ deploy:
     url: https://g10-$CI_DEFAULT_BRANCH.cc25.chasacademy.dev
     on_stop: teardown
   script:
+    - echo "Levererar till miljö"
     - export DOCKER_COMPOSE="docker-compose.yml"
     - python portainer.py $CI_JOB_STAGE -dc $DOCKER_COMPOSE
   rules:
@@ -81,6 +81,7 @@ teardown:
     <<: *env_setup
     action: stop
   script:
+    - echo "Stänger ner miljö"
     - python portainer.py $CI_JOB_STAGE
   rules:
     - when: manual
