@@ -6,7 +6,7 @@ import PasswordChangeForm from "./formBuilder/PasswordChangeForm";
 import { getReadSasUrl } from "../../api/services/fileService";
 import HandRaisedIcon from "../../assets/icons/HandRaisedIcon";
 import PenIcon from "../../assets/icons/PenIcon";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { useUserData } from "../../hooks/useUserData";
 import { getErrorMessage, createSuccessMessage } from "../../utils/errorUtils";
 import { formatUserFullName, getProfileImageUrl } from "../../utils/userUtils";
