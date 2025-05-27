@@ -15,6 +15,7 @@ import {
 
 const FileUploadContext = createContext();
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFileUpload = () => useContext(FileUploadContext);
 
 export const FileUploadProvider = ({ children }) => {
