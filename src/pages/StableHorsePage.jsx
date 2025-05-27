@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React, { useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import SearchIcon from "../assets/icons/SearchIcon";
@@ -9,7 +10,6 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAppContext } from "../hooks/useAppContext.js";
 import { useStableHorses } from "../hooks/useStableHorses";
 import { ROUTES, buildRoute } from "../routes/index.jsx";
-import { motion } from "framer-motion";
 
 function StableHorsePage() {
   const { stableId: urlStableId } = useParams();
