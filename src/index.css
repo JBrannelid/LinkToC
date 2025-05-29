@@ -156,6 +156,7 @@
     overflow-x: hidden;
     margin: 0;
     padding: 0;
+    padding-top: env(safe-area-inset-top);
   }
 
   h1,
@@ -243,6 +244,7 @@
   .min-h-screen-safe {
     min-height: -webkit-fill-available; /* Fallback for iOS Safari */
     min-height: 100dvh;
+    padding-top: env(safe-area-inset-top);
   }
 }
 
