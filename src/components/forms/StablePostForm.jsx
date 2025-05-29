@@ -131,8 +131,8 @@ const StablePostForm = ({
             </div>
 
             {/* Image upload button */}
-            <div className="mt-4 mb-6 flex justify-end">
-              <Button
+            <div className="mt-4 mb-6 flex justify-end opacity-30">
+              {/* <Button
                 type="secondary"
                 className="w-6/10 h-8 md:w-4/10"
                 onClick={triggerImageUpload}
@@ -145,7 +145,7 @@ const StablePostForm = ({
                 onChange={handleImageUpload}
                 accept="image/*"
                 className="hidden"
-              />
+              /> */}
             </div>
 
             {/* Action buttons */}
