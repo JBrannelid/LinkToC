@@ -150,13 +150,7 @@
     background-color: var(--color-background);
     min-height: 100vh;
     height: 100%;
-
-    /* Ensure background extends into safe areas */
-    width: 100%;
-    overflow-x: hidden;
     margin: 0;
-    padding: 0;
-    padding-top: env(safe-area-inset-top);
   }
 
   h1,
@@ -242,9 +236,8 @@
   }
 
   .min-h-screen-safe {
-    min-height: -webkit-fill-available; /* Fallback for iOS Safari */
+    min-height: -webkit-fill-available;
     min-height: 100dvh;
-    padding-top: env(safe-area-inset-top);
   }
 }
 
