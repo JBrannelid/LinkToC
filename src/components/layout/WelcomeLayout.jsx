@@ -1,6 +1,6 @@
 import React from "react";
 
-const LOGIN_PAGE_BACKGROUND = "/src/assets/images/BgLoginDesktop.webp";
+const LOGIN_PAGE_BACKGROUND = "/images/BgLoginDesktop.webp";
 const LOGIN_BG_ALT_TEXT = "Abstract padlock background - mobile view";
 
 const WelcomeLayout = ({ children }) => {

@@ -5,7 +5,7 @@ const UserProfileImage = ({
   size = "small",
   className = "",
   customContent,
-  placeholderUrl = "/src/assets/images/userPlaceholder.webp",
+  placeholderUrl = "/images/userPlaceholder.webp",
 }) => {
   // STEP 1: Set up the size of the avatar circle based on the size prop
   let sizeClass = "h-4 w-4";

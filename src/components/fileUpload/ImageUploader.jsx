@@ -10,7 +10,7 @@ const ImageUploader = ({
   onError,
   label = "Choose Image",
   className = "",
-  placeholder = "/src/assets/images/profilePlaceholder.jpg",
+  placeholder = "/images/profilePlaceholder.jpg",
   userId = null,
 }) => {
   const [_imageUrl, setImageUrl] = useState(initialImageUrl || placeholder);

@@ -122,7 +122,7 @@ const PostItem = ({
                 user={postUser}
                 className="w-full h-full"
                 alt={`Profile image of ${userFullName}`}
-                fallbackUrl="/src/assets/images/userPlaceholderRounded.webp"
+                fallbackUrl="/images/userPlaceholderRounded.webp"
                 size="rounded"
               />
             </div>

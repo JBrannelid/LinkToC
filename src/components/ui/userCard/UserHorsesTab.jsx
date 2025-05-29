@@ -7,7 +7,7 @@ import LoadingSpinner from "../LoadingSpinner";
 const UserHorsesTab = ({ userProfile }) => {
   const navigate = useNavigate();
   const getHorseImageUrl = (horse) => {
-    return horse?.imageUrl || "/src/assets/images/horeImagePlaceholder.webp";
+    return horse?.imageUrl || "/images/horeImagePlaceholder.webp";
   };
 
   // Extract horses from userProfile data

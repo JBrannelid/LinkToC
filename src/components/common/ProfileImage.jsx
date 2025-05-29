@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getReadSasUrl } from "../../api/services/fileService";
 
-const DEFAULT_FALLBACK = "/src/assets/images/userPlaceholderRounded.webp";
+const DEFAULT_FALLBACK = "/images/userPlaceholderRounded.webp";
 
 const ProfileImage = ({
   user,
@@ -15,13 +15,13 @@ const ProfileImage = ({
 
     switch (size) {
       case "small":
-        return "/src/assets/images/userPlaceholderSmall_NoLogo.webp";
+        return "/images/userPlaceholderSmall_NoLogo.webp";
       case "medium":
-        return "/src/assets/images/userPlaceholdermedium_NoLogo.webp";
+        return "/images/userPlaceholdermedium_NoLogo.webp";
       case "large":
-        return "/src/assets/images/userPlaceholderLarge_NoLogo.webp";
+        return "/images/userPlaceholderLarge_NoLogo.webp";
       case "rounded":
-        return "/src/assets/images/userPlaceholderRounded.webp";
+        return "/images/userPlaceholderRounded.webp";
       default:
         return DEFAULT_FALLBACK;
     }

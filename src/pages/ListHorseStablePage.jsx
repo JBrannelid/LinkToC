@@ -5,7 +5,7 @@ import { useAppContext } from "../hooks/useAppContext.js";
 
 const ProfileTester = () => {
   // We need to change hardcoded image placeholder
-  const placeholderImage = "/src/assets/images/profilePlaceholder.jpg";
+  const placeholderImage = "/images/profilePlaceholder.jpg";
 
   const { horseId } = useParams();
   const navigate = useNavigate();

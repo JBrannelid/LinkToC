@@ -4,37 +4,44 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import compression from "vite-plugin-compression";
 
-// Build project by code-split the application for better performance
 export default defineConfig({
   base: "/",
-  assetsInclude: ["**/*.woff", "**/*.woff2"],
+  assetsInclude: [
+    "**/*.woff",
+    "**/*.woff2",
+    "**/*.png",
+    "**/*.jpg",
+    "**/*.jpeg",
+    "**/*.svg",
+    "**/*.gif",
+    "**/*.webp", // WebP support
+  ],
   plugins: [
-    react(),
+    react({
+      jsxRuntime: "automatic",
+    }),
     tailwindcss(),
-    // gzip for better support across browsers
     compression({
       algorithm: "gzip",
       ext: ".gz",
-      filter: /\.(js|css|html|svg)$/i,
+      filter: /\.(js|css|html|svg|webp)$/i,
       threshold: 1024,
       deleteOriginFile: false,
-      compressionOptions: { level: 6 }, // compression level 6 out of 9
+      compressionOptions: { level: 6 },
       verbose: true,
       disable: false,
     }),
-    // brotliCompress - better performance with compatible browsers
     compression({
       algorithm: "brotliCompress",
       ext: ".br",
-      filter: /\.(js|css|html|svg|json)$/i,
-      compressionOptions: { level: 4 }, // Compression level 4 out of 11
+      filter: /\.(js|css|html|svg|json|webp)$/i,
+      compressionOptions: { level: 4 },
       threshold: 1024,
       deleteOriginFile: false,
       verbose: true,
       disable: false,
     }),
   ],
-  // Configure the development server to use compression
   server: {
     middlewareMode: false,
     cors: true,
@@ -42,45 +49,21 @@ export default defineConfig({
     compress: true,
   },
   build: {
+    target: "esnext",
+    assetsDir: "assets",
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Group React and core dependencies
-          if (
-            id.includes("node_modules/react") ||
-            id.includes("node_modules/react-dom") ||
-            id.includes("node_modules/react-router")
-          ) {
-            return "vendor-react";
-          }
-
-          // Group form-related dependencies
-          if (id.includes("node_modules/react-hook-form")) {
-            return "vendor-forms";
-          }
-
-          // Group UI components
-          if (id.includes("/components/ui/")) {
-            return "ui-components";
-          }
-
-          // Group form components
-          if (id.includes("/components/forms/")) {
-            return "form-components";
-          }
+        assetFileNames: "assets/[name]-[hash][extname]",
+        manualChunks: {
+          "vendor-react": ["react", "react-dom"],
+          "vendor-router": ["react-router"],
+          "vendor-forms": ["react-hook-form"],
         },
       },
     },
     cssCodeSplit: true,
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
-    minify: "terser",
-    terserOptions: {
-      // Remove console message in production
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-    },
+    minify: "esbuild",
   },
 });
