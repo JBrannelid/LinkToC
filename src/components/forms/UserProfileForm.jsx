@@ -248,7 +248,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
                   <h2 className="font-bold">Update password</h2>
                   {!showPasswordForm && (
                     <Button
-                      type="icon"
+                      variant="icon"
                       aria-label="Update password fields"
                       onClick={() => setShowPasswordForm(!showPasswordForm)}
                     >

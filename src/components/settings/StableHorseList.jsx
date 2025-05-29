@@ -291,7 +291,7 @@ const HorseList = ({ stableId }) => {
                 >
                   <div className="flex space-x-2 mt-2 sm:mt-0">
                     <Button
-                      type="icon"
+                      variant="icon"
                       onClick={() => handleEdit(horse)}
                       aria-label={`Edit ${horse.name || "this horse"}`}
                       className="text-primary text-sm"
@@ -300,7 +300,7 @@ const HorseList = ({ stableId }) => {
                     </Button>
 
                     <Button
-                      type="icon"
+                      variant="icon"
                       onClick={() => handleDelete(horse)}
                       aria-label={`Delete ${horse.name || "this horse"}`}
                       className="text-error-500 text-sm"

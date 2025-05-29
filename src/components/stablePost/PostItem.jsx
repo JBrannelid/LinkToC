@@ -148,7 +148,7 @@ const PostItem = ({
           <div className="flex justify-end">
             {canEditPost && (
               <Button
-                type="icon"
+                variant="icon"
                 className="text-primary"
                 onClick={() => onEditPost(post)}
               >
@@ -156,7 +156,7 @@ const PostItem = ({
               </Button>
             )}
             <Button
-              type="icon"
+              variant="icon"
               className="text-primary border-none shadow-none"
               onClick={() => handleShowComments(post)}
             >
@@ -193,7 +193,7 @@ const PostItem = ({
             {canEditPost && (
               <div className="flex">
                 <Button
-                  type="icon"
+                  variant="icon"
                   className="text-primary"
                   onClick={() => onEditPost(post)}
                 >

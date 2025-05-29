@@ -41,7 +41,7 @@ const NotificationDropdown = () => {
     <div className="relative" ref={dropdownRef}>
       {/* Notification Btn - Absolute position notification count */}
       <Button
-        type="icon"
+        variant="icon"
         onClick={toggleDropdown}
         aria-label="View notifications"
         className="cursor-pointer"

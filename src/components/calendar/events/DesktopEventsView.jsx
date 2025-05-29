@@ -27,7 +27,7 @@ const DesktopEventsView = ({
           </h2>
           {onBackToWall && (
             <Button
-              type="icon"
+              variant="icon"
               onClick={onBackToWall}
               className="text-primary flex-shrink-0"
               aria-label="Close"

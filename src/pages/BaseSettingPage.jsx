@@ -114,7 +114,7 @@ const BaseSettingsPage = ({
             <Button
               onClick={() => setShowUserEditProfileForm(true)}
               className="p-2 text-primary"
-              type="icon"
+              variant="icon"
               aria-label="Edit user profile"
             >
               <PenIcon className="w-9 h-9" />

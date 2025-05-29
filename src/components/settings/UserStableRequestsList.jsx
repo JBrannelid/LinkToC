@@ -72,7 +72,7 @@ const UserStableRequestsList = () => {
             </div>
             <div className="flex justify-end md:justify-center">
               <Button
-                type="icon"
+                variant="icon"
                 onClick={() => handleShowRejectModal(userRequest)}
                 aria-label="Cancel request"
                 className="text-error-500"

@@ -12,12 +12,8 @@ const StableRequestsList = ({ stableId }) => {
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
 
-  const {
-    receivedRequests,
-    loading,
-    approveRequest,
-    rejectRequest,
-  } = useStableManagement(stableId);
+  const { receivedRequests, loading, approveRequest, rejectRequest } =
+    useStableManagement(stableId);
 
   const handleShowRejectModal = (request) => {
     setSelectedRequest(request);
@@ -76,7 +72,7 @@ const StableRequestsList = ({ stableId }) => {
             </div>
             <div className="flex justify-end md:justify-center space-x-2">
               <Button
-                type="icon"
+                variant="icon"
                 onClick={() => handleShowAcceptModal(request)}
                 aria-label="Accept request"
                 className="text-primary"
@@ -84,7 +80,7 @@ const StableRequestsList = ({ stableId }) => {
                 <CheckIcon strokeWidth={4} />
               </Button>
               <Button
-                type="icon"
+                variant="icon"
                 onClick={() => handleShowRejectModal(request)}
                 aria-label="Reject request"
                 className="text-error-500"

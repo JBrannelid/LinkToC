@@ -38,7 +38,7 @@ export default function Header() {
       {showChevronLeft ? (
         <Button
           onClick={() => window.history.back()}
-          type="icon"
+          variant="icon"
           className="absolute left-4 top-4 border-0 text-primary"
           aria-label="Back"
         >
@@ -62,7 +62,7 @@ export default function Header() {
       {showBackButton ? (
         <Button
           onClick={() => window.history.back()} // Go back
-          type="icon"
+          variant="icon"
           className="absolute right-0 top-2 border-0 text-primary"
           aria-label="Close"
         >
