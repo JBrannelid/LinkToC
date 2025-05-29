@@ -15,7 +15,7 @@ const HorseManagementPage = () => {
 
   return (
     <PermissionGate requiredRoles={[USER_ROLES.ADMIN, USER_ROLES.MANAGER]}>
-      <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+      <div className="flex flex-col min-h-screen bg-background pb-35 overflow-y-hidden">
         <div className="bg-primary-light lg:bg-background">
           <ModalHeader
             title="Manage Horses"

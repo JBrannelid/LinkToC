@@ -225,7 +225,7 @@ const StableSelectionPage = () => {
   const confirmProps = getConfirmationProps();
 
   return (
-    <div className="flex flex-col bg-background pb-20 lg:pb-0 overflow-y-auto">
+    <div className="flex flex-col bg-background pb-35 lg:pb-0 overflow-y-auto">
       {/* Header */}
       <div className="bg-primary-light lg:bg-background lg:hidden">
         <ModalHeader title="Select Stable" showCloseBtn={false} />

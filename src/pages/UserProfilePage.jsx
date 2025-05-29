@@ -62,7 +62,7 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-auto">
+    <div className="flex flex-col min-h-screen bg-background pb-35 lg:p-0 overflow-y-auto">
       <UserProfileHeader
         key={`header-${refreshCounter}`}
         user={userData}

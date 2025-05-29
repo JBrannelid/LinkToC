@@ -14,7 +14,7 @@ const StableRequestsPage = () => {
   const isAdmin = hasRole([USER_ROLES.ADMIN, USER_ROLES.MANAGER]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden">
+    <div className="flex flex-col min-h-screen bg-background pb-35 overflow-y-hidden">
       <div className="bg-primary-light lg:hidden">
         <ModalHeader
           title="Stable requests"

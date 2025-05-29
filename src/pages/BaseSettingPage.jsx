@@ -88,7 +88,7 @@ const BaseSettingsPage = ({
   const userFullName = formatUserFullName(displayUser);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden ">
+    <div className="flex flex-col min-h-screen bg-background pb-35 lg:p-0 overflow-y-hidden ">
       {/* Header */}
       <div className="bg-primary-light lg:bg-background border-b-1 border-light ">
         <ModalHeader title={title} />

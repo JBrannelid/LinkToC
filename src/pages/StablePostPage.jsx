@@ -97,7 +97,7 @@ export default function StablePostPage() {
   }
 
   return (
-    <div className="bg-background min-h-screen flex flex-col pb-10">
+    <div className="bg-background min-h-screen flex flex-col pb-35">
       <div className="border-b-1 border-light flex justify-center">
         <ModalHeader
           title="Feed"

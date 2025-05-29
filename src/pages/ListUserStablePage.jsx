@@ -74,7 +74,7 @@ const ListUserStablePage = () => {
 
   return (
     <motion.div
-      className="flex flex-col min-h-screen bg-background pb-20 overflow-y-hidden"
+      className="flex flex-col min-h-screen bg-background pb-35 overflow-y-hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}

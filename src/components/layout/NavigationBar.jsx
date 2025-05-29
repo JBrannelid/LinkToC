@@ -23,7 +23,7 @@ const NavigationBar = () => {
     currentStable?.id && user?.stableRoles?.[currentStable.id] !== undefined;
 
   return (
-    <div className="w-full md:max-w-[70%] mx-auto">
+    <div className="w-full md:max-w-[70%] mx-auto bg-transparent">
       {hasStableAccess && (
         <nav
           className="nav-container"

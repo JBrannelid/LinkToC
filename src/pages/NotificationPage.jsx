@@ -23,7 +23,7 @@ const NotificationPage = ({ isDropdown = false }) => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background pb-20 lg:p-0 overflow-y-hidden">
+    <div className="flex flex-col min-h-screen bg-background pb-35 lg:p-0 overflow-y-hidden">
       {/* Header */}
       <div className="bg-background lg:pt-10">
         <ModalHeader

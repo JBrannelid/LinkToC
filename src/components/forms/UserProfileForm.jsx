@@ -134,7 +134,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
           <h1 className="text-center text-xl uppercase mt-5">Edit profile</h1>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 pb-20 md:pb-5">
+        <div className="flex-1 overflow-y-auto p-4 pb-35 md:pb-5">
           <FormProvider {...methods}>
             <div>
               {/* Profile Image */}
