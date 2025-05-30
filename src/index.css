@@ -132,6 +132,7 @@
     margin: 0;
     padding: 0;
     scrollbar-color: var(--color-primary);
+    padding-top: env(safe-area-inset-top);
   }
 
   html {
@@ -157,6 +158,7 @@
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
+    padding-top: env(safe-area-inset-top);
   }
 
   h1,
