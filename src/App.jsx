@@ -45,7 +45,10 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen-safe flex flex-col bg-background">
+      <div
+        className="flex flex-col bg-background"
+        style={{ minHeight: "100vh", minHeight: "100dvh" }}
+      >
         {/* Desktop header - always hidden on mobile, but conditionally shown on lg+ */}
         {showDesktopHeader && (
           <header className="hidden lg:block">

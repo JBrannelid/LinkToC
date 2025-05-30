@@ -132,7 +132,6 @@
     margin: 0;
     padding: 0;
     scrollbar-color: var(--color-primary);
-    padding-top: env(safe-area-inset-top);
   }
 
   html {
@@ -144,6 +143,10 @@
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
     background-color: var(--color-background);
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   body {
@@ -154,11 +157,9 @@
   body,
   #root {
     margin: 0 !important;
-    padding: 0 !important;
     height: 100vh;
     height: 100dvh;
     height: -webkit-fill-available;
-    padding-top: env(safe-area-inset-top);
   }
 
   h1,
@@ -241,12 +242,6 @@
     --tw-ring-offset-width: 0 !important;
     --tw-ring-shadow: 0 0 #0000 !important;
     --tw-ring-offset-shadow: 0 0 #0000 !important;
-  }
-
-  .min-h-screen-safe {
-    min-height: 100vh;
-    min-height: 100dvh;
-    min-height: -webkit-fill-available;
   }
 }
 
