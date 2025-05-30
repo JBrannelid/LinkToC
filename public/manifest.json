@@ -3,9 +3,9 @@
   "short_name": "Equilog",
   "description": "Digital stable management solution",
   "start_url": "/",
-  "display": "standalone",
+  "display": "browser",
   "background_color": "#f4f4f4",
-  "theme_color": "#027a48",
+  "theme_color": "transparent",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
