@@ -3,8 +3,8 @@
 /* Besley Font */
 @font-face {
   font-family: "Besley";
-  src: url("/src/assets/fonts/besley/besley-regular.woff2") format("woff2"),
-    url("/src/assets/fonts/besley/besley-regular.woff") format("woff");
+  src: url("./assets/fonts/besley/besley-regular.woff2") format("woff2"),
+    url("./assets/fonts/besley/besley-regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -12,8 +12,8 @@
 
 @font-face {
   font-family: "Besley";
-  src: url("/src/assets/fonts/besley/besley-medium.woff2") format("woff2"),
-    url("/src/assets/fonts/besley/besley-medium.woff") format("woff");
+  src: url("./assets/fonts/besley/besley-medium.woff2") format("woff2"),
+    url("./assets/fonts/besley/besley-medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -21,8 +21,8 @@
 
 @font-face {
   font-family: "Besley";
-  src: url("/src/assets/fonts/besley/besley-semibold.woff2") format("woff2"),
-    url("/src/assets/fonts/besley/besley-semibold.woff") format("woff");
+  src: url("./assets/fonts/besley/besley-semibold.woff2") format("woff2"),
+    url("./assets/fonts/besley/besley-semibold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -31,10 +31,9 @@
 /* Nunito Sans Font */
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-ExtraLight.woff2")
+  src: url("./assets/fonts/nunito-sans/NunitoSans-ExtraLight.woff2")
       format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-ExtraLight.woff")
-      format("woff");
+    url("./assets/fonts/nunito-sans/NunitoSans-ExtraLight.woff") format("woff");
   font-weight: 200;
   font-style: normal;
   font-display: swap;
@@ -42,9 +41,8 @@
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-Light.woff2")
-      format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-Light.woff") format("woff");
+  src: url("./assets/fonts/nunito-sans/NunitoSans-Light.woff2") format("woff2"),
+    url("./assets/fonts/nunito-sans/NunitoSans-Light.woff") format("woff");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -52,9 +50,9 @@
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-Regular.woff2")
+  src: url("./assets/fonts/nunito-sans/NunitoSans-Regular.woff2")
       format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-Regular.woff") format("woff");
+    url("./assets/fonts/nunito-sans/NunitoSans-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -62,9 +60,9 @@
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-SemiBold.woff2")
+  src: url("./assets/fonts/nunito-sans/NunitoSans-SemiBold.woff2")
       format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-SemiBold.woff") format("woff");
+    url("./assets/fonts/nunito-sans/NunitoSans-SemiBold.woff") format("woff");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -72,9 +70,8 @@
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-Bold.woff2")
-      format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-Bold.woff") format("woff");
+  src: url("./assets/fonts/nunito-sans/NunitoSans-Bold.woff2") format("woff2"),
+    url("./assets/fonts/nunito-sans/NunitoSans-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -82,9 +79,8 @@
 
 @font-face {
   font-family: "Nunito Sans";
-  src: url("/src/assets/fonts/nunito-sans/NunitoSans-Black.woff2")
-      format("woff2"),
-    url("/src/assets/fonts/nunito-sans/NunitoSans-Black.woff") format("woff");
+  src: url("./assets/fonts/nunito-sans/NunitoSans-Black.woff2") format("woff2"),
+    url("./assets/fonts/nunito-sans/NunitoSans-Black.woff") format("woff");
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -148,9 +144,15 @@
 
   body {
     background-color: var(--color-background);
-    min-height: 100vh;
-    height: 100%;
     margin: 0;
+    padding-top: env(safe-area-inset-top);
+  }
+
+  html,
+  body,
+  #root {
+    height: 100vh;
+    height: -webkit-fill-available;
   }
 
   h1,
@@ -236,8 +238,9 @@
   }
 
   .min-h-screen-safe {
+    min-height: calc(100vh - env(safe-area-inset-top));
+    min-height: calc(100dvh - env(safe-area-inset-top));
     min-height: -webkit-fill-available;
-    min-height: 100dvh;
   }
 }
 
