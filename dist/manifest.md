@@ -3,7 +3,7 @@
   "short_name": "Equilog",
   "description": "Digital stable management solution",
   "start_url": "/",
-  "display": "browser",
+  "display": "standalone",
   "background_color": "#f4f4f4",
   "theme_color": "transparent",
   "icons": [
