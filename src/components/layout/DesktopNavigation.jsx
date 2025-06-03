@@ -196,15 +196,9 @@ const DesktopNavigation = () => {
 
             {/* Notifications */}
             {!shouldHideNotification && (
-              <motion.div
-                className="cursor-pointer"
-                aria-label="Notifications"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div>
                 <NotificationDropdown />
-              </motion.div>
+              </div>
             )}
 
             {/* User Profile */}

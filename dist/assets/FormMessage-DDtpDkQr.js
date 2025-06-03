@@ -1,0 +1,1 @@
+import{j as r}from"./index-uCdg3-W8.js";import"./vendor-router-BURTDQSf.js";const i=({message:t})=>!t||!t.text?null:r.jsx("div",{className:`mt-4 p-3 rounded-md ${t.type==="success"?"bg-green-50 text-green-700":"bg-red-50 text-red-700"}`,role:t.type==="error"?"alert":"status","aria-live":"polite",children:t.text});export{i as F};
