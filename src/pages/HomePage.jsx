@@ -180,7 +180,7 @@ export default function HomePage() {
 
   return (
     <motion.div
-      className="mt-5 md:mt-10 pb-35 md:pb-10 sm:px-1 xl:px-16 lg:px-14"
+      className="mt-5 md:mt-10 pb-35 md:pb-40 sm:px-1 xl:px-16 lg:px-14"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.2 }}

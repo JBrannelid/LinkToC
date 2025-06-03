@@ -123,7 +123,7 @@ const UserProfileForm = ({ onClose, onSuccess, userData: initialUserData }) => {
   const userFullName = formatUserFullName(displayUser);
 
   return (
-    <div className="fixed inset-0 z-50 bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center">
+    <div className="fixed inset-0  bg-white md:bg-black/40 shadow-md flex flex-col md:items-center md:justify-center lg:z-0 z-110">
       <div className="w-full h-full md:max-h-8/10 md:w-xl overflow-y-auto bg-white shadow-md rounded flex flex-col relative">
         <div className="bg-primary-light pb-5">
           <ModalHeader

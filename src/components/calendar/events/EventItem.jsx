@@ -19,8 +19,6 @@ const EventItem = ({ event, index, onUpdate }) => {
     }
   };
 
-  console.log("EventItem", event);
-
   return (
     <li
       className={`flex items-center px-2 py-5 ${bgColor}`}

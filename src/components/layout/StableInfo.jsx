@@ -109,9 +109,9 @@ export default function StableInfo({
           <div className="px-5 pb-3">
             <div className="grid grid-cols-2 gap-2">
               {/* First row */}
-              <div className="flex justify-center items-center grid-span-2 mr-15">
+              <div className="col-span-2 flex items-center pl-[11%] sm:pl-[17%] md:pl-[20%] ">
                 {/* Location */}
-                <div className="flex items-center ">
+                <div className="flex items-center">
                   <LocationPinIcon
                     className="w-5 h-5 mr-2 text-primary"
                     size={29}
@@ -120,10 +120,7 @@ export default function StableInfo({
                 </div>
               </div>
 
-              {/* Empty cell to maintain grid */}
-              <div className="invisible"></div>
-
-              {/* Second row */}
+              {/* Second row - UNCHANGED */}
               <div className="flex justify-center items-center ">
                 <HorseFaceIcon
                   className="w-5 h-5 mr-2 text-primary"
@@ -142,7 +139,7 @@ export default function StableInfo({
                 <span className="font-normal">{stableInfo.type}</span>
               </div>
 
-              {/* Third row */}
+              {/* Third row - UNCHANGED */}
               <div className="flex justify-center items-center ml-7">
                 <PeopleIcon className="w-5 h-5 mr-2 text-primary" size={24} />
                 <span className="font-normal">
